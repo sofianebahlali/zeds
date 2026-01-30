@@ -1,0 +1,269 @@
+// ==========================================
+// PLAYER TYPES
+// ==========================================
+
+export interface Player {
+  id: string;
+  name: string;
+  avatar: string;
+  isHost: boolean;
+  isReady: boolean;
+  isConnected: boolean;
+  score: number;
+  roundScore: number;
+  streak: number;
+  lastAnswerTime?: number;
+}
+
+export type PlayerStatus = "idle" | "ready" | "answering" | "answered" | "disconnected";
+
+// ==========================================
+// ROOM TYPES
+// ==========================================
+
+export interface Room {
+  code: string;
+  hostId: string;
+  players: Player[];
+  status: RoomStatus;
+  gameMode: GameMode;
+  settings: GameSettings;
+  currentRound: number;
+  totalRounds: number;
+  createdAt: number;
+}
+
+export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" | "finished";
+
+// ==========================================
+// GAME TYPES
+// ==========================================
+
+export type GameMode = "dictation" | "image" | "qcm" | "open";
+
+export interface GameSettings {
+  maxPlayers: number;
+  roundDuration: number; // seconds
+  totalRounds: number;
+  showLeaderboardBetweenRounds: boolean;
+  difficulty: "easy" | "medium" | "hard";
+}
+
+export const DEFAULT_GAME_SETTINGS: GameSettings = {
+  maxPlayers: 8,
+  roundDuration: 30,
+  totalRounds: 10,
+  showLeaderboardBetweenRounds: true,
+  difficulty: "medium",
+};
+
+// ==========================================
+// QUESTION TYPES
+// ==========================================
+
+export interface BaseQuestion {
+  id: string;
+  type: GameMode;
+  timeLimit: number;
+  points: number;
+}
+
+export interface DictationQuestion extends BaseQuestion {
+  type: "dictation";
+  audioUrl: string;
+  answer: string;
+  hint?: string;
+}
+
+export interface ImageQuestion extends BaseQuestion {
+  type: "image";
+  imageUrl: string;
+  answer: string;
+  hint?: string;
+}
+
+export interface QCMQuestion extends BaseQuestion {
+  type: "qcm";
+  question: string;
+  options: string[];
+  correctIndex: number;
+}
+
+export interface OpenQuestion extends BaseQuestion {
+  type: "open";
+  question: string;
+  answers: string[]; // Multiple valid answers
+  caseSensitive: boolean;
+}
+
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion;
+
+// ==========================================
+// ANSWER TYPES
+// ==========================================
+
+export interface Answer {
+  playerId: string;
+  questionId: string;
+  answer: string;
+  timestamp: number;
+  isCorrect?: boolean;
+  points?: number;
+  responseTime?: number;
+}
+
+// ==========================================
+// ROUND TYPES
+// ==========================================
+
+export interface RoundResult {
+  roundNumber: number;
+  question: Question;
+  answers: Answer[];
+  correctAnswer: string;
+  winner?: Player;
+  scores: { playerId: string; points: number; total: number }[];
+}
+
+// ==========================================
+// GAME STATE TYPES
+// ==========================================
+
+export interface GameState {
+  status: "idle" | "question" | "answering" | "revealing" | "leaderboard" | "finished";
+  currentQuestion?: Question;
+  timeRemaining: number;
+  roundResults?: RoundResult;
+  playerAnswers: Map<string, Answer>;
+}
+
+// ==========================================
+// SOCKET EVENT TYPES
+// ==========================================
+
+export interface ServerToClientEvents {
+  // Room events
+  "room:joined": (room: Room, player: Player) => void;
+  "room:player_joined": (player: Player) => void;
+  "room:player_left": (playerId: string) => void;
+  "room:player_ready": (playerId: string, isReady: boolean) => void;
+  "room:settings_updated": (settings: GameSettings) => void;
+  "room:host_changed": (newHostId: string) => void;
+  "room:error": (message: string) => void;
+
+  // Game events
+  "game:starting": (countdown: number) => void;
+  "game:round_start": (round: number, question: Question) => void;
+  "game:time_update": (timeRemaining: number) => void;
+  "game:player_answered": (playerId: string) => void;
+  "game:round_end": (result: RoundResult) => void;
+  "game:leaderboard": (players: Player[]) => void;
+  "game:finished": (finalScores: Player[]) => void;
+
+  // Connection events
+  "connection:reconnected": (room: Room, player: Player) => void;
+  "connection:player_disconnected": (playerId: string) => void;
+  "connection:player_reconnected": (playerId: string) => void;
+}
+
+export interface ClientToServerEvents {
+  // Room events
+  "room:create": (playerName: string, avatar: string) => void;
+  "room:join": (roomCode: string, playerName: string, avatar: string) => void;
+  "room:leave": () => void;
+  "room:ready": (isReady: boolean) => void;
+  "room:update_settings": (settings: Partial<GameSettings>) => void;
+  "room:kick_player": (playerId: string) => void;
+  "room:change_game_mode": (mode: GameMode) => void;
+
+  // Game events
+  "game:start": () => void;
+  "game:submit_answer": (answer: string) => void;
+  "game:request_next_round": () => void;
+
+  // Connection events
+  "connection:reconnect": (roomCode: string, playerId: string) => void;
+}
+
+// ==========================================
+// UI STATE TYPES
+// ==========================================
+
+export type Screen =
+  | "home"
+  | "create"
+  | "join"
+  | "lobby"
+  | "game"
+  | "scoreboard"
+  | "error"
+  | "reconnecting";
+
+export interface UIState {
+  currentScreen: Screen;
+  isLoading: boolean;
+  error: string | null;
+  notification: Notification | null;
+}
+
+export interface Notification {
+  id: string;
+  type: "success" | "error" | "info" | "warning";
+  message: string;
+  duration?: number;
+}
+
+// ==========================================
+// AVATAR OPTIONS
+// ==========================================
+
+export const AVATARS = [
+  "🦊", "🐼", "🦁", "🐯", "🐨", "🐸", "🦄", "🐙",
+  "🦋", "🐝", "🦜", "🦩", "🐳", "🦈", "🐬", "🦑",
+  "🐲", "🦖", "🦕", "🐢", "🐍", "🦎", "🐅", "🐆",
+] as const;
+
+export type Avatar = typeof AVATARS[number];
+
+// ==========================================
+// GAME MODE INFO
+// ==========================================
+
+export interface GameModeInfo {
+  id: GameMode;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+}
+
+export const GAME_MODES: GameModeInfo[] = [
+  {
+    id: "dictation",
+    name: "Dictée",
+    description: "Écoute et écris ce que tu entends",
+    icon: "🎧",
+    color: "from-brand-500 to-brand-700",
+  },
+  {
+    id: "image",
+    name: "Image",
+    description: "Devine ce que représente l'image",
+    icon: "🖼️",
+    color: "from-accent-500 to-accent-700",
+  },
+  {
+    id: "qcm",
+    name: "QCM",
+    description: "Choisis la bonne réponse parmi 4",
+    icon: "📝",
+    color: "from-success-500 to-success-700",
+  },
+  {
+    id: "open",
+    name: "Question ouverte",
+    description: "Réponds librement à la question",
+    icon: "💬",
+    color: "from-warning-500 to-warning-700",
+  },
+];
