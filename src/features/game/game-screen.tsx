@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useGameStore, useRoomStore } from "@/stores";
 import { CountdownOverlay } from "./countdown-overlay";
 import { QuestionDisplay } from "./question-display";
+import { VotingPhase } from "./voting-phase";
 import { RoundResult } from "./round-result";
 import { LeaderboardDisplay } from "./leaderboard-display";
 import { ScreenContainer } from "@/components/layout";
@@ -46,6 +47,7 @@ export function GameScreen() {
           {(status === "question" || status === "answering") && (
             <QuestionDisplay key="question" />
           )}
+          {status === "voting" && <VotingPhase key="voting" />}
           {status === "revealing" && <RoundResult key="result" />}
           {status === "leaderboard" && <LeaderboardDisplay key="leaderboard" />}
         </AnimatePresence>

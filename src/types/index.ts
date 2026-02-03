@@ -33,7 +33,7 @@ export interface Room {
   createdAt: number;
 }
 
-export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" | "finished";
+export type RoomStatus = "waiting" | "starting" | "playing" | "voting" | "between_rounds" | "finished";
 
 // ==========================================
 // GAME TYPES
@@ -110,6 +110,43 @@ export interface Answer {
   isCorrect?: boolean;
   points?: number;
   responseTime?: number;
+  // Voting results (for open questions)
+  votesFor?: number;
+  votesAgainst?: number;
+  validatedByVote?: boolean;
+}
+
+// ==========================================
+// VOTING TYPES
+// ==========================================
+
+export interface Vote {
+  voterId: string;        // Player who voted
+  targetPlayerId: string; // Player whose answer is being voted on
+  isValid: boolean;       // true = valid answer, false = invalid
+}
+
+export interface AnswerForVoting {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  answer: string;
+  responseTime: number;
+}
+
+export interface VotingPhaseData {
+  correctAnswer: string;
+  answersToVote: AnswerForVoting[];
+  timeRemaining: number;
+  totalVotingTime: number;
+}
+
+export interface VotingResults {
+  [playerId: string]: {
+    votesFor: number;
+    votesAgainst: number;
+    isValidated: boolean;
+  };
 }
 
 // ==========================================
@@ -130,11 +167,13 @@ export interface RoundResult {
 // ==========================================
 
 export interface GameState {
-  status: "idle" | "question" | "answering" | "revealing" | "leaderboard" | "finished";
+  status: "idle" | "question" | "answering" | "voting" | "revealing" | "leaderboard" | "finished";
   currentQuestion?: Question;
   timeRemaining: number;
   roundResults?: RoundResult;
   playerAnswers: Map<string, Answer>;
+  votingData?: VotingPhaseData;
+  myVotes?: Map<string, boolean>; // playerId -> isValid vote
 }
 
 // ==========================================
@@ -160,6 +199,12 @@ export interface ServerToClientEvents {
   "game:leaderboard": (players: Player[]) => void;
   "game:finished": (finalScores: Player[]) => void;
 
+  // Voting events
+  "game:voting_start": (data: VotingPhaseData) => void;
+  "game:voting_time_update": (timeRemaining: number) => void;
+  "game:player_voted": (voterId: string, targetPlayerId: string) => void;
+  "game:voting_end": (results: VotingResults) => void;
+
   // Connection events
   "connection:reconnected": (room: Room, player: Player) => void;
   "connection:player_disconnected": (playerId: string) => void;
@@ -179,6 +224,7 @@ export interface ClientToServerEvents {
   // Game events
   "game:start": () => void;
   "game:submit_answer": (answer: string) => void;
+  "game:submit_vote": (targetPlayerId: string, isValid: boolean) => void;
   "game:request_next_round": () => void;
 
   // Connection events

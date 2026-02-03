@@ -12,6 +12,10 @@ import type {
   RoundResult,
   ClientToServerEvents,
   ServerToClientEvents,
+  Vote,
+  VotingPhaseData,
+  VotingResults,
+  AnswerForVoting,
 } from "../src/types";
 
 type TypedIO = Server<ClientToServerEvents, ServerToClientEvents>;
@@ -121,6 +125,13 @@ export class GameEngine {
   private timeRemaining: number = 0;
   private questions: Question[] = [];
   private disconnectedPlayers: Set<string> = new Set();
+
+  // Voting phase properties
+  private static readonly VOTING_TIME = 15; // seconds for voting phase
+  private votes: Map<string, Vote[]> = new Map(); // targetPlayerId -> votes
+  private votingTimerInterval: NodeJS.Timeout | null = null;
+  private votingTimeRemaining: number = 0;
+  private isVotingPhase: boolean = false;
 
   constructor(room: Room, io: TypedIO, roomManager: RoomManager) {
     this.room = room;
@@ -270,6 +281,183 @@ export class GameEngine {
 
     if (!this.currentQuestion) return;
 
+    // For QCM questions, validate automatically
+    // For other question types, start voting phase
+    if (this.currentQuestion.type === "qcm") {
+      this.finalizeRound();
+    } else {
+      this.startVotingPhase();
+    }
+  }
+
+  /**
+   * Start the voting phase for non-QCM questions
+   */
+  private startVotingPhase(): void {
+    if (!this.currentQuestion) return;
+
+    this.isVotingPhase = true;
+    this.votes.clear();
+    this.votingTimeRemaining = GameEngine.VOTING_TIME;
+
+    // Update room status
+    this.roomManager.updateRoomStatus(this.room.code, "voting");
+
+    // Prepare answers for voting
+    const answersToVote: AnswerForVoting[] = [];
+    for (const [playerId, answer] of this.answers) {
+      const player = this.room.players.find((p) => p.id === playerId);
+      if (player) {
+        answersToVote.push({
+          playerId,
+          playerName: player.name,
+          playerAvatar: player.avatar,
+          answer: answer.answer,
+          responseTime: answer.responseTime || 0,
+        });
+        // Initialize votes array for this player
+        this.votes.set(playerId, []);
+      }
+    }
+
+    // Get the correct answer to display
+    const correctAnswer = this.getCorrectAnswer();
+
+    const votingData: VotingPhaseData = {
+      correctAnswer,
+      answersToVote,
+      timeRemaining: this.votingTimeRemaining,
+      totalVotingTime: GameEngine.VOTING_TIME,
+    };
+
+    this.io.to(this.room.code).emit("game:voting_start", votingData);
+
+    // Start voting timer
+    this.startVotingTimer();
+  }
+
+  /**
+   * Start the voting timer
+   */
+  private startVotingTimer(): void {
+    this.votingTimerInterval = setInterval(() => {
+      this.votingTimeRemaining--;
+      this.io.to(this.room.code).emit("game:voting_time_update", this.votingTimeRemaining);
+
+      if (this.votingTimeRemaining <= 0) {
+        this.endVotingPhase();
+      }
+    }, 1000);
+  }
+
+  /**
+   * Stop the voting timer
+   */
+  private stopVotingTimer(): void {
+    if (this.votingTimerInterval) {
+      clearInterval(this.votingTimerInterval);
+      this.votingTimerInterval = null;
+    }
+  }
+
+  /**
+   * Submit a vote for a player's answer
+   */
+  submitVote(voterId: string, targetPlayerId: string, isValid: boolean): void {
+    if (!this.isVotingPhase) return;
+    if (voterId === targetPlayerId) return; // Can't vote for yourself
+
+    const playerVotes = this.votes.get(targetPlayerId);
+    if (!playerVotes) return;
+
+    // Check if this voter already voted for this target
+    const existingVoteIndex = playerVotes.findIndex((v) => v.voterId === voterId);
+    if (existingVoteIndex !== -1) {
+      // Update existing vote
+      playerVotes[existingVoteIndex].isValid = isValid;
+    } else {
+      // Add new vote
+      playerVotes.push({ voterId, targetPlayerId, isValid });
+    }
+
+    // Notify others that a vote was cast (without revealing the vote)
+    this.io.to(this.room.code).emit("game:player_voted", voterId, targetPlayerId);
+
+    // Check if all votes are in
+    this.checkAllVotesComplete();
+  }
+
+  /**
+   * Check if all possible votes have been submitted
+   */
+  private checkAllVotesComplete(): void {
+    const activePlayers = this.room.players.filter(
+      (p) => p.isConnected && !this.disconnectedPlayers.has(p.id)
+    );
+
+    // For each answer, we need (activePlayers - 1) votes (everyone except the answer owner)
+    let allComplete = true;
+    for (const [targetPlayerId, votes] of this.votes) {
+      // Number of expected voters = active players who submitted an answer minus the target player
+      // Actually, everyone except the target player can vote
+      const expectedVoters = activePlayers.filter((p) => p.id !== targetPlayerId).length;
+      if (votes.length < expectedVoters) {
+        allComplete = false;
+        break;
+      }
+    }
+
+    if (allComplete) {
+      this.endVotingPhase();
+    }
+  }
+
+  /**
+   * End the voting phase and calculate results
+   */
+  private endVotingPhase(): void {
+    this.stopVotingTimer();
+    this.isVotingPhase = false;
+
+    // Calculate voting results
+    const votingResults: VotingResults = {};
+    for (const [targetPlayerId, votes] of this.votes) {
+      const votesFor = votes.filter((v) => v.isValid).length;
+      const votesAgainst = votes.filter((v) => !v.isValid).length;
+      // Validated if more than 50% voted for (strict majority)
+      const isValidated = votesFor > votesAgainst;
+
+      votingResults[targetPlayerId] = {
+        votesFor,
+        votesAgainst,
+        isValidated,
+      };
+
+      // Update the answer with voting results
+      const answer = this.answers.get(targetPlayerId);
+      if (answer) {
+        answer.votesFor = votesFor;
+        answer.votesAgainst = votesAgainst;
+        answer.validatedByVote = isValidated;
+        answer.isCorrect = isValidated;
+      }
+    }
+
+    // Send voting results
+    this.io.to(this.room.code).emit("game:voting_end", votingResults);
+
+    // Finalize the round after a short delay to let players see results
+    setTimeout(() => {
+      this.finalizeRound();
+    }, 2000);
+  }
+
+  /**
+   * Finalize the round (calculate scores and show results)
+   */
+  private finalizeRound(): void {
+    if (!this.currentQuestion) return;
+
     // Calculate scores
     const results = this.calculateScores();
 
@@ -308,8 +496,16 @@ export class GameEngine {
 
     // Process each answer
     for (const [playerId, answer] of this.answers) {
-      const isCorrect = this.checkAnswer(answer.answer);
-      answer.isCorrect = isCorrect;
+      // For QCM: use automatic validation
+      // For other types: use voting results (already set in endVotingPhase)
+      let isCorrect: boolean;
+      if (this.currentQuestion.type === "qcm") {
+        isCorrect = this.checkAnswer(answer.answer);
+        answer.isCorrect = isCorrect;
+      } else {
+        // For non-QCM, isCorrect was already set by voting
+        isCorrect = answer.isCorrect ?? false;
+      }
 
       let points = 0;
       if (isCorrect) {
@@ -498,5 +694,6 @@ export class GameEngine {
    */
   destroy(): void {
     this.stopTimer();
+    this.stopVotingTimer();
   }
 }

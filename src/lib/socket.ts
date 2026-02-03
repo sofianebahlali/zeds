@@ -7,7 +7,18 @@ import type {
 } from "@/types";
 
 // Socket configuration
-const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
+// In production fullstack mode, connect to same origin
+// In development or split deployment, use the configured URL
+const getSocketUrl = () => {
+  if (process.env.NEXT_PUBLIC_SOCKET_URL) {
+    return process.env.NEXT_PUBLIC_SOCKET_URL;
+  }
+  if (typeof window !== "undefined") {
+    return window.location.origin;
+  }
+  return "http://localhost:3001";
+};
+const SOCKET_URL = getSocketUrl();
 
 // Create a typed socket
 type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;

@@ -187,6 +187,19 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
       gameEngine.submitAnswer(playerId, answer);
     });
 
+    socket.on("game:submit_vote", (targetPlayerId: string, isValid: boolean) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.submitVote(playerId, targetPlayerId, isValid);
+    });
+
     socket.on("game:request_next_round", () => {
       const playerId = roomManager.getPlayerIdFromSocket(socket.id);
       if (!playerId) return;
