@@ -122,9 +122,19 @@ All socket events are handled in `src/hooks/use-socket.ts`. The hook:
 ### 4. Server Authority
 The server (`server/game-engine.ts`) controls:
 - Question selection and timing
-- Answer validation
+- Answer validation (automatic for QCM, peer-voting for open questions)
+- Voting phase management for non-QCM questions
 - Score calculation with speed bonuses
 - Round progression
+
+### 5. Peer Voting System
+For non-QCM questions (open, image, dictation), answers are validated by peer voting:
+- After answer submission, a 15-second voting phase begins
+- Each player sees all submitted answers and the expected correct answer
+- Players vote to validate or refuse each answer (except their own)
+- An answer is validated if it receives a strict majority (>50%) of "valid" votes
+- If votes are tied (50/50), the answer is refused
+- Points are awarded only to validated answers
 
 ## Socket.IO Events
 
@@ -137,6 +147,7 @@ The server (`server/game-engine.ts`) controls:
 | `room:ready` | isReady | Toggle ready status |
 | `game:start` | - | Host starts the game |
 | `game:submit_answer` | answer | Submit answer for current question |
+| `game:submit_vote` | targetPlayerId, isValid | Vote on a player's answer |
 
 ### Server → Client
 | Event | Parameters | Description |
@@ -146,17 +157,21 @@ The server (`server/game-engine.ts`) controls:
 | `game:starting` | countdown | Game countdown (3, 2, 1) |
 | `game:round_start` | round, question | New question started |
 | `game:time_update` | timeRemaining | Timer tick |
+| `game:voting_start` | VotingPhaseData | Voting phase begins (non-QCM) |
+| `game:voting_time_update` | timeRemaining | Voting timer tick |
+| `game:player_voted` | voterId, targetPlayerId | A player cast a vote |
+| `game:voting_end` | VotingResults | Voting phase ended with results |
 | `game:round_end` | result | Round results with scores |
 | `game:finished` | finalScores | Game ended |
 
 ## Game Modes
 
-| Mode | Type | Description |
-|------|------|-------------|
-| `qcm` | Multiple Choice | 4 options, select correct one |
-| `open` | Free Text | Type the answer (multiple valid answers supported) |
-| `image` | Image Guess | Identify what's in the image (not yet implemented) |
-| `dictation` | Audio | Write what you hear (not yet implemented) |
+| Mode | Type | Validation | Description |
+|------|------|------------|-------------|
+| `qcm` | Multiple Choice | Automatic | 4 options, select correct one |
+| `open` | Free Text | Peer voting | Type the answer, validated by other players |
+| `image` | Image Guess | Peer voting | Identify what's in the image (not yet implemented) |
+| `dictation` | Audio | Peer voting | Write what you hear (not yet implemented) |
 
 ## Design System
 
@@ -257,3 +272,5 @@ curl http://localhost:3001/api/rooms/ABCD
 3. **Inactive rooms**: Cleaned up after 1 hour if still in "waiting" status
 4. **Minimum players**: Game requires at least 2 players to start
 5. **Host transfer**: If host leaves, first remaining player becomes host
+6. **Voting rules**: Players cannot vote on their own answers; strict majority (>50%) required to validate
+7. **Voting time**: 15 seconds for the voting phase on non-QCM questions

@@ -3,7 +3,7 @@
 import { useEffect, useCallback, useRef } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, Question, RoundResult } from "@/types";
+import type { Room, Player, GameSettings, Question, RoundResult, VotingPhaseData, VotingResults } from "@/types";
 
 export function useSocket() {
   const socket = getSocket();
@@ -28,6 +28,13 @@ export function useSocket() {
   const setRoundResult = useGameStore((s) => s.setRoundResult);
   const startGame = useGameStore((s) => s.startGame);
   const finishGame = useGameStore((s) => s.finishGame);
+
+  // Voting store actions
+  const startVoting = useGameStore((s) => s.startVoting);
+  const setVotingTimeRemaining = useGameStore((s) => s.setVotingTimeRemaining);
+  const markPlayerVoted = useGameStore((s) => s.markPlayerVoted);
+  const setVotingResults = useGameStore((s) => s.setVotingResults);
+  const endVoting = useGameStore((s) => s.endVoting);
 
   const setScreen = useUIStore((s) => s.setScreen);
   const setError = useUIStore((s) => s.setError);
@@ -155,6 +162,24 @@ export function useSocket() {
       setScreen("scoreboard");
     });
 
+    // Voting events
+    socket.on("game:voting_start", (data: VotingPhaseData) => {
+      startVoting(data);
+    });
+
+    socket.on("game:voting_time_update", (time: number) => {
+      setVotingTimeRemaining(time);
+    });
+
+    socket.on("game:player_voted", (voterId: string, targetPlayerId: string) => {
+      markPlayerVoted(voterId, targetPlayerId);
+    });
+
+    socket.on("game:voting_end", (results: VotingResults) => {
+      setVotingResults(results);
+      endVoting();
+    });
+
     // Connection events
     socket.on("connection:reconnected", (room: Room, player: Player) => {
       setRoom(room);
@@ -255,6 +280,14 @@ export function useSocket() {
     }
   }, [socket]);
 
+  const submitVote = useCallback((targetPlayerId: string, isValid: boolean) => {
+    const hasVoted = useGameStore.getState().hasVotedFor(targetPlayerId);
+    if (!hasVoted) {
+      socket.emit("game:submit_vote", targetPlayerId, isValid);
+      useGameStore.getState().recordMyVote(targetPlayerId, isValid);
+    }
+  }, [socket]);
+
   const requestNextRound = useCallback(() => {
     socket.emit("game:request_next_round");
   }, [socket]);
@@ -278,6 +311,7 @@ export function useSocket() {
     kickPlayer,
     startGame: startGameAction,
     submitAnswer,
+    submitVote,
     requestNextRound,
     reconnect,
   };

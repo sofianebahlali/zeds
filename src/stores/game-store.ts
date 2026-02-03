@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState } from "@/types";
+import type { Question, Answer, RoundResult, GameState, VotingPhaseData, VotingResults } from "@/types";
 
-type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished";
+type GameStatus = "idle" | "countdown" | "question" | "answering" | "voting" | "revealing" | "leaderboard" | "finished";
 
 interface GameStoreState {
   // Game state
@@ -19,6 +19,13 @@ interface GameStoreState {
   roundResult: RoundResult | null;
   allResults: RoundResult[];
 
+  // Voting state
+  votingData: VotingPhaseData | null;
+  votingTimeRemaining: number;
+  myVotes: Record<string, boolean>; // targetPlayerId -> isValid
+  votedPlayers: Record<string, string[]>; // targetPlayerId -> voterIds who voted
+  votingResults: VotingResults | null;
+
   // Actions
   setStatus: (status: GameStatus) => void;
   setCurrentQuestion: (question: Question) => void;
@@ -34,9 +41,18 @@ interface GameStoreState {
   startGame: (totalRounds: number) => void;
   finishGame: () => void;
 
+  // Voting actions
+  startVoting: (data: VotingPhaseData) => void;
+  setVotingTimeRemaining: (time: number) => void;
+  recordMyVote: (targetPlayerId: string, isValid: boolean) => void;
+  markPlayerVoted: (voterId: string, targetPlayerId: string) => void;
+  setVotingResults: (results: VotingResults) => void;
+  endVoting: () => void;
+
   // Computed
   getProgress: () => number;
   canSubmitAnswer: () => boolean;
+  hasVotedFor: (targetPlayerId: string) => boolean;
 }
 
 export const useGameStore = create<GameStoreState>((set, get) => ({
@@ -52,6 +68,13 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   answeredPlayers: [],
   roundResult: null,
   allResults: [],
+
+  // Voting initial state
+  votingData: null,
+  votingTimeRemaining: 0,
+  myVotes: {},
+  votedPlayers: {},
+  votingResults: null,
 
   // Actions
   setStatus: (status) => set({ status }),
@@ -129,6 +152,44 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   finishGame: () => set({ status: "finished" }),
 
+  // Voting actions
+  startVoting: (data) =>
+    set({
+      status: "voting",
+      votingData: data,
+      votingTimeRemaining: data.timeRemaining,
+      myVotes: {},
+      votedPlayers: {},
+      votingResults: null,
+    }),
+
+  setVotingTimeRemaining: (time) => set({ votingTimeRemaining: time }),
+
+  recordMyVote: (targetPlayerId, isValid) =>
+    set((state) => ({
+      myVotes: { ...state.myVotes, [targetPlayerId]: isValid },
+    })),
+
+  markPlayerVoted: (voterId, targetPlayerId) =>
+    set((state) => {
+      const currentVoters = state.votedPlayers[targetPlayerId] || [];
+      if (currentVoters.includes(voterId)) return state;
+      return {
+        votedPlayers: {
+          ...state.votedPlayers,
+          [targetPlayerId]: [...currentVoters, voterId],
+        },
+      };
+    }),
+
+  setVotingResults: (results) => set({ votingResults: results }),
+
+  endVoting: () =>
+    set({
+      votingData: null,
+      votingTimeRemaining: 0,
+    }),
+
   resetGame: () =>
     set({
       status: "idle",
@@ -142,6 +203,12 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       answeredPlayers: [],
       roundResult: null,
       allResults: [],
+      // Reset voting state
+      votingData: null,
+      votingTimeRemaining: 0,
+      myVotes: {},
+      votedPlayers: {},
+      votingResults: null,
     }),
 
   // Computed
@@ -153,5 +220,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   canSubmitAnswer: () => {
     const { status, hasAnswered, timeRemaining } = get();
     return status === "question" && !hasAnswered && timeRemaining > 0;
+  },
+
+  hasVotedFor: (targetPlayerId) => {
+    const { myVotes } = get();
+    return targetPlayerId in myVotes;
   },
 }));
