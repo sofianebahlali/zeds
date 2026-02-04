@@ -2,7 +2,7 @@ services:
   - type: web
     name: quizz-arena
     runtime: node
-    buildCommand: npm install && npm run build
+    buildCommand: echo "=== Listing src ===" && ls -la src/ && npm ci && npm run build
     startCommand: npm run start
     envVars:
       - key: NODE_ENV
