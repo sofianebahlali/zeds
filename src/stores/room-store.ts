@@ -137,7 +137,7 @@ export const useRoomStore = create<RoomState>((set, get) => ({
 
   isAllReady: () => {
     const { players } = get();
-    if (players.length < 2) return false;
+    if (players.length < 1) return false;
     return players.every((p) => p.isReady || p.isHost);
   },
 

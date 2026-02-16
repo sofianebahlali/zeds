@@ -24,13 +24,11 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ) => {
     const variantStyles = {
       default: "bg-surface-900 border border-surface-800",
-      glass: "bg-white/5 backdrop-blur-xl border border-white/10",
+      glass: "bg-surface-900/80 border border-surface-800",
       elevated: "bg-surface-900 border border-surface-800 shadow-card",
       interactive:
-        "bg-surface-900 border border-surface-800 hover:border-surface-700 hover:shadow-card-hover transition-all duration-200 cursor-pointer",
-      gradient: gradient
-        ? `bg-gradient-to-br ${gradient} border-0`
-        : "bg-gradient-to-br from-brand-500/20 to-accent-500/20 border border-white/10",
+        "bg-surface-900 border border-surface-800 hover:border-surface-600 transition-colors duration-200 cursor-pointer",
+      gradient: "bg-surface-900 border border-surface-700",
     };
 
     const paddingStyles = {
@@ -40,20 +38,15 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       lg: "p-6 sm:p-8",
     };
 
-    const isInteractive = variant === "interactive";
-
     return (
       <motion.div
         ref={ref}
         className={cn(
-          "rounded-2xl",
+          "rounded-xl",
           variantStyles[variant],
           paddingStyles[padding],
           className
         )}
-        whileHover={isInteractive ? { scale: 1.02, y: -2 } : undefined}
-        whileTap={isInteractive ? { scale: 0.98 } : undefined}
-        transition={{ duration: 0.2 }}
         {...props}
       >
         {children}
@@ -83,7 +76,7 @@ const CardTitle = React.forwardRef<
   <h3
     ref={ref}
     className={cn(
-      "text-xl font-bold leading-none tracking-tight text-white",
+      "text-xl font-bold leading-none tracking-tight text-surface-100",
       className
     )}
     {...props}

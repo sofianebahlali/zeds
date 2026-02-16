@@ -10,7 +10,6 @@ import {
   Play,
   Settings,
   Users,
-  Wifi,
   WifiOff,
 } from "lucide-react";
 import { Button, Card, Avatar, Badge, StatusBadge, ScrollArea } from "@/components/ui";
@@ -45,13 +44,13 @@ export function LobbyScreen() {
   };
 
   const readyCount = players.filter((p) => p.isReady || p.isHost).length;
-  const canStart = players.length >= 2 && players.every((p) => p.isReady || p.isHost);
+  const canStart = players.length >= 1 && players.every((p) => p.isReady || p.isHost);
   const currentMode = GAME_MODES.find((m) => m.id === room.gameMode);
 
   return (
     <ScreenContainer centered={false} className="py-4">
       <div className="w-full max-w-lg mx-auto flex flex-col h-full">
-        {/* Header with room code */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -80,14 +79,14 @@ export function LobbyScreen() {
           </div>
 
           {/* Room code card */}
-          <Card variant="gradient" gradient="from-brand-500/20 to-accent-500/20">
+          <Card variant="gradient">
             <div className="text-center">
-              <p className="text-surface-400 text-sm mb-2">Code de la room</p>
+              <p className="text-surface-500 text-sm mb-2">Code de la room</p>
               <button
                 onClick={copyCode}
                 className="flex items-center justify-center gap-3 mx-auto group"
               >
-                <span className="text-4xl font-bold tracking-[0.3em] text-white">
+                <span className="text-4xl font-display font-bold tracking-[0.3em] text-surface-100">
                   {room.code}
                 </span>
                 <motion.span
@@ -97,8 +96,8 @@ export function LobbyScreen() {
                   className={cn(
                     "p-2 rounded-lg transition-colors",
                     copied
-                      ? "bg-success-500/20 text-success-400"
-                      : "bg-surface-800 text-surface-400 group-hover:text-white"
+                      ? "bg-success-500/15 text-success-400"
+                      : "bg-surface-800 text-surface-400 group-hover:text-surface-100"
                   )}
                 >
                   {copied ? (
@@ -119,30 +118,30 @@ export function LobbyScreen() {
         <AnimatePresence>
           {showSettings && isHost && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mb-6 overflow-hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="mb-6"
             >
-              <Card variant="glass">
-                <h3 className="text-sm font-medium text-surface-300 mb-3">
+              <Card>
+                <h3 className="text-sm font-medium text-surface-400 mb-3">
                   Mode de jeu
                 </h3>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   {GAME_MODES.map((mode) => (
                     <button
                       key={mode.id}
                       onClick={() => changeGameMode(mode.id)}
                       className={cn(
-                        "p-3 rounded-xl text-left transition-all",
-                        "border-2",
+                        "p-3 rounded-xl text-center transition-colors",
+                        "border",
                         room.gameMode === mode.id
                           ? "border-brand-500 bg-brand-500/10"
-                          : "border-surface-700 bg-surface-800/50 hover:border-surface-600"
+                          : "border-surface-700 bg-surface-800 hover:border-surface-500"
                       )}
                     >
                       <span className="text-2xl mb-1 block">{mode.icon}</span>
-                      <span className="text-sm font-medium text-white">
+                      <span className="text-xs font-medium text-surface-100">
                         {mode.name}
                       </span>
                     </button>
@@ -153,7 +152,7 @@ export function LobbyScreen() {
           )}
         </AnimatePresence>
 
-        {/* Current game mode display */}
+        {/* Current game mode */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -163,7 +162,7 @@ export function LobbyScreen() {
           <div className="flex items-center justify-center gap-2 text-surface-400">
             <span className="text-2xl">{currentMode?.icon}</span>
             <span className="text-sm">{currentMode?.name}</span>
-            <span className="text-surface-600">•</span>
+            <span className="text-surface-600">·</span>
             <span className="text-sm">{room.settings.totalRounds} manches</span>
           </div>
         </motion.div>
@@ -176,7 +175,7 @@ export function LobbyScreen() {
           className="flex-1 min-h-0"
         >
           <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2 text-surface-300">
+            <div className="flex items-center gap-2 text-surface-400">
               <Users className="w-4 h-4" />
               <span className="text-sm font-medium">
                 Joueurs ({players.length}/{room.settings.maxPlayers})
@@ -221,8 +220,6 @@ export function LobbyScreen() {
             >
               {canStart
                 ? "Lancer la partie"
-                : players.length < 2
-                ? "En attente de joueurs..."
                 : "En attente des joueurs..."}
             </Button>
           ) : (
@@ -264,8 +261,8 @@ function PlayerCard({ player, isCurrentPlayer, index }: PlayerCardProps) {
       transition={{ delay: index * 0.05 }}
       className={cn(
         "flex items-center gap-3 p-3 rounded-xl",
-        "bg-surface-900/80",
-        isCurrentPlayer && "ring-2 ring-brand-500/50"
+        "bg-surface-900 border border-surface-800",
+        isCurrentPlayer && "border-brand-500/40"
       )}
     >
       <Avatar
@@ -282,11 +279,11 @@ function PlayerCard({ player, isCurrentPlayer, index }: PlayerCardProps) {
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="font-medium text-white truncate">
+          <span className="font-medium text-surface-100 truncate">
             {player.name}
           </span>
           {player.isHost && (
-            <Crown className="w-4 h-4 text-warning-400 shrink-0" />
+            <Crown className="w-4 h-4 text-accent-400 shrink-0" />
           )}
           {isCurrentPlayer && (
             <span className="text-xs text-surface-500">(toi)</span>

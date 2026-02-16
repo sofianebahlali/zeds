@@ -14,10 +14,10 @@ const iconMap = {
 };
 
 const colorMap = {
-  success: "bg-success-500/20 border-success-500/30 text-success-400",
-  error: "bg-danger-500/20 border-danger-500/30 text-danger-400",
-  info: "bg-brand-500/20 border-brand-500/30 text-brand-400",
-  warning: "bg-warning-500/20 border-warning-500/30 text-warning-400",
+  success: "bg-surface-900 border-success-500/40 text-success-400",
+  error: "bg-surface-900 border-danger-500/40 text-danger-400",
+  info: "bg-surface-900 border-brand-500/40 text-brand-400",
+  warning: "bg-surface-900 border-accent-500/40 text-accent-400",
 };
 
 function NotificationItem({ notification }: { notification: Notification }) {
@@ -36,16 +36,15 @@ function NotificationItem({ notification }: { notification: Notification }) {
         "px-4 py-3",
         "rounded-xl",
         "border",
-        "backdrop-blur-xl",
-        "shadow-lg",
+        "shadow-card",
         colorMap[notification.type]
       )}
     >
       <Icon className="h-5 w-5 shrink-0" />
-      <p className="text-sm font-medium flex-1">{notification.message}</p>
+      <p className="text-sm font-medium flex-1 text-surface-100">{notification.message}</p>
       <button
         onClick={() => removeNotification(notification.id)}
-        className="p-1 hover:bg-white/10 rounded-lg transition-colors"
+        className="p-1 hover:bg-surface-800 rounded-lg transition-colors text-surface-500"
       >
         <X className="h-4 w-4" />
       </button>

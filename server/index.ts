@@ -9,9 +9,27 @@ import type { ClientToServerEvents, ServerToClientEvents } from "../src/types";
 const app = express();
 const httpServer = createServer(app);
 
-// Configure CORS
+// Configure CORS - allow Codespace origins
+const allowedOrigins = [
+  process.env.FRONTEND_URL || "http://localhost:3000",
+];
+
+function isAllowedOrigin(origin: string | undefined): boolean {
+  if (!origin) return true;
+  if (allowedOrigins.includes(origin)) return true;
+  // Allow all GitHub Codespace origins
+  if (origin.endsWith(".app.github.dev")) return true;
+  return false;
+}
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000",
+  origin: (origin, callback) => {
+    if (isAllowedOrigin(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST"],
 }));
 
@@ -20,7 +38,13 @@ app.use(express.json());
 // Create Socket.IO server with types
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: (origin, callback) => {
+      if (isAllowedOrigin(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST"],
   },
   pingTimeout: 60000,

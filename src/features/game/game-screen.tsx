@@ -18,7 +18,7 @@ export function GameScreen() {
       {/* Progress bar */}
       <div className="fixed top-0 left-0 right-0 z-20 h-1 bg-surface-800">
         <motion.div
-          className="h-full bg-gradient-to-r from-brand-500 to-accent-500"
+          className="h-full bg-brand-500"
           initial={{ width: 0 }}
           animate={{ width: `${(currentRound / totalRounds) * 100}%` }}
           transition={{ duration: 0.5 }}
@@ -31,10 +31,10 @@ export function GameScreen() {
           key={currentRound}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="px-4 py-2 rounded-full bg-surface-900/80 backdrop-blur-xl border border-surface-700"
+          className="px-4 py-2 rounded-lg bg-surface-900 border border-surface-800"
         >
-          <span className="text-sm font-medium text-surface-300">
-            Question {currentRound}/{totalRounds}
+          <span className="text-sm font-medium text-surface-400">
+            Question <span className="text-surface-100 font-display">{currentRound}</span>/{totalRounds}
           </span>
         </motion.div>
       </div>

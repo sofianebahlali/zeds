@@ -1,11 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { AlertTriangle, RefreshCw, Home, Wifi } from "lucide-react";
-import { Button, Card } from "@/components/ui";
+import { AlertTriangle, RefreshCw, Home } from "lucide-react";
+import { Button } from "@/components/ui";
 import { ScreenContainer } from "@/components/layout";
 import { useUIStore, useGameStore, useRoomStore } from "@/stores";
-import { useSocket } from "@/hooks";
 
 export function ErrorScreen() {
   const error = useUIStore((s) => s.error);
@@ -34,11 +33,11 @@ export function ErrorScreen() {
           animate={{ scale: 1, opacity: 1 }}
           className="mb-8"
         >
-          <div className="w-24 h-24 mx-auto rounded-full bg-danger-500/20 flex items-center justify-center mb-6">
-            <AlertTriangle className="w-12 h-12 text-danger-400" />
+          <div className="w-20 h-20 mx-auto rounded-2xl bg-danger-500/15 flex items-center justify-center mb-6">
+            <AlertTriangle className="w-10 h-10 text-danger-400" />
           </div>
 
-          <h1 className="text-2xl font-bold text-white mb-2">Oups !</h1>
+          <h1 className="text-2xl font-display font-bold text-surface-100 mb-2">Oups !</h1>
           <p className="text-surface-400">
             {error || "Une erreur est survenue"}
           </p>

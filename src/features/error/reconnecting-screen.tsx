@@ -1,9 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Wifi, WifiOff, RefreshCw, Home } from "lucide-react";
+import { WifiOff, RefreshCw, Home } from "lucide-react";
 import { Button } from "@/components/ui";
 import { ScreenContainer } from "@/components/layout";
+import { cn } from "@/lib/utils";
 import { useUIStore, useConnectionStatus, useRoomStore, usePlayerStore, useGameStore } from "@/stores";
 import { useSocket } from "@/hooks";
 
@@ -40,32 +41,24 @@ export function ReconnectingScreen() {
           animate={{ scale: 1, opacity: 1 }}
           className="mb-8"
         >
-          {/* Animated icon */}
-          <div className="relative w-24 h-24 mx-auto mb-6">
+          <div className="relative w-20 h-20 mx-auto mb-6">
             {isFailed ? (
-              <div className="w-full h-full rounded-full bg-danger-500/20 flex items-center justify-center">
-                <WifiOff className="w-12 h-12 text-danger-400" />
+              <div className="w-full h-full rounded-2xl bg-danger-500/15 flex items-center justify-center">
+                <WifiOff className="w-10 h-10 text-danger-400" />
               </div>
             ) : (
-              <>
+              <div className="w-full h-full rounded-2xl bg-accent-500/15 flex items-center justify-center">
                 <motion.div
-                  className="absolute inset-0 rounded-full bg-warning-500/20"
-                  animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.2, 0.5] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                />
-                <div className="relative w-full h-full rounded-full bg-warning-500/20 flex items-center justify-center">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  >
-                    <RefreshCw className="w-12 h-12 text-warning-400" />
-                  </motion.div>
-                </div>
-              </>
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                >
+                  <RefreshCw className="w-10 h-10 text-accent-400" />
+                </motion.div>
+              </div>
             )}
           </div>
 
-          <h1 className="text-2xl font-bold text-white mb-2">
+          <h1 className="text-2xl font-display font-bold text-surface-100 mb-2">
             {isFailed ? "Connexion perdue" : "Reconnexion..."}
           </h1>
           <p className="text-surface-400">
@@ -85,14 +78,15 @@ export function ReconnectingScreen() {
             {Array.from({ length: maxAttempts }).map((_, i) => (
               <motion.div
                 key={i}
-                className={`w-3 h-3 rounded-full ${
+                className={cn(
+                  "w-2 h-2 rounded-full",
                   i < reconnectAttempts
-                    ? "bg-warning-500"
+                    ? "bg-accent-500"
                     : "bg-surface-700"
-                }`}
+                )}
                 animate={
                   i === reconnectAttempts
-                    ? { scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }
+                    ? { scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }
                     : undefined
                 }
                 transition={{ duration: 0.8, repeat: Infinity }}
@@ -130,7 +124,6 @@ export function ReconnectingScreen() {
           </Button>
         </motion.div>
 
-        {/* Tips */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

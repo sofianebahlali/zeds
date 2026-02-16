@@ -1,5 +1,7 @@
 import { Server } from "socket.io";
 import { RoomManager } from "./room-manager";
+import * as fs from "fs";
+import * as path from "path";
 import type {
   Room,
   Player,
@@ -8,6 +10,7 @@ import type {
   OpenQuestion,
   ImageQuestion,
   DictationQuestion,
+  EstimationQuestion,
   Answer,
   RoundResult,
   ClientToServerEvents,
@@ -130,11 +133,37 @@ export class GameEngine {
   }
 
   /**
+   * Load estimation questions from JSON file
+   */
+  private static loadEstimationQuestions(): Question[] {
+    const filePath = path.resolve(__dirname, "../data/questions/estimation.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw) as EstimationQuestion[];
+    } catch {
+      console.warn("No estimation questions found at", filePath);
+      return [];
+    }
+  }
+
+  /**
    * Prepare questions for the game
    */
   private prepareQuestions(): void {
+    let pool: Question[];
+
+    if (this.room.gameMode === "estimation") {
+      pool = GameEngine.loadEstimationQuestions();
+      if (pool.length === 0) {
+        console.warn("No estimation questions available, falling back to sample questions");
+        pool = [...SAMPLE_QUESTIONS];
+      }
+    } else {
+      pool = [...SAMPLE_QUESTIONS];
+    }
+
     // Shuffle and select questions based on settings
-    const shuffled = [...SAMPLE_QUESTIONS].sort(() => Math.random() - 0.5);
+    const shuffled = pool.sort(() => Math.random() - 0.5);
     this.questions = shuffled.slice(0, this.room.settings.totalRounds);
   }
 
@@ -195,11 +224,16 @@ export class GameEngine {
    * Sanitize question before sending to clients (hide answer)
    */
   private sanitizeQuestionForClient(question: Question): Question {
-    // Don't send the correct answer to clients for open questions
     if (question.type === "open") {
       return {
         ...question,
         answers: [], // Hide answers
+      };
+    }
+    if (question.type === "estimation") {
+      return {
+        ...question,
+        correctValue: 0, // Hide the real price
       };
     }
     return question;
@@ -304,6 +338,11 @@ export class GameEngine {
     const correctAnswer = this.getCorrectAnswer();
     const scores: { playerId: string; points: number; total: number }[] = [];
     let winner: Player | undefined;
+
+    if (this.currentQuestion.type === "estimation") {
+      return this.calculateEstimationScores(correctAnswer, scores);
+    }
+
     let fastestCorrectTime = Infinity;
 
     // Process each answer
@@ -383,6 +422,86 @@ export class GameEngine {
   }
 
   /**
+   * Calculate proportional scores for estimation questions
+   */
+  private calculateEstimationScores(
+    correctAnswer: string,
+    scores: { playerId: string; points: number; total: number }[]
+  ): RoundResult {
+    const q = this.currentQuestion as EstimationQuestion;
+    const realPrice = q.correctValue;
+    let winner: Player | undefined;
+    let closestDeviation = Infinity;
+
+    for (const [playerId, answer] of this.answers) {
+      const guess = parseFloat(answer.answer.replace(/[^\d.,]/g, "").replace(",", "."));
+
+      if (isNaN(guess)) {
+        answer.isCorrect = false;
+        answer.points = 0;
+        const player = this.room.players.find((p) => p.id === playerId);
+        if (player) player.streak = 0;
+        const updatedPlayer = this.roomManager.updatePlayerScore(playerId, 0);
+        if (updatedPlayer) {
+          scores.push({ playerId, points: 0, total: updatedPlayer.score });
+        }
+        continue;
+      }
+
+      // Proportional scoring: score = points * max(0, 1 - |guess - real| / real)
+      const deviation = Math.abs(guess - realPrice) / realPrice;
+      const proximityScore = Math.max(0, 1 - deviation);
+      let points = Math.round(q.points * proximityScore);
+
+      // Consider "correct" if within 15% of real price
+      answer.isCorrect = deviation <= 0.15;
+      answer.points = points;
+
+      // Streak management
+      const player = this.room.players.find((p) => p.id === playerId);
+      if (player) {
+        if (answer.isCorrect) {
+          player.streak++;
+          if (player.streak >= 3) {
+            points += 50 * Math.min(player.streak - 2, 5);
+            answer.points = points;
+          }
+        } else {
+          player.streak = 0;
+        }
+      }
+
+      // Track closest guess for winner
+      if (deviation < closestDeviation) {
+        closestDeviation = deviation;
+        winner = this.room.players.find((p) => p.id === playerId);
+      }
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);
+      if (updatedPlayer) {
+        scores.push({ playerId, points, total: updatedPlayer.score });
+      }
+    }
+
+    // Players who didn't answer
+    for (const player of this.room.players) {
+      if (!this.answers.has(player.id)) {
+        player.streak = 0;
+        scores.push({ playerId: player.id, points: 0, total: player.score });
+      }
+    }
+
+    return {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion!,
+      answers: Array.from(this.answers.values()),
+      correctAnswer,
+      winner,
+      scores,
+    };
+  }
+
+  /**
    * Get the correct answer for the current question
    */
   private getCorrectAnswer(): string {
@@ -399,6 +518,10 @@ export class GameEngine {
         return (this.currentQuestion as ImageQuestion).answer;
       case "dictation":
         return (this.currentQuestion as DictationQuestion).answer;
+      case "estimation": {
+        const q = this.currentQuestion as EstimationQuestion;
+        return `${q.correctValue.toLocaleString("fr-FR")} ${q.unit}`;
+      }
       default:
         return "";
     }
@@ -438,6 +561,9 @@ export class GameEngine {
         const q = this.currentQuestion as DictationQuestion;
         return normalizedAnswer === q.answer.toLowerCase();
       }
+      case "estimation":
+        // Estimation scoring is handled in calculateEstimationScores
+        return false;
       default:
         return false;
     }
@@ -480,8 +606,8 @@ export class GameEngine {
       this.endRound();
     }
 
-    // If only one player left, end the game
-    if (activePlayers.length <= 1) {
+    // If no players left, end the game
+    if (activePlayers.length <= 0) {
       this.finishGame();
     }
   }

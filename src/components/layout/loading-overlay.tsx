@@ -14,29 +14,23 @@ export function LoadingOverlay() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-surface-950/80 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-surface-950/90"
         >
           <div className="text-center">
-            {/* Animated spinner */}
-            <div className="relative w-16 h-16 mx-auto mb-4">
-              <motion.div
-                className="absolute inset-0 rounded-full border-4 border-brand-500/30"
-              />
-              <motion.div
-                className="absolute inset-0 rounded-full border-4 border-transparent border-t-brand-500"
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: 1,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-              />
-            </div>
+            <motion.div
+              className="w-8 h-8 mx-auto mb-4 border-2 border-surface-700 border-t-brand-500 rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 0.8,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            />
             {loadingMessage && (
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-surface-300 text-sm"
+                className="text-surface-400 text-sm"
               >
                 {loadingMessage}
               </motion.p>

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Gamepad2, Users, Sparkles, Zap } from "lucide-react";
+import { Users } from "lucide-react";
 import { Button } from "@/components/ui";
 import { ScreenContainer } from "@/components/layout";
 import { useUIStore } from "@/stores";
@@ -11,55 +11,40 @@ export function HomeScreen() {
 
   return (
     <ScreenContainer className="overflow-hidden">
-      <div className="w-full max-w-md mx-auto">
-        {/* Logo and Title */}
+      <div className="w-full max-w-sm mx-auto">
+        {/* Logo: stylized "?" in serif font */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-12"
+          className="text-center mb-14"
         >
-          {/* Animated Logo */}
           <motion.div
-            className="relative w-24 h-24 mx-auto mb-6"
-            animate={{
-              scale: [1, 1.05, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
+            className="w-24 h-24 mx-auto mb-8 rounded-2xl bg-brand-500 flex items-center justify-center"
+            initial={{ rotate: -6 }}
+            animate={{ rotate: [-6, -3, -6] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-brand-500 to-accent-500 rounded-3xl rotate-6 opacity-60 blur-lg" />
-            <div className="relative bg-gradient-to-br from-brand-500 to-accent-500 rounded-3xl w-full h-full flex items-center justify-center shadow-2xl">
-              <Gamepad2 className="w-12 h-12 text-white" />
-            </div>
-            {/* Sparkles */}
-            <motion.div
-              className="absolute -top-2 -right-2"
-              animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              <Sparkles className="w-6 h-6 text-warning-400" />
-            </motion.div>
+            <span className="font-display text-6xl text-white font-bold select-none" style={{ lineHeight: 1 }}>
+              ?
+            </span>
           </motion.div>
 
           <motion.h1
-            className="text-4xl sm:text-5xl font-bold mb-3"
+            className="text-5xl sm:text-6xl font-display font-bold text-surface-100 italic"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <span className="text-gradient">Quizz Arena</span>
+            Quizz Arena
           </motion.h1>
           <motion.p
-            className="text-surface-400 text-lg"
+            className="text-surface-400 text-lg mt-3"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            Défie tes amis en temps réel !
+            Défie tes amis en temps réel
           </motion.p>
         </motion.div>
 
@@ -68,52 +53,40 @@ export function HomeScreen() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="space-y-4"
+          className="space-y-3"
         >
           <Button
             variant="primary"
             size="xl"
             fullWidth
             onClick={() => setScreen("create")}
-            leftIcon={<Zap className="w-6 h-6" />}
           >
             Créer une partie
           </Button>
 
           <Button
-            variant="glass"
+            variant="secondary"
             size="xl"
             fullWidth
             onClick={() => setScreen("join")}
-            leftIcon={<Users className="w-6 h-6" />}
+            leftIcon={<Users className="w-5 h-5" />}
           >
-            Rejoindre une partie
+            Rejoindre
           </Button>
         </motion.div>
 
-        {/* Features showcase */}
+        {/* Feature tags */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="mt-12 grid grid-cols-3 gap-4"
+          className="mt-14 flex items-center justify-center gap-3 text-surface-500 text-sm"
         >
-          {[
-            { icon: "🎯", label: "Quiz rapides" },
-            { icon: "👥", label: "Multijoueur" },
-            { icon: "🏆", label: "Classements" },
-          ].map((feature, i) => (
-            <motion.div
-              key={feature.label}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 + i * 0.1 }}
-              className="text-center p-3 rounded-2xl bg-surface-900/50"
-            >
-              <div className="text-3xl mb-2">{feature.icon}</div>
-              <div className="text-xs text-surface-400">{feature.label}</div>
-            </motion.div>
-          ))}
+          <span>Quiz rapides</span>
+          <span className="w-1 h-1 rounded-full bg-surface-700" />
+          <span>Multijoueur</span>
+          <span className="w-1 h-1 rounded-full bg-surface-700" />
+          <span>Classements</span>
         </motion.div>
       </div>
     </ScreenContainer>

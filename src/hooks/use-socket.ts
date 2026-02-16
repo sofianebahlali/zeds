@@ -1,201 +1,176 @@
 "use client";
 
-import { useEffect, useCallback, useRef } from "react";
+import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, Question, RoundResult } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult } from "@/types";
+
+// Module-level flag: listeners are attached ONCE across all component instances
+let listenersAttached = false;
+
+function setupSocketListeners() {
+  if (listenersAttached) return;
+  listenersAttached = true;
+
+  const socket = getSocket();
+
+  // Connection events
+  socket.on("connect", () => {
+    console.log("Socket connected");
+    useUIStore.getState().setConnected(true);
+    useUIStore.getState().setReconnecting(false);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Socket disconnected");
+    useUIStore.getState().setConnected(false);
+  });
+
+  socket.on("connect_error", (error) => {
+    console.error("Socket connection error:", error);
+    useUIStore.getState().setReconnecting(true);
+  });
+
+  // Room events
+  socket.on("room:joined", (room: Room, player: Player) => {
+    useRoomStore.getState().setRoom(room);
+    usePlayerStore.getState().setIsHost(player.isHost);
+    useUIStore.getState().setScreen("lobby");
+    useUIStore.getState().setLoading(false);
+    useUIStore.getState().addNotification({
+      type: "success",
+      message: player.isHost ? "Room créée !" : "Tu as rejoint la room !",
+    });
+  });
+
+  socket.on("room:player_joined", (player: Player) => {
+    useRoomStore.getState().addPlayer(player);
+    useUIStore.getState().addNotification({
+      type: "info",
+      message: `${player.name} a rejoint la partie`,
+    });
+  });
+
+  socket.on("room:player_left", (playerId: string) => {
+    const room = useRoomStore.getState().room;
+    const player = room?.players.find((p) => p.id === playerId);
+    useRoomStore.getState().removePlayer(playerId);
+    if (player) {
+      useUIStore.getState().addNotification({
+        type: "info",
+        message: `${player.name} a quitté la partie`,
+      });
+    }
+  });
+
+  socket.on("room:player_ready", (playerId: string, isReady: boolean) => {
+    useRoomStore.getState().setPlayerReady(playerId, isReady);
+  });
+
+  socket.on("room:settings_updated", (settings: GameSettings) => {
+    useRoomStore.getState().updateSettings(settings);
+  });
+
+  socket.on("room:host_changed", (newHostId: string) => {
+    const currentPlayerId = usePlayerStore.getState().playerId;
+    useRoomStore.getState().setHost(newHostId);
+    if (`player_${socket.id}` === newHostId || currentPlayerId === newHostId) {
+      usePlayerStore.getState().setIsHost(true);
+      useUIStore.getState().addNotification({
+        type: "info",
+        message: "Tu es maintenant l'hôte !",
+      });
+    }
+  });
+
+  socket.on("room:error", (message: string) => {
+    useUIStore.getState().setError(message);
+    useUIStore.getState().setLoading(false);
+  });
+
+  // Game events
+  socket.on("game:starting", (countdown: number) => {
+    if (useGameStore.getState().status !== "countdown") {
+      useUIStore.getState().setScreen("game");
+      const room = useRoomStore.getState().room;
+      if (room) {
+        useGameStore.getState().startGame(room.settings.totalRounds);
+      }
+    }
+    useGameStore.getState().setCountdown(countdown);
+  });
+
+  socket.on("game:round_start", (_round: number, question: Question) => {
+    useGameStore.getState().setCurrentQuestion(question);
+  });
+
+  socket.on("game:time_update", (time: number) => {
+    useGameStore.getState().setTimeRemaining(time);
+  });
+
+  socket.on("game:player_answered", (playerId: string) => {
+    useGameStore.getState().markPlayerAnswered(playerId);
+  });
+
+  socket.on("game:round_end", (result: RoundResult) => {
+    useGameStore.getState().setRoundResult(result);
+  });
+
+  socket.on("game:leaderboard", (players: Player[]) => {
+    useRoomStore.getState().setPlayers(players);
+    useGameStore.getState().setStatus("leaderboard");
+  });
+
+  socket.on("game:finished", (finalScores: Player[]) => {
+    useRoomStore.getState().setPlayers(finalScores);
+    useGameStore.getState().finishGame();
+    useUIStore.getState().setScreen("scoreboard");
+  });
+
+  // Connection events
+  socket.on("connection:reconnected", (room: Room, player: Player) => {
+    useRoomStore.getState().setRoom(room);
+    usePlayerStore.getState().setIsHost(player.isHost);
+    useUIStore.getState().setReconnecting(false);
+    useUIStore.getState().setConnected(true);
+
+    if (room.status === "playing") {
+      useUIStore.getState().setScreen("game");
+    } else if (room.status === "finished") {
+      useUIStore.getState().setScreen("scoreboard");
+    } else {
+      useUIStore.getState().setScreen("lobby");
+    }
+
+    useUIStore.getState().addNotification({
+      type: "success",
+      message: "Reconnecté !",
+    });
+  });
+
+  socket.on("connection:player_disconnected", (playerId: string) => {
+    useRoomStore.getState().setPlayerDisconnected(playerId, false);
+  });
+
+  socket.on("connection:player_reconnected", (playerId: string) => {
+    useRoomStore.getState().setPlayerDisconnected(playerId, true);
+    const room = useRoomStore.getState().room;
+    const player = room?.players.find((p) => p.id === playerId);
+    if (player) {
+      useUIStore.getState().addNotification({
+        type: "info",
+        message: `${player.name} s'est reconnecté`,
+      });
+    }
+  });
+}
 
 export function useSocket() {
   const socket = getSocket();
-  const isInitialized = useRef(false);
 
-  // Get store actions
-  const setRoom = useRoomStore((s) => s.setRoom);
-  const addPlayer = useRoomStore((s) => s.addPlayer);
-  const removePlayer = useRoomStore((s) => s.removePlayer);
-  const setPlayerReady = useRoomStore((s) => s.setPlayerReady);
-  const updateSettings = useRoomStore((s) => s.updateSettings);
-  const setHost = useRoomStore((s) => s.setHost);
-  const setPlayerDisconnected = useRoomStore((s) => s.setPlayerDisconnected);
-
-  const playerSetIsHost = usePlayerStore((s) => s.setIsHost);
-
-  const setGameStatus = useGameStore((s) => s.setStatus);
-  const setCountdown = useGameStore((s) => s.setCountdown);
-  const setCurrentQuestion = useGameStore((s) => s.setCurrentQuestion);
-  const setTimeRemaining = useGameStore((s) => s.setTimeRemaining);
-  const markPlayerAnswered = useGameStore((s) => s.markPlayerAnswered);
-  const setRoundResult = useGameStore((s) => s.setRoundResult);
-  const startGame = useGameStore((s) => s.startGame);
-  const finishGame = useGameStore((s) => s.finishGame);
-
-  const setScreen = useUIStore((s) => s.setScreen);
-  const setError = useUIStore((s) => s.setError);
-  const setConnected = useUIStore((s) => s.setConnected);
-  const setReconnecting = useUIStore((s) => s.setReconnecting);
-  const addNotification = useUIStore((s) => s.addNotification);
-  const setLoading = useUIStore((s) => s.setLoading);
-
-  // Setup event listeners
+  // Setup listeners once (module-level, survives component mount/unmount)
   useEffect(() => {
-    if (isInitialized.current) return;
-    isInitialized.current = true;
-
-    // Connection events
-    socket.on("connect", () => {
-      console.log("Socket connected");
-      setConnected(true);
-      setReconnecting(false);
-    });
-
-    socket.on("disconnect", () => {
-      console.log("Socket disconnected");
-      setConnected(false);
-    });
-
-    socket.on("connect_error", (error) => {
-      console.error("Socket connection error:", error);
-      setReconnecting(true);
-    });
-
-    // Room events
-    socket.on("room:joined", (room: Room, player: Player) => {
-      setRoom(room);
-      playerSetIsHost(player.isHost);
-      setScreen("lobby");
-      setLoading(false);
-      addNotification({
-        type: "success",
-        message: player.isHost ? "Room créée !" : "Tu as rejoint la room !",
-      });
-    });
-
-    socket.on("room:player_joined", (player: Player) => {
-      addPlayer(player);
-      addNotification({
-        type: "info",
-        message: `${player.name} a rejoint la partie`,
-      });
-    });
-
-    socket.on("room:player_left", (playerId: string) => {
-      const room = useRoomStore.getState().room;
-      const player = room?.players.find((p) => p.id === playerId);
-      removePlayer(playerId);
-      if (player) {
-        addNotification({
-          type: "info",
-          message: `${player.name} a quitté la partie`,
-        });
-      }
-    });
-
-    socket.on("room:player_ready", (playerId: string, isReady: boolean) => {
-      setPlayerReady(playerId, isReady);
-    });
-
-    socket.on("room:settings_updated", (settings: GameSettings) => {
-      updateSettings(settings);
-    });
-
-    socket.on("room:host_changed", (newHostId: string) => {
-      const currentPlayerId = usePlayerStore.getState().playerId;
-      setHost(newHostId);
-      if (`player_${socket.id}` === newHostId || currentPlayerId === newHostId) {
-        playerSetIsHost(true);
-        addNotification({
-          type: "info",
-          message: "Tu es maintenant l'hôte !",
-        });
-      }
-    });
-
-    socket.on("room:error", (message: string) => {
-      setError(message);
-      setLoading(false);
-    });
-
-    // Game events
-    socket.on("game:starting", (countdown: number) => {
-      setCountdown(countdown);
-      setScreen("game");
-      const room = useRoomStore.getState().room;
-      if (room) {
-        startGame(room.settings.totalRounds);
-      }
-    });
-
-    socket.on("game:round_start", (round: number, question: Question) => {
-      setCurrentQuestion(question);
-    });
-
-    socket.on("game:time_update", (time: number) => {
-      setTimeRemaining(time);
-    });
-
-    socket.on("game:player_answered", (playerId: string) => {
-      markPlayerAnswered(playerId);
-    });
-
-    socket.on("game:round_end", (result: RoundResult) => {
-      setRoundResult(result);
-    });
-
-    socket.on("game:leaderboard", (players: Player[]) => {
-      const room = useRoomStore.getState().room;
-      if (room) {
-        useRoomStore.getState().setPlayers(players);
-      }
-      setGameStatus("leaderboard");
-    });
-
-    socket.on("game:finished", (finalScores: Player[]) => {
-      useRoomStore.getState().setPlayers(finalScores);
-      finishGame();
-      setScreen("scoreboard");
-    });
-
-    // Connection events
-    socket.on("connection:reconnected", (room: Room, player: Player) => {
-      setRoom(room);
-      playerSetIsHost(player.isHost);
-      setReconnecting(false);
-      setConnected(true);
-
-      if (room.status === "playing") {
-        setScreen("game");
-      } else if (room.status === "finished") {
-        setScreen("scoreboard");
-      } else {
-        setScreen("lobby");
-      }
-
-      addNotification({
-        type: "success",
-        message: "Reconnecté !",
-      });
-    });
-
-    socket.on("connection:player_disconnected", (playerId: string) => {
-      setPlayerDisconnected(playerId, false);
-    });
-
-    socket.on("connection:player_reconnected", (playerId: string) => {
-      setPlayerDisconnected(playerId, true);
-      const room = useRoomStore.getState().room;
-      const player = room?.players.find((p) => p.id === playerId);
-      if (player) {
-        addNotification({
-          type: "info",
-          message: `${player.name} s'est reconnecté`,
-        });
-      }
-    });
-
-    return () => {
-      socket.removeAllListeners();
-      isInitialized.current = false;
-    };
+    setupSocketListeners();
   }, []);
 
   // Actions
@@ -208,23 +183,37 @@ export function useSocket() {
   }, []);
 
   const createRoom = useCallback((playerName: string, avatar: string) => {
-    setLoading(true, "Création de la room...");
-    connectSocket();
-    socket.emit("room:create", playerName, avatar);
-  }, [socket, setLoading]);
+    useUIStore.getState().setLoading(true, "Création de la room...");
+
+    if (socket.connected) {
+      socket.emit("room:create", playerName, avatar);
+    } else {
+      socket.once("connect", () => {
+        socket.emit("room:create", playerName, avatar);
+      });
+      connectSocket();
+    }
+  }, [socket]);
 
   const joinRoom = useCallback((roomCode: string, playerName: string, avatar: string) => {
-    setLoading(true, "Connexion à la room...");
-    connectSocket();
-    socket.emit("room:join", roomCode, playerName, avatar);
-  }, [socket, setLoading]);
+    useUIStore.getState().setLoading(true, "Connexion à la room...");
+
+    if (socket.connected) {
+      socket.emit("room:join", roomCode, playerName, avatar);
+    } else {
+      socket.once("connect", () => {
+        socket.emit("room:join", roomCode, playerName, avatar);
+      });
+      connectSocket();
+    }
+  }, [socket]);
 
   const leaveRoom = useCallback(() => {
     socket.emit("room:leave");
-    setRoom(null);
-    setScreen("home");
+    useRoomStore.getState().setRoom(null);
+    useUIStore.getState().setScreen("home");
     useGameStore.getState().resetGame();
-  }, [socket, setRoom, setScreen]);
+  }, [socket]);
 
   const setReady = useCallback((isReady: boolean) => {
     socket.emit("room:ready", isReady);
@@ -236,7 +225,9 @@ export function useSocket() {
   }, [socket]);
 
   const changeGameMode = useCallback((mode: string) => {
-    socket.emit("room:change_game_mode", mode as "qcm" | "open" | "image" | "dictation");
+    socket.emit("room:change_game_mode", mode as GameMode);
+    // Optimistic update
+    useRoomStore.getState().setGameMode(mode as GameMode);
   }, [socket]);
 
   const kickPlayer = useCallback((playerId: string) => {
@@ -248,8 +239,7 @@ export function useSocket() {
   }, [socket]);
 
   const submitAnswer = useCallback((answer: string) => {
-    const canSubmit = useGameStore.getState().canSubmitAnswer();
-    if (canSubmit) {
+    if (useGameStore.getState().canSubmitAnswer()) {
       socket.emit("game:submit_answer", answer);
       useGameStore.getState().submitAnswer(answer);
     }
@@ -260,10 +250,10 @@ export function useSocket() {
   }, [socket]);
 
   const reconnect = useCallback((roomCode: string, playerId: string) => {
-    setReconnecting(true);
+    useUIStore.getState().setReconnecting(true);
     connectSocket();
     socket.emit("connection:reconnect", roomCode, playerId);
-  }, [socket, setReconnecting]);
+  }, [socket]);
 
   return {
     socket,

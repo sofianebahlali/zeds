@@ -161,10 +161,15 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
         return;
       }
 
-      if (room.players.length < 2) {
-        socket.emit("room:error", "Need at least 2 players to start");
-        return;
+      // Clean up old game engine if replaying
+      const oldEngine = gameEngines.get(room.code);
+      if (oldEngine) {
+        oldEngine.destroy();
+        gameEngines.delete(room.code);
       }
+
+      // Reset scores for a fresh game
+      roomManager.resetAllScores(room.code);
 
       // Create game engine for this room
       const gameEngine = new GameEngine(room, io, roomManager);

@@ -20,9 +20,9 @@ const sizeStyles = {
 
 const statusColors = {
   online: "bg-success-500",
-  offline: "bg-surface-500",
+  offline: "bg-surface-600",
   ready: "bg-success-500",
-  answering: "bg-warning-500 animate-pulse",
+  answering: "bg-accent-400 animate-pulse",
   answered: "bg-brand-500",
 };
 
@@ -35,8 +35,8 @@ const Avatar = React.forwardRef<
       ref={ref}
       className={cn(
         "relative flex shrink-0 overflow-hidden rounded-full",
-        "bg-gradient-to-br from-surface-800 to-surface-900",
-        "border-2 border-surface-700",
+        "bg-surface-800",
+        "border border-surface-700",
         "items-center justify-center",
         sizeStyles[size],
         className
@@ -92,7 +92,6 @@ const AvatarFallback = React.forwardRef<
 ));
 AvatarFallback.displayName = "AvatarFallback";
 
-// Avatar selector grid for choosing emoji avatars
 interface AvatarSelectorProps {
   avatars: readonly string[];
   selected: string;
@@ -120,15 +119,14 @@ const AvatarSelector = ({
           onClick={() => onSelect(avatar)}
           className={cn(
             "flex items-center justify-center",
-            "h-12 w-12 rounded-xl",
+            "h-12 w-12 rounded-lg",
             "text-2xl",
-            "transition-all duration-200",
+            "transition-colors duration-150",
             selected === avatar
-              ? "bg-brand-500/20 border-2 border-brand-500 scale-110"
-              : "bg-surface-800 border-2 border-transparent hover:border-surface-600"
+              ? "bg-brand-500/15 border-2 border-brand-500"
+              : "bg-surface-800 border border-surface-700 hover:border-surface-500"
           )}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
+          whileTap={{ scale: 0.9 }}
         >
           {avatar}
         </motion.button>

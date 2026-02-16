@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation";
 
 export interface GameSettings {
   maxPlayers: number;
@@ -96,7 +96,19 @@ export interface OpenQuestion extends BaseQuestion {
   caseSensitive: boolean;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion;
+export interface EstimationQuestion extends BaseQuestion {
+  type: "estimation";
+  question: string;
+  productName: string;
+  imageUrl: string;
+  correctValue: number;
+  unit: string;
+  category: string;
+  difficulty: "easy" | "medium" | "hard";
+  source?: string;
+}
+
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -265,5 +277,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Réponds librement à la question",
     icon: "💬",
     color: "from-warning-500 to-warning-700",
+  },
+  {
+    id: "estimation",
+    name: "Le Juste Prix",
+    description: "Devine le prix de l'objet",
+    icon: "💰",
+    color: "from-emerald-500 to-emerald-700",
   },
 ];

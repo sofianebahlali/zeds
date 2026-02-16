@@ -17,7 +17,7 @@ export function CountdownOverlay() {
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-surface-400 text-xl mb-6"
+          className="text-surface-400 text-xl mb-8"
         >
           La partie commence dans...
         </motion.p>
@@ -28,19 +28,10 @@ export function CountdownOverlay() {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 1.5, opacity: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="relative"
         >
-          {/* Glow effect */}
-          <div className="absolute inset-0 blur-3xl">
-            <div className="w-40 h-40 mx-auto rounded-full bg-gradient-to-br from-brand-500 to-accent-500 opacity-40" />
-          </div>
-
-          {/* Number */}
-          <div className="relative w-40 h-40 mx-auto rounded-full bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center shadow-2xl">
-            <span className="text-8xl font-bold text-white">
-              {countdown}
-            </span>
-          </div>
+          <span className="font-display text-[10rem] leading-none font-bold text-brand-500 select-none">
+            {countdown}
+          </span>
         </motion.div>
 
         <motion.p

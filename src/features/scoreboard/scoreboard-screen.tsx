@@ -41,7 +41,7 @@ export function ScoreboardScreen() {
   const handleShare = async () => {
     const text = `J'ai terminé ${getOrdinal(myRank)} sur Quizz Arena avec ${
       sortedPlayers.find((p) => p.id === myPlayerId)?.score || 0
-    } points ! 🎮`;
+    } points !`;
 
     if (navigator.share) {
       try {
@@ -73,11 +73,11 @@ export function ScoreboardScreen() {
   const getRankIcon = (rank: number) => {
     switch (rank) {
       case 1:
-        return <Trophy className="w-8 h-8 text-warning-400" />;
+        return <Trophy className="w-8 h-8 text-accent-400" />;
       case 2:
         return <Medal className="w-8 h-8 text-surface-300" />;
       case 3:
-        return <Award className="w-8 h-8 text-amber-600" />;
+        return <Award className="w-8 h-8 text-brand-400" />;
       default:
         return null;
     }
@@ -92,7 +92,7 @@ export function ScoreboardScreen() {
           height={windowSize.height}
           recycle={false}
           numberOfPieces={200}
-          colors={["#0ea5e9", "#d946ef", "#22c55e", "#f59e0b"]}
+          colors={["#FF5C39", "#FFB224", "#3DD68C", "#FAF8F5"]}
         />
       )}
 
@@ -105,29 +105,15 @@ export function ScoreboardScreen() {
           className="text-center mb-8"
         >
           <motion.div
-            animate={{
-              y: [0, -10, 0],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             className="relative inline-block mb-4"
           >
-            {/* Glow effect */}
-            <div className="absolute inset-0 blur-2xl">
-              <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-warning-500 to-warning-600 opacity-50" />
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+              <Trophy className="w-10 h-10 text-accent-400" />
             </div>
-
-            {/* Winner avatar */}
-            <div className="relative">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <Trophy className="w-10 h-10 text-warning-400" />
-              </div>
-              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-warning-500 to-warning-600 flex items-center justify-center text-5xl border-4 border-warning-400/50 shadow-2xl">
-                {winner?.avatar}
-              </div>
+            <div className="w-28 h-28 rounded-2xl bg-accent-500/15 border-2 border-accent-500/40 flex items-center justify-center text-5xl">
+              {winner?.avatar}
             </div>
           </motion.div>
 
@@ -135,7 +121,7 @@ export function ScoreboardScreen() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-3xl font-bold text-white mb-1"
+            className="text-3xl font-display font-bold text-surface-100 mb-1"
           >
             {winner?.name}
           </motion.h1>
@@ -143,17 +129,17 @@ export function ScoreboardScreen() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-warning-400 font-semibold"
+            className="text-accent-400 font-medium"
           >
-            remporte la partie ! 🏆
+            remporte la partie !
           </motion.p>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="text-2xl font-bold text-white mt-2"
+            className="text-3xl font-display font-bold text-surface-100 mt-2"
           >
-            {winner?.score} points
+            {winner?.score} <span className="text-base text-surface-400 font-sans font-normal">points</span>
           </motion.p>
         </motion.div>
 
@@ -164,7 +150,7 @@ export function ScoreboardScreen() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <Card variant="gradient" gradient="from-brand-500/20 to-accent-500/20" className="mb-6">
+            <Card variant="gradient" className="mb-6">
               <div className="flex items-center gap-4">
                 <Avatar
                   emoji={sortedPlayers.find((p) => p.id === myPlayerId)?.avatar || "🦊"}
@@ -172,13 +158,13 @@ export function ScoreboardScreen() {
                 />
                 <div className="flex-1">
                   <p className="text-surface-400 text-sm">Ton classement</p>
-                  <p className="text-2xl font-bold text-white">
+                  <p className="text-2xl font-display font-bold text-surface-100">
                     {getOrdinal(myRank)}
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-surface-400 text-sm">Score</p>
-                  <p className="text-2xl font-bold text-white">
+                  <p className="text-2xl font-display font-bold text-surface-100">
                     {sortedPlayers.find((p) => p.id === myPlayerId)?.score || 0}
                   </p>
                 </div>
@@ -197,8 +183,8 @@ export function ScoreboardScreen() {
           <h2 className="text-sm font-medium text-surface-400 mb-3">
             Classement final
           </h2>
-          <Card variant="glass" padding="sm">
-            <div className="space-y-2">
+          <Card padding="sm">
+            <div className="space-y-1">
               {sortedPlayers.map((player, index) => {
                 const rank = index + 1;
                 const isMe = player.id === myPlayerId;
@@ -211,21 +197,19 @@ export function ScoreboardScreen() {
                     transition={{ delay: 0.7 + index * 0.1 }}
                     className={cn(
                       "flex items-center gap-3 p-3 rounded-xl",
-                      rank <= 3 && "bg-surface-800/50",
-                      isMe && "ring-2 ring-brand-500/50"
+                      rank === 1 && "bg-surface-800/50",
+                      isMe && "bg-brand-500/5 border border-brand-500/20"
                     )}
                   >
-                    {/* Rank */}
                     <div className="w-8 shrink-0 flex justify-center">
                       {getRankIcon(rank) || (
-                        <span className="text-surface-500 font-bold">{rank}</span>
+                        <span className="text-surface-500 font-display font-bold">{rank}</span>
                       )}
                     </div>
 
-                    {/* Player */}
                     <Avatar emoji={player.avatar} size="sm" />
                     <div className="flex-1 min-w-0">
-                      <span className="font-medium text-white truncate block">
+                      <span className="font-medium text-surface-100 truncate block">
                         {player.name}
                         {isMe && (
                           <span className="text-surface-500 text-xs ml-1">
@@ -235,8 +219,7 @@ export function ScoreboardScreen() {
                       </span>
                     </div>
 
-                    {/* Score */}
-                    <span className="font-bold text-white">{player.score}</span>
+                    <span className="font-display font-bold text-surface-100">{player.score}</span>
                   </motion.div>
                 );
               })}
@@ -263,7 +246,7 @@ export function ScoreboardScreen() {
 
             {isHost && (
               <Button
-                variant="accent"
+                variant="primary"
                 size="lg"
                 onClick={handlePlayAgain}
                 leftIcon={<RotateCcw className="w-5 h-5" />}

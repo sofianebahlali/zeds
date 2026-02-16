@@ -294,6 +294,21 @@ export class RoomManager {
   }
 
   /**
+   * Reset all player scores (for play again)
+   */
+  resetAllScores(code: string): void {
+    const room = this.rooms.get(code);
+    if (!room) return;
+
+    room.players.forEach((p) => {
+      p.score = 0;
+      p.roundScore = 0;
+      p.streak = 0;
+    });
+    room.currentRound = 0;
+  }
+
+  /**
    * Kick a player from room
    */
   kickPlayer(code: string, playerId: string, requesterId: string): boolean {
@@ -319,7 +334,7 @@ export class RoomManager {
    */
   areAllPlayersReady(code: string): boolean {
     const room = this.rooms.get(code);
-    if (!room || room.players.length < 2) return false;
+    if (!room || room.players.length < 1) return false;
 
     return room.players.every((p) => p.isReady || p.isHost);
   }

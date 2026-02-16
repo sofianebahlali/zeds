@@ -28,28 +28,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-    const variantStyles = {
-      default: [
-        "bg-surface-900",
-        "border-surface-700",
-        "focus:border-brand-500",
-        "focus:ring-brand-500/20",
-      ],
-      ghost: [
-        "bg-transparent",
-        "border-transparent",
-        "focus:bg-surface-900",
-        "focus:border-brand-500",
-      ],
-      glass: [
-        "bg-white/5",
-        "backdrop-blur-xl",
-        "border-white/10",
-        "focus:border-brand-500",
-        "focus:ring-brand-500/20",
-      ],
-    };
-
     return (
       <div className="w-full space-y-2">
         {label && (
@@ -59,31 +37,25 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative">
           {leftIcon && (
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-400">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-500">
               {leftIcon}
             </div>
           )}
           <input
             type={type}
             className={cn(
-              // Base styles
               "flex w-full rounded-xl",
-              "border-2 transition-all duration-200",
-              "text-white placeholder:text-surface-500",
-              "focus:outline-none focus:ring-4",
-              // Mobile-first sizing
+              "border border-surface-700 bg-surface-800",
+              "transition-colors duration-150",
+              "text-surface-100 placeholder:text-surface-500",
+              "focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30",
               "h-14 min-h-[56px]",
               "px-4 py-4",
               "text-base",
-              // Variant styles
-              variantStyles[variant],
-              // Icon padding
               leftIcon && "pl-12",
               rightIcon && "pr-12",
-              // Error state
-              error && "border-danger-500 focus:border-danger-500 focus:ring-danger-500/20",
-              // Disabled state
-              disabled && "opacity-50 cursor-not-allowed",
+              error && "border-danger-500 focus:border-danger-500 focus:ring-danger-500/30",
+              disabled && "opacity-40 cursor-not-allowed",
               className
             )}
             ref={ref}
@@ -91,7 +63,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {rightIcon && (
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-surface-400">
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-surface-500">
               {rightIcon}
             </div>
           )}

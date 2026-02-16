@@ -20,30 +20,17 @@ export function LeaderboardDisplay() {
   const getRankIcon = (rank: number) => {
     switch (rank) {
       case 1:
-        return <Trophy className="w-6 h-6 text-warning-400" />;
+        return <Trophy className="w-6 h-6 text-accent-400" />;
       case 2:
         return <Medal className="w-6 h-6 text-surface-300" />;
       case 3:
-        return <Award className="w-6 h-6 text-amber-600" />;
+        return <Award className="w-6 h-6 text-brand-400" />;
       default:
         return (
-          <span className="w-6 h-6 flex items-center justify-center text-surface-500 font-bold">
+          <span className="w-6 h-6 flex items-center justify-center text-surface-500 font-display font-bold">
             {rank}
           </span>
         );
-    }
-  };
-
-  const getRankColor = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return "from-warning-500/20 to-warning-600/20 border-warning-500/30";
-      case 2:
-        return "from-surface-400/10 to-surface-500/10 border-surface-400/20";
-      case 3:
-        return "from-amber-600/10 to-amber-700/10 border-amber-600/20";
-      default:
-        return "from-surface-800 to-surface-900 border-surface-700";
     }
   };
 
@@ -52,7 +39,7 @@ export function LeaderboardDisplay() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="flex flex-col h-full px-4 pb-4"
+      className="flex flex-col h-full px-5 pb-4"
     >
       {/* Header */}
       <motion.div
@@ -60,14 +47,14 @@ export function LeaderboardDisplay() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-8 pt-8"
       >
-        <h2 className="text-2xl font-bold text-white mb-2">Classement</h2>
+        <h2 className="text-3xl font-display font-bold text-surface-100 mb-2">Classement</h2>
         <p className="text-surface-400">
           Après {currentRound} / {totalRounds} manches
         </p>
       </motion.div>
 
       {/* Leaderboard */}
-      <div className="flex-1 space-y-3 overflow-auto">
+      <div className="flex-1 space-y-2 overflow-auto">
         {sortedPlayers.map((player, index) => {
           const rank = index + 1;
           const isMe = player.id === myPlayerId;
@@ -80,16 +67,16 @@ export function LeaderboardDisplay() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
               className={cn(
-                "relative overflow-hidden rounded-2xl",
+                "relative overflow-hidden rounded-xl",
                 "border",
-                "bg-gradient-to-r",
-                getRankColor(rank),
-                isMe && "ring-2 ring-brand-500"
+                "bg-surface-900",
+                rank === 1 ? "border-accent-500/40" : "border-surface-800",
+                isMe && "border-brand-500/40"
               )}
             >
               {/* Score bar background */}
               <motion.div
-                className="absolute inset-0 bg-white/5"
+                className="absolute inset-0 bg-surface-800/50"
                 initial={{ width: 0 }}
                 animate={{ width: `${scorePercentage}%` }}
                 transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
@@ -97,16 +84,11 @@ export function LeaderboardDisplay() {
 
               {/* Content */}
               <div className="relative flex items-center gap-4 p-4">
-                {/* Rank */}
                 <div className="shrink-0">{getRankIcon(rank)}</div>
-
-                {/* Avatar */}
                 <Avatar emoji={player.avatar} size="md" />
-
-                {/* Name and score */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-white truncate">
+                    <span className="font-semibold text-surface-100 truncate">
                       {player.name}
                     </span>
                     {isMe && (
@@ -114,18 +96,16 @@ export function LeaderboardDisplay() {
                     )}
                   </div>
                   {player.streak >= 3 && (
-                    <span className="text-xs text-warning-400">
-                      🔥 Série de {player.streak}
+                    <span className="text-xs text-accent-400">
+                      Série de {player.streak}
                     </span>
                   )}
                 </div>
-
-                {/* Score */}
                 <div className="text-right">
-                  <span className="text-2xl font-bold text-white">
+                  <span className="text-2xl font-display font-bold text-surface-100">
                     {player.score}
                   </span>
-                  <span className="text-surface-400 text-sm ml-1">pts</span>
+                  <span className="text-surface-500 text-sm ml-1">pts</span>
                 </div>
               </div>
             </motion.div>
@@ -140,7 +120,7 @@ export function LeaderboardDisplay() {
         transition={{ delay: 0.5 }}
         className="mt-6 text-center"
       >
-        <p className="text-surface-400 text-sm">
+        <p className="text-surface-500 text-sm">
           Prochaine question dans quelques secondes...
         </p>
         <div className="mt-2">

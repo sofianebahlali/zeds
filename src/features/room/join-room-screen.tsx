@@ -24,7 +24,6 @@ export function JoinRoomScreen() {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const { joinRoom } = useSocket();
 
-  // Auto-focus first input
   useEffect(() => {
     if (step === "code") {
       inputRefs.current[0]?.focus();
@@ -32,7 +31,6 @@ export function JoinRoomScreen() {
   }, [step]);
 
   const handleCodeChange = (index: number, value: string) => {
-    // Only accept alphanumeric
     const char = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
     if (char.length > 1) return;
 
@@ -40,7 +38,6 @@ export function JoinRoomScreen() {
     newCode[index] = char;
     setCode(newCode);
 
-    // Auto-advance to next input
     if (char && index < 3) {
       inputRefs.current[index + 1]?.focus();
     }
@@ -66,7 +63,6 @@ export function JoinRoomScreen() {
     }
     setCode(newCode);
 
-    // Focus appropriate input
     const focusIndex = Math.min(pasted.length, 3);
     inputRefs.current[focusIndex]?.focus();
   };
@@ -91,12 +87,11 @@ export function JoinRoomScreen() {
   return (
     <ScreenContainer>
       <div className="w-full max-w-md mx-auto">
-        {/* Back button */}
         <motion.button
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           onClick={() => (step === "profile" ? setStep("code") : setScreen("home"))}
-          className="flex items-center gap-2 text-surface-400 hover:text-white transition-colors mb-6"
+          className="flex items-center gap-2 text-surface-400 hover:text-surface-100 transition-colors mb-6"
         >
           <ArrowLeft className="w-5 h-5" />
           <span>Retour</span>
@@ -104,7 +99,6 @@ export function JoinRoomScreen() {
 
         {step === "code" ? (
           <>
-            {/* Code Entry */}
             <PageHeader
               title="Rejoindre"
               subtitle="Entre le code de la room"
@@ -115,7 +109,7 @@ export function JoinRoomScreen() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <Card variant="glass" className="space-y-8">
+              <Card className="space-y-8">
                 {/* Code inputs */}
                 <div className="flex justify-center gap-3">
                   {code.map((char, index) => (
@@ -135,21 +129,20 @@ export function JoinRoomScreen() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.1 * index }}
                       className={cn(
-                        "w-16 h-20 text-center text-3xl font-bold",
-                        "rounded-2xl",
+                        "w-16 h-20 text-center text-3xl font-display font-bold",
+                        "rounded-xl",
                         "bg-surface-800 border-2",
-                        "text-white",
-                        "focus:outline-none focus:ring-4",
-                        "transition-all duration-200",
+                        "text-surface-100",
+                        "focus:outline-none",
+                        "transition-colors duration-150",
                         char
-                          ? "border-brand-500 focus:ring-brand-500/20"
-                          : "border-surface-700 focus:border-brand-500 focus:ring-brand-500/20"
+                          ? "border-brand-500"
+                          : "border-surface-700 focus:border-brand-500"
                       )}
                     />
                   ))}
                 </div>
 
-                {/* Continue button */}
                 <Button
                   variant="primary"
                   size="lg"
@@ -165,7 +158,6 @@ export function JoinRoomScreen() {
           </>
         ) : (
           <>
-            {/* Profile Setup */}
             <PageHeader
               title="Ton profil"
               subtitle={`Room: ${code.join("")}`}
@@ -175,8 +167,7 @@ export function JoinRoomScreen() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <Card variant="glass" className="space-y-6">
-                {/* Avatar preview */}
+              <Card className="space-y-6">
                 <div className="flex justify-center">
                   <motion.div
                     key={avatar}
@@ -188,9 +179,8 @@ export function JoinRoomScreen() {
                   </motion.div>
                 </div>
 
-                {/* Avatar selector */}
                 <div>
-                  <label className="block text-sm font-medium text-surface-300 mb-3">
+                  <label className="block text-sm font-medium text-surface-400 mb-3">
                     Choisis ton avatar
                   </label>
                   <AvatarSelector
@@ -200,17 +190,14 @@ export function JoinRoomScreen() {
                   />
                 </div>
 
-                {/* Name input */}
                 <Input
                   label="Ton pseudo"
                   placeholder="Entre ton pseudo..."
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   maxLength={20}
-                  variant="glass"
                 />
 
-                {/* Join button */}
                 <Button
                   variant="primary"
                   size="lg"

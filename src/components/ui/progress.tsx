@@ -15,17 +15,17 @@ interface ProgressProps
 
 const variantStyles = {
   default: "bg-surface-500",
-  brand: "bg-gradient-to-r from-brand-500 to-brand-400",
-  accent: "bg-gradient-to-r from-accent-500 to-accent-400",
-  success: "bg-gradient-to-r from-success-500 to-success-400",
-  warning: "bg-gradient-to-r from-warning-500 to-warning-400",
-  danger: "bg-gradient-to-r from-danger-500 to-danger-400",
+  brand: "bg-brand-500",
+  accent: "bg-accent-500",
+  success: "bg-success-500",
+  warning: "bg-accent-500",
+  danger: "bg-danger-500",
 };
 
 const sizeStyles = {
-  sm: "h-1.5",
-  md: "h-2.5",
-  lg: "h-4",
+  sm: "h-1",
+  md: "h-2",
+  lg: "h-3",
 };
 
 const Progress = React.forwardRef<
@@ -48,7 +48,7 @@ const Progress = React.forwardRef<
       {showValue && (
         <div className="flex justify-between items-center mb-1.5">
           <span className="text-sm text-surface-400">Progression</span>
-          <span className="text-sm font-medium text-white">{Math.round(value || 0)}%</span>
+          <span className="text-sm font-medium text-surface-100">{Math.round(value || 0)}%</span>
         </div>
       )}
       <ProgressPrimitive.Root
@@ -79,7 +79,6 @@ const Progress = React.forwardRef<
 
 Progress.displayName = "Progress";
 
-// Timer progress bar for game rounds
 interface TimerProgressProps {
   timeRemaining: number;
   totalTime: number;
@@ -103,41 +102,34 @@ const TimerProgress = ({
         <div className="flex justify-center mb-2">
           <motion.span
             className={cn(
-              "text-2xl font-bold tabular-nums",
+              "text-3xl font-display font-bold tabular-nums",
               isCritical
                 ? "text-danger-400"
                 : isLow
-                ? "text-warning-400"
-                : "text-white"
+                ? "text-accent-400"
+                : "text-surface-100"
             )}
-            animate={isCritical ? { scale: [1, 1.1, 1] } : undefined}
+            animate={isCritical ? { scale: [1, 1.08, 1] } : undefined}
             transition={{ duration: 0.5, repeat: isCritical ? Infinity : 0 }}
           >
             {timeRemaining}s
           </motion.span>
         </div>
       )}
-      <div className="relative h-3 w-full overflow-hidden rounded-full bg-surface-800">
+      <div className="relative h-2 w-full overflow-hidden rounded-full bg-surface-800">
         <motion.div
           className={cn(
             "h-full rounded-full",
             isCritical
-              ? "bg-gradient-to-r from-danger-500 to-danger-400"
+              ? "bg-danger-500"
               : isLow
-              ? "bg-gradient-to-r from-warning-500 to-warning-400"
-              : "bg-gradient-to-r from-brand-500 to-brand-400"
+              ? "bg-accent-500"
+              : "bg-brand-500"
           )}
           initial={{ width: "100%" }}
           animate={{ width: `${percentage}%` }}
           transition={{ duration: 0.3 }}
         />
-        {isCritical && (
-          <motion.div
-            className="absolute inset-0 bg-danger-400/30"
-            animate={{ opacity: [0, 0.5, 0] }}
-            transition={{ duration: 0.5, repeat: Infinity }}
-          />
-        )}
       </div>
     </div>
   );

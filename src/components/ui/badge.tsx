@@ -8,24 +8,24 @@ import { cn } from "@/lib/utils";
 const badgeVariants = cva(
   [
     "inline-flex items-center justify-center",
-    "rounded-full",
+    "rounded-lg",
     "font-semibold",
-    "transition-colors duration-200",
+    "transition-colors duration-150",
     "select-none",
   ],
   {
     variants: {
       variant: {
-        default: "bg-surface-800 text-surface-200 border border-surface-700",
-        primary: "bg-brand-500/20 text-brand-400 border border-brand-500/30",
-        accent: "bg-accent-500/20 text-accent-400 border border-accent-500/30",
-        success: "bg-success-500/20 text-success-400 border border-success-500/30",
-        warning: "bg-warning-500/20 text-warning-400 border border-warning-500/30",
-        danger: "bg-danger-500/20 text-danger-400 border border-danger-500/30",
-        solid: "bg-brand-500 text-white border-0",
-        "solid-accent": "bg-accent-500 text-white border-0",
-        "solid-success": "bg-success-500 text-white border-0",
-        outline: "bg-transparent text-brand-400 border-2 border-brand-500",
+        default: "bg-surface-800 text-surface-300",
+        primary: "bg-brand-500/15 text-brand-400",
+        accent: "bg-accent-500/15 text-accent-400",
+        success: "bg-success-500/15 text-success-400",
+        warning: "bg-accent-500/15 text-accent-400",
+        danger: "bg-danger-500/15 text-danger-400",
+        solid: "bg-brand-500 text-white",
+        "solid-accent": "bg-accent-500 text-white",
+        "solid-success": "bg-success-500 text-white",
+        outline: "bg-transparent text-surface-300 border border-surface-700",
       },
       size: {
         sm: "h-5 px-2 text-xs gap-1",
@@ -79,7 +79,6 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
 
 Badge.displayName = "Badge";
 
-// Animated badge for showing status changes
 interface StatusBadgeProps {
   status: "waiting" | "ready" | "playing" | "answered" | "correct" | "wrong";
   className?: string;
