@@ -39,8 +39,9 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/data ./data
 
-# Compiled server (dist/server/ → server/)
+# Compiled server (dist/server/ → server/) + shared types (dist/src/ → src/)
 COPY --from=builder /app/dist/server ./server
+COPY --from=builder /app/dist/src ./src
 
 RUN chown -R nextjs:nodejs /app
 

@@ -11,6 +11,6 @@
     "declaration": false,
     "resolveJsonModule": true
   },
-  "include": ["server/**/*.ts"],
+  "include": ["server/**/*.ts", "src/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
