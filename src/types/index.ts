@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing";
 
 export interface GameSettings {
   maxPlayers: number;
@@ -124,7 +124,13 @@ export interface ParcoursQuestion extends BaseQuestion {
   nationality?: string;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion;
+export interface DrawingQuestion extends BaseQuestion {
+  type: "drawing";
+  phrase: string;
+  category?: string;
+}
+
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -151,6 +157,49 @@ export interface RoundResult {
   correctAnswer: string;
   winner?: Player;
   scores: { playerId: string; points: number; total: number }[];
+}
+
+// ==========================================
+// DRAWING MODE TYPES
+// ==========================================
+
+export type DrawingPhase = "drawing" | "guessing" | "revealing";
+
+export interface DrawingPhaseData {
+  phase: DrawingPhase;
+  timeLimit: number;
+  totalPlayers: number;
+}
+
+export interface DrawingChain {
+  artistId: string;
+  artistName: string;
+  artistAvatar: string;
+  phrase: string;
+  drawingData: string;
+  guesserId: string;
+  guesserName: string;
+  guesserAvatar: string;
+  guess: string;
+  isGuessCorrect: boolean;
+}
+
+export interface DrawingRevealState {
+  chains: DrawingChain[];
+  currentChainIndex: number;
+  currentStep: number; // 0=phrase, 1=drawing, 2=guess, 3=verdict
+}
+
+export interface DrawingScoreBreakdown {
+  drawingGuessedByOther: boolean;
+  youGuessedCorrectly: boolean;
+  totalForRound: number;
+}
+
+export interface DrawingRoundResult {
+  roundNumber: number;
+  chains: DrawingChain[];
+  scores: { playerId: string; points: number; total: number; breakdown: DrawingScoreBreakdown }[];
 }
 
 // ==========================================
@@ -188,6 +237,14 @@ export interface ServerToClientEvents {
   "game:leaderboard": (players: Player[]) => void;
   "game:finished": (finalScores: Player[]) => void;
 
+  // Drawing events
+  "drawing:phase_start": (phase: DrawingPhase, data: DrawingPhaseData) => void;
+  "drawing:your_phrase": (phrase: string, questionId: string) => void;
+  "drawing:your_guess_target": (drawingData: string) => void;
+  "drawing:reveal_state": (revealState: DrawingRevealState) => void;
+  "drawing:reveal_step": (chainIndex: number, step: number) => void;
+  "drawing:round_scores": (result: DrawingRoundResult) => void;
+
   // Connection events
   "connection:reconnected": (room: Room, player: Player) => void;
   "connection:player_disconnected": (playerId: string) => void;
@@ -208,6 +265,12 @@ export interface ClientToServerEvents {
   "game:start": () => void;
   "game:submit_answer": (answer: string) => void;
   "game:request_next_round": () => void;
+
+  // Drawing events
+  "drawing:submit_drawing": (drawingBase64: string) => void;
+  "drawing:submit_guess": (guess: string) => void;
+  "drawing:reveal_next": () => void;
+  "drawing:reveal_prev": () => void;
 
   // Connection events
   "connection:reconnect": (roomCode: string, playerId: string) => void;
@@ -307,5 +370,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Devine le joueur à partir de ses clubs",
     icon: "⚽",
     color: "from-green-500 to-green-700",
+  },
+  {
+    id: "drawing",
+    name: "Dessine-moi",
+    description: "Dessine une phrase, devine le dessin des autres",
+    icon: "🎨",
+    color: "from-purple-500 to-purple-700",
   },
 ];

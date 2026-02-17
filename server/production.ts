@@ -21,6 +21,7 @@ async function main() {
   const io = new Server<ClientToServerEvents, ServerToClientEvents>(httpServer, {
     pingTimeout: 60000,
     pingInterval: 25000,
+    maxHttpBufferSize: 2e6, // 2MB for base64 drawing images
   });
 
   const roomManager = new RoomManager();

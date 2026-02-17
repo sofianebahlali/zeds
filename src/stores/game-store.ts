@@ -1,7 +1,8 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult } from "@/types";
 
-type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished";
+type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
+  | "drawing" | "guessing" | "drawing_reveal";
 
 interface GameStoreState {
   // Game state
@@ -19,6 +20,13 @@ interface GameStoreState {
   roundResult: RoundResult | null;
   allResults: RoundResult[];
 
+  // Drawing mode
+  drawingPhrase: string | null;
+  drawingToGuess: string | null;
+  drawingRevealState: DrawingRevealState | null;
+  drawingScores: DrawingRoundResult | null;
+  drawingPhase: DrawingPhase | null;
+
   // Actions
   setStatus: (status: GameStatus) => void;
   setCurrentQuestion: (question: Question) => void;
@@ -33,6 +41,14 @@ interface GameStoreState {
   resetGame: () => void;
   startGame: (totalRounds: number) => void;
   finishGame: () => void;
+
+  // Drawing actions
+  setDrawingPhrase: (phrase: string) => void;
+  setDrawingToGuess: (base64: string) => void;
+  setDrawingPhase: (phase: DrawingPhase, timeLimit: number) => void;
+  setDrawingRevealState: (state: DrawingRevealState) => void;
+  updateDrawingRevealStep: (chainIndex: number, step: number) => void;
+  setDrawingScores: (result: DrawingRoundResult) => void;
 
   // Computed
   getProgress: () => number;
@@ -52,6 +68,13 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   answeredPlayers: [],
   roundResult: null,
   allResults: [],
+
+  // Drawing initial state
+  drawingPhrase: null,
+  drawingToGuess: null,
+  drawingRevealState: null,
+  drawingScores: null,
+  drawingPhase: null,
 
   // Actions
   setStatus: (status) => set({ status }),
@@ -125,6 +148,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       answeredPlayers: [],
       roundResult: null,
       allResults: [],
+      drawingPhrase: null,
+      drawingToGuess: null,
+      drawingRevealState: null,
+      drawingScores: null,
+      drawingPhase: null,
     }),
 
   finishGame: () => set({ status: "finished" }),
@@ -142,7 +170,42 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       answeredPlayers: [],
       roundResult: null,
       allResults: [],
+      drawingPhrase: null,
+      drawingToGuess: null,
+      drawingRevealState: null,
+      drawingScores: null,
+      drawingPhase: null,
     }),
+
+  // Drawing actions
+  setDrawingPhrase: (phrase) => set({ drawingPhrase: phrase }),
+
+  setDrawingToGuess: (base64) => set({
+    drawingToGuess: base64,
+    hasAnswered: false,
+    answeredPlayers: [],
+  }),
+
+  setDrawingPhase: (phase, timeLimit) => set({
+    drawingPhase: phase,
+    timeRemaining: timeLimit,
+    hasAnswered: false,
+    answeredPlayers: [],
+    status: phase === "drawing" ? "drawing" : phase === "guessing" ? "guessing" : "drawing_reveal",
+  }),
+
+  setDrawingRevealState: (state) => set({
+    drawingRevealState: state,
+    status: "drawing_reveal",
+  }),
+
+  updateDrawingRevealStep: (chainIndex, step) => set((state) => ({
+    drawingRevealState: state.drawingRevealState
+      ? { ...state.drawingRevealState, currentChainIndex: chainIndex, currentStep: step }
+      : null,
+  })),
+
+  setDrawingScores: (result) => set({ drawingScores: result }),
 
   // Computed
   getProgress: () => {

@@ -44,7 +44,10 @@ export function LobbyScreen() {
   };
 
   const readyCount = players.filter((p) => p.isReady || p.isHost).length;
-  const canStart = players.length >= 1 && players.every((p) => p.isReady || p.isHost);
+  const isDrawingMode = room.gameMode === "drawing";
+  const minPlayers = isDrawingMode ? 3 : 1;
+  const hasEnoughPlayers = players.length >= minPlayers;
+  const canStart = hasEnoughPlayers && players.every((p) => p.isReady || p.isHost);
   const currentMode = GAME_MODES.find((m) => m.id === room.gameMode);
 
   return (
@@ -220,6 +223,8 @@ export function LobbyScreen() {
             >
               {canStart
                 ? "Lancer la partie"
+                : !hasEnoughPlayers && isDrawingMode
+                ? `${minPlayers} joueurs minimum pour le dessin`
                 : "En attente des joueurs..."}
             </Button>
           ) : (

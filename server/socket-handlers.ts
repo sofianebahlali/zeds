@@ -206,6 +206,62 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     });
 
     // ==========================================
+    // DRAWING EVENTS
+    // ==========================================
+
+    socket.on("drawing:submit_drawing", (drawingBase64: string) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.submitDrawing(playerId, drawingBase64);
+    });
+
+    socket.on("drawing:submit_guess", (guess: string) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.submitGuess(playerId, guess);
+    });
+
+    socket.on("drawing:reveal_next", () => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.advanceReveal();
+    });
+
+    socket.on("drawing:reveal_prev", () => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.retreatReveal();
+    });
+
+    // ==========================================
     // CONNECTION EVENTS
     // ==========================================
 

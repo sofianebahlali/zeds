@@ -197,6 +197,16 @@ export class RoomManager {
   }
 
   /**
+   * Get socket ID from player ID (reverse lookup)
+   */
+  getSocketIdFromPlayerId(playerId: string): string | undefined {
+    for (const [socketId, pId] of this.socketPlayers) {
+      if (pId === playerId) return socketId;
+    }
+    return undefined;
+  }
+
+  /**
    * Get room by code
    */
   getRoom(code: string): Room | undefined {

@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult } from "@/types";
 
 // Module-level flag: listeners are attached ONCE across all component instances
 let listenersAttached = false;
@@ -125,6 +125,31 @@ function setupSocketListeners() {
     useRoomStore.getState().setPlayers(finalScores);
     useGameStore.getState().finishGame();
     useUIStore.getState().setScreen("scoreboard");
+  });
+
+  // Drawing events
+  socket.on("drawing:phase_start", (phase: DrawingPhase, data: DrawingPhaseData) => {
+    useGameStore.getState().setDrawingPhase(phase, data.timeLimit);
+  });
+
+  socket.on("drawing:your_phrase", (phrase: string, _questionId: string) => {
+    useGameStore.getState().setDrawingPhrase(phrase);
+  });
+
+  socket.on("drawing:your_guess_target", (drawingData: string) => {
+    useGameStore.getState().setDrawingToGuess(drawingData);
+  });
+
+  socket.on("drawing:reveal_state", (revealState: DrawingRevealState) => {
+    useGameStore.getState().setDrawingRevealState(revealState);
+  });
+
+  socket.on("drawing:reveal_step", (chainIndex: number, step: number) => {
+    useGameStore.getState().updateDrawingRevealStep(chainIndex, step);
+  });
+
+  socket.on("drawing:round_scores", (result: DrawingRoundResult) => {
+    useGameStore.getState().setDrawingScores(result);
   });
 
   // Connection events
@@ -255,6 +280,25 @@ export function useSocket() {
     socket.emit("connection:reconnect", roomCode, playerId);
   }, [socket]);
 
+  // Drawing actions
+  const submitDrawing = useCallback((base64: string) => {
+    socket.emit("drawing:submit_drawing", base64);
+    useGameStore.getState().submitAnswer(base64.substring(0, 50)); // Mark as answered without storing full base64 in store
+  }, [socket]);
+
+  const submitDrawingGuess = useCallback((guess: string) => {
+    socket.emit("drawing:submit_guess", guess);
+    useGameStore.getState().submitAnswer(guess);
+  }, [socket]);
+
+  const advanceDrawingReveal = useCallback(() => {
+    socket.emit("drawing:reveal_next");
+  }, [socket]);
+
+  const retreatDrawingReveal = useCallback(() => {
+    socket.emit("drawing:reveal_prev");
+  }, [socket]);
+
   return {
     socket,
     connect,
@@ -270,5 +314,9 @@ export function useSocket() {
     submitAnswer,
     requestNextRound,
     reconnect,
+    submitDrawing,
+    submitDrawingGuess,
+    advanceDrawingReveal,
+    retreatDrawingReveal,
   };
 }

@@ -12,10 +12,16 @@ import type {
   DictationQuestion,
   EstimationQuestion,
   ParcoursQuestion,
+  DrawingQuestion,
   Answer,
   RoundResult,
   ClientToServerEvents,
   ServerToClientEvents,
+  DrawingPhase,
+  DrawingChain,
+  DrawingRevealState,
+  DrawingRoundResult,
+  DrawingScoreBreakdown,
 } from "../src/types";
 
 type TypedIO = Server<ClientToServerEvents, ServerToClientEvents>;
@@ -126,6 +132,15 @@ export class GameEngine {
   private questions: Question[] = [];
   private disconnectedPlayers: Set<string> = new Set();
 
+  // Drawing mode state
+  private drawingPhase: DrawingPhase = "drawing";
+  private playerPhrases: Map<string, { phrase: string; questionId: string }> = new Map();
+  private drawings: Map<string, string> = new Map();
+  private drawingAssignments: Map<string, string> = new Map(); // guesserId -> artistId
+  private guesses: Map<string, string> = new Map();
+  private drawingChains: DrawingChain[] = [];
+  private revealState: DrawingRevealState | null = null;
+
   constructor(room: Room, io: TypedIO, roomManager: RoomManager) {
     this.room = room;
     this.io = io;
@@ -157,6 +172,20 @@ export class GameEngine {
       return JSON.parse(raw) as DictationQuestion[];
     } catch {
       console.warn("No dictation questions found at", filePath);
+      return [];
+    }
+  }
+
+  /**
+   * Load drawing questions from JSON file
+   */
+  private static loadDrawingQuestions(): DrawingQuestion[] {
+    const filePath = path.resolve(__dirname, "../data/questions/drawing.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw) as DrawingQuestion[];
+    } catch {
+      console.warn("No drawing questions found at", filePath);
       return [];
     }
   }
@@ -246,6 +275,12 @@ export class GameEngine {
         console.warn("No parcours questions available, falling back to sample questions");
         pool = [...SAMPLE_QUESTIONS];
       }
+    } else if (this.room.gameMode === "drawing") {
+      pool = GameEngine.loadDrawingQuestions();
+      if (pool.length === 0) {
+        console.warn("No drawing questions available");
+        pool = [...SAMPLE_QUESTIONS];
+      }
     } else {
       pool = [...SAMPLE_QUESTIONS];
     }
@@ -284,6 +319,12 @@ export class GameEngine {
     this.currentRound++;
     this.answers.clear();
     this.roomManager.resetRoundScores(this.room.code);
+
+    // Drawing mode has its own multi-phase flow
+    if (this.room.gameMode === "drawing") {
+      this.startDrawingPhase();
+      return;
+    }
 
     if (this.currentRound > this.questions.length) {
       this.finishGame();
@@ -350,7 +391,11 @@ export class GameEngine {
       this.io.to(this.room.code).emit("game:time_update", this.timeRemaining);
 
       if (this.timeRemaining <= 0) {
-        this.endRound();
+        if (this.room.gameMode === "drawing") {
+          this.onDrawingTimerExpired();
+        } else {
+          this.endRound();
+        }
       }
     }, 1000);
   }
@@ -752,6 +797,338 @@ export class GameEngine {
       default:
         return false;
     }
+  }
+
+  // ==========================================
+  // DRAWING MODE METHODS
+  // ==========================================
+
+  private getActivePlayers(): Player[] {
+    return this.room.players.filter(
+      (p) => p.isConnected && !this.disconnectedPlayers.has(p.id)
+    );
+  }
+
+  /**
+   * Start the drawing phase: assign phrases and begin timer
+   */
+  private startDrawingPhase(): void {
+    this.drawingPhase = "drawing";
+    this.drawings.clear();
+    this.guesses.clear();
+    this.playerPhrases.clear();
+    this.drawingAssignments.clear();
+    this.drawingChains = [];
+    this.revealState = null;
+
+    const activePlayers = this.getActivePlayers();
+
+    if (activePlayers.length < 3) {
+      this.io.to(this.room.code).emit("room:error", "Il faut au moins 3 joueurs pour le mode dessin");
+      this.finishGame();
+      return;
+    }
+
+    // Shuffle questions and assign one per player
+    const shuffled = [...this.questions].sort(() => Math.random() - 0.5) as DrawingQuestion[];
+    activePlayers.forEach((player, index) => {
+      const q = shuffled[index % shuffled.length];
+      this.playerPhrases.set(player.id, { phrase: q.phrase, questionId: q.id });
+    });
+
+    // Build circular rotation: player[i] draws -> player[(i+1) % n] guesses
+    for (let i = 0; i < activePlayers.length; i++) {
+      const artist = activePlayers[i];
+      const guesser = activePlayers[(i + 1) % activePlayers.length];
+      this.drawingAssignments.set(guesser.id, artist.id);
+    }
+
+    const timeLimit = this.room.settings.roundDuration || 60;
+    this.timeRemaining = timeLimit;
+
+    // Emit phase start to room
+    this.io.to(this.room.code).emit("drawing:phase_start", "drawing", {
+      phase: "drawing",
+      timeLimit,
+      totalPlayers: activePlayers.length,
+    });
+
+    // Send each player their individual phrase
+    for (const player of activePlayers) {
+      const phraseData = this.playerPhrases.get(player.id)!;
+      const socketId = this.roomManager.getSocketIdFromPlayerId(player.id);
+      if (socketId) {
+        this.io.to(socketId).emit("drawing:your_phrase", phraseData.phrase, phraseData.questionId);
+      }
+    }
+
+    this.startTimer();
+  }
+
+  /**
+   * Handle drawing timer expiration
+   */
+  private onDrawingTimerExpired(): void {
+    this.stopTimer();
+
+    if (this.drawingPhase === "drawing") {
+      this.startGuessingPhase();
+    } else if (this.drawingPhase === "guessing") {
+      this.startRevealPhase();
+    }
+  }
+
+  /**
+   * Submit a drawing (base64 image)
+   */
+  submitDrawing(playerId: string, drawingBase64: string): void {
+    if (this.drawingPhase !== "drawing") return;
+    if (this.drawings.has(playerId)) return;
+
+    this.drawings.set(playerId, drawingBase64);
+    this.io.to(this.room.code).emit("game:player_answered", playerId);
+
+    // Check if all active players submitted
+    const activePlayers = this.getActivePlayers();
+    if (this.drawings.size >= activePlayers.length) {
+      this.stopTimer();
+      this.startGuessingPhase();
+    }
+  }
+
+  /**
+   * Start the guessing phase: distribute drawings to guessers
+   */
+  private startGuessingPhase(): void {
+    this.drawingPhase = "guessing";
+
+    const timeLimit = Math.min(this.room.settings.roundDuration || 60, 45);
+    this.timeRemaining = timeLimit;
+
+    this.io.to(this.room.code).emit("drawing:phase_start", "guessing", {
+      phase: "guessing",
+      timeLimit,
+      totalPlayers: this.drawings.size,
+    });
+
+    // Send each guesser the drawing they need to guess
+    const activePlayers = this.getActivePlayers();
+    for (const player of activePlayers) {
+      const artistId = this.drawingAssignments.get(player.id);
+      if (artistId) {
+        const drawingData = this.drawings.get(artistId) || "";
+        const socketId = this.roomManager.getSocketIdFromPlayerId(player.id);
+        if (socketId && drawingData) {
+          this.io.to(socketId).emit("drawing:your_guess_target", drawingData);
+        }
+      }
+    }
+
+    this.startTimer();
+  }
+
+  /**
+   * Submit a guess for a drawing
+   */
+  submitGuess(playerId: string, guess: string): void {
+    if (this.drawingPhase !== "guessing") return;
+    if (this.guesses.has(playerId)) return;
+
+    this.guesses.set(playerId, guess);
+    this.io.to(this.room.code).emit("game:player_answered", playerId);
+
+    const activePlayers = this.getActivePlayers();
+    if (this.guesses.size >= activePlayers.length) {
+      this.stopTimer();
+      this.startRevealPhase();
+    }
+  }
+
+  /**
+   * Start the reveal phase: build chains, calculate scores, let host navigate
+   */
+  private startRevealPhase(): void {
+    this.drawingPhase = "revealing";
+
+    const activePlayers = this.getActivePlayers();
+
+    // Build chains
+    this.drawingChains = [];
+    for (const artist of activePlayers) {
+      const phraseData = this.playerPhrases.get(artist.id);
+      const drawingData = this.drawings.get(artist.id);
+      if (!phraseData) continue;
+
+      // Find the guesser for this artist
+      let guesserId = "";
+      for (const [gId, aId] of this.drawingAssignments) {
+        if (aId === artist.id) { guesserId = gId; break; }
+      }
+
+      const guesser = this.room.players.find((p) => p.id === guesserId);
+      const guess = this.guesses.get(guesserId) || "";
+      const isCorrect = this.fuzzyMatchDrawingGuess(phraseData.phrase, guess);
+
+      this.drawingChains.push({
+        artistId: artist.id,
+        artistName: artist.name,
+        artistAvatar: artist.avatar,
+        phrase: phraseData.phrase,
+        drawingData: drawingData || "",
+        guesserId,
+        guesserName: guesser?.name || "???",
+        guesserAvatar: guesser?.avatar || "🦊",
+        guess,
+        isGuessCorrect: isCorrect,
+      });
+    }
+
+    // Calculate scores
+    const scores = this.calculateDrawingScores();
+
+    // Initialize reveal navigation
+    this.revealState = {
+      chains: this.drawingChains,
+      currentChainIndex: 0,
+      currentStep: 0,
+    };
+
+    this.io.to(this.room.code).emit("drawing:reveal_state", this.revealState);
+    this.io.to(this.room.code).emit("drawing:round_scores", {
+      roundNumber: this.currentRound,
+      chains: this.drawingChains,
+      scores,
+    });
+  }
+
+  /**
+   * Fuzzy match a guess against the original drawing phrase
+   */
+  private fuzzyMatchDrawingGuess(phrase: string, guess: string): boolean {
+    const normalize = (s: string) => s.toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s]/g, "")
+      .trim();
+
+    const normalizedPhrase = normalize(phrase);
+    const normalizedGuess = normalize(guess);
+
+    if (!normalizedGuess) return false;
+    if (normalizedPhrase === normalizedGuess) return true;
+
+    // Check word-level similarity
+    const phraseWords = normalizedPhrase.split(/\s+/).filter((w) => w.length > 2);
+    const guessWords = normalizedGuess.split(/\s+/).filter((w) => w.length > 2);
+
+    if (phraseWords.length === 0) return normalizedPhrase === normalizedGuess;
+
+    const matchingWords = phraseWords.filter((pw) =>
+      guessWords.some((gw) => GameEngine.levenshteinSimilarity(pw, gw) >= 0.75)
+    );
+
+    return matchingWords.length / phraseWords.length >= 0.6;
+  }
+
+  /**
+   * Levenshtein-based string similarity (0 to 1)
+   */
+  private static levenshteinSimilarity(a: string, b: string): number {
+    const maxLen = Math.max(a.length, b.length);
+    if (maxLen === 0) return 1;
+
+    const matrix: number[][] = [];
+    for (let i = 0; i <= a.length; i++) matrix[i] = [i];
+    for (let j = 0; j <= b.length; j++) matrix[0][j] = j;
+    for (let i = 1; i <= a.length; i++) {
+      for (let j = 1; j <= b.length; j++) {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+        );
+      }
+    }
+    return 1 - matrix[a.length][b.length] / maxLen;
+  }
+
+  /**
+   * Calculate drawing scores: +100 if your drawing was guessed, +100 if you guessed correctly
+   */
+  private calculateDrawingScores(): { playerId: string; points: number; total: number; breakdown: DrawingScoreBreakdown }[] {
+    const scores: { playerId: string; points: number; total: number; breakdown: DrawingScoreBreakdown }[] = [];
+    const activePlayers = this.getActivePlayers();
+
+    for (const player of activePlayers) {
+      const chainAsArtist = this.drawingChains.find((c) => c.artistId === player.id);
+      const drawingGuessedByOther = chainAsArtist?.isGuessCorrect || false;
+
+      const chainAsGuesser = this.drawingChains.find((c) => c.guesserId === player.id);
+      const youGuessedCorrectly = chainAsGuesser?.isGuessCorrect || false;
+
+      let points = 0;
+      if (drawingGuessedByOther) points += 100;
+      if (youGuessedCorrectly) points += 100;
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, points);
+
+      scores.push({
+        playerId: player.id,
+        points,
+        total: updatedPlayer?.score || 0,
+        breakdown: {
+          drawingGuessedByOther,
+          youGuessedCorrectly,
+          totalForRound: (drawingGuessedByOther ? 1 : 0) + (youGuessedCorrectly ? 1 : 0),
+        },
+      });
+    }
+
+    return scores;
+  }
+
+  /**
+   * Host advances the reveal (next step or next chain)
+   */
+  advanceReveal(): void {
+    if (!this.revealState) return;
+
+    const totalSteps = 4;
+    const totalChains = this.revealState.chains.length;
+
+    if (this.revealState.currentStep < totalSteps - 1) {
+      this.revealState.currentStep++;
+    } else if (this.revealState.currentChainIndex < totalChains - 1) {
+      this.revealState.currentChainIndex++;
+      this.revealState.currentStep = 0;
+    } else {
+      // All chains revealed — finish game
+      this.finishGame();
+      return;
+    }
+
+    this.io.to(this.room.code).emit("drawing:reveal_step",
+      this.revealState.currentChainIndex,
+      this.revealState.currentStep
+    );
+  }
+
+  /**
+   * Host goes back in the reveal
+   */
+  retreatReveal(): void {
+    if (!this.revealState) return;
+
+    if (this.revealState.currentStep > 0) {
+      this.revealState.currentStep--;
+    } else if (this.revealState.currentChainIndex > 0) {
+      this.revealState.currentChainIndex--;
+      this.revealState.currentStep = 3;
+    }
+
+    this.io.to(this.room.code).emit("drawing:reveal_step",
+      this.revealState.currentChainIndex,
+      this.revealState.currentStep
+    );
   }
 
   /**
