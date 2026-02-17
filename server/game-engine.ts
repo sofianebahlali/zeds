@@ -13,6 +13,9 @@ import type {
   EstimationQuestion,
   ParcoursQuestion,
   DrawingQuestion,
+  PetitBacQuestion,
+  PetitBacValidationSubmission,
+  PetitBacPlayerAnswerData,
   Answer,
   RoundResult,
   ClientToServerEvents,
@@ -23,6 +26,7 @@ import type {
   DrawingRoundResult,
   DrawingScoreBreakdown,
 } from "../src/types";
+import { PETITBAC_CATEGORIES } from "../src/types";
 
 type TypedIO = Server<ClientToServerEvents, ServerToClientEvents>;
 
@@ -120,6 +124,8 @@ const SAMPLE_QUESTIONS: Question[] = [
   },
 ];
 
+const PETITBAC_LETTERS = "ABCDEFGHJKLMNOPRSTV".split("");
+
 export class GameEngine {
   private room: Room;
   private io: TypedIO;
@@ -131,6 +137,13 @@ export class GameEngine {
   private timeRemaining: number = 0;
   private questions: Question[] = [];
   private disconnectedPlayers: Set<string> = new Set();
+
+  // Playlist mode tracking
+  private currentMode: string = "";
+  private drawingQuestionPool: DrawingQuestion[] = [];
+
+  // Petit Bac state
+  private petitBacValidating: boolean = false;
 
   // Drawing mode state
   private drawingPhase: DrawingPhase = "drawing";
@@ -252,42 +265,106 @@ export class GameEngine {
   }
 
   /**
-   * Prepare questions for the game
+   * Load questions for a specific mode and return N shuffled questions
    */
-  private prepareQuestions(): void {
+  private loadQuestionsForMode(mode: string, count: number): Question[] {
     let pool: Question[];
 
-    if (this.room.gameMode === "estimation") {
-      pool = GameEngine.loadEstimationQuestions();
-      if (pool.length === 0) {
-        console.warn("No estimation questions available, falling back to sample questions");
-        pool = [...SAMPLE_QUESTIONS];
+    switch (mode) {
+      case "estimation":
+        pool = GameEngine.loadEstimationQuestions();
+        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
+        break;
+      case "dictation":
+        pool = GameEngine.loadDictationQuestions();
+        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
+        break;
+      case "parcours":
+        pool = GameEngine.loadParcoursQuestions();
+        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
+        break;
+      case "drawing": {
+        // For drawing, each "round" is a full draw→guess→reveal cycle
+        // We use a placeholder question; actual phrases come from drawingQuestionPool
+        const drawingPool = GameEngine.loadDrawingQuestions();
+        this.drawingQuestionPool = drawingPool.length > 0
+          ? drawingPool.sort(() => Math.random() - 0.5)
+          : [];
+        const placeholders: Question[] = [];
+        for (let i = 0; i < count; i++) {
+          placeholders.push({
+            id: `drawing_${i + 1}`,
+            type: "drawing" as const,
+            phrase: "placeholder",
+            timeLimit: this.room.settings.roundDuration || 60,
+            points: 100,
+          });
+        }
+        return placeholders;
       }
-    } else if (this.room.gameMode === "dictation") {
-      pool = GameEngine.loadDictationQuestions();
-      if (pool.length === 0) {
-        console.warn("No dictation questions available, falling back to sample questions");
-        pool = [...SAMPLE_QUESTIONS];
+      case "petitbac": {
+        const shuffledLetters = [...PETITBAC_LETTERS].sort(() => Math.random() - 0.5);
+        const questions: Question[] = [];
+        for (let i = 0; i < count; i++) {
+          questions.push({
+            id: `petitbac_${i + 1}`,
+            type: "petitbac" as const,
+            letter: shuffledLetters[i % shuffledLetters.length],
+            categories: [...PETITBAC_CATEGORIES],
+            timeLimit: 120,
+            points: 100,
+          });
+        }
+        return questions;
       }
-    } else if (this.room.gameMode === "parcours") {
-      pool = GameEngine.loadParcoursQuestions();
-      if (pool.length === 0) {
-        console.warn("No parcours questions available, falling back to sample questions");
+      default:
         pool = [...SAMPLE_QUESTIONS];
-      }
-    } else if (this.room.gameMode === "drawing") {
-      pool = GameEngine.loadDrawingQuestions();
-      if (pool.length === 0) {
-        console.warn("No drawing questions available");
-        pool = [...SAMPLE_QUESTIONS];
-      }
-    } else {
-      pool = [...SAMPLE_QUESTIONS];
+        break;
     }
 
-    // Shuffle and select questions based on settings
     const shuffled = pool.sort(() => Math.random() - 0.5);
-    this.questions = shuffled.slice(0, this.room.settings.totalRounds);
+    return shuffled.slice(0, count);
+  }
+
+  /**
+   * Prepare questions for the game from the playlist
+   */
+  private prepareQuestions(): void {
+    const playlist = this.room.settings.playlist;
+
+    if (!playlist || playlist.length === 0) {
+      // Fallback: use sample questions
+      this.questions = [...SAMPLE_QUESTIONS]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, this.room.settings.totalRounds);
+      return;
+    }
+
+    // Build flat question list from playlist segments
+    this.questions = [];
+    let petitbacCounter = 0;
+    let drawingCounter = 0;
+
+    for (const segment of playlist) {
+      const segQuestions = this.loadQuestionsForMode(segment.mode, segment.rounds);
+
+      // Re-number IDs to be globally unique
+      segQuestions.forEach((q, i) => {
+        if (q.type === "petitbac") {
+          petitbacCounter++;
+          q.id = `petitbac_${petitbacCounter}`;
+        } else if (q.type === "drawing") {
+          drawingCounter++;
+          q.id = `drawing_${drawingCounter}`;
+        }
+      });
+
+      this.questions.push(...segQuestions);
+    }
+
+    // Update totalRounds to match actual questions
+    this.room.settings.totalRounds = this.questions.length;
+    this.room.totalRounds = this.questions.length;
   }
 
   /**
@@ -320,19 +397,21 @@ export class GameEngine {
     this.answers.clear();
     this.roomManager.resetRoundScores(this.room.code);
 
-    // Drawing mode has its own multi-phase flow
-    if (this.room.gameMode === "drawing") {
-      this.startDrawingPhase();
-      return;
-    }
-
     if (this.currentRound > this.questions.length) {
       this.finishGame();
       return;
     }
 
-    this.currentQuestion = this.questions[this.currentRound - 1];
-    this.timeRemaining = this.currentQuestion.timeLimit;
+    const nextQuestion = this.questions[this.currentRound - 1];
+    const nextMode = nextQuestion.type;
+
+    // Detect mode change and emit event
+    if (nextMode !== this.currentMode) {
+      this.currentMode = nextMode;
+      this.room.gameMode = nextMode;
+      this.roomManager.updateGameMode(this.room.code, nextMode);
+      this.io.to(this.room.code).emit("game:mode_changed", nextMode);
+    }
 
     // Update room state
     const room = this.roomManager.getRoom(this.room.code);
@@ -340,8 +419,17 @@ export class GameEngine {
       room.currentRound = this.currentRound;
     }
 
-    // Send question to all players
-    // For QCM, we need to hide the correct answer
+    // Drawing mode has its own multi-phase flow
+    if (nextMode === "drawing") {
+      this.currentQuestion = nextQuestion;
+      this.startDrawingPhase();
+      return;
+    }
+
+    this.currentQuestion = nextQuestion;
+    this.timeRemaining = this.currentQuestion.timeLimit;
+
+    // Send question to all players (sanitized to hide answers)
     const questionForClient = this.sanitizeQuestionForClient(this.currentQuestion);
     this.io.to(this.room.code).emit("game:round_start", this.currentRound, questionForClient);
 
@@ -379,6 +467,7 @@ export class GameEngine {
         acceptedAnswers: [], // Hide accepted answers
       };
     }
+    // petitbac: nothing to hide
     return question;
   }
 
@@ -391,7 +480,7 @@ export class GameEngine {
       this.io.to(this.room.code).emit("game:time_update", this.timeRemaining);
 
       if (this.timeRemaining <= 0) {
-        if (this.room.gameMode === "drawing") {
+        if (this.currentQuestion?.type === "drawing") {
           this.onDrawingTimerExpired();
         } else {
           this.endRound();
@@ -450,6 +539,12 @@ export class GameEngine {
     this.stopTimer();
 
     if (!this.currentQuestion) return;
+
+    // Petit Bac: enter host validation phase instead of auto-scoring
+    if (this.currentQuestion.type === "petitbac") {
+      this.startPetitBacValidation();
+      return;
+    }
 
     // Calculate scores
     const results = this.calculateScores();
@@ -740,6 +835,8 @@ export class GameEngine {
       }
       case "parcours":
         return (this.currentQuestion as ParcoursQuestion).playerName;
+      case "petitbac":
+        return (this.currentQuestion as PetitBacQuestion).letter;
       default:
         return "";
     }
@@ -787,6 +884,9 @@ export class GameEngine {
       case "estimation":
         // Estimation scoring is handled in calculateEstimationScores
         return false;
+      case "petitbac":
+        // Petit Bac scoring is handled manually by host validation
+        return false;
       case "parcours": {
         const q = this.currentQuestion as ParcoursQuestion;
         const normalizedInput = GameEngine.normalizeForComparison(answer);
@@ -797,6 +897,161 @@ export class GameEngine {
       default:
         return false;
     }
+  }
+
+  // ==========================================
+  // PETIT BAC METHODS
+  // ==========================================
+
+  /**
+   * Start the validation phase: collect all answers and send to host
+   */
+  private startPetitBacValidation(): void {
+    this.petitBacValidating = true;
+    const q = this.currentQuestion as PetitBacQuestion;
+    const activePlayers = this.getActivePlayers();
+
+    // Ensure all players have an answer entry (empty if not submitted)
+    for (const player of activePlayers) {
+      if (!this.answers.has(player.id)) {
+        this.answers.set(player.id, {
+          playerId: player.id,
+          questionId: q.id,
+          answer: JSON.stringify({}),
+          timestamp: Date.now(),
+        });
+      }
+    }
+
+    const playerAnswers: PetitBacPlayerAnswerData[] = [];
+    for (const player of activePlayers) {
+      const answer = this.answers.get(player.id);
+      let answers: Record<string, string> = {};
+      if (answer) {
+        try {
+          answers = JSON.parse(answer.answer);
+        } catch {}
+      }
+      playerAnswers.push({
+        playerId: player.id,
+        playerName: player.name,
+        playerAvatar: player.avatar,
+        answers,
+      });
+    }
+
+    this.io.to(this.room.code).emit("petitbac:validation_start", {
+      letter: q.letter,
+      categories: q.categories,
+      playerAnswers,
+    });
+  }
+
+  /**
+   * Host submits validation results for Petit Bac
+   */
+  submitPetitBacValidation(validation: PetitBacValidationSubmission): void {
+    if (!this.currentQuestion || !this.petitBacValidating) return;
+    this.petitBacValidating = false;
+
+    const q = this.currentQuestion as PetitBacQuestion;
+    const results = this.calculatePetitBacScores(q, validation);
+
+    // Broadcast validated answers to everyone before round_end
+    this.io.to(this.room.code).emit("petitbac:validation_result", validation);
+
+    // Update room status
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+
+    // Send results
+    this.io.to(this.room.code).emit("game:round_end", results);
+
+    // Show leaderboard after a delay
+    setTimeout(() => {
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+
+      if (this.room.settings.showLeaderboardBetweenRounds) {
+        setTimeout(() => {
+          this.nextRound();
+        }, 5000);
+      }
+    }, 3000);
+  }
+
+  /**
+   * Calculate Petit Bac scores based on host validation
+   * - Validated unique answer: 100 points
+   * - Validated answer shared with others: 50 points
+   * - Rejected/empty: 0 points
+   */
+  private calculatePetitBacScores(
+    q: PetitBacQuestion,
+    validation: PetitBacValidationSubmission
+  ): RoundResult {
+    const scores: { playerId: string; points: number; total: number }[] = [];
+    let bestPoints = 0;
+    let winner: Player | undefined;
+
+    for (const player of this.room.players) {
+      let totalPoints = 0;
+      const answer = this.answers.get(player.id);
+
+      let myAnswers: Record<string, string> = {};
+      if (answer) {
+        try {
+          myAnswers = JSON.parse(answer.answer);
+        } catch {}
+      }
+
+      for (const category of q.categories) {
+        const validatedPlayers = validation.validatedAnswers[category] || [];
+        if (!validatedPlayers.includes(player.id)) continue;
+
+        const myAnswer = (myAnswers[category] || "").toLowerCase().trim();
+        if (!myAnswer) continue;
+
+        // Count validated players with the exact same answer
+        let sameAnswerCount = 0;
+        for (const vpId of validatedPlayers) {
+          const vpAnswerObj = this.answers.get(vpId);
+          if (!vpAnswerObj) continue;
+          try {
+            const parsed = JSON.parse(vpAnswerObj.answer);
+            const theirAnswer = (parsed[category] || "").toLowerCase().trim();
+            if (theirAnswer === myAnswer) sameAnswerCount++;
+          } catch {}
+        }
+
+        totalPoints += sameAnswerCount > 1 ? 50 : 100;
+      }
+
+      if (answer) {
+        answer.points = totalPoints;
+        answer.isCorrect = totalPoints > 0;
+      }
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, totalPoints);
+      scores.push({
+        playerId: player.id,
+        points: totalPoints,
+        total: updatedPlayer?.score || player.score,
+      });
+
+      if (totalPoints > bestPoints) {
+        bestPoints = totalPoints;
+        winner = player;
+      }
+    }
+
+    return {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion!,
+      answers: Array.from(this.answers.values()),
+      correctAnswer: q.letter,
+      winner,
+      scores,
+    };
   }
 
   // ==========================================
@@ -825,12 +1080,15 @@ export class GameEngine {
 
     if (activePlayers.length < 3) {
       this.io.to(this.room.code).emit("room:error", "Il faut au moins 3 joueurs pour le mode dessin");
-      this.finishGame();
+      this.nextRound();
       return;
     }
 
-    // Shuffle questions and assign one per player
-    const shuffled = [...this.questions].sort(() => Math.random() - 0.5) as DrawingQuestion[];
+    // Use the drawing question pool for phrase assignment
+    const phrasePool = this.drawingQuestionPool.length > 0
+      ? this.drawingQuestionPool
+      : [{ id: "fallback", type: "drawing" as const, phrase: "Un chat qui joue du piano", timeLimit: 60, points: 100 }];
+    const shuffled = [...phrasePool].sort(() => Math.random() - 0.5);
     activePlayers.forEach((player, index) => {
       const q = shuffled[index % shuffled.length];
       this.playerPhrases.set(player.id, { phrase: q.phrase, questionId: q.id });
@@ -1101,8 +1359,14 @@ export class GameEngine {
       this.revealState.currentChainIndex++;
       this.revealState.currentStep = 0;
     } else {
-      // All chains revealed — finish game
-      this.finishGame();
+      // All chains revealed — show leaderboard then proceed
+      this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+
+      setTimeout(() => {
+        this.nextRound();
+      }, 5000);
       return;
     }
 

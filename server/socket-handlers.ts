@@ -7,6 +7,7 @@ import type {
   Player,
   GameSettings,
   GameMode,
+  PetitBacValidationSubmission,
 } from "../src/types";
 
 type TypedIO = Server<ClientToServerEvents, ServerToClientEvents>;
@@ -203,6 +204,23 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
       if (gameEngine) {
         gameEngine.nextRound();
       }
+    });
+
+    // ==========================================
+    // PETIT BAC EVENTS
+    // ==========================================
+
+    socket.on("petitbac:submit_validation", (validation) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.submitPetitBacValidation(validation);
     });
 
     // ==========================================

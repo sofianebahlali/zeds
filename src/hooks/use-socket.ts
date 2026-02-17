@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission } from "@/types";
 
 // Module-level flag: listeners are attached ONCE across all component instances
 let listenersAttached = false;
@@ -89,6 +89,10 @@ function setupSocketListeners() {
   });
 
   // Game events
+  socket.on("game:mode_changed", (mode: GameMode) => {
+    useRoomStore.getState().setGameMode(mode);
+  });
+
   socket.on("game:starting", (countdown: number) => {
     if (useGameStore.getState().status !== "countdown") {
       useUIStore.getState().setScreen("game");
@@ -150,6 +154,15 @@ function setupSocketListeners() {
 
   socket.on("drawing:round_scores", (result: DrawingRoundResult) => {
     useGameStore.getState().setDrawingScores(result);
+  });
+
+  // Petit Bac events
+  socket.on("petitbac:validation_start", (data: PetitBacValidationData) => {
+    useGameStore.getState().setPetitBacValidation(data);
+  });
+
+  socket.on("petitbac:validation_result", (validation: PetitBacValidationSubmission) => {
+    useGameStore.getState().setPetitBacValidatedAnswers(validation);
   });
 
   // Connection events
@@ -299,6 +312,10 @@ export function useSocket() {
     socket.emit("drawing:reveal_prev");
   }, [socket]);
 
+  const submitPetitBacValidation = useCallback((validation: PetitBacValidationSubmission) => {
+    socket.emit("petitbac:submit_validation", validation);
+  }, [socket]);
+
   return {
     socket,
     connect,
@@ -318,5 +335,6 @@ export function useSocket() {
     submitDrawingGuess,
     advanceDrawingReveal,
     retreatDrawingReveal,
+    submitPetitBacValidation,
   };
 }

@@ -1,11 +1,17 @@
-import type { Room, Player, GameSettings, GameMode, RoomStatus, DEFAULT_GAME_SETTINGS } from "../src/types";
+import type { Room, Player, GameSettings, GameMode, GameModeConfig, RoomStatus } from "../src/types";
+import { DEFAULT_PLAYLIST } from "../src/types";
+
+function computeTotalRounds(playlist: GameModeConfig[]): number {
+  return playlist.reduce((sum, seg) => sum + seg.rounds, 0);
+}
 
 const DEFAULT_SETTINGS: GameSettings = {
   maxPlayers: 8,
   roundDuration: 30,
-  totalRounds: 10,
+  totalRounds: computeTotalRounds(DEFAULT_PLAYLIST),
   showLeaderboardBetweenRounds: true,
   difficulty: "medium",
+  playlist: [...DEFAULT_PLAYLIST],
 };
 
 export class RoomManager {
@@ -230,6 +236,11 @@ export class RoomManager {
     if (!room) return null;
 
     room.settings = { ...room.settings, ...settings };
+
+    // Recompute totalRounds from playlist
+    if (room.settings.playlist) {
+      room.settings.totalRounds = computeTotalRounds(room.settings.playlist);
+    }
     room.totalRounds = room.settings.totalRounds;
     return room;
   }

@@ -9,16 +9,22 @@ import { LeaderboardDisplay } from "./leaderboard-display";
 import { DrawingPhaseScreen } from "./drawing-phase-screen";
 import { GuessingPhaseScreen } from "./guessing-phase-screen";
 import { DrawingRevealScreen } from "./drawing-reveal-screen";
+import { PetitBacValidationScreen } from "./petitbac-validation-screen";
 import { ScreenContainer } from "@/components/layout";
+import { GAME_MODES } from "@/types";
 
 export function GameScreen() {
   const status = useGameStore((s) => s.status);
   const currentRound = useGameStore((s) => s.currentRound);
   const totalRounds = useGameStore((s) => s.totalRounds);
   const room = useRoomStore((s) => s.room);
-  const isDrawingMode = room?.gameMode === "drawing";
+  const currentGameMode = room?.gameMode;
+  const isDrawingMode = currentGameMode === "drawing";
+  const isPetitBac = currentGameMode === "petitbac";
+  const currentModeInfo = GAME_MODES.find((m) => m.id === currentGameMode);
 
   const getPhaseLabel = () => {
+    if (isPetitBac && status === "petitbac_validating") return "Validation";
     if (!isDrawingMode) return null;
     switch (status) {
       case "drawing": return "Dessine !";
@@ -54,11 +60,12 @@ export function GameScreen() {
         >
           {phaseLabel ? (
             <span className="text-sm font-medium text-surface-100 font-display">
-              🎨 {phaseLabel}
+              {currentModeInfo?.icon || "🎮"} {phaseLabel}
             </span>
           ) : (
             <span className="text-sm font-medium text-surface-400">
-              Question <span className="text-surface-100 font-display">{currentRound}</span>/{totalRounds}
+              {currentModeInfo?.icon}{" "}
+              <span className="text-surface-100 font-display">{currentRound}</span>/{totalRounds}
             </span>
           )}
         </motion.div>
@@ -76,6 +83,7 @@ export function GameScreen() {
           {status === "drawing" && <DrawingPhaseScreen key="drawing" />}
           {status === "guessing" && <GuessingPhaseScreen key="guessing" />}
           {status === "drawing_reveal" && <DrawingRevealScreen key="drawing-reveal" />}
+          {status === "petitbac_validating" && <PetitBacValidationScreen key="petitbac-validation" />}
         </AnimatePresence>
       </div>
     </ScreenContainer>

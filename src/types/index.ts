@@ -39,15 +39,28 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac";
+
+export interface GameModeConfig {
+  mode: GameMode;
+  rounds: number;
+}
 
 export interface GameSettings {
   maxPlayers: number;
   roundDuration: number; // seconds
-  totalRounds: number;
+  totalRounds: number; // computed from playlist
   showLeaderboardBetweenRounds: boolean;
   difficulty: "easy" | "medium" | "hard";
+  playlist: GameModeConfig[];
 }
+
+export const DEFAULT_PLAYLIST: GameModeConfig[] = [
+  { mode: "qcm", rounds: 3 },
+  { mode: "petitbac", rounds: 2 },
+  { mode: "estimation", rounds: 3 },
+  { mode: "parcours", rounds: 2 },
+];
 
 export const DEFAULT_GAME_SETTINGS: GameSettings = {
   maxPlayers: 8,
@@ -55,6 +68,7 @@ export const DEFAULT_GAME_SETTINGS: GameSettings = {
   totalRounds: 10,
   showLeaderboardBetweenRounds: true,
   difficulty: "medium",
+  playlist: DEFAULT_PLAYLIST,
 };
 
 // ==========================================
@@ -130,7 +144,41 @@ export interface DrawingQuestion extends BaseQuestion {
   category?: string;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion;
+export const PETITBAC_CATEGORIES = [
+  "Prénom",
+  "Pokémon",
+  "Joueur de foot",
+  "Plat",
+  "Métier",
+  "Fruit/Légume",
+  "Film",
+  "Partie du corps/os",
+] as const;
+
+export interface PetitBacQuestion extends BaseQuestion {
+  type: "petitbac";
+  letter: string;
+  categories: string[];
+}
+
+export interface PetitBacPlayerAnswerData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  answers: Record<string, string>;
+}
+
+export interface PetitBacValidationData {
+  letter: string;
+  categories: string[];
+  playerAnswers: PetitBacPlayerAnswerData[];
+}
+
+export interface PetitBacValidationSubmission {
+  validatedAnswers: Record<string, string[]>;
+}
+
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -229,6 +277,7 @@ export interface ServerToClientEvents {
   "room:error": (message: string) => void;
 
   // Game events
+  "game:mode_changed": (mode: GameMode) => void;
   "game:starting": (countdown: number) => void;
   "game:round_start": (round: number, question: Question) => void;
   "game:time_update": (timeRemaining: number) => void;
@@ -244,6 +293,10 @@ export interface ServerToClientEvents {
   "drawing:reveal_state": (revealState: DrawingRevealState) => void;
   "drawing:reveal_step": (chainIndex: number, step: number) => void;
   "drawing:round_scores": (result: DrawingRoundResult) => void;
+
+  // Petit Bac events
+  "petitbac:validation_start": (data: PetitBacValidationData) => void;
+  "petitbac:validation_result": (validation: PetitBacValidationSubmission) => void;
 
   // Connection events
   "connection:reconnected": (room: Room, player: Player) => void;
@@ -271,6 +324,9 @@ export interface ClientToServerEvents {
   "drawing:submit_guess": (guess: string) => void;
   "drawing:reveal_next": () => void;
   "drawing:reveal_prev": () => void;
+
+  // Petit Bac events
+  "petitbac:submit_validation": (validation: PetitBacValidationSubmission) => void;
 
   // Connection events
   "connection:reconnect": (roomCode: string, playerId: string) => void;
@@ -377,5 +433,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Dessine une phrase, devine le dessin des autres",
     icon: "🎨",
     color: "from-purple-500 to-purple-700",
+  },
+  {
+    id: "petitbac",
+    name: "Petit Bac",
+    description: "Trouve des mots commençant par la lettre imposée",
+    icon: "🔤",
+    color: "from-cyan-500 to-cyan-700",
   },
 ];

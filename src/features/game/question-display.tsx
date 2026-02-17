@@ -8,7 +8,7 @@ import { Button, Card, Input, TimerProgress, Badge, Avatar } from "@/components/
 import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
-import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion } from "@/types";
+import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion } from "@/types";
 
 export function QuestionDisplay() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
@@ -23,6 +23,7 @@ export function QuestionDisplay() {
   const [priceGuess, setPriceGuess] = useState("");
   const [dictationAnswer, setDictationAnswer] = useState("");
   const [parcoursAnswer, setParcoursAnswer] = useState("");
+  const [petitBacAnswers, setPetitBacAnswers] = useState<Record<string, string>>({});
 
   if (!currentQuestion) return null;
 
@@ -39,6 +40,8 @@ export function QuestionDisplay() {
       submitAnswer(dictationAnswer.trim());
     } else if (currentQuestion.type === "parcours" && parcoursAnswer.trim()) {
       submitAnswer(parcoursAnswer.trim());
+    } else if (currentQuestion.type === "petitbac") {
+      submitAnswer(JSON.stringify(petitBacAnswers));
     } else if (textAnswer.trim()) {
       submitAnswer(textAnswer.trim());
     }
@@ -103,6 +106,16 @@ export function QuestionDisplay() {
             answer={parcoursAnswer}
             hasAnswered={hasAnswered}
             onChange={setParcoursAnswer}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "petitbac" && (
+          <PetitBacQuestionView
+            question={currentQuestion as PetitBacQuestion}
+            answers={petitBacAnswers}
+            hasAnswered={hasAnswered}
+            onChange={setPetitBacAnswers}
             onSubmit={handleSubmit}
           />
         )}
@@ -704,6 +717,147 @@ function ParcoursQuestionView({
           </div>
         )}
       </div>
+    </>
+  );
+}
+
+// ==========================================
+// PETIT BAC QUESTION VIEW
+// ==========================================
+
+const PETITBAC_CATEGORY_ICONS: Record<string, string> = {
+  "Prénom": "👤",
+  "Pokémon": "⚡",
+  "Joueur de foot": "⚽",
+  "Plat": "🍽️",
+  "Métier": "💼",
+  "Fruit/Légume": "🍎",
+  "Film": "🎬",
+  "Partie du corps/os": "🦴",
+};
+
+interface PetitBacQuestionViewProps {
+  question: PetitBacQuestion;
+  answers: Record<string, string>;
+  hasAnswered: boolean;
+  onChange: (answers: Record<string, string>) => void;
+  onSubmit: () => void;
+}
+
+function PetitBacQuestionView({
+  question,
+  answers,
+  hasAnswered,
+  onChange,
+  onSubmit,
+}: PetitBacQuestionViewProps) {
+  const handleCategoryChange = (category: string, value: string) => {
+    onChange({ ...answers, [category]: value });
+  };
+
+  const filledCount = question.categories.filter(
+    (cat) => (answers[cat] || "").trim().length > 0
+  ).length;
+
+  return (
+    <>
+      {/* Header with letter */}
+      <div className="mb-4 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-800 border border-surface-700 mb-3">
+          <span className="text-lg">🔤</span>
+          <span className="text-xs font-medium text-surface-300">Petit Bac</span>
+        </div>
+        <div className="flex justify-center mb-2">
+          <motion.div
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-500 to-cyan-700 flex items-center justify-center shadow-lg"
+          >
+            <span className="text-4xl font-display font-black text-white">
+              {question.letter}
+            </span>
+          </motion.div>
+        </div>
+        <p className="text-surface-400 text-sm">
+          Trouve un mot commençant par <span className="font-bold text-cyan-400">{question.letter}</span> pour chaque catégorie
+        </p>
+      </div>
+
+      {/* Category inputs */}
+      <div className="flex-1 overflow-y-auto mb-4 -mx-1 px-1">
+        {hasAnswered ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center py-6"
+          >
+            <Card className="inline-block">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-success-400" />
+                <div className="text-left">
+                  <p className="text-sm text-surface-400">Réponses envoyées</p>
+                  <p className="text-lg font-medium text-surface-100">
+                    {filledCount}/{question.categories.length} catégories
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        ) : (
+          <div className="space-y-2.5">
+            {question.categories.map((category, index) => (
+              <motion.div
+                key={category}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.04 }}
+                className="flex items-center gap-2"
+              >
+                <div className="w-8 text-center text-lg shrink-0">
+                  {PETITBAC_CATEGORY_ICONS[category] || "📝"}
+                </div>
+                <div className="flex-1">
+                  <label className="text-xs text-surface-400 mb-0.5 block">
+                    {category}
+                  </label>
+                  <input
+                    type="text"
+                    value={answers[category] || ""}
+                    onChange={(e) => handleCategoryChange(category, e.target.value)}
+                    placeholder={`${question.letter}...`}
+                    autoComplete="off"
+                    autoCorrect="off"
+                    spellCheck={false}
+                    className={cn(
+                      "w-full rounded-lg px-3 py-2 text-sm",
+                      "bg-surface-900 border border-surface-700",
+                      "text-surface-100 placeholder:text-surface-600",
+                      "focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent",
+                      "transition-colors duration-150"
+                    )}
+                  />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Submit button */}
+      {!hasAnswered && (
+        <div>
+          <Button
+            variant="primary"
+            size="lg"
+            fullWidth
+            onClick={onSubmit}
+            rightIcon={<Send className="w-5 h-5" />}
+          >
+            Valider ({filledCount}/{question.categories.length})
+          </Button>
+        </div>
+      )}
     </>
   );
 }

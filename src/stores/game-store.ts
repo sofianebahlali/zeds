@@ -1,8 +1,9 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
-  | "drawing" | "guessing" | "drawing_reveal";
+  | "drawing" | "guessing" | "drawing_reveal"
+  | "petitbac_validating";
 
 interface GameStoreState {
   // Game state
@@ -27,6 +28,10 @@ interface GameStoreState {
   drawingScores: DrawingRoundResult | null;
   drawingPhase: DrawingPhase | null;
 
+  // Petit Bac mode
+  petitBacValidationData: PetitBacValidationData | null;
+  petitBacValidatedAnswers: Record<string, string[]> | null;
+
   // Actions
   setStatus: (status: GameStatus) => void;
   setCurrentQuestion: (question: Question) => void;
@@ -49,6 +54,10 @@ interface GameStoreState {
   setDrawingRevealState: (state: DrawingRevealState) => void;
   updateDrawingRevealStep: (chainIndex: number, step: number) => void;
   setDrawingScores: (result: DrawingRoundResult) => void;
+
+  // Petit Bac actions
+  setPetitBacValidation: (data: PetitBacValidationData) => void;
+  setPetitBacValidatedAnswers: (validation: PetitBacValidationSubmission) => void;
 
   // Computed
   getProgress: () => number;
@@ -75,6 +84,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   drawingRevealState: null,
   drawingScores: null,
   drawingPhase: null,
+
+  // Petit Bac initial state
+  petitBacValidationData: null,
+  petitBacValidatedAnswers: null,
 
   // Actions
   setStatus: (status) => set({ status }),
@@ -153,6 +166,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       drawingRevealState: null,
       drawingScores: null,
       drawingPhase: null,
+      petitBacValidationData: null,
+      petitBacValidatedAnswers: null,
     }),
 
   finishGame: () => set({ status: "finished" }),
@@ -175,6 +190,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       drawingRevealState: null,
       drawingScores: null,
       drawingPhase: null,
+      petitBacValidationData: null,
+      petitBacValidatedAnswers: null,
     }),
 
   // Drawing actions
@@ -206,6 +223,16 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   })),
 
   setDrawingScores: (result) => set({ drawingScores: result }),
+
+  // Petit Bac actions
+  setPetitBacValidation: (data) => set({
+    petitBacValidationData: data,
+    status: "petitbac_validating",
+  }),
+
+  setPetitBacValidatedAnswers: (validation) => set({
+    petitBacValidatedAnswers: validation.validatedAnswers,
+  }),
 
   // Computed
   getProgress: () => {
