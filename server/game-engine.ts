@@ -11,6 +11,7 @@ import type {
   ImageQuestion,
   DictationQuestion,
   EstimationQuestion,
+  ParcoursQuestion,
   Answer,
   RoundResult,
   ClientToServerEvents,
@@ -147,6 +148,81 @@ export class GameEngine {
   }
 
   /**
+   * Load dictation questions from JSON file
+   */
+  private static loadDictationQuestions(): Question[] {
+    const filePath = path.resolve(__dirname, "../data/questions/dictation.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw) as DictationQuestion[];
+    } catch {
+      console.warn("No dictation questions found at", filePath);
+      return [];
+    }
+  }
+
+  /**
+   * Load parcours questions from JSON file
+   */
+  private static loadParcoursQuestions(): Question[] {
+    const filePath = path.resolve(__dirname, "../data/questions/parcours.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw) as ParcoursQuestion[];
+    } catch {
+      console.warn("No parcours questions found at", filePath);
+      return [];
+    }
+  }
+
+  /**
+   * Normalize text for accent-insensitive comparison
+   */
+  private static normalizeForComparison(text: string): string {
+    return text
+      .toLowerCase()
+      .trim()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // strip accents
+      .replace(/[''`]/g, "'")          // normalize apostrophes
+      .replace(/[-]/g, " ");           // normalize hyphens
+  }
+
+  /**
+   * Normalize text for dictation comparison (strip punctuation, lowercase, keep accents)
+   */
+  private static normalizeDictationText(text: string): string[] {
+    return text
+      .toLowerCase()
+      .replace(/[.,;:!?'"«»()…\[\]{}]/g, "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .split(" ")
+      .filter((w) => w.length > 0);
+  }
+
+  /**
+   * Longest common subsequence (word-level) for tolerant dictation scoring
+   */
+  private static wordLCS(a: string[], b: string[]): number {
+    const m = a.length;
+    const n = b.length;
+    const dp: number[][] = Array(m + 1)
+      .fill(0)
+      .map(() => Array(n + 1).fill(0));
+    for (let i = 1; i <= m; i++) {
+      for (let j = 1; j <= n; j++) {
+        if (a[i - 1] === b[j - 1]) {
+          dp[i][j] = dp[i - 1][j - 1] + 1;
+        } else {
+          dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+        }
+      }
+    }
+    return dp[m][n];
+  }
+
+  /**
    * Prepare questions for the game
    */
   private prepareQuestions(): void {
@@ -156,6 +232,18 @@ export class GameEngine {
       pool = GameEngine.loadEstimationQuestions();
       if (pool.length === 0) {
         console.warn("No estimation questions available, falling back to sample questions");
+        pool = [...SAMPLE_QUESTIONS];
+      }
+    } else if (this.room.gameMode === "dictation") {
+      pool = GameEngine.loadDictationQuestions();
+      if (pool.length === 0) {
+        console.warn("No dictation questions available, falling back to sample questions");
+        pool = [...SAMPLE_QUESTIONS];
+      }
+    } else if (this.room.gameMode === "parcours") {
+      pool = GameEngine.loadParcoursQuestions();
+      if (pool.length === 0) {
+        console.warn("No parcours questions available, falling back to sample questions");
         pool = [...SAMPLE_QUESTIONS];
       }
     } else {
@@ -234,6 +322,20 @@ export class GameEngine {
       return {
         ...question,
         correctValue: 0, // Hide the real price
+      };
+    }
+    if (question.type === "dictation") {
+      return {
+        ...question,
+        text: "", // Hide the correct text
+        audioText: undefined, // Don't send audioText to client
+      };
+    }
+    if (question.type === "parcours") {
+      return {
+        ...question,
+        playerName: "", // Hide the player name
+        acceptedAnswers: [], // Hide accepted answers
       };
     }
     return question;
@@ -341,6 +443,10 @@ export class GameEngine {
 
     if (this.currentQuestion.type === "estimation") {
       return this.calculateEstimationScores(correctAnswer, scores);
+    }
+
+    if (this.currentQuestion.type === "dictation") {
+      return this.calculateDictationScores(correctAnswer, scores);
     }
 
     let fastestCorrectTime = Infinity;
@@ -502,6 +608,71 @@ export class GameEngine {
   }
 
   /**
+   * Calculate proportional scores for dictation questions
+   */
+  private calculateDictationScores(
+    correctAnswer: string,
+    scores: { playerId: string; points: number; total: number }[]
+  ): RoundResult {
+    const q = this.currentQuestion as DictationQuestion;
+    const correctWords = GameEngine.normalizeDictationText(q.text);
+    let winner: Player | undefined;
+    let bestAccuracy = 0;
+
+    for (const [playerId, answer] of this.answers) {
+      const playerWords = GameEngine.normalizeDictationText(answer.answer);
+      const lcsLen = GameEngine.wordLCS(playerWords, correctWords);
+      const accuracy = correctWords.length > 0 ? lcsLen / correctWords.length : 0;
+
+      let points = Math.round(q.points * accuracy);
+      answer.isCorrect = accuracy >= 0.85;
+      answer.points = points;
+
+      // Streak management
+      const player = this.room.players.find((p) => p.id === playerId);
+      if (player) {
+        if (answer.isCorrect) {
+          player.streak++;
+          if (player.streak >= 3) {
+            points += 50 * Math.min(player.streak - 2, 5);
+            answer.points = points;
+          }
+        } else {
+          player.streak = 0;
+        }
+      }
+
+      // Track best accuracy for winner
+      if (accuracy > bestAccuracy) {
+        bestAccuracy = accuracy;
+        winner = this.room.players.find((p) => p.id === playerId);
+      }
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);
+      if (updatedPlayer) {
+        scores.push({ playerId, points, total: updatedPlayer.score });
+      }
+    }
+
+    // Players who didn't answer
+    for (const player of this.room.players) {
+      if (!this.answers.has(player.id)) {
+        player.streak = 0;
+        scores.push({ playerId: player.id, points: 0, total: player.score });
+      }
+    }
+
+    return {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion!,
+      answers: Array.from(this.answers.values()),
+      correctAnswer,
+      winner,
+      scores,
+    };
+  }
+
+  /**
    * Get the correct answer for the current question
    */
   private getCorrectAnswer(): string {
@@ -517,11 +688,13 @@ export class GameEngine {
       case "image":
         return (this.currentQuestion as ImageQuestion).answer;
       case "dictation":
-        return (this.currentQuestion as DictationQuestion).answer;
+        return (this.currentQuestion as DictationQuestion).text;
       case "estimation": {
         const q = this.currentQuestion as EstimationQuestion;
         return `${q.correctValue.toLocaleString("fr-FR")} ${q.unit}`;
       }
+      case "parcours":
+        return (this.currentQuestion as ParcoursQuestion).playerName;
       default:
         return "";
     }
@@ -558,12 +731,24 @@ export class GameEngine {
         return normalizedAnswer === q.answer.toLowerCase();
       }
       case "dictation": {
+        // Dictation uses proportional scoring, handled in calculateDictationScores
         const q = this.currentQuestion as DictationQuestion;
-        return normalizedAnswer === q.answer.toLowerCase();
+        const playerWords = GameEngine.normalizeDictationText(answer);
+        const correctWords = GameEngine.normalizeDictationText(q.text);
+        const lcsLen = GameEngine.wordLCS(playerWords, correctWords);
+        const accuracy = correctWords.length > 0 ? lcsLen / correctWords.length : 0;
+        return accuracy >= 0.85;
       }
       case "estimation":
         // Estimation scoring is handled in calculateEstimationScores
         return false;
+      case "parcours": {
+        const q = this.currentQuestion as ParcoursQuestion;
+        const normalizedInput = GameEngine.normalizeForComparison(answer);
+        return q.acceptedAnswers.some(
+          (accepted) => GameEngine.normalizeForComparison(accepted) === normalizedInput
+        );
+      }
       default:
         return false;
     }

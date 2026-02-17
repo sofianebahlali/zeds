@@ -1,0 +1,1904 @@
+[
+  {
+    "id": "parcours_1",
+    "type": "parcours",
+    "playerName": "Mathieu Valbuena",
+    "clubs": [
+      { "name": "Libourne", "years": "2003-2006" },
+      { "name": "Olympique de Marseille", "years": "2006-2014" },
+      { "name": "Dynamo Moscou", "years": "2014-2015" },
+      { "name": "Olympique Lyonnais", "years": "2015-2017" },
+      { "name": "Fenerbahçe", "years": "2017-2019" },
+      { "name": "Olympiacos", "years": "2019-2021" }
+    ],
+    "acceptedAnswers": ["Valbuena", "Mathieu Valbuena"],
+    "difficulty": "easy",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_2",
+    "type": "parcours",
+    "playerName": "Yoann Gourcuff",
+    "clubs": [
+      { "name": "Stade Rennais", "years": "2003-2006" },
+      { "name": "AC Milan", "years": "2006-2008" },
+      { "name": "Girondins de Bordeaux", "years": "2008-2010" },
+      { "name": "Olympique Lyonnais", "years": "2010-2015" },
+      { "name": "Stade Rennais", "years": "2015-2018" }
+    ],
+    "acceptedAnswers": ["Gourcuff", "Yoann Gourcuff"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_3",
+    "type": "parcours",
+    "playerName": "Hatem Ben Arfa",
+    "clubs": [
+      { "name": "Olympique Lyonnais", "years": "2004-2008" },
+      { "name": "Olympique de Marseille", "years": "2008-2010" },
+      { "name": "Newcastle United", "years": "2010-2014" },
+      { "name": "OGC Nice", "years": "2015-2016" },
+      { "name": "Paris Saint-Germain", "years": "2016-2018" },
+      { "name": "Stade Rennais", "years": "2018-2019" },
+      { "name": "Real Valladolid", "years": "2020" },
+      { "name": "Girondins de Bordeaux", "years": "2021-2022" }
+    ],
+    "acceptedAnswers": ["Ben Arfa", "Hatem Ben Arfa", "HBA"],
+    "difficulty": "easy",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_4",
+    "type": "parcours",
+    "playerName": "Samir Nasri",
+    "clubs": [
+      { "name": "Olympique de Marseille", "years": "2004-2008" },
+      { "name": "Arsenal", "years": "2008-2011" },
+      { "name": "Manchester City", "years": "2011-2017" },
+      { "name": "Séville FC", "years": "2016-2017" },
+      { "name": "Antalyaspor", "years": "2017-2018" },
+      { "name": "West Ham United", "years": "2019" },
+      { "name": "RSC Anderlecht", "years": "2019-2020" }
+    ],
+    "acceptedAnswers": ["Nasri", "Samir Nasri"],
+    "difficulty": "easy",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_5",
+    "type": "parcours",
+    "playerName": "Jérémy Ménez",
+    "clubs": [
+      { "name": "FC Sochaux", "years": "2004-2007" },
+      { "name": "AS Monaco", "years": "2007-2008" },
+      { "name": "AS Roma", "years": "2008-2011" },
+      { "name": "Paris Saint-Germain", "years": "2011-2014" },
+      { "name": "AC Milan", "years": "2014-2016" },
+      { "name": "Girondins de Bordeaux", "years": "2016-2017" },
+      { "name": "Antalyaspor", "years": "2017-2018" },
+      { "name": "Club América", "years": "2018" },
+      { "name": "Paris FC", "years": "2019-2020" }
+    ],
+    "acceptedAnswers": ["Ménez", "Menez", "Jérémy Ménez", "Jeremy Menez"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_6",
+    "type": "parcours",
+    "playerName": "Kevin Gameiro",
+    "clubs": [
+      { "name": "RC Strasbourg", "years": "2005-2008" },
+      { "name": "FC Lorient", "years": "2008-2011" },
+      { "name": "Paris Saint-Germain", "years": "2011-2013" },
+      { "name": "Séville FC", "years": "2013-2016" },
+      { "name": "Atlético Madrid", "years": "2016-2018" },
+      { "name": "Valencia CF", "years": "2018-2019" },
+      { "name": "RC Strasbourg", "years": "2019-2023" }
+    ],
+    "acceptedAnswers": ["Gameiro", "Kevin Gameiro"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_7",
+    "type": "parcours",
+    "playerName": "Loïc Rémy",
+    "clubs": [
+      { "name": "Olympique Lyonnais", "years": "2006-2008" },
+      { "name": "RC Lens", "years": "2007-2008" },
+      { "name": "OGC Nice", "years": "2008-2010" },
+      { "name": "Olympique de Marseille", "years": "2010-2013" },
+      { "name": "Queens Park Rangers", "years": "2013" },
+      { "name": "Newcastle United", "years": "2013-2014" },
+      { "name": "Chelsea", "years": "2014-2016" },
+      { "name": "Crystal Palace", "years": "2016-2017" },
+      { "name": "Las Palmas", "years": "2017-2018" },
+      { "name": "Lille OSC", "years": "2018-2019" }
+    ],
+    "acceptedAnswers": ["Rémy", "Remy", "Loïc Rémy", "Loic Remy"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_8",
+    "type": "parcours",
+    "playerName": "Yohan Cabaye",
+    "clubs": [
+      { "name": "Lille OSC", "years": "2004-2011" },
+      { "name": "Newcastle United", "years": "2011-2014" },
+      { "name": "Paris Saint-Germain", "years": "2014-2015" },
+      { "name": "Crystal Palace", "years": "2015-2018" },
+      { "name": "Al-Nasr", "years": "2018" },
+      { "name": "AS Saint-Étienne", "years": "2019-2020" }
+    ],
+    "acceptedAnswers": ["Cabaye", "Yohan Cabaye"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_9",
+    "type": "parcours",
+    "playerName": "Bacary Sagna",
+    "clubs": [
+      { "name": "AJ Auxerre", "years": "2002-2007" },
+      { "name": "Arsenal", "years": "2007-2014" },
+      { "name": "Manchester City", "years": "2014-2017" },
+      { "name": "Benevento", "years": "2018" },
+      { "name": "Montreal Impact", "years": "2018-2019" }
+    ],
+    "acceptedAnswers": ["Sagna", "Bacary Sagna"],
+    "difficulty": "easy",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_10",
+    "type": "parcours",
+    "playerName": "Moussa Sissoko",
+    "clubs": [
+      { "name": "Toulouse FC", "years": "2007-2013" },
+      { "name": "Newcastle United", "years": "2013-2016" },
+      { "name": "Tottenham Hotspur", "years": "2016-2021" },
+      { "name": "Watford", "years": "2021-2022" },
+      { "name": "FC Nantes", "years": "2022-2023" }
+    ],
+    "acceptedAnswers": ["Sissoko", "Moussa Sissoko"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_11",
+    "type": "parcours",
+    "playerName": "Blaise Matuidi",
+    "clubs": [
+      { "name": "Troyes", "years": "2004-2007" },
+      { "name": "AS Saint-Étienne", "years": "2007-2011" },
+      { "name": "Paris Saint-Germain", "years": "2011-2017" },
+      { "name": "Juventus", "years": "2017-2020" },
+      { "name": "Inter Miami", "years": "2020-2022" }
+    ],
+    "acceptedAnswers": ["Matuidi", "Blaise Matuidi"],
+    "difficulty": "easy",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_12",
+    "type": "parcours",
+    "playerName": "Lassana Diarra",
+    "clubs": [
+      { "name": "Le Havre AC", "years": "2003-2005" },
+      { "name": "Chelsea", "years": "2005-2007" },
+      { "name": "Arsenal", "years": "2007-2008" },
+      { "name": "Portsmouth", "years": "2008-2009" },
+      { "name": "Real Madrid", "years": "2009-2012" },
+      { "name": "Anzhi Makhachkala", "years": "2012-2013" },
+      { "name": "Lokomotiv Moscou", "years": "2013-2014" },
+      { "name": "Olympique de Marseille", "years": "2015-2017" },
+      { "name": "Paris Saint-Germain", "years": "2018-2019" }
+    ],
+    "acceptedAnswers": ["Diarra", "Lassana Diarra", "Lass Diarra", "Lass"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_13",
+    "type": "parcours",
+    "playerName": "Djibril Cissé",
+    "clubs": [
+      { "name": "AJ Auxerre", "years": "1998-2004" },
+      { "name": "Liverpool", "years": "2004-2007" },
+      { "name": "Olympique de Marseille", "years": "2006-2007" },
+      { "name": "Sunderland", "years": "2008-2009" },
+      { "name": "Panathinaïkos", "years": "2009-2011" },
+      { "name": "Lazio", "years": "2011-2012" },
+      { "name": "Queens Park Rangers", "years": "2012" },
+      { "name": "Al-Gharafa", "years": "2012-2013" },
+      { "name": "SC Bastia", "years": "2014-2015" }
+    ],
+    "acceptedAnswers": ["Cissé", "Cisse", "Djibril Cissé", "Djibril Cisse"],
+    "difficulty": "easy",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_14",
+    "type": "parcours",
+    "playerName": "André-Pierre Gignac",
+    "clubs": [
+      { "name": "FC Lorient", "years": "2002-2004" },
+      { "name": "Toulouse FC", "years": "2004-2010" },
+      { "name": "Olympique de Marseille", "years": "2010-2015" },
+      { "name": "Tigres UANL", "years": "2015-2024" }
+    ],
+    "acceptedAnswers": ["Gignac", "André-Pierre Gignac", "Andre-Pierre Gignac", "APG"],
+    "difficulty": "easy",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_15",
+    "type": "parcours",
+    "playerName": "Adil Rami",
+    "clubs": [
+      { "name": "Lille OSC", "years": "2006-2007" },
+      { "name": "SC Freiburg", "years": "2007-2008" },
+      { "name": "Lille OSC", "years": "2008-2012" },
+      { "name": "Valencia CF", "years": "2012-2014" },
+      { "name": "AC Milan", "years": "2014-2015" },
+      { "name": "Séville FC", "years": "2015-2016" },
+      { "name": "Olympique de Marseille", "years": "2017-2019" },
+      { "name": "Fenerbahçe", "years": "2019" },
+      { "name": "Boavista", "years": "2020" },
+      { "name": "Troyes", "years": "2021-2022" }
+    ],
+    "acceptedAnswers": ["Rami", "Adil Rami"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_16",
+    "type": "parcours",
+    "playerName": "Mathieu Debuchy",
+    "clubs": [
+      { "name": "Lille OSC", "years": "2003-2013" },
+      { "name": "Newcastle United", "years": "2013-2014" },
+      { "name": "Arsenal", "years": "2014-2018" },
+      { "name": "Girondins de Bordeaux", "years": "2016-2017" },
+      { "name": "AS Saint-Étienne", "years": "2018-2021" }
+    ],
+    "acceptedAnswers": ["Debuchy", "Mathieu Debuchy"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_17",
+    "type": "parcours",
+    "playerName": "Gaël Clichy",
+    "clubs": [
+      { "name": "AS Cannes", "years": "2001-2003" },
+      { "name": "Arsenal", "years": "2003-2011" },
+      { "name": "Manchester City", "years": "2011-2017" },
+      { "name": "İstanbul Başakşehir", "years": "2017-2019" },
+      { "name": "Servette FC", "years": "2020-2022" }
+    ],
+    "acceptedAnswers": ["Clichy", "Gaël Clichy", "Gael Clichy"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_18",
+    "type": "parcours",
+    "playerName": "Louis Saha",
+    "clubs": [
+      { "name": "FC Metz", "years": "1997-2000" },
+      { "name": "Newcastle United", "years": "1999-2000" },
+      { "name": "Fulham", "years": "2000-2004" },
+      { "name": "Manchester United", "years": "2004-2008" },
+      { "name": "Everton", "years": "2008-2012" },
+      { "name": "Tottenham Hotspur", "years": "2012" },
+      { "name": "Sunderland", "years": "2012-2013" },
+      { "name": "Lazio", "years": "2013" }
+    ],
+    "acceptedAnswers": ["Saha", "Louis Saha"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_19",
+    "type": "parcours",
+    "playerName": "Nicolas Anelka",
+    "clubs": [
+      { "name": "Paris Saint-Germain", "years": "1996-1997" },
+      { "name": "Arsenal", "years": "1997-1999" },
+      { "name": "Real Madrid", "years": "1999-2000" },
+      { "name": "Paris Saint-Germain", "years": "2000-2002" },
+      { "name": "Liverpool", "years": "2001-2002" },
+      { "name": "Manchester City", "years": "2002-2005" },
+      { "name": "Fenerbahçe", "years": "2005-2006" },
+      { "name": "Bolton Wanderers", "years": "2006-2008" },
+      { "name": "Chelsea", "years": "2008-2012" },
+      { "name": "Shanghai Shenhua", "years": "2012" },
+      { "name": "Juventus", "years": "2013" },
+      { "name": "West Bromwich Albion", "years": "2013-2014" }
+    ],
+    "acceptedAnswers": ["Anelka", "Nicolas Anelka"],
+    "difficulty": "easy",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_20",
+    "type": "parcours",
+    "playerName": "David Trezeguet",
+    "clubs": [
+      { "name": "Platense", "years": "1994-1995" },
+      { "name": "AS Monaco", "years": "1995-2000" },
+      { "name": "Juventus", "years": "2000-2010" },
+      { "name": "Hércules CF", "years": "2010-2011" },
+      { "name": "River Plate", "years": "2012-2013" },
+      { "name": "Newell's Old Boys", "years": "2013" },
+      { "name": "FC Pune City", "years": "2014" }
+    ],
+    "acceptedAnswers": ["Trezeguet", "David Trezeguet", "Trézéguet"],
+    "difficulty": "easy",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_21",
+    "type": "parcours",
+    "playerName": "Sylvain Wiltord",
+    "clubs": [
+      { "name": "Stade Rennais", "years": "1993-1996" },
+      { "name": "Deportivo La Coruña", "years": "1996-1997" },
+      { "name": "Girondins de Bordeaux", "years": "1997-2000" },
+      { "name": "Arsenal", "years": "2000-2004" },
+      { "name": "Olympique Lyonnais", "years": "2004-2007" },
+      { "name": "Stade Rennais", "years": "2007-2009" },
+      { "name": "FC Metz", "years": "2009-2010" },
+      { "name": "FC Nantes", "years": "2011-2012" }
+    ],
+    "acceptedAnswers": ["Wiltord", "Sylvain Wiltord"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_22",
+    "type": "parcours",
+    "playerName": "Sidney Govou",
+    "clubs": [
+      { "name": "Olympique Lyonnais", "years": "1999-2010" },
+      { "name": "Panathinaïkos", "years": "2010-2011" },
+      { "name": "Evian TG", "years": "2011-2013" }
+    ],
+    "acceptedAnswers": ["Govou", "Sidney Govou"],
+    "difficulty": "hard",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_23",
+    "type": "parcours",
+    "playerName": "Éric Abidal",
+    "clubs": [
+      { "name": "AS Monaco", "years": "1998-2000" },
+      { "name": "Lille OSC", "years": "2000-2002" },
+      { "name": "Olympique Lyonnais", "years": "2002-2007" },
+      { "name": "FC Barcelone", "years": "2007-2013" },
+      { "name": "AS Monaco", "years": "2013-2014" }
+    ],
+    "acceptedAnswers": ["Abidal", "Éric Abidal", "Eric Abidal"],
+    "difficulty": "easy",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_24",
+    "type": "parcours",
+    "playerName": "Yann M'Vila",
+    "clubs": [
+      { "name": "Stade Rennais", "years": "2008-2013" },
+      { "name": "Rubin Kazan", "years": "2013-2015" },
+      { "name": "Inter Milan", "years": "2014-2015" },
+      { "name": "Sunderland", "years": "2015-2016" },
+      { "name": "AS Saint-Étienne", "years": "2016-2020" },
+      { "name": "Olympiacos", "years": "2020-2022" }
+    ],
+    "acceptedAnswers": ["M'Vila", "MVila", "Yann M'Vila", "Yann MVila"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_25",
+    "type": "parcours",
+    "playerName": "Steve Mandanda",
+    "clubs": [
+      { "name": "Le Havre AC", "years": "2003-2007" },
+      { "name": "Olympique de Marseille", "years": "2007-2016" },
+      { "name": "Crystal Palace", "years": "2016-2017" },
+      { "name": "Olympique de Marseille", "years": "2017-2022" },
+      { "name": "Stade Rennais", "years": "2022-2024" }
+    ],
+    "acceptedAnswers": ["Mandanda", "Steve Mandanda"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_26",
+    "type": "parcours",
+    "playerName": "Santi Cazorla",
+    "clubs": [
+      { "name": "Villarreal", "years": "2003-2006" },
+      { "name": "Recreativo Huelva", "years": "2006-2007" },
+      { "name": "Villarreal", "years": "2007-2011" },
+      { "name": "Málaga", "years": "2011-2012" },
+      { "name": "Arsenal", "years": "2012-2018" },
+      { "name": "Villarreal", "years": "2018-2020" },
+      { "name": "Al-Sadd", "years": "2020-2022" }
+    ],
+    "acceptedAnswers": ["Cazorla", "Santi Cazorla", "Santiago Cazorla"],
+    "difficulty": "easy",
+    "nationality": "Espagne",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_27",
+    "type": "parcours",
+    "playerName": "Juan Mata",
+    "clubs": [
+      { "name": "Real Madrid Castilla", "years": "2006-2007" },
+      { "name": "Valencia CF", "years": "2007-2011" },
+      { "name": "Chelsea", "years": "2011-2014" },
+      { "name": "Manchester United", "years": "2014-2022" },
+      { "name": "Galatasaray", "years": "2022-2023" },
+      { "name": "Vissel Kobe", "years": "2023-2024" }
+    ],
+    "acceptedAnswers": ["Mata", "Juan Mata"],
+    "difficulty": "easy",
+    "nationality": "Espagne",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_28",
+    "type": "parcours",
+    "playerName": "Jesús Navas",
+    "clubs": [
+      { "name": "Séville FC", "years": "2003-2013" },
+      { "name": "Manchester City", "years": "2013-2017" },
+      { "name": "Séville FC", "years": "2017-2024" }
+    ],
+    "acceptedAnswers": ["Navas", "Jesús Navas", "Jesus Navas"],
+    "difficulty": "easy",
+    "nationality": "Espagne",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_29",
+    "type": "parcours",
+    "playerName": "Roberto Soldado",
+    "clubs": [
+      { "name": "Real Madrid", "years": "2004-2005" },
+      { "name": "Osasuna", "years": "2005-2006" },
+      { "name": "Getafe", "years": "2006-2008" },
+      { "name": "Valencia CF", "years": "2008-2013" },
+      { "name": "Tottenham Hotspur", "years": "2013-2015" },
+      { "name": "Villarreal", "years": "2015-2019" },
+      { "name": "Fenerbahçe", "years": "2019" },
+      { "name": "Granada CF", "years": "2019-2020" },
+      { "name": "Levante", "years": "2020-2022" }
+    ],
+    "acceptedAnswers": ["Soldado", "Roberto Soldado"],
+    "difficulty": "medium",
+    "nationality": "Espagne",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_30",
+    "type": "parcours",
+    "playerName": "Álvaro Negredo",
+    "clubs": [
+      { "name": "Real Madrid Castilla", "years": "2004-2005" },
+      { "name": "Almería", "years": "2005-2009" },
+      { "name": "Séville FC", "years": "2009-2013" },
+      { "name": "Manchester City", "years": "2013-2015" },
+      { "name": "Valencia CF", "years": "2015-2016" },
+      { "name": "Middlesbrough", "years": "2016-2017" },
+      { "name": "Beşiktaş", "years": "2017-2018" },
+      { "name": "Al-Nasr", "years": "2018-2019" },
+      { "name": "Cadix CF", "years": "2020-2022" }
+    ],
+    "acceptedAnswers": ["Negredo", "Álvaro Negredo", "Alvaro Negredo"],
+    "difficulty": "medium",
+    "nationality": "Espagne",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_31",
+    "type": "parcours",
+    "playerName": "Fernando Llorente",
+    "clubs": [
+      { "name": "Athletic Bilbao", "years": "2005-2013" },
+      { "name": "Juventus", "years": "2013-2015" },
+      { "name": "Séville FC", "years": "2015-2016" },
+      { "name": "Swansea City", "years": "2016-2017" },
+      { "name": "Tottenham Hotspur", "years": "2017-2019" },
+      { "name": "SSC Napoli", "years": "2019-2020" },
+      { "name": "Udinese", "years": "2020-2021" },
+      { "name": "Eibar", "years": "2021-2022" }
+    ],
+    "acceptedAnswers": ["Llorente", "Fernando Llorente"],
+    "difficulty": "medium",
+    "nationality": "Espagne",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_32",
+    "type": "parcours",
+    "playerName": "Raúl Albiol",
+    "clubs": [
+      { "name": "Valencia CF", "years": "2003-2009" },
+      { "name": "Real Madrid", "years": "2009-2013" },
+      { "name": "SSC Napoli", "years": "2013-2019" },
+      { "name": "Villarreal", "years": "2019-2024" }
+    ],
+    "acceptedAnswers": ["Albiol", "Raúl Albiol", "Raul Albiol"],
+    "difficulty": "medium",
+    "nationality": "Espagne",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_33",
+    "type": "parcours",
+    "playerName": "Álvaro Arbeloa",
+    "clubs": [
+      { "name": "Real Madrid", "years": "2001-2006" },
+      { "name": "Deportivo La Coruña", "years": "2006-2007" },
+      { "name": "Liverpool", "years": "2007-2009" },
+      { "name": "Real Madrid", "years": "2009-2016" },
+      { "name": "West Ham United", "years": "2016-2017" }
+    ],
+    "acceptedAnswers": ["Arbeloa", "Álvaro Arbeloa", "Alvaro Arbeloa"],
+    "difficulty": "hard",
+    "nationality": "Espagne",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_34",
+    "type": "parcours",
+    "playerName": "Pepe Reina",
+    "clubs": [
+      { "name": "FC Barcelone", "years": "2000-2002" },
+      { "name": "Villarreal", "years": "2002-2005" },
+      { "name": "Liverpool", "years": "2005-2014" },
+      { "name": "SSC Napoli", "years": "2013-2014" },
+      { "name": "Bayern Munich", "years": "2014-2015" },
+      { "name": "SSC Napoli", "years": "2015-2018" },
+      { "name": "AC Milan", "years": "2018-2020" },
+      { "name": "Aston Villa", "years": "2019-2020" },
+      { "name": "Lazio", "years": "2020-2022" },
+      { "name": "Villarreal", "years": "2022-2024" }
+    ],
+    "acceptedAnswers": ["Reina", "Pepe Reina", "José Reina"],
+    "difficulty": "medium",
+    "nationality": "Espagne",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_35",
+    "type": "parcours",
+    "playerName": "Antonio Cassano",
+    "clubs": [
+      { "name": "AS Bari", "years": "1999-2001" },
+      { "name": "AS Roma", "years": "2001-2006" },
+      { "name": "Real Madrid", "years": "2006-2007" },
+      { "name": "Sampdoria", "years": "2007-2011" },
+      { "name": "AC Milan", "years": "2011-2012" },
+      { "name": "Inter Milan", "years": "2012-2013" },
+      { "name": "Parme", "years": "2013-2015" },
+      { "name": "Sampdoria", "years": "2015-2017" },
+      { "name": "Hellas Vérone", "years": "2017-2018" }
+    ],
+    "acceptedAnswers": ["Cassano", "Antonio Cassano"],
+    "difficulty": "medium",
+    "nationality": "Italie",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_36",
+    "type": "parcours",
+    "playerName": "Mario Balotelli",
+    "clubs": [
+      { "name": "Inter Milan", "years": "2007-2010" },
+      { "name": "Manchester City", "years": "2010-2013" },
+      { "name": "AC Milan", "years": "2013-2014" },
+      { "name": "Liverpool", "years": "2014-2015" },
+      { "name": "AC Milan", "years": "2015-2016" },
+      { "name": "OGC Nice", "years": "2016-2019" },
+      { "name": "Olympique de Marseille", "years": "2019" },
+      { "name": "Brescia", "years": "2019-2020" },
+      { "name": "Monza", "years": "2020-2021" },
+      { "name": "Adana Demirspor", "years": "2021-2023" }
+    ],
+    "acceptedAnswers": ["Balotelli", "Mario Balotelli", "Super Mario"],
+    "difficulty": "easy",
+    "nationality": "Italie",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_37",
+    "type": "parcours",
+    "playerName": "Sebastian Giovinco",
+    "clubs": [
+      { "name": "Juventus", "years": "2006-2012" },
+      { "name": "Empoli", "years": "2007-2008" },
+      { "name": "Parme", "years": "2010-2012" },
+      { "name": "Juventus", "years": "2012-2015" },
+      { "name": "Toronto FC", "years": "2015-2019" },
+      { "name": "Al-Hilal", "years": "2019-2020" },
+      { "name": "Sampdoria", "years": "2021-2022" }
+    ],
+    "acceptedAnswers": ["Giovinco", "Sebastian Giovinco", "Atomic Ant"],
+    "difficulty": "hard",
+    "nationality": "Italie",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_38",
+    "type": "parcours",
+    "playerName": "Alessio Cerci",
+    "clubs": [
+      { "name": "AS Roma", "years": "2006-2009" },
+      { "name": "Fiorentina", "years": "2009-2012" },
+      { "name": "Torino", "years": "2012-2014" },
+      { "name": "Atlético Madrid", "years": "2014-2016" },
+      { "name": "AC Milan", "years": "2015" },
+      { "name": "Genoa", "years": "2016" },
+      { "name": "Hellas Vérone", "years": "2017" },
+      { "name": "Ankaragücü", "years": "2018-2019" },
+      { "name": "Salernitana", "years": "2019-2020" }
+    ],
+    "acceptedAnswers": ["Cerci", "Alessio Cerci"],
+    "difficulty": "hard",
+    "nationality": "Italie",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_39",
+    "type": "parcours",
+    "playerName": "Alberto Aquilani",
+    "clubs": [
+      { "name": "AS Roma", "years": "2003-2009" },
+      { "name": "Liverpool", "years": "2009-2012" },
+      { "name": "Juventus", "years": "2010-2011" },
+      { "name": "AC Milan", "years": "2011-2012" },
+      { "name": "Fiorentina", "years": "2012-2015" },
+      { "name": "Sporting CP", "years": "2015-2016" },
+      { "name": "Pescara", "years": "2016-2017" },
+      { "name": "US Sassuolo", "years": "2017-2018" }
+    ],
+    "acceptedAnswers": ["Aquilani", "Alberto Aquilani"],
+    "difficulty": "hard",
+    "nationality": "Italie",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_40",
+    "type": "parcours",
+    "playerName": "Giampaolo Pazzini",
+    "clubs": [
+      { "name": "Atalanta", "years": "2002-2005" },
+      { "name": "Fiorentina", "years": "2005-2009" },
+      { "name": "Sampdoria", "years": "2009-2011" },
+      { "name": "Inter Milan", "years": "2011-2012" },
+      { "name": "AC Milan", "years": "2012-2014" },
+      { "name": "Hellas Vérone", "years": "2014-2018" },
+      { "name": "Levante", "years": "2018" }
+    ],
+    "acceptedAnswers": ["Pazzini", "Giampaolo Pazzini"],
+    "difficulty": "hard",
+    "nationality": "Italie",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_41",
+    "type": "parcours",
+    "playerName": "Fabio Borini",
+    "clubs": [
+      { "name": "Chelsea", "years": "2007-2011" },
+      { "name": "Swansea City", "years": "2011" },
+      { "name": "AS Roma", "years": "2011-2012" },
+      { "name": "Liverpool", "years": "2012-2015" },
+      { "name": "Sunderland", "years": "2013-2014" },
+      { "name": "Sunderland", "years": "2015-2017" },
+      { "name": "AC Milan", "years": "2017-2019" },
+      { "name": "Hellas Vérone", "years": "2019-2020" },
+      { "name": "Karagümrük", "years": "2020-2022" }
+    ],
+    "acceptedAnswers": ["Borini", "Fabio Borini"],
+    "difficulty": "hard",
+    "nationality": "Italie",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_42",
+    "type": "parcours",
+    "playerName": "Lukas Podolski",
+    "clubs": [
+      { "name": "FC Cologne", "years": "2003-2006" },
+      { "name": "Bayern Munich", "years": "2006-2009" },
+      { "name": "FC Cologne", "years": "2009-2012" },
+      { "name": "Arsenal", "years": "2012-2015" },
+      { "name": "Inter Milan", "years": "2015" },
+      { "name": "Galatasaray", "years": "2015-2017" },
+      { "name": "Vissel Kobe", "years": "2017-2020" },
+      { "name": "Antalyaspor", "years": "2020-2021" },
+      { "name": "Górnik Zabrze", "years": "2021-2024" }
+    ],
+    "acceptedAnswers": ["Podolski", "Lukas Podolski", "Poldi"],
+    "difficulty": "easy",
+    "nationality": "Allemagne",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_43",
+    "type": "parcours",
+    "playerName": "Miroslav Klose",
+    "clubs": [
+      { "name": "Kaiserslautern", "years": "1999-2004" },
+      { "name": "Werder Brême", "years": "2004-2007" },
+      { "name": "Bayern Munich", "years": "2007-2011" },
+      { "name": "Lazio", "years": "2011-2016" }
+    ],
+    "acceptedAnswers": ["Klose", "Miroslav Klose", "Miro Klose"],
+    "difficulty": "easy",
+    "nationality": "Allemagne",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_44",
+    "type": "parcours",
+    "playerName": "Mario Gómez",
+    "clubs": [
+      { "name": "VfB Stuttgart", "years": "2003-2009" },
+      { "name": "Bayern Munich", "years": "2009-2013" },
+      { "name": "Fiorentina", "years": "2013-2015" },
+      { "name": "Beşiktaş", "years": "2015-2016" },
+      { "name": "VfL Wolfsburg", "years": "2016-2018" },
+      { "name": "VfB Stuttgart", "years": "2018-2020" }
+    ],
+    "acceptedAnswers": ["Gómez", "Gomez", "Mario Gómez", "Mario Gomez"],
+    "difficulty": "medium",
+    "nationality": "Allemagne",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_45",
+    "type": "parcours",
+    "playerName": "André Schürrle",
+    "clubs": [
+      { "name": "Mayence", "years": "2009-2011" },
+      { "name": "Bayer Leverkusen", "years": "2011-2013" },
+      { "name": "Chelsea", "years": "2013-2015" },
+      { "name": "VfL Wolfsburg", "years": "2015-2016" },
+      { "name": "Borussia Dortmund", "years": "2016-2019" },
+      { "name": "Fulham", "years": "2018-2019" },
+      { "name": "Spartak Moscou", "years": "2019-2020" }
+    ],
+    "acceptedAnswers": ["Schürrle", "Schurrle", "André Schürrle", "Andre Schurrle"],
+    "difficulty": "medium",
+    "nationality": "Allemagne",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_46",
+    "type": "parcours",
+    "playerName": "Peter Crouch",
+    "clubs": [
+      { "name": "Queens Park Rangers", "years": "2000-2001" },
+      { "name": "Portsmouth", "years": "2001-2002" },
+      { "name": "Aston Villa", "years": "2002-2004" },
+      { "name": "Southampton", "years": "2004-2005" },
+      { "name": "Liverpool", "years": "2005-2008" },
+      { "name": "Portsmouth", "years": "2008-2009" },
+      { "name": "Tottenham Hotspur", "years": "2009-2011" },
+      { "name": "Stoke City", "years": "2011-2019" },
+      { "name": "Burnley", "years": "2019" }
+    ],
+    "acceptedAnswers": ["Crouch", "Peter Crouch"],
+    "difficulty": "easy",
+    "nationality": "Angleterre",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_47",
+    "type": "parcours",
+    "playerName": "Jermain Defoe",
+    "clubs": [
+      { "name": "West Ham United", "years": "1999-2004" },
+      { "name": "Tottenham Hotspur", "years": "2004-2008" },
+      { "name": "Portsmouth", "years": "2008-2009" },
+      { "name": "Tottenham Hotspur", "years": "2009-2014" },
+      { "name": "Toronto FC", "years": "2014" },
+      { "name": "Sunderland", "years": "2015-2017" },
+      { "name": "AFC Bournemouth", "years": "2017-2018" },
+      { "name": "Rangers", "years": "2018-2021" },
+      { "name": "Sunderland", "years": "2022" }
+    ],
+    "acceptedAnswers": ["Defoe", "Jermain Defoe"],
+    "difficulty": "medium",
+    "nationality": "Angleterre",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_48",
+    "type": "parcours",
+    "playerName": "Theo Walcott",
+    "clubs": [
+      { "name": "Southampton", "years": "2005-2006" },
+      { "name": "Arsenal", "years": "2006-2018" },
+      { "name": "Everton", "years": "2018-2021" },
+      { "name": "Southampton", "years": "2021-2022" }
+    ],
+    "acceptedAnswers": ["Walcott", "Theo Walcott"],
+    "difficulty": "easy",
+    "nationality": "Angleterre",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_49",
+    "type": "parcours",
+    "playerName": "Aaron Lennon",
+    "clubs": [
+      { "name": "Leeds United", "years": "2003-2005" },
+      { "name": "Tottenham Hotspur", "years": "2005-2015" },
+      { "name": "Everton", "years": "2015-2018" },
+      { "name": "Burnley", "years": "2018-2020" },
+      { "name": "Kayserispor", "years": "2021" }
+    ],
+    "acceptedAnswers": ["Lennon", "Aaron Lennon"],
+    "difficulty": "medium",
+    "nationality": "Angleterre",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_50",
+    "type": "parcours",
+    "playerName": "James Milner",
+    "clubs": [
+      { "name": "Leeds United", "years": "2002-2004" },
+      { "name": "Swindon Town", "years": "2003" },
+      { "name": "Newcastle United", "years": "2004-2008" },
+      { "name": "Aston Villa", "years": "2005-2010" },
+      { "name": "Manchester City", "years": "2010-2015" },
+      { "name": "Liverpool", "years": "2015-2023" },
+      { "name": "Brighton", "years": "2023-2025" }
+    ],
+    "acceptedAnswers": ["Milner", "James Milner"],
+    "difficulty": "easy",
+    "nationality": "Angleterre",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_51",
+    "type": "parcours",
+    "playerName": "Stewart Downing",
+    "clubs": [
+      { "name": "Middlesbrough", "years": "2001-2009" },
+      { "name": "Aston Villa", "years": "2009-2011" },
+      { "name": "Liverpool", "years": "2011-2013" },
+      { "name": "West Ham United", "years": "2013-2015" },
+      { "name": "Middlesbrough", "years": "2015-2019" },
+      { "name": "Blackburn Rovers", "years": "2019-2020" }
+    ],
+    "acceptedAnswers": ["Downing", "Stewart Downing"],
+    "difficulty": "hard",
+    "nationality": "Angleterre",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_52",
+    "type": "parcours",
+    "playerName": "Andy Carroll",
+    "clubs": [
+      { "name": "Newcastle United", "years": "2006-2011" },
+      { "name": "Liverpool", "years": "2011-2013" },
+      { "name": "West Ham United", "years": "2012-2019" },
+      { "name": "Newcastle United", "years": "2019-2020" },
+      { "name": "Reading", "years": "2020-2021" },
+      { "name": "West Bromwich Albion", "years": "2021-2022" },
+      { "name": "Amiens SC", "years": "2022-2023" }
+    ],
+    "acceptedAnswers": ["Carroll", "Andy Carroll"],
+    "difficulty": "medium",
+    "nationality": "Angleterre",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_53",
+    "type": "parcours",
+    "playerName": "Darren Bent",
+    "clubs": [
+      { "name": "Ipswich Town", "years": "2001-2005" },
+      { "name": "Charlton Athletic", "years": "2005-2007" },
+      { "name": "Tottenham Hotspur", "years": "2007-2009" },
+      { "name": "Sunderland", "years": "2009-2011" },
+      { "name": "Aston Villa", "years": "2011-2015" },
+      { "name": "Fulham", "years": "2013-2014" },
+      { "name": "Brighton", "years": "2015" },
+      { "name": "Derby County", "years": "2015-2017" }
+    ],
+    "acceptedAnswers": ["Bent", "Darren Bent"],
+    "difficulty": "hard",
+    "nationality": "Angleterre",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_54",
+    "type": "parcours",
+    "playerName": "Ricardo Quaresma",
+    "clubs": [
+      { "name": "Sporting CP", "years": "2001-2003" },
+      { "name": "FC Barcelone", "years": "2003-2004" },
+      { "name": "FC Porto", "years": "2004-2008" },
+      { "name": "Inter Milan", "years": "2008-2009" },
+      { "name": "Chelsea", "years": "2009" },
+      { "name": "Beşiktaş", "years": "2010-2013" },
+      { "name": "Al-Ahli", "years": "2013-2014" },
+      { "name": "FC Porto", "years": "2014-2015" },
+      { "name": "Beşiktaş", "years": "2015-2019" },
+      { "name": "Kasımpaşa", "years": "2019-2020" },
+      { "name": "Vitória Guimarães", "years": "2020-2021" }
+    ],
+    "acceptedAnswers": ["Quaresma", "Ricardo Quaresma"],
+    "difficulty": "easy",
+    "nationality": "Portugal",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_55",
+    "type": "parcours",
+    "playerName": "Nani",
+    "clubs": [
+      { "name": "Sporting CP", "years": "2005-2007" },
+      { "name": "Manchester United", "years": "2007-2015" },
+      { "name": "Sporting CP", "years": "2014-2015" },
+      { "name": "Fenerbahçe", "years": "2015-2016" },
+      { "name": "Valencia CF", "years": "2016-2018" },
+      { "name": "Sporting CP", "years": "2018-2019" },
+      { "name": "Orlando City", "years": "2019-2021" },
+      { "name": "Venezia", "years": "2021-2022" },
+      { "name": "Melbourne Victory", "years": "2022-2023" }
+    ],
+    "acceptedAnswers": ["Nani", "Luís Nani", "Luis Nani"],
+    "difficulty": "medium",
+    "nationality": "Portugal",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_56",
+    "type": "parcours",
+    "playerName": "Simão Sabrosa",
+    "clubs": [
+      { "name": "Sporting CP", "years": "1998-1999" },
+      { "name": "FC Barcelone", "years": "1999-2001" },
+      { "name": "Benfica", "years": "2001-2008" },
+      { "name": "Atlético Madrid", "years": "2008-2011" },
+      { "name": "Beşiktaş", "years": "2011-2013" },
+      { "name": "Espanyol", "years": "2013" },
+      { "name": "NorthEast United", "years": "2014" }
+    ],
+    "acceptedAnswers": ["Simão", "Simao", "Simão Sabrosa", "Simao Sabrosa"],
+    "difficulty": "hard",
+    "nationality": "Portugal",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_57",
+    "type": "parcours",
+    "playerName": "Raul Meireles",
+    "clubs": [
+      { "name": "Boavista", "years": "2001-2004" },
+      { "name": "FC Porto", "years": "2004-2010" },
+      { "name": "Liverpool", "years": "2010-2011" },
+      { "name": "Chelsea", "years": "2011-2013" },
+      { "name": "Fenerbahçe", "years": "2013-2016" }
+    ],
+    "acceptedAnswers": ["Meireles", "Raul Meireles"],
+    "difficulty": "hard",
+    "nationality": "Portugal",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_58",
+    "type": "parcours",
+    "playerName": "Dirk Kuyt",
+    "clubs": [
+      { "name": "FC Utrecht", "years": "1998-2003" },
+      { "name": "Feyenoord", "years": "2003-2006" },
+      { "name": "Liverpool", "years": "2006-2012" },
+      { "name": "Fenerbahçe", "years": "2012-2015" },
+      { "name": "Feyenoord", "years": "2015-2018" }
+    ],
+    "acceptedAnswers": ["Kuyt", "Dirk Kuyt", "Kuijt"],
+    "difficulty": "medium",
+    "nationality": "Pays-Bas",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_59",
+    "type": "parcours",
+    "playerName": "Rafael van der Vaart",
+    "clubs": [
+      { "name": "Ajax", "years": "2000-2005" },
+      { "name": "Hamburger SV", "years": "2005-2008" },
+      { "name": "Real Madrid", "years": "2008-2010" },
+      { "name": "Tottenham Hotspur", "years": "2010-2012" },
+      { "name": "Hamburger SV", "years": "2012-2015" },
+      { "name": "Real Betis", "years": "2015-2016" },
+      { "name": "FC Midtjylland", "years": "2016" },
+      { "name": "Esbjerg fB", "years": "2018" }
+    ],
+    "acceptedAnswers": ["Van der Vaart", "Rafael van der Vaart", "VDV"],
+    "difficulty": "medium",
+    "nationality": "Pays-Bas",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_60",
+    "type": "parcours",
+    "playerName": "Christian Benteke",
+    "clubs": [
+      { "name": "KRC Genk", "years": "2007-2010" },
+      { "name": "Standard de Liège", "years": "2010-2011" },
+      { "name": "KV Courtrai", "years": "2010-2011" },
+      { "name": "Aston Villa", "years": "2012-2015" },
+      { "name": "Liverpool", "years": "2015-2016" },
+      { "name": "Crystal Palace", "years": "2016-2021" },
+      { "name": "DC United", "years": "2022" },
+      { "name": "Ipswich Town", "years": "2023" }
+    ],
+    "acceptedAnswers": ["Benteke", "Christian Benteke"],
+    "difficulty": "medium",
+    "nationality": "Belgique",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_61",
+    "type": "parcours",
+    "playerName": "Marouane Fellaini",
+    "clubs": [
+      { "name": "Standard de Liège", "years": "2005-2008" },
+      { "name": "Everton", "years": "2008-2013" },
+      { "name": "Manchester United", "years": "2013-2019" },
+      { "name": "Shandong Luneng", "years": "2019-2023" }
+    ],
+    "acceptedAnswers": ["Fellaini", "Marouane Fellaini"],
+    "difficulty": "easy",
+    "nationality": "Belgique",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_62",
+    "type": "parcours",
+    "playerName": "Moussa Dembélé",
+    "clubs": [
+      { "name": "Paris Saint-Germain", "years": "2012-2013" },
+      { "name": "Fulham", "years": "2013-2016" },
+      { "name": "Celtic", "years": "2016-2018" },
+      { "name": "Olympique Lyonnais", "years": "2018-2022" },
+      { "name": "Atlético Madrid", "years": "2022-2023" },
+      { "name": "Al-Ettifaq", "years": "2023-2024" }
+    ],
+    "acceptedAnswers": ["Dembélé", "Dembele", "Moussa Dembélé", "Moussa Dembele"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_63",
+    "type": "parcours",
+    "playerName": "Alou Diarra",
+    "clubs": [
+      { "name": "Bayern Munich", "years": "2002-2003" },
+      { "name": "Liverpool", "years": "2002-2003" },
+      { "name": "RC Lens", "years": "2003-2006" },
+      { "name": "Olympique Lyonnais", "years": "2006-2007" },
+      { "name": "Girondins de Bordeaux", "years": "2007-2011" },
+      { "name": "Olympique de Marseille", "years": "2011-2013" },
+      { "name": "West Ham United", "years": "2012-2013" },
+      { "name": "Stade Rennais", "years": "2013-2014" },
+      { "name": "Charlton Athletic", "years": "2015" }
+    ],
+    "acceptedAnswers": ["Alou Diarra", "Diarra"],
+    "difficulty": "hard",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_64",
+    "type": "parcours",
+    "playerName": "Mathieu Flamini",
+    "clubs": [
+      { "name": "Olympique de Marseille", "years": "2003-2004" },
+      { "name": "Arsenal", "years": "2004-2008" },
+      { "name": "AC Milan", "years": "2008-2013" },
+      { "name": "Arsenal", "years": "2013-2016" },
+      { "name": "Crystal Palace", "years": "2016-2017" },
+      { "name": "Getafe", "years": "2017-2018" }
+    ],
+    "acceptedAnswers": ["Flamini", "Mathieu Flamini"],
+    "difficulty": "hard",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_65",
+    "type": "parcours",
+    "playerName": "Moussa Sow",
+    "clubs": [
+      { "name": "Stade Rennais", "years": "2005-2007" },
+      { "name": "Lille OSC", "years": "2007-2012" },
+      { "name": "Fenerbahçe", "years": "2012-2016" },
+      { "name": "Al-Ahli Djeddah", "years": "2016-2017" },
+      { "name": "Bursaspor", "years": "2018-2019" }
+    ],
+    "acceptedAnswers": ["Sow", "Moussa Sow"],
+    "difficulty": "hard",
+    "nationality": "Sénégal",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_66",
+    "type": "parcours",
+    "playerName": "Demba Ba",
+    "clubs": [
+      { "name": "Rouen", "years": "2005-2006" },
+      { "name": "Mouscron", "years": "2006-2007" },
+      { "name": "Hoffenheim", "years": "2007-2011" },
+      { "name": "West Ham United", "years": "2011" },
+      { "name": "Newcastle United", "years": "2011-2013" },
+      { "name": "Chelsea", "years": "2013-2014" },
+      { "name": "Beşiktaş", "years": "2014-2016" },
+      { "name": "Shanghai Shenhua", "years": "2016-2019" },
+      { "name": "İstanbul Başakşehir", "years": "2019-2021" },
+      { "name": "Lugano", "years": "2021" }
+    ],
+    "acceptedAnswers": ["Demba Ba", "Ba"],
+    "difficulty": "medium",
+    "nationality": "Sénégal",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_67",
+    "type": "parcours",
+    "playerName": "Papiss Cissé",
+    "clubs": [
+      { "name": "FC Metz", "years": "2005-2009" },
+      { "name": "SC Freiburg", "years": "2009-2012" },
+      { "name": "Newcastle United", "years": "2012-2016" },
+      { "name": "Shandong Luneng", "years": "2016-2017" },
+      { "name": "Alanyaspor", "years": "2017-2019" },
+      { "name": "Akhmat Grozny", "years": "2019-2020" }
+    ],
+    "acceptedAnswers": ["Papiss Cissé", "Papiss Cisse", "Cissé", "Cisse"],
+    "difficulty": "hard",
+    "nationality": "Sénégal",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_68",
+    "type": "parcours",
+    "playerName": "Mattia Destro",
+    "clubs": [
+      { "name": "Inter Milan", "years": "2009-2010" },
+      { "name": "Genoa", "years": "2010-2011" },
+      { "name": "Siena", "years": "2011-2012" },
+      { "name": "AS Roma", "years": "2012-2015" },
+      { "name": "AC Milan", "years": "2015" },
+      { "name": "Bologna", "years": "2015-2019" },
+      { "name": "Genoa", "years": "2019-2022" },
+      { "name": "Empoli", "years": "2022-2023" }
+    ],
+    "acceptedAnswers": ["Destro", "Mattia Destro"],
+    "difficulty": "hard",
+    "nationality": "Italie",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_69",
+    "type": "parcours",
+    "playerName": "Danny",
+    "clubs": [
+      { "name": "Sporting CP", "years": "2003-2005" },
+      { "name": "Dynamo Moscou", "years": "2005-2008" },
+      { "name": "Zénith Saint-Pétersbourg", "years": "2008-2018" }
+    ],
+    "acceptedAnswers": ["Danny", "Daniel Miguel Alves Gomes"],
+    "difficulty": "hard",
+    "nationality": "Portugal",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_70",
+    "type": "parcours",
+    "playerName": "Dimitar Berbatov",
+    "clubs": [
+      { "name": "CSKA Sofia", "years": "1998-2001" },
+      { "name": "Bayer Leverkusen", "years": "2001-2006" },
+      { "name": "Tottenham Hotspur", "years": "2006-2008" },
+      { "name": "Manchester United", "years": "2008-2012" },
+      { "name": "Fulham", "years": "2012-2014" },
+      { "name": "AS Monaco", "years": "2014" },
+      { "name": "PAOK Salonique", "years": "2015-2016" },
+      { "name": "Kerala Blasters", "years": "2017" }
+    ],
+    "acceptedAnswers": ["Berbatov", "Dimitar Berbatov", "Berba"],
+    "difficulty": "easy",
+    "nationality": "Bulgarie",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_71",
+    "type": "parcours",
+    "playerName": "Éden Hazard",
+    "clubs": [
+      { "name": "Lille OSC", "years": "2007-2012" },
+      { "name": "Chelsea", "years": "2012-2019" },
+      { "name": "Real Madrid", "years": "2019-2024" }
+    ],
+    "acceptedAnswers": ["Hazard", "Éden Hazard", "Eden Hazard"],
+    "difficulty": "easy",
+    "nationality": "Belgique",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_72",
+    "type": "parcours",
+    "playerName": "Xherdan Shaqiri",
+    "clubs": [
+      { "name": "FC Bâle", "years": "2009-2012" },
+      { "name": "Bayern Munich", "years": "2012-2015" },
+      { "name": "Inter Milan", "years": "2015" },
+      { "name": "Stoke City", "years": "2015-2018" },
+      { "name": "Liverpool", "years": "2018-2021" },
+      { "name": "Olympique Lyonnais", "years": "2021-2022" },
+      { "name": "Chicago Fire", "years": "2022-2024" },
+      { "name": "FC Bâle", "years": "2024" }
+    ],
+    "acceptedAnswers": ["Shaqiri", "Xherdan Shaqiri"],
+    "difficulty": "medium",
+    "nationality": "Suisse",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_73",
+    "type": "parcours",
+    "playerName": "Radamel Falcao",
+    "clubs": [
+      { "name": "River Plate", "years": "2005-2009" },
+      { "name": "FC Porto", "years": "2009-2011" },
+      { "name": "Atlético Madrid", "years": "2011-2013" },
+      { "name": "AS Monaco", "years": "2013-2019" },
+      { "name": "Manchester United", "years": "2014-2015" },
+      { "name": "Chelsea", "years": "2015-2016" },
+      { "name": "Galatasaray", "years": "2019-2020" },
+      { "name": "Rayo Vallecano", "years": "2021-2023" }
+    ],
+    "acceptedAnswers": ["Falcao", "Radamel Falcao", "El Tigre"],
+    "difficulty": "easy",
+    "nationality": "Colombie",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_74",
+    "type": "parcours",
+    "playerName": "Javier Pastore",
+    "clubs": [
+      { "name": "Talleres", "years": "2005-2007" },
+      { "name": "Huracán", "years": "2007-2009" },
+      { "name": "Palerme", "years": "2009-2011" },
+      { "name": "Paris Saint-Germain", "years": "2011-2018" },
+      { "name": "AS Roma", "years": "2018-2021" },
+      { "name": "Elche", "years": "2022-2023" }
+    ],
+    "acceptedAnswers": ["Pastore", "Javier Pastore", "El Flaco"],
+    "difficulty": "medium",
+    "nationality": "Argentine",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_75",
+    "type": "parcours",
+    "playerName": "Ezequiel Lavezzi",
+    "clubs": [
+      { "name": "Estudiantes", "years": "2001-2004" },
+      { "name": "San Lorenzo", "years": "2004-2007" },
+      { "name": "SSC Napoli", "years": "2007-2012" },
+      { "name": "Paris Saint-Germain", "years": "2012-2016" },
+      { "name": "Hebei China Fortune", "years": "2016-2019" }
+    ],
+    "acceptedAnswers": ["Lavezzi", "Ezequiel Lavezzi", "El Pocho"],
+    "difficulty": "medium",
+    "nationality": "Argentine",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_76",
+    "type": "parcours",
+    "playerName": "Éver Banega",
+    "clubs": [
+      { "name": "Boca Juniors", "years": "2004-2008" },
+      { "name": "Valencia CF", "years": "2008-2014" },
+      { "name": "Atlético Mineiro", "years": "2012" },
+      { "name": "Newell's Old Boys", "years": "2013" },
+      { "name": "Séville FC", "years": "2014-2016" },
+      { "name": "Inter Milan", "years": "2016-2017" },
+      { "name": "Séville FC", "years": "2017-2020" },
+      { "name": "Al-Shabab", "years": "2020-2023" }
+    ],
+    "acceptedAnswers": ["Banega", "Éver Banega", "Ever Banega"],
+    "difficulty": "hard",
+    "nationality": "Argentine",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_77",
+    "type": "parcours",
+    "playerName": "Edinson Cavani",
+    "clubs": [
+      { "name": "Danubio", "years": "2005-2007" },
+      { "name": "Palerme", "years": "2007-2010" },
+      { "name": "SSC Napoli", "years": "2010-2013" },
+      { "name": "Paris Saint-Germain", "years": "2013-2020" },
+      { "name": "Manchester United", "years": "2020-2022" },
+      { "name": "Valencia CF", "years": "2022-2023" },
+      { "name": "Boca Juniors", "years": "2023-2024" }
+    ],
+    "acceptedAnswers": ["Cavani", "Edinson Cavani", "El Matador"],
+    "difficulty": "easy",
+    "nationality": "Uruguay",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_78",
+    "type": "parcours",
+    "playerName": "Gervinho",
+    "clubs": [
+      { "name": "KSK Beveren", "years": "2004-2007" },
+      { "name": "Le Mans UC", "years": "2007-2009" },
+      { "name": "Lille OSC", "years": "2009-2011" },
+      { "name": "Arsenal", "years": "2011-2013" },
+      { "name": "AS Roma", "years": "2013-2016" },
+      { "name": "Hebei China Fortune", "years": "2016-2020" },
+      { "name": "Parme", "years": "2018-2021" },
+      { "name": "Trabzonspor", "years": "2021-2023" }
+    ],
+    "acceptedAnswers": ["Gervinho", "Gervais Yao Kouassi"],
+    "difficulty": "medium",
+    "nationality": "Côte d'Ivoire",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_79",
+    "type": "parcours",
+    "playerName": "Michy Batshuayi",
+    "clubs": [
+      { "name": "Standard de Liège", "years": "2011-2014" },
+      { "name": "Olympique de Marseille", "years": "2014-2016" },
+      { "name": "Chelsea", "years": "2016-2022" },
+      { "name": "Borussia Dortmund", "years": "2018" },
+      { "name": "Valencia CF", "years": "2018-2019" },
+      { "name": "Crystal Palace", "years": "2019" },
+      { "name": "Beşiktaş", "years": "2021-2022" },
+      { "name": "Fenerbahçe", "years": "2022-2024" }
+    ],
+    "acceptedAnswers": ["Batshuayi", "Michy Batshuayi", "Batsman"],
+    "difficulty": "medium",
+    "nationality": "Belgique",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_80",
+    "type": "parcours",
+    "playerName": "Mario Götze",
+    "clubs": [
+      { "name": "Borussia Dortmund", "years": "2009-2013" },
+      { "name": "Bayern Munich", "years": "2013-2016" },
+      { "name": "Borussia Dortmund", "years": "2016-2020" },
+      { "name": "PSV Eindhoven", "years": "2020-2024" },
+      { "name": "Eintracht Francfort", "years": "2024-2025" }
+    ],
+    "acceptedAnswers": ["Götze", "Gotze", "Mario Götze", "Mario Gotze"],
+    "difficulty": "easy",
+    "nationality": "Allemagne",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_81",
+    "type": "parcours",
+    "playerName": "Javier Mascherano",
+    "clubs": [
+      { "name": "River Plate", "years": "2003-2005" },
+      { "name": "Corinthians", "years": "2005-2006" },
+      { "name": "West Ham United", "years": "2006-2007" },
+      { "name": "Liverpool", "years": "2007-2010" },
+      { "name": "FC Barcelone", "years": "2010-2018" },
+      { "name": "Hebei China Fortune", "years": "2018" },
+      { "name": "Estudiantes", "years": "2019-2020" }
+    ],
+    "acceptedAnswers": ["Mascherano", "Javier Mascherano", "El Jefecito"],
+    "difficulty": "medium",
+    "nationality": "Argentine",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_82",
+    "type": "parcours",
+    "playerName": "Yaya Touré",
+    "clubs": [
+      { "name": "Beveren", "years": "2001-2003" },
+      { "name": "Metalurh Donetsk", "years": "2003-2005" },
+      { "name": "Olympiacos", "years": "2005-2006" },
+      { "name": "AS Monaco", "years": "2006-2007" },
+      { "name": "FC Barcelone", "years": "2007-2010" },
+      { "name": "Manchester City", "years": "2010-2018" },
+      { "name": "Olympiacos", "years": "2018-2019" },
+      { "name": "Qingdao Huanghai", "years": "2019-2020" }
+    ],
+    "acceptedAnswers": ["Yaya Touré", "Yaya Toure", "Touré", "Toure"],
+    "difficulty": "easy",
+    "nationality": "Côte d'Ivoire",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_83",
+    "type": "parcours",
+    "playerName": "Erik Lamela",
+    "clubs": [
+      { "name": "River Plate", "years": "2009-2011" },
+      { "name": "AS Roma", "years": "2011-2013" },
+      { "name": "Tottenham Hotspur", "years": "2013-2021" },
+      { "name": "Séville FC", "years": "2021-2024" }
+    ],
+    "acceptedAnswers": ["Lamela", "Erik Lamela", "Coco Lamela"],
+    "difficulty": "medium",
+    "nationality": "Argentine",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_84",
+    "type": "parcours",
+    "playerName": "Robin van Persie",
+    "clubs": [
+      { "name": "Feyenoord", "years": "2001-2004" },
+      { "name": "Arsenal", "years": "2004-2012" },
+      { "name": "Manchester United", "years": "2012-2015" },
+      { "name": "Fenerbahçe", "years": "2015-2018" },
+      { "name": "Feyenoord", "years": "2018-2019" }
+    ],
+    "acceptedAnswers": ["Van Persie", "Robin van Persie", "RVP"],
+    "difficulty": "easy",
+    "nationality": "Pays-Bas",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_85",
+    "type": "parcours",
+    "playerName": "Alexandre Pato",
+    "clubs": [
+      { "name": "Internacional", "years": "2006-2007" },
+      { "name": "AC Milan", "years": "2007-2013" },
+      { "name": "Corinthians", "years": "2013-2014" },
+      { "name": "São Paulo FC", "years": "2014-2015" },
+      { "name": "Chelsea", "years": "2016" },
+      { "name": "Villarreal", "years": "2016-2017" },
+      { "name": "Tianjin Quanjian", "years": "2017-2019" },
+      { "name": "São Paulo FC", "years": "2019-2020" },
+      { "name": "Orlando City", "years": "2021" }
+    ],
+    "acceptedAnswers": ["Pato", "Alexandre Pato"],
+    "difficulty": "medium",
+    "nationality": "Brésil",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_86",
+    "type": "parcours",
+    "playerName": "Florent Malouda",
+    "clubs": [
+      { "name": "Châteauroux", "years": "2000-2002" },
+      { "name": "EA Guingamp", "years": "2002-2003" },
+      { "name": "Olympique Lyonnais", "years": "2003-2007" },
+      { "name": "Chelsea", "years": "2007-2013" },
+      { "name": "Trabzonspor", "years": "2013-2014" },
+      { "name": "FC Metz", "years": "2014-2015" },
+      { "name": "Delhi Dynamos", "years": "2015-2016" }
+    ],
+    "acceptedAnswers": ["Malouda", "Florent Malouda"],
+    "difficulty": "hard",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_87",
+    "type": "parcours",
+    "playerName": "Frédéric Kanouté",
+    "clubs": [
+      { "name": "Olympique Lyonnais", "years": "1997-2000" },
+      { "name": "West Ham United", "years": "2000-2003" },
+      { "name": "Tottenham Hotspur", "years": "2003-2005" },
+      { "name": "Séville FC", "years": "2005-2012" },
+      { "name": "Beijing Guoan", "years": "2012" }
+    ],
+    "acceptedAnswers": ["Kanouté", "Kanoute", "Frédéric Kanouté", "Frederic Kanoute"],
+    "difficulty": "hard",
+    "nationality": "Mali",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_88",
+    "type": "parcours",
+    "playerName": "Mauro Zárate",
+    "clubs": [
+      { "name": "Vélez Sársfield", "years": "2004-2007" },
+      { "name": "Al-Sadd", "years": "2007-2008" },
+      { "name": "Birmingham City", "years": "2008" },
+      { "name": "Lazio", "years": "2008-2014" },
+      { "name": "Inter Milan", "years": "2011-2012" },
+      { "name": "West Ham United", "years": "2014" },
+      { "name": "Queens Park Rangers", "years": "2014-2015" },
+      { "name": "Fiorentina", "years": "2015-2017" },
+      { "name": "Watford", "years": "2017" },
+      { "name": "Vélez Sársfield", "years": "2017-2018" },
+      { "name": "Boca Juniors", "years": "2018-2021" }
+    ],
+    "acceptedAnswers": ["Zárate", "Zarate", "Mauro Zárate", "Mauro Zarate"],
+    "difficulty": "hard",
+    "nationality": "Argentine",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_89",
+    "type": "parcours",
+    "playerName": "Cesc Fàbregas",
+    "clubs": [
+      { "name": "Arsenal", "years": "2003-2011" },
+      { "name": "FC Barcelone", "years": "2011-2014" },
+      { "name": "Chelsea", "years": "2014-2019" },
+      { "name": "AS Monaco", "years": "2019-2022" },
+      { "name": "Côme", "years": "2022-2023" }
+    ],
+    "acceptedAnswers": ["Fàbregas", "Fabregas", "Cesc Fàbregas", "Cesc Fabregas", "Cesc"],
+    "difficulty": "easy",
+    "nationality": "Espagne",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_90",
+    "type": "parcours",
+    "playerName": "Arjen Robben",
+    "clubs": [
+      { "name": "FC Groningue", "years": "2000-2002" },
+      { "name": "PSV Eindhoven", "years": "2002-2004" },
+      { "name": "Chelsea", "years": "2004-2007" },
+      { "name": "Real Madrid", "years": "2007-2009" },
+      { "name": "Bayern Munich", "years": "2009-2019" },
+      { "name": "FC Groningue", "years": "2020-2021" }
+    ],
+    "acceptedAnswers": ["Robben", "Arjen Robben"],
+    "difficulty": "easy",
+    "nationality": "Pays-Bas",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_91",
+    "type": "parcours",
+    "playerName": "Jozy Altidore",
+    "clubs": [
+      { "name": "New York Red Bulls", "years": "2006-2008" },
+      { "name": "Villarreal", "years": "2008-2009" },
+      { "name": "Xerez CD", "years": "2009" },
+      { "name": "Hull City", "years": "2009-2010" },
+      { "name": "Bursaspor", "years": "2011-2012" },
+      { "name": "AZ Alkmaar", "years": "2012-2013" },
+      { "name": "Sunderland", "years": "2013-2015" },
+      { "name": "Toronto FC", "years": "2015-2022" },
+      { "name": "New England Revolution", "years": "2022" }
+    ],
+    "acceptedAnswers": ["Altidore", "Jozy Altidore"],
+    "difficulty": "hard",
+    "nationality": "États-Unis",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_92",
+    "type": "parcours",
+    "playerName": "Wilfried Bony",
+    "clubs": [
+      { "name": "Sparta Prague", "years": "2007-2011" },
+      { "name": "Vitesse", "years": "2011-2013" },
+      { "name": "Swansea City", "years": "2013-2015" },
+      { "name": "Manchester City", "years": "2015-2017" },
+      { "name": "Stoke City", "years": "2016-2017" },
+      { "name": "Swansea City", "years": "2017-2018" },
+      { "name": "Al-Arabi", "years": "2018-2019" },
+      { "name": "NEC Nimègue", "years": "2020-2021" }
+    ],
+    "acceptedAnswers": ["Bony", "Wilfried Bony"],
+    "difficulty": "hard",
+    "nationality": "Côte d'Ivoire",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_93",
+    "type": "parcours",
+    "playerName": "Rémy Cabella",
+    "clubs": [
+      { "name": "Montpellier HSC", "years": "2010-2014" },
+      { "name": "Newcastle United", "years": "2014-2016" },
+      { "name": "Olympique de Marseille", "years": "2015-2016" },
+      { "name": "AS Saint-Étienne", "years": "2016-2020" },
+      { "name": "Krasnodar", "years": "2020-2022" },
+      { "name": "Montpellier HSC", "years": "2022" },
+      { "name": "Lille OSC", "years": "2022-2024" }
+    ],
+    "acceptedAnswers": ["Cabella", "Rémy Cabella", "Remy Cabella"],
+    "difficulty": "hard",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_94",
+    "type": "parcours",
+    "playerName": "Wissam Ben Yedder",
+    "clubs": [
+      { "name": "UJA Alfortville", "years": "2007-2010" },
+      { "name": "Toulouse FC", "years": "2010-2016" },
+      { "name": "Séville FC", "years": "2016-2019" },
+      { "name": "AS Monaco", "years": "2019-2024" }
+    ],
+    "acceptedAnswers": ["Ben Yedder", "Wissam Ben Yedder", "WBY"],
+    "difficulty": "medium",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_95",
+    "type": "parcours",
+    "playerName": "Nacer Chadli",
+    "clubs": [
+      { "name": "RWDM", "years": "2008-2010" },
+      { "name": "FC Twente", "years": "2010-2013" },
+      { "name": "Tottenham Hotspur", "years": "2013-2016" },
+      { "name": "West Bromwich Albion", "years": "2016-2018" },
+      { "name": "AS Monaco", "years": "2018" },
+      { "name": "Anderlecht", "years": "2018-2019" },
+      { "name": "İstanbul Başakşehir", "years": "2019-2021" },
+      { "name": "KV Westerlo", "years": "2022" }
+    ],
+    "acceptedAnswers": ["Chadli", "Nacer Chadli"],
+    "difficulty": "hard",
+    "nationality": "Belgique",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_96",
+    "type": "parcours",
+    "playerName": "Sofiane Feghouli",
+    "clubs": [
+      { "name": "Grenoble Foot", "years": "2007-2010" },
+      { "name": "Valencia CF", "years": "2010-2016" },
+      { "name": "West Ham United", "years": "2016-2017" },
+      { "name": "Galatasaray", "years": "2017-2022" },
+      { "name": "Fatih Karagümrük", "years": "2022-2023" }
+    ],
+    "acceptedAnswers": ["Feghouli", "Sofiane Feghouli"],
+    "difficulty": "hard",
+    "nationality": "Algérie",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_97",
+    "type": "parcours",
+    "playerName": "Matteo Darmian",
+    "clubs": [
+      { "name": "AC Milan", "years": "2006-2010" },
+      { "name": "Padova", "years": "2010-2011" },
+      { "name": "Palerme", "years": "2011-2013" },
+      { "name": "Torino", "years": "2013-2015" },
+      { "name": "Manchester United", "years": "2015-2019" },
+      { "name": "Parme", "years": "2019-2020" },
+      { "name": "Inter Milan", "years": "2020-2025" }
+    ],
+    "acceptedAnswers": ["Darmian", "Matteo Darmian"],
+    "difficulty": "hard",
+    "nationality": "Italie",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_98",
+    "type": "parcours",
+    "playerName": "Maxi López",
+    "clubs": [
+      { "name": "River Plate", "years": "2000-2005" },
+      { "name": "FC Barcelone", "years": "2005-2007" },
+      { "name": "Moscou", "years": "2007" },
+      { "name": "Grêmio", "years": "2007-2008" },
+      { "name": "Catania", "years": "2008-2012" },
+      { "name": "AC Milan", "years": "2012" },
+      { "name": "Sampdoria", "years": "2012-2014" },
+      { "name": "Chievo Vérone", "years": "2014" },
+      { "name": "Torino", "years": "2014-2015" },
+      { "name": "Vasco da Gama", "years": "2016" },
+      { "name": "Udinese", "years": "2016-2017" },
+      { "name": "Crotone", "years": "2017-2018" },
+      { "name": "Sambenedettese", "years": "2020" }
+    ],
+    "acceptedAnswers": ["Maxi López", "Maxi Lopez", "López", "Lopez"],
+    "difficulty": "hard",
+    "nationality": "Argentine",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_99",
+    "type": "parcours",
+    "playerName": "Mathieu Bodmer",
+    "clubs": [
+      { "name": "SM Caen", "years": "2000-2004" },
+      { "name": "Lille OSC", "years": "2004-2007" },
+      { "name": "Olympique Lyonnais", "years": "2007-2010" },
+      { "name": "Paris Saint-Germain", "years": "2010-2013" },
+      { "name": "AS Saint-Étienne", "years": "2013" },
+      { "name": "OGC Nice", "years": "2013-2016" },
+      { "name": "EA Guingamp", "years": "2016-2017" },
+      { "name": "Amiens SC", "years": "2017-2019" }
+    ],
+    "acceptedAnswers": ["Bodmer", "Mathieu Bodmer"],
+    "difficulty": "hard",
+    "nationality": "France",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "parcours_100",
+    "type": "parcours",
+    "playerName": "Lucas Barrios",
+    "clubs": [
+      { "name": "Argentinos Juniors", "years": "2003-2005" },
+      { "name": "Tiro Federal", "years": "2005-2006" },
+      { "name": "Atlas", "years": "2006" },
+      { "name": "Colo-Colo", "years": "2007-2009" },
+      { "name": "Borussia Dortmund", "years": "2009-2012" },
+      { "name": "Guangzhou Evergrande", "years": "2012-2013" },
+      { "name": "Spartak Moscou", "years": "2013" },
+      { "name": "Montpellier HSC", "years": "2013-2015" },
+      { "name": "Palmeiras", "years": "2015-2016" },
+      { "name": "Grêmio", "years": "2016-2017" },
+      { "name": "Huracán", "years": "2017-2018" },
+      { "name": "Patronato", "years": "2018" }
+    ],
+    "acceptedAnswers": ["Barrios", "Lucas Barrios"],
+    "difficulty": "hard",
+    "nationality": "Paraguay",
+    "timeLimit": 30,
+    "points": 100
+  }
+]

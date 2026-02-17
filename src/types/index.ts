@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours";
 
 export interface GameSettings {
   maxPlayers: number;
@@ -70,9 +70,11 @@ export interface BaseQuestion {
 
 export interface DictationQuestion extends BaseQuestion {
   type: "dictation";
-  audioUrl: string;
-  answer: string;
-  hint?: string;
+  text: string;
+  audioFile: string;
+  audioText?: string;
+  traps?: string[];
+  difficulty?: "easy" | "medium" | "hard";
 }
 
 export interface ImageQuestion extends BaseQuestion {
@@ -108,7 +110,21 @@ export interface EstimationQuestion extends BaseQuestion {
   source?: string;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion;
+export interface ParcoursClub {
+  name: string;
+  years: string;
+}
+
+export interface ParcoursQuestion extends BaseQuestion {
+  type: "parcours";
+  playerName: string;
+  clubs: ParcoursClub[];
+  acceptedAnswers: string[];
+  difficulty: "easy" | "medium" | "hard";
+  nationality?: string;
+}
+
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -284,5 +300,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Devine le prix de l'objet",
     icon: "💰",
     color: "from-emerald-500 to-emerald-700",
+  },
+  {
+    id: "parcours",
+    name: "Parcours",
+    description: "Devine le joueur à partir de ses clubs",
+    icon: "⚽",
+    color: "from-green-500 to-green-700",
   },
 ];

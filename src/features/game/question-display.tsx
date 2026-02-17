@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle, Tag } from "lucide-react";
+import { Send, CheckCircle, Tag, Volume2, RotateCcw } from "lucide-react";
 import Image from "next/image";
 import { Button, Card, Input, TimerProgress, Badge, Avatar } from "@/components/ui";
 import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
-import type { QCMQuestion, OpenQuestion, EstimationQuestion } from "@/types";
+import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion } from "@/types";
 
 export function QuestionDisplay() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
@@ -21,6 +21,8 @@ export function QuestionDisplay() {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [textAnswer, setTextAnswer] = useState("");
   const [priceGuess, setPriceGuess] = useState("");
+  const [dictationAnswer, setDictationAnswer] = useState("");
+  const [parcoursAnswer, setParcoursAnswer] = useState("");
 
   if (!currentQuestion) return null;
 
@@ -33,6 +35,10 @@ export function QuestionDisplay() {
       submitAnswer(String(selectedOption));
     } else if (currentQuestion.type === "estimation" && priceGuess.trim()) {
       submitAnswer(priceGuess.trim());
+    } else if (currentQuestion.type === "dictation" && dictationAnswer.trim()) {
+      submitAnswer(dictationAnswer.trim());
+    } else if (currentQuestion.type === "parcours" && parcoursAnswer.trim()) {
+      submitAnswer(parcoursAnswer.trim());
     } else if (textAnswer.trim()) {
       submitAnswer(textAnswer.trim());
     }
@@ -81,9 +87,28 @@ export function QuestionDisplay() {
           />
         )}
 
+        {currentQuestion.type === "dictation" && (
+          <DictationQuestionView
+            question={currentQuestion as DictationQuestion}
+            answer={dictationAnswer}
+            hasAnswered={hasAnswered}
+            onChange={setDictationAnswer}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "parcours" && (
+          <ParcoursQuestionView
+            question={currentQuestion as ParcoursQuestion}
+            answer={parcoursAnswer}
+            hasAnswered={hasAnswered}
+            onChange={setParcoursAnswer}
+            onSubmit={handleSubmit}
+          />
+        )}
+
         {(currentQuestion.type === "open" ||
-          currentQuestion.type === "image" ||
-          currentQuestion.type === "dictation") && (
+          currentQuestion.type === "image") && (
           <OpenQuestionView
             question={currentQuestion as OpenQuestion}
             answer={textAnswer}
@@ -384,6 +409,282 @@ function OpenQuestionView({
               onChange={(e) => onChange(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Tape ta réponse..."
+              autoFocus
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+            />
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onSubmit}
+              disabled={!answer.trim()}
+              rightIcon={<Send className="w-5 h-5" />}
+            >
+              Valider
+            </Button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ==========================================
+// DICTATION QUESTION VIEW
+// ==========================================
+
+interface DictationQuestionViewProps {
+  question: DictationQuestion;
+  answer: string;
+  hasAnswered: boolean;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+}
+
+function DictationQuestionView({
+  question,
+  answer,
+  hasAnswered,
+  onChange,
+  onSubmit,
+}: DictationQuestionViewProps) {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioLoaded, setAudioLoaded] = useState(false);
+  const [playCount, setPlayCount] = useState(0);
+
+  const audioSrc = `/audio/dictation/${question.audioFile}`;
+
+  const playAudio = useCallback(() => {
+    if (!audioRef.current) {
+      const audio = new Audio(audioSrc);
+      audio.addEventListener("canplaythrough", () => setAudioLoaded(true));
+      audio.addEventListener("playing", () => setIsPlaying(true));
+      audio.addEventListener("ended", () => setIsPlaying(false));
+      audio.addEventListener("error", () => setAudioLoaded(false));
+      audioRef.current = audio;
+    }
+    audioRef.current.currentTime = 0;
+    audioRef.current.play().catch(() => {});
+    setPlayCount((c) => c + 1);
+  }, [audioSrc]);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSubmit();
+    }
+  };
+
+  return (
+    <>
+      {/* Header */}
+      <div className="mb-6 py-4 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-800 border border-surface-700 mb-4">
+          <span className="text-lg">🎧</span>
+          <span className="text-xs font-medium text-surface-300">Dictée</span>
+        </div>
+        <h2 className="text-xl sm:text-2xl font-display font-bold text-surface-100 text-balance">
+          Écoute et écris ce que tu entends
+        </h2>
+      </div>
+
+      {/* Audio controls */}
+      <div className="flex justify-center gap-3 mb-6">
+        <Button
+          variant={playCount === 0 ? "primary" : "secondary"}
+          size="lg"
+          onClick={playAudio}
+          disabled={isPlaying}
+          leftIcon={
+            playCount === 0 ? (
+              <Volume2 className="w-5 h-5" />
+            ) : (
+              <RotateCcw className="w-5 h-5" />
+            )
+          }
+        >
+          {isPlaying
+            ? "Lecture..."
+            : playCount === 0
+            ? "Écouter la dictée"
+            : "Réécouter"}
+        </Button>
+      </div>
+
+      {/* Answer input */}
+      <div className="flex-1 flex flex-col justify-end">
+        {hasAnswered ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center"
+          >
+            <Card className="inline-block">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-success-400" />
+                <div className="text-left">
+                  <p className="text-sm text-surface-400">Ta dictée :</p>
+                  <p className="text-base font-medium text-surface-100">{answer}</p>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        ) : (
+          <div className="space-y-4">
+            <textarea
+              value={answer}
+              onChange={(e) => onChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Écris la phrase ici..."
+              autoFocus
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+              data-gramm="false"
+              data-gramm_editor="false"
+              data-enable-grammarly="false"
+              rows={3}
+              className={cn(
+                "w-full rounded-xl px-4 py-3 text-base resize-none",
+                "bg-surface-900 border border-surface-700",
+                "text-surface-100 placeholder:text-surface-600",
+                "focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent",
+                "transition-colors duration-150"
+              )}
+            />
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onSubmit}
+              disabled={!answer.trim()}
+              rightIcon={<Send className="w-5 h-5" />}
+            >
+              Valider
+            </Button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ==========================================
+// PARCOURS QUESTION VIEW (Career Path)
+// ==========================================
+
+interface ParcoursQuestionViewProps {
+  question: ParcoursQuestion;
+  answer: string;
+  hasAnswered: boolean;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+}
+
+function ParcoursQuestionView({
+  question,
+  answer,
+  hasAnswered,
+  onChange,
+  onSubmit,
+}: ParcoursQuestionViewProps) {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSubmit();
+    }
+  };
+
+  return (
+    <>
+      {/* Header */}
+      <div className="mb-4 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-800 border border-surface-700 mb-3">
+          <span className="text-lg">⚽</span>
+          <span className="text-xs font-medium text-surface-300">Parcours</span>
+        </div>
+        <h2 className="text-lg sm:text-xl font-display font-bold text-surface-100 text-balance">
+          Quel joueur est passé par ces clubs ?
+        </h2>
+      </div>
+
+      {/* Club timeline */}
+      <div className="flex-1 overflow-y-auto mb-4">
+        <div className="relative pl-8">
+          {/* Vertical line */}
+          <div className="absolute left-3 top-2 bottom-2 w-0.5 bg-surface-700" />
+
+          {question.clubs.map((club, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, x: -15 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="relative flex items-center gap-3 mb-3 last:mb-0"
+            >
+              {/* Timeline dot */}
+              <div
+                className={cn(
+                  "absolute -left-5 w-3 h-3 rounded-full border-2",
+                  index === 0
+                    ? "bg-green-500 border-green-400"
+                    : index === question.clubs.length - 1
+                    ? "bg-brand-500 border-brand-400"
+                    : "bg-surface-600 border-surface-500"
+                )}
+              />
+
+              {/* Club card */}
+              <div
+                className={cn(
+                  "flex-1 flex items-center justify-between",
+                  "px-4 py-3 rounded-xl",
+                  "bg-surface-900 border border-surface-700",
+                  "hover:border-surface-600 transition-colors"
+                )}
+              >
+                <span className="font-medium text-surface-100 text-sm sm:text-base">
+                  {club.name}
+                </span>
+                <span className="text-xs sm:text-sm text-surface-400 font-mono ml-3 shrink-0">
+                  {club.years}
+                </span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Answer input */}
+      <div>
+        {hasAnswered ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center"
+          >
+            <Card className="inline-block">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-success-400" />
+                <div className="text-left">
+                  <p className="text-sm text-surface-400">Ta réponse :</p>
+                  <p className="text-lg font-medium text-surface-100">{answer}</p>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        ) : (
+          <div className="space-y-3">
+            <Input
+              value={answer}
+              onChange={(e) => onChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Nom du joueur..."
               autoFocus
               autoComplete="off"
               autoCorrect="off"

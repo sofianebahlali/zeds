@@ -6,7 +6,7 @@ import { Card, Avatar, Badge } from "@/components/ui";
 import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
-import type { EstimationQuestion } from "@/types";
+import type { EstimationQuestion, DictationQuestion } from "@/types";
 
 export function RoundResult() {
   const roundResult = useGameStore((s) => s.roundResult);
@@ -20,6 +20,8 @@ export function RoundResult() {
   const myResult = roundResult.scores.find((s) => s.playerId === myPlayerId);
   const isCorrect = myResult && myResult.points > 0;
   const isEstimation = roundResult.question.type === "estimation";
+  const isDictation = roundResult.question.type === "dictation";
+  const isParcours = roundResult.question.type === "parcours";
 
   return (
     <motion.div
@@ -63,6 +65,14 @@ export function RoundResult() {
             ? isCorrect
               ? "Bien estimé !"
               : "Pas facile !"
+            : isDictation
+            ? isCorrect
+              ? "Bien écrit !"
+              : "Piégé !"
+            : isParcours
+            ? isCorrect
+              ? "Bien trouvé !"
+              : "Perdu !"
             : isCorrect
             ? "Bonne réponse !"
             : "Raté !"}
@@ -98,9 +108,20 @@ export function RoundResult() {
         <Card className="mb-6">
           <div className="text-center">
             <p className="text-sm text-surface-400 mb-2">
-              {isEstimation ? "Le vrai prix :" : "La bonne réponse était :"}
+              {isEstimation
+                ? "Le vrai prix :"
+                : isDictation
+                ? "La phrase correcte :"
+                : isParcours
+                ? "Le joueur était :"
+                : "La bonne réponse était :"}
             </p>
-            <p className="text-2xl font-display font-bold text-surface-100">
+            <p
+              className={cn(
+                "font-display font-bold text-surface-100",
+                isDictation ? "text-base leading-relaxed" : "text-2xl"
+              )}
+            >
               {roundResult.correctAnswer}
             </p>
             {isEstimation && (
@@ -129,7 +150,13 @@ export function RoundResult() {
                 </span>
               </div>
               <Badge variant="warning" size="sm">
-                {isEstimation ? "Le plus proche !" : "Le plus rapide !"}
+                {isEstimation
+                  ? "Le plus proche !"
+                  : isDictation
+                  ? "Le plus précis !"
+                  : isParcours
+                  ? "Le plus rapide !"
+                  : "Le plus rapide !"}
               </Badge>
             </div>
           </Card>
