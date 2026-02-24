@@ -8,6 +8,7 @@ import type {
   GameSettings,
   GameMode,
   PetitBacValidationSubmission,
+  GeoQuizValidationSubmission,
 } from "../src/types";
 
 type TypedIO = Server<ClientToServerEvents, ServerToClientEvents>;
@@ -221,6 +222,49 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
       if (!gameEngine) return;
 
       gameEngine.submitPetitBacValidation(validation);
+    });
+
+    // ==========================================
+    // GEOQUIZ EVENTS
+    // ==========================================
+
+    socket.on("geoquiz:submit_validation", (validation) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.submitGeoQuizValidation(validation);
+    });
+
+    socket.on("geoquiz:validate_answer", (targetPlayerId: string, accepted: boolean) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.validateSingleGeoQuizAnswer(targetPlayerId, accepted);
+    });
+
+    socket.on("geoquiz:use_hint", () => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.useGeoQuizHint(playerId);
     });
 
     // ==========================================

@@ -12,7 +12,8 @@
     "start": "next start",
     "start:backend": "tsx server/index.ts",
     "start:prod": "node dist/server/production.js",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed:questions": "tsx scripts/seed-questions.ts"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.0.4",
@@ -21,6 +22,7 @@
     "@radix-ui/react-scroll-area": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "better-sqlite3": "^12.6.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cors": "^2.8.5",
@@ -39,6 +41,7 @@
     "zustand": "^4.5.0"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/node": "^20.11.0",

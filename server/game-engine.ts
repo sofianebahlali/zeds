@@ -16,6 +16,9 @@ import type {
   PetitBacQuestion,
   PetitBacValidationSubmission,
   PetitBacPlayerAnswerData,
+  GeoQuizQuestion,
+  GeoQuizValidationSubmission,
+  GeoQuizPlayerAnswerData,
   Answer,
   RoundResult,
   ClientToServerEvents,
@@ -27,6 +30,7 @@ import type {
   DrawingScoreBreakdown,
 } from "../src/types";
 import { PETITBAC_CATEGORIES } from "../src/types";
+import { getQuestions as getDbQuestions, getTotalCount as getDbTotalCount } from "./question-db";
 
 type TypedIO = Server<ClientToServerEvents, ServerToClientEvents>;
 
@@ -137,6 +141,7 @@ export class GameEngine {
   private timeRemaining: number = 0;
   private questions: Question[] = [];
   private disconnectedPlayers: Set<string> = new Set();
+  private usedQuestionDbIds: Set<number> = new Set(); // Track used SQLite question IDs per session
 
   // Playlist mode tracking
   private currentMode: string = "";
@@ -144,6 +149,13 @@ export class GameEngine {
 
   // Petit Bac state
   private petitBacValidating: boolean = false;
+
+  // GeoQuiz state
+  private geoQuizValidating: boolean = false;
+  private geoQuizHintUsers: Set<string> = new Set(); // Players who used the hint
+  private geoQuizAutoValidationTimer: NodeJS.Timeout | null = null;
+  private geoQuizDecisions: Map<string, boolean> = new Map();
+  private geoQuizPlayerAnswers: GeoQuizPlayerAnswerData[] = [];
 
   // Drawing mode state
   private drawingPhase: DrawingPhase = "drawing";
@@ -218,6 +230,20 @@ export class GameEngine {
   }
 
   /**
+   * Load geoquiz questions from JSON file
+   */
+  private static loadGeoQuizQuestions(): Question[] {
+    const filePath = path.resolve(__dirname, "../data/questions/geoquiz.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw) as GeoQuizQuestion[];
+    } catch {
+      console.warn("No geoquiz questions found at", filePath);
+      return [];
+    }
+  }
+
+  /**
    * Normalize text for accent-insensitive comparison
    */
   private static normalizeForComparison(text: string): string {
@@ -265,12 +291,69 @@ export class GameEngine {
   }
 
   /**
+   * Load QCM/Open questions from SQLite database, with session-level deduplication
+   */
+  private loadQuestionsFromDb(mode: "qcm" | "open", count: number): Question[] {
+    const dbTotal = getDbTotalCount();
+    if (dbTotal === 0) return [];
+
+    const questions = getDbQuestions({
+      count,
+      excludeIds: this.usedQuestionDbIds,
+    });
+
+    // Track used IDs for session deduplication
+    for (const q of questions) {
+      const numId = parseInt(q.id.replace("db_", ""), 10);
+      if (!isNaN(numId)) this.usedQuestionDbIds.add(numId);
+    }
+
+    // Override type if specifically requesting "open" mode
+    if (mode === "open") {
+      return questions.map((q) => {
+        if (q.type === "qcm") {
+          const qcm = q as QCMQuestion;
+          return {
+            id: qcm.id,
+            type: "open" as const,
+            question: qcm.question,
+            answers: [qcm.options[qcm.correctIndex]],
+            caseSensitive: false,
+            timeLimit: 20,
+            points: 150,
+          } as OpenQuestion;
+        }
+        return q;
+      });
+    }
+
+    return questions;
+  }
+
+  /**
    * Load questions for a specific mode and return N shuffled questions
    */
   private loadQuestionsForMode(mode: string, count: number): Question[] {
     let pool: Question[];
 
     switch (mode) {
+      case "qcm": {
+        // Try SQLite database first
+        const dbQuestions = this.loadQuestionsFromDb("qcm", count);
+        if (dbQuestions.length >= count) return dbQuestions;
+        // Fallback: pad with sample questions if DB doesn't have enough
+        pool = [...dbQuestions, ...SAMPLE_QUESTIONS.filter((q) => q.type === "qcm")];
+        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
+        break;
+      }
+      case "open": {
+        // Try SQLite database first (converts QCM to Open)
+        const dbQuestions = this.loadQuestionsFromDb("open", count);
+        if (dbQuestions.length >= count) return dbQuestions;
+        pool = [...dbQuestions, ...SAMPLE_QUESTIONS.filter((q) => q.type === "open")];
+        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
+        break;
+      }
       case "estimation":
         pool = GameEngine.loadEstimationQuestions();
         if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
@@ -281,6 +364,10 @@ export class GameEngine {
         break;
       case "parcours":
         pool = GameEngine.loadParcoursQuestions();
+        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
+        break;
+      case "geoquiz":
+        pool = GameEngine.loadGeoQuizQuestions();
         if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
         break;
       case "drawing": {
@@ -467,6 +554,14 @@ export class GameEngine {
         acceptedAnswers: [], // Hide accepted answers
       };
     }
+    if (question.type === "geoquiz") {
+      return {
+        ...question,
+        city: "", // Hide the city name
+        acceptedAnswers: [], // Hide accepted answers
+        hint: "", // Hide hint (revealed via socket event)
+      };
+    }
     // petitbac: nothing to hide
     return question;
   }
@@ -543,6 +638,12 @@ export class GameEngine {
     // Petit Bac: enter host validation phase instead of auto-scoring
     if (this.currentQuestion.type === "petitbac") {
       this.startPetitBacValidation();
+      return;
+    }
+
+    // GeoQuiz: enter host validation phase instead of auto-scoring
+    if (this.currentQuestion.type === "geoquiz") {
+      this.startGeoQuizValidation();
       return;
     }
 
@@ -837,6 +938,8 @@ export class GameEngine {
         return (this.currentQuestion as ParcoursQuestion).playerName;
       case "petitbac":
         return (this.currentQuestion as PetitBacQuestion).letter;
+      case "geoquiz":
+        return (this.currentQuestion as GeoQuizQuestion).city;
       default:
         return "";
     }
@@ -886,6 +989,9 @@ export class GameEngine {
         return false;
       case "petitbac":
         // Petit Bac scoring is handled manually by host validation
+        return false;
+      case "geoquiz":
+        // GeoQuiz scoring is handled manually by host validation
         return false;
       case "parcours": {
         const q = this.currentQuestion as ParcoursQuestion;
@@ -1049,6 +1155,268 @@ export class GameEngine {
       question: this.currentQuestion!,
       answers: Array.from(this.answers.values()),
       correctAnswer: q.letter,
+      winner,
+      scores,
+    };
+  }
+
+  // ==========================================
+  // GEOQUIZ METHODS
+  // ==========================================
+
+  /**
+   * Player uses hint — reveal the country, halve their points
+   */
+  useGeoQuizHint(playerId: string): void {
+    if (!this.currentQuestion || this.currentQuestion.type !== "geoquiz") return;
+    if (this.geoQuizHintUsers.has(playerId)) return;
+
+    this.geoQuizHintUsers.add(playerId);
+    const q = this.currentQuestion as GeoQuizQuestion;
+
+    // Send hint only to this player
+    const socketId = this.roomManager.getSocketIdFromPlayerId(playerId);
+    if (socketId) {
+      this.io.to(socketId).emit("geoquiz:hint_revealed", q.hint || q.country);
+    }
+  }
+
+  /**
+   * Start GeoQuiz validation phase: collect answers and send to host
+   */
+  private startGeoQuizValidation(): void {
+    this.geoQuizValidating = true;
+    this.geoQuizDecisions.clear();
+    const q = this.currentQuestion as GeoQuizQuestion;
+    const activePlayers = this.getActivePlayers();
+
+    // Ensure all players have an answer entry
+    for (const player of activePlayers) {
+      if (!this.answers.has(player.id)) {
+        this.answers.set(player.id, {
+          playerId: player.id,
+          questionId: q.id,
+          answer: "",
+          timestamp: Date.now(),
+        });
+      }
+    }
+
+    this.geoQuizPlayerAnswers = activePlayers.map((player) => {
+      const answer = this.answers.get(player.id);
+      return {
+        playerId: player.id,
+        playerName: player.name,
+        playerAvatar: player.avatar,
+        answer: answer?.answer || "",
+        usedHint: this.geoQuizHintUsers.has(player.id),
+      };
+    });
+
+    this.io.to(this.room.code).emit("geoquiz:validation_start", {
+      city: q.city,
+      country: q.country,
+      imageUrl: q.imageUrl,
+      playerAnswers: this.geoQuizPlayerAnswers,
+    });
+
+    // Auto-validation timeout: 60 seconds for step-by-step review
+    this.geoQuizAutoValidationTimer = setTimeout(() => {
+      if (this.geoQuizValidating) {
+        // Auto-validate remaining un-reviewed answers
+        for (const pa of this.geoQuizPlayerAnswers) {
+          if (this.geoQuizDecisions.has(pa.playerId)) continue;
+          if (!pa.answer) {
+            this.geoQuizDecisions.set(pa.playerId, false);
+            continue;
+          }
+          const normalized = GameEngine.normalizeForComparison(pa.answer);
+          const isMatch = q.acceptedAnswers.some(
+            (accepted) => GameEngine.normalizeForComparison(accepted) === normalized
+          );
+          this.geoQuizDecisions.set(pa.playerId, isMatch);
+          this.io.to(this.room.code).emit("geoquiz:answer_result", {
+            playerId: pa.playerId,
+            playerName: pa.playerName,
+            playerAvatar: pa.playerAvatar,
+            answer: pa.answer,
+            usedHint: pa.usedHint,
+            accepted: isMatch,
+          });
+        }
+        // Finalize after a short delay
+        setTimeout(() => {
+          this.finalizeGeoQuizFromDecisions();
+        }, 1500);
+      }
+    }, 60000);
+  }
+
+  /**
+   * Host validates a single player's answer (step-by-step)
+   */
+  validateSingleGeoQuizAnswer(playerId: string, accepted: boolean): void {
+    if (!this.geoQuizValidating || !this.currentQuestion) return;
+    if (this.geoQuizDecisions.has(playerId)) return;
+
+    this.geoQuizDecisions.set(playerId, accepted);
+
+    // Find player data
+    const pa = this.geoQuizPlayerAnswers.find((p) => p.playerId === playerId);
+    if (!pa) return;
+
+    // Broadcast result to all players
+    this.io.to(this.room.code).emit("geoquiz:answer_result", {
+      playerId: pa.playerId,
+      playerName: pa.playerName,
+      playerAvatar: pa.playerAvatar,
+      answer: pa.answer,
+      usedHint: pa.usedHint,
+      accepted,
+    });
+
+    // Check if all players with answers have been reviewed
+    const playersToReview = this.geoQuizPlayerAnswers.filter(
+      (p) => p.answer.trim().length > 0
+    );
+    const allReviewed = playersToReview.every((p) =>
+      this.geoQuizDecisions.has(p.playerId)
+    );
+
+    if (allReviewed) {
+      // Also mark empty-answer players as rejected
+      for (const p of this.geoQuizPlayerAnswers) {
+        if (!this.geoQuizDecisions.has(p.playerId)) {
+          this.geoQuizDecisions.set(p.playerId, false);
+        }
+      }
+      // Finalize after brief delay for last animation
+      setTimeout(() => {
+        this.finalizeGeoQuizFromDecisions();
+      }, 2000);
+    }
+  }
+
+  /**
+   * Finalize GeoQuiz scoring from accumulated per-answer decisions
+   */
+  private finalizeGeoQuizFromDecisions(): void {
+    if (!this.geoQuizValidating) return;
+
+    const validatedPlayerIds = Array.from(this.geoQuizDecisions.entries())
+      .filter(([, accepted]) => accepted)
+      .map(([id]) => id);
+
+    this.submitGeoQuizValidation({ validatedPlayerIds });
+  }
+
+  /**
+   * Host submits GeoQuiz validation results
+   */
+  submitGeoQuizValidation(validation: GeoQuizValidationSubmission): void {
+    if (!this.currentQuestion || !this.geoQuizValidating) return;
+    this.geoQuizValidating = false;
+
+    // Clear auto-validation timer
+    if (this.geoQuizAutoValidationTimer) {
+      clearTimeout(this.geoQuizAutoValidationTimer);
+      this.geoQuizAutoValidationTimer = null;
+    }
+
+    const q = this.currentQuestion as GeoQuizQuestion;
+    const results = this.calculateGeoQuizScores(q, validation);
+
+    // Broadcast validation result
+    this.io.to(this.room.code).emit("geoquiz:validation_result", validation);
+
+    // Update room status
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+
+    // Send results
+    this.io.to(this.room.code).emit("game:round_end", results);
+
+    // Reset hint users for next round
+    this.geoQuizHintUsers.clear();
+
+    // Show leaderboard after delay
+    setTimeout(() => {
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+
+      if (this.room.settings.showLeaderboardBetweenRounds) {
+        setTimeout(() => {
+          this.nextRound();
+        }, 5000);
+      }
+    }, 3000);
+  }
+
+  /**
+   * Calculate GeoQuiz scores based on host validation
+   * - Validated: base points + speed bonus, /2 if hint used
+   * - Rejected/empty: 0 points
+   */
+  private calculateGeoQuizScores(
+    q: GeoQuizQuestion,
+    validation: GeoQuizValidationSubmission
+  ): RoundResult {
+    const scores: { playerId: string; points: number; total: number }[] = [];
+    let bestPoints = 0;
+    let winner: Player | undefined;
+
+    for (const player of this.room.players) {
+      const answer = this.answers.get(player.id);
+      const isValidated = validation.validatedPlayerIds.includes(player.id);
+
+      let points = 0;
+      if (isValidated && answer) {
+        // Base points
+        points = q.points;
+
+        // Speed bonus
+        const responseTime = answer.responseTime || q.timeLimit;
+        const speedBonus = Math.floor(
+          (q.timeLimit - responseTime) / q.timeLimit * (q.points * 0.5)
+        );
+        points += speedBonus;
+
+        // Streak bonus
+        player.streak++;
+        if (player.streak >= 3) {
+          points += 50 * Math.min(player.streak - 2, 5);
+        }
+
+        // Hint penalty: halve points
+        if (this.geoQuizHintUsers.has(player.id)) {
+          points = Math.floor(points / 2);
+        }
+      } else {
+        player.streak = 0;
+      }
+
+      if (answer) {
+        answer.points = points;
+        answer.isCorrect = isValidated;
+      }
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, points);
+      scores.push({
+        playerId: player.id,
+        points,
+        total: updatedPlayer?.score || player.score,
+      });
+
+      if (points > bestPoints) {
+        bestPoints = points;
+        winner = player;
+      }
+    }
+
+    return {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion!,
+      answers: Array.from(this.answers.values()),
+      correctAnswer: q.city,
       winner,
       scores,
     };
@@ -1450,5 +1818,9 @@ export class GameEngine {
    */
   destroy(): void {
     this.stopTimer();
+    if (this.geoQuizAutoValidationTimer) {
+      clearTimeout(this.geoQuizAutoValidationTimer);
+      this.geoQuizAutoValidationTimer = null;
+    }
   }
 }

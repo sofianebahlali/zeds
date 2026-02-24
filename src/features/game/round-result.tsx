@@ -36,6 +36,7 @@ export function RoundResult() {
   const isDictation = roundResult.question.type === "dictation";
   const isParcours = roundResult.question.type === "parcours";
   const isPetitBac = roundResult.question.type === "petitbac";
+  const isGeoQuiz = roundResult.question.type === "geoquiz";
 
   if (isPetitBac) {
     return (
@@ -101,6 +102,10 @@ export function RoundResult() {
             ? isCorrect
               ? "Bien trouvé !"
               : "Perdu !"
+            : isGeoQuiz
+            ? isCorrect
+              ? "Bien localisé !"
+              : "Perdu !"
             : isCorrect
             ? "Bonne réponse !"
             : "Raté !"}
@@ -142,6 +147,8 @@ export function RoundResult() {
                 ? "La phrase correcte :"
                 : isParcours
                 ? "Le joueur était :"
+                : isGeoQuiz
+                ? "La ville était :"
                 : "La bonne réponse était :"}
             </p>
             <p
@@ -182,8 +189,8 @@ export function RoundResult() {
                   ? "Le plus proche !"
                   : isDictation
                   ? "Le plus précis !"
-                  : isParcours
-                  ? "Le plus rapide !"
+                  : isGeoQuiz
+                  ? "Globe-trotteur !"
                   : "Le plus rapide !"}
               </Badge>
             </div>

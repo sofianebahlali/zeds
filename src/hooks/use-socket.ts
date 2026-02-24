@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData } from "@/types";
 
 // Module-level flag: listeners are attached ONCE across all component instances
 let listenersAttached = false;
@@ -165,6 +165,23 @@ function setupSocketListeners() {
     useGameStore.getState().setPetitBacValidatedAnswers(validation);
   });
 
+  // GeoQuiz events
+  socket.on("geoquiz:validation_start", (data: GeoQuizValidationData) => {
+    useGameStore.getState().setGeoQuizValidation(data);
+  });
+
+  socket.on("geoquiz:validation_result", (validation: GeoQuizValidationSubmission) => {
+    useGameStore.getState().setGeoQuizValidatedPlayerIds(validation);
+  });
+
+  socket.on("geoquiz:hint_revealed", (hint: string) => {
+    useGameStore.getState().setGeoQuizHint(hint);
+  });
+
+  socket.on("geoquiz:answer_result", (data: GeoQuizAnswerResultData) => {
+    useGameStore.getState().addGeoQuizAnswerResult(data);
+  });
+
   // Connection events
   socket.on("connection:reconnected", (room: Room, player: Player) => {
     useRoomStore.getState().setRoom(room);
@@ -316,6 +333,18 @@ export function useSocket() {
     socket.emit("petitbac:submit_validation", validation);
   }, [socket]);
 
+  const submitGeoQuizValidation = useCallback((validation: GeoQuizValidationSubmission) => {
+    socket.emit("geoquiz:submit_validation", validation);
+  }, [socket]);
+
+  const validateGeoQuizAnswer = useCallback((playerId: string, accepted: boolean) => {
+    socket.emit("geoquiz:validate_answer", playerId, accepted);
+  }, [socket]);
+
+  const useGeoQuizHint = useCallback(() => {
+    socket.emit("geoquiz:use_hint");
+  }, [socket]);
+
   return {
     socket,
     connect,
@@ -336,5 +365,8 @@ export function useSocket() {
     advanceDrawingReveal,
     retreatDrawingReveal,
     submitPetitBacValidation,
+    submitGeoQuizValidation,
+    validateGeoQuizAnswer,
+    useGeoQuizHint,
   };
 }

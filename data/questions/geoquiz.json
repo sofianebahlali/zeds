@@ -1,0 +1,1750 @@
+[
+  {
+    "id": "geo-001",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Shibuya_Crossing%2C_Aerial.jpg/800px-Shibuya_Crossing%2C_Aerial.jpg",
+    "city": "Tokyo",
+    "country": "Japon",
+    "continent": "Asie",
+    "hint": "Ce carrefour célèbre est au Japon",
+    "acceptedAnswers": [
+      "Tokyo",
+      "Tōkyō",
+      "Tokio",
+      "tokyo"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-002",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/New_york_times_square-terabass.jpg/800px-New_york_times_square-terabass.jpg",
+    "city": "New York",
+    "country": "États-Unis",
+    "continent": "Amérique",
+    "hint": "Cette place lumineuse se trouve aux États-Unis",
+    "acceptedAnswers": [
+      "New York",
+      "New-York",
+      "NYC",
+      "new york",
+      "new-york",
+      "New york"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-003",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Gran_V%C3%ADa_%28Madrid%29_1.jpg/800px-Gran_V%C3%ADa_%28Madrid%29_1.jpg",
+    "city": "Madrid",
+    "country": "Espagne",
+    "continent": "Europe",
+    "hint": "Cette grande avenue est en Espagne",
+    "acceptedAnswers": [
+      "Madrid",
+      "madrid"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-004",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Open_Happiness_Piccadilly_Circus_Blue-Pink_Hour_120917-1126-jikatu.jpg/800px-Open_Happiness_Piccadilly_Circus_Blue-Pink_Hour_120917-1126-jikatu.jpg",
+    "city": "Londres",
+    "country": "Royaume-Uni",
+    "continent": "Europe",
+    "hint": "Ce carrefour iconique est au Royaume-Uni",
+    "acceptedAnswers": [
+      "Londres",
+      "London",
+      "londres",
+      "london"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-005",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/15-10-27-Vista_des_de_l%27est%C3%A0tua_de_Colom_a_Barcelona-WMA_2791.jpg/800px-15-10-27-Vista_des_de_l%27est%C3%A0tua_de_Colom_a_Barcelona-WMA_2791.jpg",
+    "city": "Barcelone",
+    "country": "Espagne",
+    "continent": "Europe",
+    "hint": "Cette promenade célèbre est en Espagne",
+    "acceptedAnswers": [
+      "Barcelone",
+      "Barcelona",
+      "barcelone",
+      "barcelona"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-006",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Djemaa_el_Fna.jpg/800px-Djemaa_el_Fna.jpg",
+    "city": "Marrakech",
+    "country": "Maroc",
+    "continent": "Afrique",
+    "hint": "Cette place animée se trouve au Maroc",
+    "acceptedAnswers": [
+      "Marrakech",
+      "Marrakesh",
+      "marrakech",
+      "marrakesh"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-007",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Nyhavn_Copenhagen_2.jpg/800px-Nyhavn_Copenhagen_2.jpg",
+    "city": "Copenhague",
+    "country": "Danemark",
+    "continent": "Europe",
+    "hint": "Ce port coloré est au Danemark",
+    "acceptedAnswers": [
+      "Copenhague",
+      "Copenhagen",
+      "copenhague",
+      "copenhagen"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-008",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Rialto_2025_4.jpg/800px-Rialto_2025_4.jpg",
+    "city": "Venise",
+    "country": "Italie",
+    "continent": "Europe",
+    "hint": "Ce pont célèbre est en Italie",
+    "acceptedAnswers": [
+      "Venise",
+      "Venice",
+      "Venezia",
+      "venise",
+      "venice"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-009",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Hong_Kong_Skyline_view_from_the_peak_2017.jpg/800px-Hong_Kong_Skyline_view_from_the_peak_2017.jpg",
+    "city": "Hong Kong",
+    "country": "Chine",
+    "continent": "Asie",
+    "hint": "Cette skyline spectaculaire est en Chine",
+    "acceptedAnswers": [
+      "Hong Kong",
+      "Hong-Kong",
+      "HK",
+      "hong kong",
+      "hong-kong",
+      "Hongkong"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-010",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Keizersgracht_Jul_2019.jpg/800px-Keizersgracht_Jul_2019.jpg",
+    "city": "Amsterdam",
+    "country": "Pays-Bas",
+    "continent": "Europe",
+    "hint": "Ces canaux emblématiques sont aux Pays-Bas",
+    "acceptedAnswers": [
+      "Amsterdam",
+      "amsterdam"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-011",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Prague_07-2016_view_from_Lesser_Town_Tower_of_Charles_Bridge_img3.jpg/800px-Prague_07-2016_view_from_Lesser_Town_Tower_of_Charles_Bridge_img3.jpg",
+    "city": "Prague",
+    "country": "République tchèque",
+    "continent": "Europe",
+    "hint": "Ce pont médiéval est en République tchèque",
+    "acceptedAnswers": [
+      "Prague",
+      "Praha",
+      "prague"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-012",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Istanbul_asv2021-11_img41_Grand_Bazaar.jpg/800px-Istanbul_asv2021-11_img41_Grand_Bazaar.jpg",
+    "city": "Istanbul",
+    "country": "Turquie",
+    "continent": "Asie",
+    "hint": "Ce bazar historique est en Turquie",
+    "acceptedAnswers": [
+      "Istanbul",
+      "Constantinople",
+      "istanbul"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-013",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Burj_Khalifa_%28worlds_tallest_building%29_and_the_Dubai_skyline_%2825781049892%29.jpg/800px-Burj_Khalifa_%28worlds_tallest_building%29_and_the_Dubai_skyline_%2825781049892%29.jpg",
+    "city": "Dubaï",
+    "country": "Émirats arabes unis",
+    "continent": "Asie",
+    "hint": "Cette skyline futuriste est aux Émirats arabes unis",
+    "acceptedAnswers": [
+      "Dubaï",
+      "Dubai",
+      "dubai",
+      "dubaï"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-014",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Praia_de_Copacabana_-_Rio_de_Janeiro%2C_Brasil.jpg/800px-Praia_de_Copacabana_-_Rio_de_Janeiro%2C_Brasil.jpg",
+    "city": "Rio de Janeiro",
+    "country": "Brésil",
+    "continent": "Amérique",
+    "hint": "Cette plage mythique est au Brésil",
+    "acceptedAnswers": [
+      "Rio de Janeiro",
+      "Rio",
+      "rio de janeiro",
+      "rio"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-015",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Lisbon-Day3-1_%2834184431096%29.jpg/800px-Lisbon-Day3-1_%2834184431096%29.jpg",
+    "city": "Lisbonne",
+    "country": "Portugal",
+    "continent": "Europe",
+    "hint": "Ce tramway jaune circule au Portugal",
+    "acceptedAnswers": [
+      "Lisbonne",
+      "Lisboa",
+      "Lisbon",
+      "lisbonne",
+      "lisboa"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-016",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Lombard_Street_2020.jpg/800px-Lombard_Street_2020.jpg",
+    "city": "San Francisco",
+    "country": "États-Unis",
+    "continent": "Amérique",
+    "hint": "Cette rue pentue est aux États-Unis",
+    "acceptedAnswers": [
+      "San Francisco",
+      "SF",
+      "san francisco"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-017",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/High_Street%2C_Edinburgh.JPG/800px-High_Street%2C_Edinburgh.JPG",
+    "city": "Édimbourg",
+    "country": "Écosse",
+    "continent": "Europe",
+    "hint": "Cette rue historique est en Écosse",
+    "acceptedAnswers": [
+      "Édimbourg",
+      "Edinburgh",
+      "edimbourg",
+      "edinburgh"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-018",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/%EB%AA%85%EB%8F%998%EA%B8%B8_%EA%B1%B0%EB%A6%AC_%282020.03%29.jpg/800px-%EB%AA%85%EB%8F%998%EA%B8%B8_%EA%B1%B0%EB%A6%AC_%282020.03%29.jpg",
+    "city": "Séoul",
+    "country": "Corée du Sud",
+    "continent": "Asie",
+    "hint": "Ce quartier moderne est en Corée du Sud",
+    "acceptedAnswers": [
+      "Séoul",
+      "Seoul",
+      "seoul",
+      "séoul"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-019",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Supertree_Grove%2C_Gardens_by_the_Bay%2C_Singapore_-_20120712-02.jpg/800px-Supertree_Grove%2C_Gardens_by_the_Bay%2C_Singapore_-_20120712-02.jpg",
+    "city": "Singapour",
+    "country": "Singapour",
+    "continent": "Asie",
+    "hint": "Ces jardins futuristes sont à Singapour",
+    "acceptedAnswers": [
+      "Singapour",
+      "Singapore",
+      "singapour",
+      "singapore"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-020",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Carrer_del_barri_de_Plaka%2C_Atenes.JPG/800px-Carrer_del_barri_de_Plaka%2C_Atenes.JPG",
+    "city": "Athènes",
+    "country": "Grèce",
+    "continent": "Europe",
+    "hint": "Ce quartier ancien est en Grèce",
+    "acceptedAnswers": [
+      "Athènes",
+      "Athens",
+      "athènes",
+      "athens",
+      "Athenes",
+      "athenes"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-021",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Budapest_Orsz%C3%A1gh%C3%A1z_%2831355012995%29.jpg/800px-Budapest_Orsz%C3%A1gh%C3%A1z_%2831355012995%29.jpg",
+    "city": "Budapest",
+    "country": "Hongrie",
+    "continent": "Europe",
+    "hint": "Ce parlement majestueux est en Hongrie",
+    "acceptedAnswers": [
+      "Budapest",
+      "budapest"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-022",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Brandenburger_Tor_abends.jpg/800px-Brandenburger_Tor_abends.jpg",
+    "city": "Berlin",
+    "country": "Allemagne",
+    "continent": "Europe",
+    "hint": "Cette porte historique est en Allemagne",
+    "acceptedAnswers": [
+      "Berlin",
+      "berlin"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-023",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Grand-Place%2C_Brussels_-_panorama%2C_June_2018.jpg/800px-Grand-Place%2C_Brussels_-_panorama%2C_June_2018.jpg",
+    "city": "Bruxelles",
+    "country": "Belgique",
+    "continent": "Europe",
+    "hint": "Cette Grand-Place est en Belgique",
+    "acceptedAnswers": [
+      "Bruxelles",
+      "Brussels",
+      "bruxelles",
+      "brussels"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-024",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Gamla_stan_September_2014_01.jpg/800px-Gamla_stan_September_2014_01.jpg",
+    "city": "Stockholm",
+    "country": "Suède",
+    "continent": "Europe",
+    "hint": "Cette vieille ville colorée est en Suède",
+    "acceptedAnswers": [
+      "Stockholm",
+      "stockholm"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-025",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Mumbai_03-2016_30_Gateway_of_India.jpg/800px-Mumbai_03-2016_30_Gateway_of_India.jpg",
+    "city": "Mumbai",
+    "country": "Inde",
+    "continent": "Asie",
+    "hint": "Cette porte monumentale est en Inde",
+    "acceptedAnswers": [
+      "Mumbai",
+      "Bombay",
+      "mumbai",
+      "bombay"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-026",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Sydney_Australia._%2821339175489%29.jpg/800px-Sydney_Australia._%2821339175489%29.jpg",
+    "city": "Sydney",
+    "country": "Australie",
+    "continent": "Océanie",
+    "hint": "Ce port emblématique est en Australie",
+    "acceptedAnswers": [
+      "Sydney",
+      "sydney"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-027",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/%D8%AE%D8%A7%D9%86_%D8%A7%D9%84%D8%AE%D9%84%D9%8A%D9%84%D9%8A_1.jpg/800px-%D8%AE%D8%A7%D9%86_%D8%A7%D9%84%D8%AE%D9%84%D9%8A%D9%84%D9%8A_1.jpg",
+    "city": "Le Caire",
+    "country": "Égypte",
+    "continent": "Afrique",
+    "hint": "Ce marché traditionnel est en Égypte",
+    "acceptedAnswers": [
+      "Le Caire",
+      "Cairo",
+      "le caire",
+      "cairo",
+      "Caire",
+      "caire"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-028",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Old_Port_of_Montreal_%28French-_Vieux-Port_de_Montr%C3%A9al%29.jpg/800px-Old_Port_of_Montreal_%28French-_Vieux-Port_de_Montr%C3%A9al%29.jpg",
+    "city": "Montréal",
+    "country": "Canada",
+    "continent": "Amérique",
+    "hint": "Ce quartier historique est au Canada",
+    "acceptedAnswers": [
+      "Montréal",
+      "Montreal",
+      "montréal",
+      "montreal"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-029",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/RUS-2016-Aerial-SPB-Winter_Palace_%28crop%29.jpg/800px-RUS-2016-Aerial-SPB-Winter_Palace_%28crop%29.jpg",
+    "city": "Saint-Pétersbourg",
+    "country": "Russie",
+    "continent": "Europe",
+    "hint": "Ce palais somptueux est en Russie",
+    "acceptedAnswers": [
+      "Saint-Pétersbourg",
+      "Saint-Petersbourg",
+      "St-Pétersbourg",
+      "Saint Pétersbourg",
+      "saint-pétersbourg",
+      "saint-petersbourg",
+      "St Petersburg",
+      "Saint Petersburg"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-030",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Wien_-_Schloss_Sch%C3%B6nbrunn.JPG/800px-Wien_-_Schloss_Sch%C3%B6nbrunn.JPG",
+    "city": "Vienne",
+    "country": "Autriche",
+    "continent": "Europe",
+    "hint": "Ce palais baroque est en Autriche",
+    "acceptedAnswers": [
+      "Vienne",
+      "Vienna",
+      "Wien",
+      "vienne",
+      "vienna",
+      "wien"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-031",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/0005574_-_Wat_Phra_Kaew_006.jpg/800px-0005574_-_Wat_Phra_Kaew_006.jpg",
+    "city": "Bangkok",
+    "country": "Thaïlande",
+    "continent": "Asie",
+    "hint": "Ce temple doré est en Thaïlande",
+    "acceptedAnswers": [
+      "Bangkok",
+      "bangkok"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-032",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/LaBoca_ST_98.jpg/800px-LaBoca_ST_98.jpg",
+    "city": "Buenos Aires",
+    "country": "Argentine",
+    "continent": "Amérique",
+    "hint": "Ce quartier coloré est en Argentine",
+    "acceptedAnswers": [
+      "Buenos Aires",
+      "buenos aires"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-033",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Torii_path_with_lantern_at_Fushimi_Inari_Taisha_Shrine%2C_Kyoto%2C_Japan.jpg/800px-Torii_path_with_lantern_at_Fushimi_Inari_Taisha_Shrine%2C_Kyoto%2C_Japan.jpg",
+    "city": "Kyoto",
+    "country": "Japon",
+    "continent": "Asie",
+    "hint": "Cette allée de torii rouges est au Japon",
+    "acceptedAnswers": [
+      "Kyoto",
+      "Kyōto",
+      "kyoto"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-034",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Ponte_Vecchio_from_Ponte_alle_Grazie.jpg/800px-Ponte_Vecchio_from_Ponte_alle_Grazie.jpg",
+    "city": "Florence",
+    "country": "Italie",
+    "continent": "Europe",
+    "hint": "Ce pont médiéval est en Italie",
+    "acceptedAnswers": [
+      "Florence",
+      "Firenze",
+      "florence",
+      "firenze"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-035",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg/800px-Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg",
+    "city": "Paris",
+    "country": "France",
+    "continent": "Europe",
+    "hint": "Cette tour métallique est en France",
+    "acceptedAnswers": [
+      "Paris",
+      "paris"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-036",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/800px-Colosseo_2020.jpg",
+    "city": "Rome",
+    "country": "Italie",
+    "continent": "Europe",
+    "hint": "Cet amphithéâtre antique est en Italie",
+    "acceptedAnswers": [
+      "Rome",
+      "Roma",
+      "rome",
+      "roma"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-037",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Saint_Basil%27s_Cathedral_in_Moscow.jpg/800px-Saint_Basil%27s_Cathedral_in_Moscow.jpg",
+    "city": "Moscou",
+    "country": "Russie",
+    "continent": "Europe",
+    "hint": "Cette cathédrale colorée est en Russie",
+    "acceptedAnswers": [
+      "Moscou",
+      "Moscow",
+      "moscou",
+      "moscow"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-038",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Petronas_Towers_Logo.svg/800px-Petronas_Towers_Logo.svg.png",
+    "city": "Kuala Lumpur",
+    "country": "Malaisie",
+    "continent": "Asie",
+    "hint": "Ces tours jumelles sont en Malaisie",
+    "acceptedAnswers": [
+      "Kuala Lumpur",
+      "KL",
+      "kuala lumpur"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-039",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Taipei_101_logo.svg/800px-Taipei_101_logo.svg.png",
+    "city": "Taipei",
+    "country": "Taïwan",
+    "continent": "Asie",
+    "hint": "Ce gratte-ciel en bambou est à Taïwan",
+    "acceptedAnswers": [
+      "Taipei",
+      "Taïpei",
+      "taipei"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-040",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Las_Vegas_Strip_09_2017_4897.jpg/800px-Las_Vegas_Strip_09_2017_4897.jpg",
+    "city": "Las Vegas",
+    "country": "États-Unis",
+    "continent": "Amérique",
+    "hint": "Ce boulevard illuminé est aux États-Unis",
+    "acceptedAnswers": [
+      "Las Vegas",
+      "las vegas",
+      "Vegas",
+      "vegas"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-041",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Toronto_Skyline_viewed_from_Algonquin_Island_%2816-9_crop%29.jpg/800px-Toronto_Skyline_viewed_from_Algonquin_Island_%2816-9_crop%29.jpg",
+    "city": "Toronto",
+    "country": "Canada",
+    "continent": "Amérique",
+    "hint": "Cette tour emblématique est au Canada",
+    "acceptedAnswers": [
+      "Toronto",
+      "toronto"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-042",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/The_Forbidden_City_-_View_from_Coal_Hill.jpg/800px-The_Forbidden_City_-_View_from_Coal_Hill.jpg",
+    "city": "Pékin",
+    "country": "Chine",
+    "continent": "Asie",
+    "hint": "Ce palais impérial est en Chine",
+    "acceptedAnswers": [
+      "Pékin",
+      "Beijing",
+      "Pekin",
+      "pékin",
+      "beijing",
+      "pekin"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-043",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/DJI_0197_crp_wiki.jpg/800px-DJI_0197_crp_wiki.jpg",
+    "city": "La Havane",
+    "country": "Cuba",
+    "continent": "Amérique",
+    "hint": "Ces voitures anciennes circulent à Cuba",
+    "acceptedAnswers": [
+      "La Havane",
+      "Havana",
+      "la havane",
+      "havana",
+      "Havane",
+      "havane"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-044",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Brugge_Belfort_HDR.jpg/800px-Brugge_Belfort_HDR.jpg",
+    "city": "Bruges",
+    "country": "Belgique",
+    "continent": "Europe",
+    "hint": "Ce beffroi médiéval est en Belgique",
+    "acceptedAnswers": [
+      "Bruges",
+      "Brugge",
+      "bruges",
+      "brugge"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-045",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Puente_Don_Luis_I%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_13.JPG/800px-Puente_Don_Luis_I%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_13.JPG",
+    "city": "Porto",
+    "country": "Portugal",
+    "continent": "Europe",
+    "hint": "Ce quartier fluvial est au Portugal",
+    "acceptedAnswers": [
+      "Porto",
+      "Oporto",
+      "porto"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-046",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Plaza_de_Espa%C3%B1a_%28Sevilla%29_-_01.jpg/800px-Plaza_de_Espa%C3%B1a_%28Sevilla%29_-_01.jpg",
+    "city": "Séville",
+    "country": "Espagne",
+    "continent": "Europe",
+    "hint": "Cette place monumentale est en Espagne",
+    "acceptedAnswers": [
+      "Séville",
+      "Seville",
+      "Sevilla",
+      "séville",
+      "seville",
+      "sevilla"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-047",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/CollineDuChateau_NiceFrance2022.png/800px-CollineDuChateau_NiceFrance2022.png",
+    "city": "Nice",
+    "country": "France",
+    "continent": "Europe",
+    "hint": "Cette promenade longe la Méditerranée en France",
+    "acceptedAnswers": [
+      "Nice",
+      "nice"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-048",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Marseille_Old_Port.jpg/800px-Marseille_Old_Port.jpg",
+    "city": "Marseille",
+    "country": "France",
+    "continent": "Europe",
+    "hint": "Ce vieux port est en France",
+    "acceptedAnswers": [
+      "Marseille",
+      "marseille"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-049",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Fourviere_Lyon.jpg/800px-Fourviere_Lyon.jpg",
+    "city": "Lyon",
+    "country": "France",
+    "continent": "Europe",
+    "hint": "Cette basilique domine une ville française",
+    "acceptedAnswers": [
+      "Lyon",
+      "lyon"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-050",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Milan_Cathedral_from_Piazza_del_Duomo.jpg/800px-Milan_Cathedral_from_Piazza_del_Duomo.jpg",
+    "city": "Milan",
+    "country": "Italie",
+    "continent": "Europe",
+    "hint": "Cette cathédrale gothique est en Italie",
+    "acceptedAnswers": [
+      "Milan",
+      "Milano",
+      "milan",
+      "milano"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-051",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Napoli_-_Maschio_Angioino_-_202209302342_3.jpg/800px-Napoli_-_Maschio_Angioino_-_202209302342_3.jpg",
+    "city": "Naples",
+    "country": "Italie",
+    "continent": "Europe",
+    "hint": "Ce golfe volcanique est en Italie",
+    "acceptedAnswers": [
+      "Naples",
+      "Napoli",
+      "naples",
+      "napoli"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-052",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Rathaus_and_Marienplatz_from_Peterskirche_-_August_2006.jpg/800px-Rathaus_and_Marienplatz_from_Peterskirche_-_August_2006.jpg",
+    "city": "Munich",
+    "country": "Allemagne",
+    "continent": "Europe",
+    "hint": "Cette place historique est en Allemagne",
+    "acceptedAnswers": [
+      "Munich",
+      "München",
+      "munich",
+      "munchen"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-053",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Wawel_%284%29.jpg/800px-Wawel_%284%29.jpg",
+    "city": "Cracovie",
+    "country": "Pologne",
+    "continent": "Europe",
+    "hint": "Ce château royal est en Pologne",
+    "acceptedAnswers": [
+      "Cracovie",
+      "Kraków",
+      "Krakow",
+      "cracovie",
+      "krakow"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-054",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Dubrovnik_s_24.jpg/800px-Dubrovnik_s_24.jpg",
+    "city": "Dubrovnik",
+    "country": "Croatie",
+    "continent": "Europe",
+    "hint": "Ces remparts surplombent la mer en Croatie",
+    "acceptedAnswers": [
+      "Dubrovnik",
+      "dubrovnik"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-055",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Helsinki_July_2013-27a.jpg/800px-Helsinki_July_2013-27a.jpg",
+    "city": "Helsinki",
+    "country": "Finlande",
+    "continent": "Europe",
+    "hint": "Cette cathédrale blanche est en Finlande",
+    "acceptedAnswers": [
+      "Helsinki",
+      "helsinki"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-056",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Bryggen%2C_Bergen%2C_Noruega%2C_2019-09-08%2C_DD_115-117_PAN.jpg/800px-Bryggen%2C_Bergen%2C_Noruega%2C_2019-09-08%2C_DD_115-117_PAN.jpg",
+    "city": "Bergen",
+    "country": "Norvège",
+    "continent": "Europe",
+    "hint": "Ces maisons colorées en bois sont en Norvège",
+    "acceptedAnswers": [
+      "Bergen",
+      "bergen"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-057",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Leifur_Eir%C3%ADksson_and_Hallgr%C3%ADmskirkja_%2814527191932%29.jpg/800px-Leifur_Eir%C3%ADksson_and_Hallgr%C3%ADmskirkja_%2814527191932%29.jpg",
+    "city": "Reykjavik",
+    "country": "Islande",
+    "continent": "Europe",
+    "hint": "Cette église moderne est en Islande",
+    "acceptedAnswers": [
+      "Reykjavik",
+      "Reykjavík",
+      "reykjavik"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-058",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Thap_Rua.jpg/800px-Thap_Rua.jpg",
+    "city": "Hanoï",
+    "country": "Viêt Nam",
+    "continent": "Asie",
+    "hint": "Ce lac sacré est au Viêt Nam",
+    "acceptedAnswers": [
+      "Hanoï",
+      "Hanoi",
+      "hanoï",
+      "hanoi",
+      "Ha Noi"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-059",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Osaka_Castle_02bs3200.jpg/800px-Osaka_Castle_02bs3200.jpg",
+    "city": "Osaka",
+    "country": "Japon",
+    "continent": "Asie",
+    "hint": "Ce château japonais est entouré de cerisiers",
+    "acceptedAnswers": [
+      "Osaka",
+      "Ōsaka",
+      "osaka"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-060",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/The_Bund_2.jpg/800px-The_Bund_2.jpg",
+    "city": "Shanghai",
+    "country": "Chine",
+    "continent": "Asie",
+    "hint": "Ce front de mer est en Chine",
+    "acceptedAnswers": [
+      "Shanghai",
+      "Shanghaï",
+      "shanghai"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-061",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/TanahLot_2014.JPG/800px-TanahLot_2014.JPG",
+    "city": "Bali",
+    "country": "Indonésie",
+    "continent": "Asie",
+    "hint": "Ce temple sur la mer est en Indonésie",
+    "acceptedAnswers": [
+      "Bali",
+      "bali"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-062",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Boudhanath_stupa_%2C_Kathmandu%2C_Nepal.jpg/800px-Boudhanath_stupa_%2C_Kathmandu%2C_Nepal.jpg",
+    "city": "Katmandou",
+    "country": "Népal",
+    "continent": "Asie",
+    "hint": "Ce stupa sacré est au Népal",
+    "acceptedAnswers": [
+      "Katmandou",
+      "Kathmandu",
+      "katmandou",
+      "kathmandu"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-063",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/East_facade_Hawa_Mahal_Jaipur_from_ground_level_%28July_2022%29_-_img_01.jpg/800px-East_facade_Hawa_Mahal_Jaipur_from_ground_level_%28July_2022%29_-_img_01.jpg",
+    "city": "Jaipur",
+    "country": "Inde",
+    "continent": "Asie",
+    "hint": "Ce palais des vents est en Inde",
+    "acceptedAnswers": [
+      "Jaipur",
+      "jaipur"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-064",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Bogota%2C_Colombia_%2836668708290%29.jpg/800px-Bogota%2C_Colombia_%2836668708290%29.jpg",
+    "city": "Bogota",
+    "country": "Colombie",
+    "continent": "Amérique",
+    "hint": "Ce quartier colonial est en Colombie",
+    "acceptedAnswers": [
+      "Bogota",
+      "Bogotá",
+      "bogota"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-065",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Museo_Naval_del_Caribe.JPG/800px-Museo_Naval_del_Caribe.JPG",
+    "city": "Carthagène",
+    "country": "Colombie",
+    "continent": "Amérique",
+    "hint": "Cette ville fortifiée est en Colombie",
+    "acceptedAnswers": [
+      "Carthagène",
+      "Cartagena",
+      "carthagène",
+      "cartagena"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-066",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Angel_de_la_independencia170409.jpg/800px-Angel_de_la_independencia170409.jpg",
+    "city": "Mexico",
+    "country": "Mexique",
+    "continent": "Amérique",
+    "hint": "Cet ange doré est au Mexique",
+    "acceptedAnswers": [
+      "Mexico",
+      "Ciudad de México",
+      "mexico"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-067",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/en/c/ce/Hassan_II_mosque%2C_Casablanca_2.jpg",
+    "city": "Casablanca",
+    "country": "Maroc",
+    "continent": "Afrique",
+    "hint": "Cette mosquée face à l'océan est au Maroc",
+    "acceptedAnswers": [
+      "Casablanca",
+      "casablanca",
+      "Casa"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-068",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Table_Mountain_DanieVDM.jpg/800px-Table_Mountain_DanieVDM.jpg",
+    "city": "Le Cap",
+    "country": "Afrique du Sud",
+    "continent": "Afrique",
+    "hint": "Cette montagne plate est en Afrique du Sud",
+    "acceptedAnswers": [
+      "Le Cap",
+      "Cape Town",
+      "le cap",
+      "cape town"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-069",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Tallinna_Raekoda_11-06-2013.jpg/800px-Tallinna_Raekoda_11-06-2013.jpg",
+    "city": "Tallinn",
+    "country": "Estonie",
+    "continent": "Europe",
+    "hint": "Cet hôtel de ville médiéval est en Estonie",
+    "acceptedAnswers": [
+      "Tallinn",
+      "tallinn"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-070",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Bratislava_-_Burg_%28b%29.JPG/800px-Bratislava_-_Burg_%28b%29.JPG",
+    "city": "Bratislava",
+    "country": "Slovaquie",
+    "continent": "Europe",
+    "hint": "Ce château domine le Danube en Slovaquie",
+    "acceptedAnswers": [
+      "Bratislava",
+      "bratislava"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-071",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Ljubljanski_grad_in_Grajski_gri%C4%8D.jpg/800px-Ljubljanski_grad_in_Grajski_gri%C4%8D.jpg",
+    "city": "Ljubljana",
+    "country": "Slovénie",
+    "continent": "Europe",
+    "hint": "Ce château est en Slovénie",
+    "acceptedAnswers": [
+      "Ljubljana",
+      "ljubljana"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-072",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Mostar_Old_Town_Panorama_2007.jpg/800px-Mostar_Old_Town_Panorama_2007.jpg",
+    "city": "Mostar",
+    "country": "Bosnie-Herzégovine",
+    "continent": "Europe",
+    "hint": "Ce vieux pont est en Bosnie-Herzégovine",
+    "acceptedAnswers": [
+      "Mostar",
+      "mostar"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-073",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/20090719_Crkva_Gospa_od_Zdravlja_Kotor_Bay_Montenegro.jpg/800px-20090719_Crkva_Gospa_od_Zdravlja_Kotor_Bay_Montenegro.jpg",
+    "city": "Kotor",
+    "country": "Monténégro",
+    "continent": "Europe",
+    "hint": "Cette baie fortifiée est au Monténégro",
+    "acceptedAnswers": [
+      "Kotor",
+      "kotor"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-074",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Tbilisi_IMG_8846_1920.jpg/800px-Tbilisi_IMG_8846_1920.jpg",
+    "city": "Tbilissi",
+    "country": "Géorgie",
+    "continent": "Asie",
+    "hint": "Cette forteresse ancienne est en Géorgie",
+    "acceptedAnswers": [
+      "Tbilissi",
+      "Tbilisi",
+      "tbilissi",
+      "tbilisi"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-075",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/0/08/Flame_towers_baku.jpg/800px-Flame_towers_baku.jpg",
+    "city": "Bakou",
+    "country": "Azerbaïdjan",
+    "continent": "Asie",
+    "hint": "Ces tours de flammes sont en Azerbaïdjan",
+    "acceptedAnswers": [
+      "Bakou",
+      "Baku",
+      "bakou",
+      "baku"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-076",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/St_Sebastian_Curtain_%28cropped%29.jpg/800px-St_Sebastian_Curtain_%28cropped%29.jpg",
+    "city": "La Valette",
+    "country": "Malte",
+    "continent": "Europe",
+    "hint": "Cette capitale fortifiée est à Malte",
+    "acceptedAnswers": [
+      "La Valette",
+      "Valletta",
+      "la valette",
+      "valletta"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-077",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Gent%2C_de_Graslei_vanaf_de_Korenlei_met_oeg24758tm61%2B25159_IMG_0447_2021-08-13_18.37.jpg/800px-Gent%2C_de_Graslei_vanaf_de_Korenlei_met_oeg24758tm61%2B25159_IMG_0447_2021-08-13_18.37.jpg",
+    "city": "Gand",
+    "country": "Belgique",
+    "continent": "Europe",
+    "hint": "Ce canal médiéval est en Belgique",
+    "acceptedAnswers": [
+      "Gand",
+      "Ghent",
+      "Gent",
+      "gand",
+      "ghent",
+      "gent"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-078",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Nationaltheatret_evening.jpg/800px-Nationaltheatret_evening.jpg",
+    "city": "Oslo",
+    "country": "Norvège",
+    "continent": "Europe",
+    "hint": "Cet opéra moderne est en Norvège",
+    "acceptedAnswers": [
+      "Oslo",
+      "oslo"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-079",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Old_Riga_Vecr%C4%ABga_Town_Hall.jpg/800px-Old_Riga_Vecr%C4%ABga_Town_Hall.jpg",
+    "city": "Riga",
+    "country": "Lettonie",
+    "continent": "Europe",
+    "hint": "Cette vieille ville est en Lettonie",
+    "acceptedAnswers": [
+      "Riga",
+      "riga"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-080",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Phou_si_Luang_Prabang_Laos_%E3%83%97%E3%83%BC%E3%82%B7%E3%83%BC%E3%81%AE%E4%B8%98_%E3%83%A9%E3%82%AA%E3%82%B9%E3%83%BB%E3%83%AB%E3%82%A2%E3%83%B3%E3%83%97%E3%83%A9%E3%83%90%E3%83%BC%E3%83%B3_DSCF6777.jpg/800px-Phou_si_Luang_Prabang_Laos_%E3%83%97%E3%83%BC%E3%82%B7%E3%83%BC%E3%81%AE%E4%B8%98_%E3%83%A9%E3%82%AA%E3%82%B9%E3%83%BB%E3%83%AB%E3%82%A2%E3%83%B3%E3%83%97%E3%83%A9%E3%83%90%E3%83%BC%E3%83%B3_DSCF6777.jpg",
+    "city": "Luang Prabang",
+    "country": "Laos",
+    "continent": "Asie",
+    "hint": "Cette ville sacrée est au Laos",
+    "acceptedAnswers": [
+      "Luang Prabang",
+      "luang prabang"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-081",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Buddhist_monks_in_front_of_the_Angkor_Wat.jpg/800px-Buddhist_monks_in_front_of_the_Angkor_Wat.jpg",
+    "city": "Siem Reap",
+    "country": "Cambodge",
+    "continent": "Asie",
+    "hint": "Ce temple ancestral est au Cambodge",
+    "acceptedAnswers": [
+      "Siem Reap",
+      "siem reap",
+      "Siem reap"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-082",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Chefchaouen_%2852189357475%29.jpg/800px-Chefchaouen_%2852189357475%29.jpg",
+    "city": "Chefchaouen",
+    "country": "Maroc",
+    "continent": "Afrique",
+    "hint": "Cette ville bleue est au Maroc",
+    "acceptedAnswers": [
+      "Chefchaouen",
+      "Chaouen",
+      "chefchaouen",
+      "chaouen"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-083",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Al_Deir_Petra.JPG/800px-Al_Deir_Petra.JPG",
+    "city": "Petra",
+    "country": "Jordanie",
+    "continent": "Asie",
+    "hint": "Cette cité taillée dans la roche est en Jordanie",
+    "acceptedAnswers": [
+      "Petra",
+      "Pétra",
+      "petra"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-084",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Taj_Mahal_%28Edited%29.jpeg/800px-Taj_Mahal_%28Edited%29.jpeg",
+    "city": "Agra",
+    "country": "Inde",
+    "continent": "Asie",
+    "hint": "Ce mausolée de marbre est en Inde",
+    "acceptedAnswers": [
+      "Agra",
+      "agra"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-085",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Sigiriya_%28141688197%29.jpeg/800px-Sigiriya_%28141688197%29.jpeg",
+    "city": "Sigiriya",
+    "country": "Sri Lanka",
+    "continent": "Asie",
+    "hint": "Ce rocher-forteresse est au Sri Lanka",
+    "acceptedAnswers": [
+      "Sigiriya",
+      "sigiriya"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-086",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Machu_Picchu%2C_2023_%28012%29.jpg/800px-Machu_Picchu%2C_2023_%28012%29.jpg",
+    "city": "Machu Picchu",
+    "country": "Pérou",
+    "continent": "Amérique",
+    "hint": "Cette cité inca est au Pérou",
+    "acceptedAnswers": [
+      "Machu Picchu",
+      "machu picchu",
+      "Machu picchu"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-087",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/AhuTongariki.JPG/800px-AhuTongariki.JPG",
+    "city": "Île de Pâques",
+    "country": "Chili",
+    "continent": "Océanie",
+    "hint": "Ces statues géantes sont au Chili",
+    "acceptedAnswers": [
+      "Île de Pâques",
+      "Easter Island",
+      "Rapa Nui",
+      "ile de paques",
+      "easter island"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-088",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/%CE%A3%CE%B1%CE%B3%CF%81%CE%AC%CE%B4%CE%B1_%CE%A6%CE%B1%CE%BC%CE%AF%CE%BB%CE%B9%CE%B1_2941.jpg/800px-%CE%A3%CE%B1%CE%B3%CF%81%CE%AC%CE%B4%CE%B1_%CE%A6%CE%B1%CE%BC%CE%AF%CE%BB%CE%B9%CE%B1_2941.jpg",
+    "city": "Barcelone",
+    "country": "Espagne",
+    "continent": "Europe",
+    "hint": "Cette basilique inachevée est en Espagne",
+    "acceptedAnswers": [
+      "Barcelone",
+      "Barcelona",
+      "barcelone",
+      "barcelona"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-089",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/2011_Dimos_Thiras.png/800px-2011_Dimos_Thiras.png",
+    "city": "Santorin",
+    "country": "Grèce",
+    "continent": "Europe",
+    "hint": "Ces maisons blanches et bleues sont en Grèce",
+    "acceptedAnswers": [
+      "Santorin",
+      "Santorini",
+      "santorin",
+      "santorini"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-090",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Cinque_Terre_%28Italy%2C_October_2020%29_-_24_%2850543603956%29.jpg/800px-Cinque_Terre_%28Italy%2C_October_2020%29_-_24_%2850543603956%29.jpg",
+    "city": "Cinque Terre",
+    "country": "Italie",
+    "continent": "Europe",
+    "hint": "Ces villages colorés sont en Italie",
+    "acceptedAnswers": [
+      "Cinque Terre",
+      "cinque terre"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-091",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Golden_Gate_Bridge_as_seen_from_Battery_East.jpg/800px-Golden_Gate_Bridge_as_seen_from_Battery_East.jpg",
+    "city": "San Francisco",
+    "country": "États-Unis",
+    "continent": "Amérique",
+    "hint": "Ce pont rouge est aux États-Unis",
+    "acceptedAnswers": [
+      "San Francisco",
+      "SF",
+      "san francisco"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-092",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Front_view_of_Statue_of_Liberty_%28cropped%29.jpg/800px-Front_view_of_Statue_of_Liberty_%28cropped%29.jpg",
+    "city": "New York",
+    "country": "États-Unis",
+    "continent": "Amérique",
+    "hint": "Cette statue emblématique est aux États-Unis",
+    "acceptedAnswers": [
+      "New York",
+      "New-York",
+      "NYC",
+      "new york"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-093",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/3Falls_Niagara.jpg/800px-3Falls_Niagara.jpg",
+    "city": "Niagara Falls",
+    "country": "Canada",
+    "continent": "Amérique",
+    "hint": "Ces chutes spectaculaires sont en Amérique du Nord",
+    "acceptedAnswers": [
+      "Niagara Falls",
+      "Niagara",
+      "niagara falls",
+      "niagara",
+      "Chutes du Niagara"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-094",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/1029_Acropolis_of_Athens_in_Greece_at_night_Photo_by_Giles_Laurent.jpg/800px-1029_Acropolis_of_Athens_in_Greece_at_night_Photo_by_Giles_Laurent.jpg",
+    "city": "Athènes",
+    "country": "Grèce",
+    "continent": "Europe",
+    "hint": "Ce temple antique domine la Grèce",
+    "acceptedAnswers": [
+      "Athènes",
+      "Athens",
+      "athènes",
+      "athens",
+      "Athenes"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-095",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Elizabeth_Tower%2C_June_2022.jpg/800px-Elizabeth_Tower%2C_June_2022.jpg",
+    "city": "Londres",
+    "country": "Royaume-Uni",
+    "continent": "Europe",
+    "hint": "Cette horloge célèbre est au Royaume-Uni",
+    "acceptedAnswers": [
+      "Londres",
+      "London",
+      "londres",
+      "london"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 100
+  },
+  {
+    "id": "geo-096",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Matterhorn_from_Domh%C3%BCtte_-_2.jpg/800px-Matterhorn_from_Domh%C3%BCtte_-_2.jpg",
+    "city": "Zermatt",
+    "country": "Suisse",
+    "continent": "Europe",
+    "hint": "Ce sommet pyramidal est en Suisse",
+    "acceptedAnswers": [
+      "Zermatt",
+      "zermatt"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "geo-097",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Istanbul_%2834223582516%29_%28cropped%29.jpg/800px-Istanbul_%2834223582516%29_%28cropped%29.jpg",
+    "city": "Istanbul",
+    "country": "Turquie",
+    "continent": "Asie",
+    "hint": "Cette mosquée aux minarets est en Turquie",
+    "acceptedAnswers": [
+      "Istanbul",
+      "istanbul",
+      "Constantinople"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-098",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Sydney_Harbour_Bridge-16_October_2025.jpg/800px-Sydney_Harbour_Bridge-16_October_2025.jpg",
+    "city": "Sydney",
+    "country": "Australie",
+    "continent": "Océanie",
+    "hint": "Ce pont en arche est en Australie",
+    "acceptedAnswers": [
+      "Sydney",
+      "sydney"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-099",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/800px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg",
+    "city": "Pékin",
+    "country": "Chine",
+    "continent": "Asie",
+    "hint": "Cette muraille millénaire est en Chine",
+    "acceptedAnswers": [
+      "Pékin",
+      "Beijing",
+      "Pekin",
+      "pékin",
+      "beijing"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 25,
+    "points": 100
+  },
+  {
+    "id": "geo-100",
+    "type": "geoquiz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Idyllic_landscape_with_a_waterfall_%28Unsplash%29.jpg/800px-Idyllic_landscape_with_a_waterfall_%28Unsplash%29.jpg",
+    "city": "Seljalandsfoss",
+    "country": "Islande",
+    "continent": "Europe",
+    "hint": "Cette cascade est en Islande",
+    "acceptedAnswers": [
+      "Seljalandsfoss",
+      "seljalandsfoss"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  }
+]

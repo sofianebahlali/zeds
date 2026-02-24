@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -155,6 +155,45 @@ export const PETITBAC_CATEGORIES = [
   "Partie du corps/os",
 ] as const;
 
+export interface GeoQuizQuestion extends BaseQuestion {
+  type: "geoquiz";
+  imageUrl: string;
+  city: string;
+  country: string;
+  continent: string;
+  hint: string; // Usually the country, revealed on hint button
+  acceptedAnswers: string[]; // Variations: ["Madrid", "madrid"]
+  difficulty: "easy" | "medium" | "hard";
+}
+
+export interface GeoQuizPlayerAnswerData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  answer: string;
+  usedHint: boolean;
+}
+
+export interface GeoQuizValidationData {
+  city: string;
+  country: string;
+  imageUrl: string;
+  playerAnswers: GeoQuizPlayerAnswerData[];
+}
+
+export interface GeoQuizValidationSubmission {
+  validatedPlayerIds: string[];
+}
+
+export interface GeoQuizAnswerResultData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  answer: string;
+  usedHint: boolean;
+  accepted: boolean;
+}
+
 export interface PetitBacQuestion extends BaseQuestion {
   type: "petitbac";
   letter: string;
@@ -178,7 +217,7 @@ export interface PetitBacValidationSubmission {
   validatedAnswers: Record<string, string[]>;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -298,6 +337,12 @@ export interface ServerToClientEvents {
   "petitbac:validation_start": (data: PetitBacValidationData) => void;
   "petitbac:validation_result": (validation: PetitBacValidationSubmission) => void;
 
+  // GeoQuiz events
+  "geoquiz:validation_start": (data: GeoQuizValidationData) => void;
+  "geoquiz:validation_result": (validation: GeoQuizValidationSubmission) => void;
+  "geoquiz:hint_revealed": (hint: string) => void;
+  "geoquiz:answer_result": (data: GeoQuizAnswerResultData) => void;
+
   // Connection events
   "connection:reconnected": (room: Room, player: Player) => void;
   "connection:player_disconnected": (playerId: string) => void;
@@ -327,6 +372,11 @@ export interface ClientToServerEvents {
 
   // Petit Bac events
   "petitbac:submit_validation": (validation: PetitBacValidationSubmission) => void;
+
+  // GeoQuiz events
+  "geoquiz:submit_validation": (validation: GeoQuizValidationSubmission) => void;
+  "geoquiz:validate_answer": (playerId: string, accepted: boolean) => void;
+  "geoquiz:use_hint": () => void;
 
   // Connection events
   "connection:reconnect": (roomCode: string, playerId: string) => void;
@@ -440,5 +490,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Trouve des mots commençant par la lettre imposée",
     icon: "🔤",
     color: "from-cyan-500 to-cyan-700",
+  },
+  {
+    id: "geoquiz",
+    name: "GeoQuiz",
+    description: "Reconnais le lieu et trouve la ville",
+    icon: "🌍",
+    color: "from-sky-500 to-sky-700",
   },
 ];

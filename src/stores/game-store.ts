@@ -1,9 +1,10 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "drawing" | "guessing" | "drawing_reveal"
-  | "petitbac_validating";
+  | "petitbac_validating"
+  | "geoquiz_validating";
 
 interface GameStoreState {
   // Game state
@@ -32,6 +33,13 @@ interface GameStoreState {
   petitBacValidationData: PetitBacValidationData | null;
   petitBacValidatedAnswers: Record<string, string[]> | null;
 
+  // GeoQuiz mode
+  geoQuizValidationData: GeoQuizValidationData | null;
+  geoQuizValidatedPlayerIds: string[] | null;
+  geoQuizHint: string | null;
+  geoQuizAnswerResults: GeoQuizAnswerResultData[];
+  geoQuizReviewIndex: number;
+
   // Actions
   setStatus: (status: GameStatus) => void;
   setCurrentQuestion: (question: Question) => void;
@@ -58,6 +66,12 @@ interface GameStoreState {
   // Petit Bac actions
   setPetitBacValidation: (data: PetitBacValidationData) => void;
   setPetitBacValidatedAnswers: (validation: PetitBacValidationSubmission) => void;
+
+  // GeoQuiz actions
+  setGeoQuizValidation: (data: GeoQuizValidationData) => void;
+  setGeoQuizValidatedPlayerIds: (validation: GeoQuizValidationSubmission) => void;
+  setGeoQuizHint: (hint: string) => void;
+  addGeoQuizAnswerResult: (result: GeoQuizAnswerResultData) => void;
 
   // Computed
   getProgress: () => number;
@@ -89,6 +103,13 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   petitBacValidationData: null,
   petitBacValidatedAnswers: null,
 
+  // GeoQuiz initial state
+  geoQuizValidationData: null,
+  geoQuizValidatedPlayerIds: null,
+  geoQuizHint: null,
+  geoQuizAnswerResults: [],
+  geoQuizReviewIndex: 0,
+
   // Actions
   setStatus: (status) => set({ status }),
 
@@ -100,6 +121,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       hasAnswered: false,
       answeredPlayers: [],
       status: "question",
+      geoQuizHint: null,
     }),
 
   setTimeRemaining: (time) => set({ timeRemaining: time }),
@@ -168,6 +190,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       drawingPhase: null,
       petitBacValidationData: null,
       petitBacValidatedAnswers: null,
+      geoQuizValidationData: null,
+      geoQuizValidatedPlayerIds: null,
+      geoQuizHint: null,
+      geoQuizAnswerResults: [],
+      geoQuizReviewIndex: 0,
     }),
 
   finishGame: () => set({ status: "finished" }),
@@ -192,6 +219,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       drawingPhase: null,
       petitBacValidationData: null,
       petitBacValidatedAnswers: null,
+      geoQuizValidationData: null,
+      geoQuizValidatedPlayerIds: null,
+      geoQuizHint: null,
+      geoQuizAnswerResults: [],
+      geoQuizReviewIndex: 0,
     }),
 
   // Drawing actions
@@ -233,6 +265,26 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   setPetitBacValidatedAnswers: (validation) => set({
     petitBacValidatedAnswers: validation.validatedAnswers,
   }),
+
+  // GeoQuiz actions
+  setGeoQuizValidation: (data) => set({
+    geoQuizValidationData: data,
+    geoQuizAnswerResults: [],
+    geoQuizReviewIndex: 0,
+    status: "geoquiz_validating",
+  }),
+
+  setGeoQuizValidatedPlayerIds: (validation) => set({
+    geoQuizValidatedPlayerIds: validation.validatedPlayerIds,
+  }),
+
+  setGeoQuizHint: (hint) => set({
+    geoQuizHint: hint,
+  }),
+
+  addGeoQuizAnswerResult: (result) => set((state) => ({
+    geoQuizAnswerResults: [...state.geoQuizAnswerResults, result],
+  })),
 
   // Computed
   getProgress: () => {

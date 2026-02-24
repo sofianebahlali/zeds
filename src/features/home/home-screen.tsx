@@ -44,7 +44,7 @@ export function HomeScreen() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            Défie tes amis en temps réel
+            Samir va-t-il réussir à finir dernier sur un jeu de plus ?
           </motion.p>
         </motion.div>
 

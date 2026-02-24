@@ -2,13 +2,13 @@
 
 import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle, Tag, Volume2, RotateCcw } from "lucide-react";
+import { Send, CheckCircle, Tag, Volume2, RotateCcw, MapPin, Eye } from "lucide-react";
 import Image from "next/image";
 import { Button, Card, Input, TimerProgress, Badge, Avatar } from "@/components/ui";
 import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
-import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion } from "@/types";
+import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion } from "@/types";
 
 export function QuestionDisplay() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
@@ -24,6 +24,7 @@ export function QuestionDisplay() {
   const [dictationAnswer, setDictationAnswer] = useState("");
   const [parcoursAnswer, setParcoursAnswer] = useState("");
   const [petitBacAnswers, setPetitBacAnswers] = useState<Record<string, string>>({});
+  const [geoQuizAnswer, setGeoQuizAnswer] = useState("");
 
   if (!currentQuestion) return null;
 
@@ -42,6 +43,8 @@ export function QuestionDisplay() {
       submitAnswer(parcoursAnswer.trim());
     } else if (currentQuestion.type === "petitbac") {
       submitAnswer(JSON.stringify(petitBacAnswers));
+    } else if (currentQuestion.type === "geoquiz" && geoQuizAnswer.trim()) {
+      submitAnswer(geoQuizAnswer.trim());
     } else if (textAnswer.trim()) {
       submitAnswer(textAnswer.trim());
     }
@@ -106,6 +109,16 @@ export function QuestionDisplay() {
             answer={parcoursAnswer}
             hasAnswered={hasAnswered}
             onChange={setParcoursAnswer}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "geoquiz" && (
+          <GeoQuizQuestionView
+            question={currentQuestion as GeoQuizQuestion}
+            answer={geoQuizAnswer}
+            hasAnswered={hasAnswered}
+            onChange={setGeoQuizAnswer}
             onSubmit={handleSubmit}
           />
         )}
@@ -858,6 +871,147 @@ function PetitBacQuestionView({
           </Button>
         </div>
       )}
+    </>
+  );
+}
+
+// ==========================================
+// GEOQUIZ QUESTION VIEW
+// ==========================================
+
+interface GeoQuizQuestionViewProps {
+  question: GeoQuizQuestion;
+  answer: string;
+  hasAnswered: boolean;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+}
+
+function GeoQuizQuestionView({
+  question,
+  answer,
+  hasAnswered,
+  onChange,
+  onSubmit,
+}: GeoQuizQuestionViewProps) {
+  const geoQuizHint = useGameStore((s) => s.geoQuizHint);
+  const { useGeoQuizHint } = useSocket();
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSubmit();
+    }
+  };
+
+  const handleUseHint = () => {
+    if (!geoQuizHint) {
+      useGeoQuizHint();
+    }
+  };
+
+  return (
+    <>
+      {/* Header */}
+      <div className="mb-3 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-800 border border-surface-700 mb-3">
+          <span className="text-lg">🌍</span>
+          <span className="text-xs font-medium text-surface-300">GeoQuiz</span>
+        </div>
+        <h2 className="text-lg sm:text-xl font-display font-bold text-surface-100 text-balance">
+          Dans quelle ville se trouve ce lieu ?
+        </h2>
+      </div>
+
+      {/* Place image */}
+      {question.imageUrl && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="flex justify-center mb-3"
+        >
+          <div className="w-full max-w-sm aspect-[4/3] rounded-2xl overflow-hidden bg-surface-800 shadow-lg">
+            <img
+              src={question.imageUrl}
+              alt="Lieu à deviner"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </motion.div>
+      )}
+
+      {/* Hint */}
+      <AnimatePresence>
+        {geoQuizHint ? (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            className="mb-3"
+          >
+            <div className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-sky-500/10 border border-sky-500/30">
+              <MapPin className="w-4 h-4 text-sky-400" />
+              <span className="text-sm text-sky-300">{geoQuizHint}</span>
+              <Badge variant="warning" size="sm">-50%</Badge>
+            </div>
+          </motion.div>
+        ) : !hasAnswered ? (
+          <motion.div className="mb-3 flex justify-center">
+            <button
+              onClick={handleUseHint}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-800 border border-surface-700 hover:border-sky-500/50 transition-colors"
+            >
+              <Eye className="w-4 h-4 text-sky-400" />
+              <span className="text-sm text-surface-300">Indice</span>
+              <span className="text-xs text-surface-500">(points /2)</span>
+            </button>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+
+      {/* Answer input */}
+      <div className="flex-1 flex flex-col justify-end">
+        {hasAnswered ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center"
+          >
+            <Card className="inline-block">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-success-400" />
+                <div className="text-left">
+                  <p className="text-sm text-surface-400">Ta réponse :</p>
+                  <p className="text-lg font-medium text-surface-100">{answer}</p>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        ) : (
+          <div className="space-y-3">
+            <Input
+              value={answer}
+              onChange={(e) => onChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Nom de la ville..."
+              autoFocus
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+            />
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onSubmit}
+              disabled={!answer.trim()}
+              rightIcon={<Send className="w-5 h-5" />}
+            >
+              Valider
+            </Button>
+          </div>
+        )}
+      </div>
     </>
   );
 }
