@@ -11,6 +11,7 @@ import { GuessingPhaseScreen } from "./guessing-phase-screen";
 import { DrawingRevealScreen } from "./drawing-reveal-screen";
 import { PetitBacValidationScreen } from "./petitbac-validation-screen";
 import { GeoQuizValidationScreen } from "./geoquiz-validation-screen";
+import { LangueValidationScreen } from "./langue-validation-screen";
 import { ScreenContainer } from "@/components/layout";
 import { GAME_MODES } from "@/types";
 
@@ -23,11 +24,13 @@ export function GameScreen() {
   const isDrawingMode = currentGameMode === "drawing";
   const isPetitBac = currentGameMode === "petitbac";
   const isGeoQuiz = currentGameMode === "geoquiz";
+  const isLangue = currentGameMode === "langue";
   const currentModeInfo = GAME_MODES.find((m) => m.id === currentGameMode);
 
   const getPhaseLabel = () => {
     if (isPetitBac && status === "petitbac_validating") return "Validation";
     if (isGeoQuiz && status === "geoquiz_validating") return "Validation";
+    if (isLangue && status === "langue_validating") return "Validation";
     if (!isDrawingMode) return null;
     switch (status) {
       case "drawing": return "Dessine !";
@@ -88,6 +91,7 @@ export function GameScreen() {
           {status === "drawing_reveal" && <DrawingRevealScreen key="drawing-reveal" />}
           {status === "petitbac_validating" && <PetitBacValidationScreen key="petitbac-validation" />}
           {status === "geoquiz_validating" && <GeoQuizValidationScreen key="geoquiz-validation" />}
+          {status === "langue_validating" && <LangueValidationScreen key="langue-validation" />}
         </AnimatePresence>
       </div>
     </ScreenContainer>

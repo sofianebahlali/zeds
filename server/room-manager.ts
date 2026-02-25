@@ -93,7 +93,6 @@ export class RoomManager {
       isConnected: true,
       score: 0,
       roundScore: 0,
-      streak: 0,
     };
 
     room.players.push(newPlayer);
@@ -324,7 +323,6 @@ export class RoomManager {
     room.players.forEach((p) => {
       p.score = 0;
       p.roundScore = 0;
-      p.streak = 0;
     });
     room.currentRound = 0;
   }

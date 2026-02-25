@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData } from "@/types";
 
 // Module-level flag: listeners are attached ONCE across all component instances
 let listenersAttached = false;
@@ -182,6 +182,19 @@ function setupSocketListeners() {
     useGameStore.getState().addGeoQuizAnswerResult(data);
   });
 
+  // Langue events
+  socket.on("langue:validation_start", (data: LangueValidationData) => {
+    useGameStore.getState().setLangueValidation(data);
+  });
+
+  socket.on("langue:validation_result", (_validation: LangueValidationSubmission) => {
+    // round_end follows immediately
+  });
+
+  socket.on("langue:answer_result", (data: LangueAnswerResultData) => {
+    useGameStore.getState().addLangueAnswerResult(data);
+  });
+
   // Connection events
   socket.on("connection:reconnected", (room: Room, player: Player) => {
     useRoomStore.getState().setRoom(room);
@@ -345,6 +358,14 @@ export function useSocket() {
     socket.emit("geoquiz:use_hint");
   }, [socket]);
 
+  const validateLangueAnswer = useCallback((playerId: string, languageCorrect: boolean, meaningCorrect: boolean) => {
+    socket.emit("langue:validate_answer", playerId, languageCorrect, meaningCorrect);
+  }, [socket]);
+
+  const submitLangueValidation = useCallback((validation: LangueValidationSubmission) => {
+    socket.emit("langue:submit_validation", validation);
+  }, [socket]);
+
   return {
     socket,
     connect,
@@ -368,5 +389,7 @@ export function useSocket() {
     submitGeoQuizValidation,
     validateGeoQuizAnswer,
     useGeoQuizHint,
+    validateLangueAnswer,
+    submitLangueValidation,
   };
 }

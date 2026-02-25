@@ -9,6 +9,7 @@ import type {
   GameMode,
   PetitBacValidationSubmission,
   GeoQuizValidationSubmission,
+  LangueValidationSubmission,
 } from "../src/types";
 
 type TypedIO = Server<ClientToServerEvents, ServerToClientEvents>;
@@ -36,7 +37,6 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
           isConnected: true,
           score: 0,
           roundScore: 0,
-          streak: 0,
         };
 
         const room = roomManager.createRoom(player);
@@ -71,7 +71,6 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
           isConnected: true,
           score: 0,
           roundScore: 0,
-          streak: 0,
         };
 
         const room = roomManager.joinRoom(code, player);
@@ -265,6 +264,36 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
       if (!gameEngine) return;
 
       gameEngine.useGeoQuizHint(playerId);
+    });
+
+    // ==========================================
+    // LANGUE EVENTS
+    // ==========================================
+
+    socket.on("langue:submit_validation", (validation) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.submitLangueValidation(validation);
+    });
+
+    socket.on("langue:validate_answer", (targetPlayerId: string, languageCorrect: boolean, meaningCorrect: boolean) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.validateSingleLangueAnswer(targetPlayerId, languageCorrect, meaningCorrect);
     });
 
     // ==========================================

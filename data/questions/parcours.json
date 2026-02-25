@@ -14,7 +14,7 @@
     "acceptedAnswers": ["Valbuena", "Mathieu Valbuena"],
     "difficulty": "easy",
     "nationality": "France",
-    "timeLimit": 30,
+    "timeLimit": 60,
     "points": 100
   },
   {
@@ -51,7 +51,7 @@
     "acceptedAnswers": ["Ben Arfa", "Hatem Ben Arfa", "HBA"],
     "difficulty": "easy",
     "nationality": "France",
-    "timeLimit": 30,
+    "timeLimit": 60,
     "points": 100
   },
   {
@@ -91,7 +91,7 @@
     "acceptedAnswers": ["Ménez", "Menez", "Jérémy Ménez", "Jeremy Menez"],
     "difficulty": "medium",
     "nationality": "France",
-    "timeLimit": 30,
+    "timeLimit": 60,
     "points": 100
   },
   {
@@ -132,7 +132,7 @@
     "acceptedAnswers": ["Rémy", "Remy", "Loïc Rémy", "Loic Remy"],
     "difficulty": "medium",
     "nationality": "France",
-    "timeLimit": 30,
+    "timeLimit": 60,
     "points": 100
   },
   {
@@ -167,7 +167,7 @@
     "acceptedAnswers": ["Sagna", "Bacary Sagna"],
     "difficulty": "easy",
     "nationality": "France",
-    "timeLimit": 30,
+    "timeLimit": 60,
     "points": 100
   },
   {

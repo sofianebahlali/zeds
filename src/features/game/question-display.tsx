@@ -8,7 +8,7 @@ import { Button, Card, Input, TimerProgress, Badge, Avatar } from "@/components/
 import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
-import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion } from "@/types";
+import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion } from "@/types";
 
 export function QuestionDisplay() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
@@ -25,6 +25,8 @@ export function QuestionDisplay() {
   const [parcoursAnswer, setParcoursAnswer] = useState("");
   const [petitBacAnswers, setPetitBacAnswers] = useState<Record<string, string>>({});
   const [geoQuizAnswer, setGeoQuizAnswer] = useState("");
+  const [langueLanguage, setLangueLanguage] = useState("");
+  const [langueMeaning, setLangueMeaning] = useState("");
 
   if (!currentQuestion) return null;
 
@@ -45,6 +47,8 @@ export function QuestionDisplay() {
       submitAnswer(JSON.stringify(petitBacAnswers));
     } else if (currentQuestion.type === "geoquiz" && geoQuizAnswer.trim()) {
       submitAnswer(geoQuizAnswer.trim());
+    } else if (currentQuestion.type === "langue" && (langueLanguage.trim() || langueMeaning.trim())) {
+      submitAnswer(JSON.stringify({ language: langueLanguage.trim(), meaning: langueMeaning.trim() }));
     } else if (textAnswer.trim()) {
       submitAnswer(textAnswer.trim());
     }
@@ -119,6 +123,18 @@ export function QuestionDisplay() {
             answer={geoQuizAnswer}
             hasAnswered={hasAnswered}
             onChange={setGeoQuizAnswer}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "langue" && (
+          <LangueQuestionView
+            question={currentQuestion as LangueQuestion}
+            languageAnswer={langueLanguage}
+            meaningAnswer={langueMeaning}
+            hasAnswered={hasAnswered}
+            onLanguageChange={setLangueLanguage}
+            onMeaningChange={setLangueMeaning}
             onSubmit={handleSubmit}
           />
         )}
@@ -1005,6 +1021,130 @@ function GeoQuizQuestionView({
               fullWidth
               onClick={onSubmit}
               disabled={!answer.trim()}
+              rightIcon={<Send className="w-5 h-5" />}
+            >
+              Valider
+            </Button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ==========================================
+// LANGUE QUESTION VIEW (Devine la Langue)
+// ==========================================
+
+interface LangueQuestionViewProps {
+  question: LangueQuestion;
+  languageAnswer: string;
+  meaningAnswer: string;
+  hasAnswered: boolean;
+  onLanguageChange: (value: string) => void;
+  onMeaningChange: (value: string) => void;
+  onSubmit: () => void;
+}
+
+function LangueQuestionView({
+  question,
+  languageAnswer,
+  meaningAnswer,
+  hasAnswered,
+  onLanguageChange,
+  onMeaningChange,
+  onSubmit,
+}: LangueQuestionViewProps) {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSubmit();
+    }
+  };
+
+  return (
+    <>
+      {/* Header */}
+      <div className="mb-4 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-800 border border-surface-700 mb-3">
+          <span className="text-lg">🗣️</span>
+          <span className="text-xs font-medium text-surface-300">Devine la Langue</span>
+        </div>
+        <h2 className="text-lg sm:text-xl font-display font-bold text-surface-100 text-balance">
+          Quelle langue et que signifie ce mot ?
+        </h2>
+      </div>
+
+      {/* Word display */}
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        className="flex justify-center mb-6"
+      >
+        <div className="px-8 py-6 rounded-2xl bg-gradient-to-br from-rose-500 to-rose-700 shadow-lg">
+          <span className="text-3xl sm:text-4xl font-display font-black text-white">
+            {question.word}
+          </span>
+        </div>
+      </motion.div>
+
+      {/* Two input fields */}
+      <div className="flex-1 flex flex-col justify-end">
+        {hasAnswered ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center"
+          >
+            <Card className="inline-block">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-success-400" />
+                <div className="text-left">
+                  <p className="text-sm text-surface-400">Tes réponses :</p>
+                  <p className="text-base font-medium text-surface-100">
+                    Langue : {languageAnswer || "(vide)"}
+                  </p>
+                  <p className="text-base font-medium text-surface-100">
+                    Sens : {meaningAnswer || "(vide)"}
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        ) : (
+          <div className="space-y-3">
+            <div>
+              <label className="text-xs text-surface-400 mb-1 block">Langue</label>
+              <Input
+                value={languageAnswer}
+                onChange={(e) => onLanguageChange(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Ex: Japonais, Arabe..."
+                autoFocus
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
+              />
+            </div>
+            <div>
+              <label className="text-xs text-surface-400 mb-1 block">Signification</label>
+              <Input
+                value={meaningAnswer}
+                onChange={(e) => onMeaningChange(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Que signifie ce mot ?"
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
+              />
+            </div>
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onSubmit}
+              disabled={!languageAnswer.trim() && !meaningAnswer.trim()}
               rightIcon={<Send className="w-5 h-5" />}
             >
               Valider

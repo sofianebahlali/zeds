@@ -95,11 +95,6 @@ export function LeaderboardDisplay() {
                       <span className="text-xs text-surface-500">(toi)</span>
                     )}
                   </div>
-                  {player.streak >= 3 && (
-                    <span className="text-xs text-accent-400">
-                      Série de {player.streak}
-                    </span>
-                  )}
                 </div>
                 <div className="text-right">
                   <span className="text-2xl font-display font-bold text-surface-100">

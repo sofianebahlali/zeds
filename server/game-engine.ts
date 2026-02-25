@@ -19,6 +19,9 @@ import type {
   GeoQuizQuestion,
   GeoQuizValidationSubmission,
   GeoQuizPlayerAnswerData,
+  LangueQuestion,
+  LangueValidationSubmission,
+  LanguePlayerAnswerData,
   Answer,
   RoundResult,
   ClientToServerEvents,
@@ -70,7 +73,7 @@ const SAMPLE_QUESTIONS: Question[] = [
     answers: ["chien", "le chien", "un chien"],
     caseSensitive: false,
     timeLimit: 20,
-    points: 150,
+    points: 100,
   },
   {
     id: "q5",
@@ -97,7 +100,7 @@ const SAMPLE_QUESTIONS: Question[] = [
     answers: ["mars", "Mars"],
     caseSensitive: false,
     timeLimit: 15,
-    points: 150,
+    points: 100,
   },
   {
     id: "q8",
@@ -124,7 +127,7 @@ const SAMPLE_QUESTIONS: Question[] = [
     answers: ["pomme", "une pomme", "la pomme"],
     caseSensitive: false,
     timeLimit: 15,
-    points: 150,
+    points: 100,
   },
 ];
 
@@ -156,6 +159,12 @@ export class GameEngine {
   private geoQuizAutoValidationTimer: NodeJS.Timeout | null = null;
   private geoQuizDecisions: Map<string, boolean> = new Map();
   private geoQuizPlayerAnswers: GeoQuizPlayerAnswerData[] = [];
+
+  // Langue state
+  private langueValidating: boolean = false;
+  private langueAutoValidationTimer: NodeJS.Timeout | null = null;
+  private langueDecisions: Map<string, { languageCorrect: boolean; meaningCorrect: boolean }> = new Map();
+  private languePlayerAnswers: LanguePlayerAnswerData[] = [];
 
   // Drawing mode state
   private drawingPhase: DrawingPhase = "drawing";
@@ -244,6 +253,20 @@ export class GameEngine {
   }
 
   /**
+   * Load langue questions from JSON file
+   */
+  private static loadLangueQuestions(): Question[] {
+    const filePath = path.resolve(__dirname, "../data/questions/langue.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw) as LangueQuestion[];
+    } catch {
+      console.warn("No langue questions found at", filePath);
+      return [];
+    }
+  }
+
+  /**
    * Normalize text for accent-insensitive comparison
    */
   private static normalizeForComparison(text: string): string {
@@ -320,7 +343,7 @@ export class GameEngine {
             answers: [qcm.options[qcm.correctIndex]],
             caseSensitive: false,
             timeLimit: 20,
-            points: 150,
+            points: 100,
           } as OpenQuestion;
         }
         return q;
@@ -368,6 +391,10 @@ export class GameEngine {
         break;
       case "geoquiz":
         pool = GameEngine.loadGeoQuizQuestions();
+        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
+        break;
+      case "langue":
+        pool = GameEngine.loadLangueQuestions();
         if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
         break;
       case "drawing": {
@@ -562,6 +589,15 @@ export class GameEngine {
         hint: "", // Hide hint (revealed via socket event)
       };
     }
+    if (question.type === "langue") {
+      return {
+        ...question,
+        language: "",
+        meaning: "",
+        acceptedLanguages: [],
+        acceptedMeanings: [],
+      };
+    }
     // petitbac: nothing to hide
     return question;
   }
@@ -647,6 +683,12 @@ export class GameEngine {
       return;
     }
 
+    // Langue: enter host validation phase instead of auto-scoring
+    if (this.currentQuestion.type === "langue") {
+      this.startLangueValidation();
+      return;
+    }
+
     // Calculate scores
     const results = this.calculateScores();
 
@@ -699,39 +741,13 @@ export class GameEngine {
 
       let points = 0;
       if (isCorrect) {
-        // Base points
         points = this.currentQuestion.points;
-
-        // Speed bonus (up to 50% extra for fastest answers)
-        const speedBonus = Math.floor(
-          (this.currentQuestion.timeLimit - (answer.responseTime || 0)) /
-            this.currentQuestion.timeLimit *
-            (this.currentQuestion.points * 0.5)
-        );
-        points += speedBonus;
-
         answer.points = points;
 
         // Track fastest correct answer for winner
         if ((answer.responseTime || Infinity) < fastestCorrectTime) {
           fastestCorrectTime = answer.responseTime || Infinity;
           winner = this.room.players.find((p) => p.id === playerId);
-        }
-
-        // Update streak
-        const player = this.room.players.find((p) => p.id === playerId);
-        if (player) {
-          player.streak++;
-          // Streak bonus
-          if (player.streak >= 3) {
-            points += 50 * Math.min(player.streak - 2, 5);
-          }
-        }
-      } else {
-        // Reset streak on wrong answer
-        const player = this.room.players.find((p) => p.id === playerId);
-        if (player) {
-          player.streak = 0;
         }
       }
 
@@ -749,7 +765,6 @@ export class GameEngine {
     // Players who didn't answer get 0 points
     for (const player of this.room.players) {
       if (!this.answers.has(player.id)) {
-        player.streak = 0;
         scores.push({
           playerId: player.id,
           points: 0,
@@ -786,8 +801,6 @@ export class GameEngine {
       if (isNaN(guess)) {
         answer.isCorrect = false;
         answer.points = 0;
-        const player = this.room.players.find((p) => p.id === playerId);
-        if (player) player.streak = 0;
         const updatedPlayer = this.roomManager.updatePlayerScore(playerId, 0);
         if (updatedPlayer) {
           scores.push({ playerId, points: 0, total: updatedPlayer.score });
@@ -798,25 +811,11 @@ export class GameEngine {
       // Proportional scoring: score = points * max(0, 1 - |guess - real| / real)
       const deviation = Math.abs(guess - realPrice) / realPrice;
       const proximityScore = Math.max(0, 1 - deviation);
-      let points = Math.round(q.points * proximityScore);
+      const points = Math.round(q.points * proximityScore);
 
       // Consider "correct" if within 15% of real price
       answer.isCorrect = deviation <= 0.15;
       answer.points = points;
-
-      // Streak management
-      const player = this.room.players.find((p) => p.id === playerId);
-      if (player) {
-        if (answer.isCorrect) {
-          player.streak++;
-          if (player.streak >= 3) {
-            points += 50 * Math.min(player.streak - 2, 5);
-            answer.points = points;
-          }
-        } else {
-          player.streak = 0;
-        }
-      }
 
       // Track closest guess for winner
       if (deviation < closestDeviation) {
@@ -833,7 +832,6 @@ export class GameEngine {
     // Players who didn't answer
     for (const player of this.room.players) {
       if (!this.answers.has(player.id)) {
-        player.streak = 0;
         scores.push({ playerId: player.id, points: 0, total: player.score });
       }
     }
@@ -865,23 +863,9 @@ export class GameEngine {
       const lcsLen = GameEngine.wordLCS(playerWords, correctWords);
       const accuracy = correctWords.length > 0 ? lcsLen / correctWords.length : 0;
 
-      let points = Math.round(q.points * accuracy);
+      const points = Math.round(q.points * accuracy);
       answer.isCorrect = accuracy >= 0.85;
       answer.points = points;
-
-      // Streak management
-      const player = this.room.players.find((p) => p.id === playerId);
-      if (player) {
-        if (answer.isCorrect) {
-          player.streak++;
-          if (player.streak >= 3) {
-            points += 50 * Math.min(player.streak - 2, 5);
-            answer.points = points;
-          }
-        } else {
-          player.streak = 0;
-        }
-      }
 
       // Track best accuracy for winner
       if (accuracy > bestAccuracy) {
@@ -898,7 +882,6 @@ export class GameEngine {
     // Players who didn't answer
     for (const player of this.room.players) {
       if (!this.answers.has(player.id)) {
-        player.streak = 0;
         scores.push({ playerId: player.id, points: 0, total: player.score });
       }
     }
@@ -940,6 +923,10 @@ export class GameEngine {
         return (this.currentQuestion as PetitBacQuestion).letter;
       case "geoquiz":
         return (this.currentQuestion as GeoQuizQuestion).city;
+      case "langue": {
+        const q = this.currentQuestion as LangueQuestion;
+        return `${q.language} — ${q.meaning}`;
+      }
       default:
         return "";
     }
@@ -992,6 +979,9 @@ export class GameEngine {
         return false;
       case "geoquiz":
         // GeoQuiz scoring is handled manually by host validation
+        return false;
+      case "langue":
+        // Langue scoring is handled manually by host validation
         return false;
       case "parcours": {
         const q = this.currentQuestion as ParcoursQuestion;
@@ -1131,6 +1121,9 @@ export class GameEngine {
 
         totalPoints += sameAnswerCount > 1 ? 50 : 100;
       }
+
+      // Normalize to max 100 points per round
+      totalPoints = Math.round(totalPoints / q.categories.length);
 
       if (answer) {
         answer.points = totalPoints;
@@ -1370,28 +1363,12 @@ export class GameEngine {
 
       let points = 0;
       if (isValidated && answer) {
-        // Base points
         points = q.points;
-
-        // Speed bonus
-        const responseTime = answer.responseTime || q.timeLimit;
-        const speedBonus = Math.floor(
-          (q.timeLimit - responseTime) / q.timeLimit * (q.points * 0.5)
-        );
-        points += speedBonus;
-
-        // Streak bonus
-        player.streak++;
-        if (player.streak >= 3) {
-          points += 50 * Math.min(player.streak - 2, 5);
-        }
 
         // Hint penalty: halve points
         if (this.geoQuizHintUsers.has(player.id)) {
           points = Math.floor(points / 2);
         }
-      } else {
-        player.streak = 0;
       }
 
       if (answer) {
@@ -1417,6 +1394,222 @@ export class GameEngine {
       question: this.currentQuestion!,
       answers: Array.from(this.answers.values()),
       correctAnswer: q.city,
+      winner,
+      scores,
+    };
+  }
+
+  // ==========================================
+  // LANGUE METHODS
+  // ==========================================
+
+  private startLangueValidation(): void {
+    this.langueValidating = true;
+    this.langueDecisions.clear();
+    const q = this.currentQuestion as LangueQuestion;
+    const activePlayers = this.getActivePlayers();
+
+    // Ensure all players have an answer entry
+    for (const player of activePlayers) {
+      if (!this.answers.has(player.id)) {
+        this.answers.set(player.id, {
+          playerId: player.id,
+          questionId: q.id,
+          answer: JSON.stringify({ language: "", meaning: "" }),
+          timestamp: Date.now(),
+        });
+      }
+    }
+
+    this.languePlayerAnswers = activePlayers.map((player) => {
+      const answer = this.answers.get(player.id);
+      let languageAnswer = "";
+      let meaningAnswer = "";
+      if (answer) {
+        try {
+          const parsed = JSON.parse(answer.answer);
+          languageAnswer = parsed.language || "";
+          meaningAnswer = parsed.meaning || "";
+        } catch {
+          languageAnswer = answer.answer || "";
+        }
+      }
+      return {
+        playerId: player.id,
+        playerName: player.name,
+        playerAvatar: player.avatar,
+        languageAnswer,
+        meaningAnswer,
+      };
+    });
+
+    this.io.to(this.room.code).emit("langue:validation_start", {
+      word: q.word,
+      correctLanguage: q.language,
+      correctMeaning: q.meaning,
+      playerAnswers: this.languePlayerAnswers,
+    });
+
+    // Auto-validation timeout: 60 seconds
+    this.langueAutoValidationTimer = setTimeout(() => {
+      if (this.langueValidating) {
+        for (const pa of this.languePlayerAnswers) {
+          if (this.langueDecisions.has(pa.playerId)) continue;
+          if (!pa.languageAnswer && !pa.meaningAnswer) {
+            this.langueDecisions.set(pa.playerId, { languageCorrect: false, meaningCorrect: false });
+            continue;
+          }
+          const langNorm = GameEngine.normalizeForComparison(pa.languageAnswer);
+          const meaningNorm = GameEngine.normalizeForComparison(pa.meaningAnswer);
+          const languageCorrect = q.acceptedLanguages.some(
+            (accepted) => GameEngine.normalizeForComparison(accepted) === langNorm
+          );
+          const meaningCorrect = q.acceptedMeanings.some(
+            (accepted) => GameEngine.normalizeForComparison(accepted) === meaningNorm
+          );
+          this.langueDecisions.set(pa.playerId, { languageCorrect, meaningCorrect });
+          this.io.to(this.room.code).emit("langue:answer_result", {
+            playerId: pa.playerId,
+            playerName: pa.playerName,
+            playerAvatar: pa.playerAvatar,
+            languageAnswer: pa.languageAnswer,
+            meaningAnswer: pa.meaningAnswer,
+            languageCorrect,
+            meaningCorrect,
+          });
+        }
+        setTimeout(() => {
+          this.finalizeLangueFromDecisions();
+        }, 1500);
+      }
+    }, 60000);
+  }
+
+  validateSingleLangueAnswer(playerId: string, languageCorrect: boolean, meaningCorrect: boolean): void {
+    if (!this.langueValidating || !this.currentQuestion) return;
+    if (this.langueDecisions.has(playerId)) return;
+
+    this.langueDecisions.set(playerId, { languageCorrect, meaningCorrect });
+
+    const pa = this.languePlayerAnswers.find((p) => p.playerId === playerId);
+    if (!pa) return;
+
+    this.io.to(this.room.code).emit("langue:answer_result", {
+      playerId: pa.playerId,
+      playerName: pa.playerName,
+      playerAvatar: pa.playerAvatar,
+      languageAnswer: pa.languageAnswer,
+      meaningAnswer: pa.meaningAnswer,
+      languageCorrect,
+      meaningCorrect,
+    });
+
+    // Check if all players with answers have been reviewed
+    const playersToReview = this.languePlayerAnswers.filter(
+      (p) => (p.languageAnswer || "").trim().length > 0 || (p.meaningAnswer || "").trim().length > 0
+    );
+    const allReviewed = playersToReview.every((p) =>
+      this.langueDecisions.has(p.playerId)
+    );
+
+    if (allReviewed) {
+      for (const p of this.languePlayerAnswers) {
+        if (!this.langueDecisions.has(p.playerId)) {
+          this.langueDecisions.set(p.playerId, { languageCorrect: false, meaningCorrect: false });
+        }
+      }
+      setTimeout(() => {
+        this.finalizeLangueFromDecisions();
+      }, 2000);
+    }
+  }
+
+  private finalizeLangueFromDecisions(): void {
+    if (!this.langueValidating) return;
+
+    const results: LangueValidationSubmission["results"] = Array.from(this.langueDecisions.entries())
+      .map(([playerId, decision]) => ({
+        playerId,
+        languageCorrect: decision.languageCorrect,
+        meaningCorrect: decision.meaningCorrect,
+      }));
+
+    this.submitLangueValidation({ results });
+  }
+
+  submitLangueValidation(validation: LangueValidationSubmission): void {
+    if (!this.currentQuestion || !this.langueValidating) return;
+    this.langueValidating = false;
+
+    if (this.langueAutoValidationTimer) {
+      clearTimeout(this.langueAutoValidationTimer);
+      this.langueAutoValidationTimer = null;
+    }
+
+    const q = this.currentQuestion as LangueQuestion;
+    const results = this.calculateLangueScores(q, validation);
+
+    this.io.to(this.room.code).emit("langue:validation_result", validation);
+
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+
+    this.io.to(this.room.code).emit("game:round_end", results);
+
+    setTimeout(() => {
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+
+      if (this.room.settings.showLeaderboardBetweenRounds) {
+        setTimeout(() => {
+          this.nextRound();
+        }, 5000);
+      }
+    }, 3000);
+  }
+
+  private calculateLangueScores(
+    q: LangueQuestion,
+    validation: LangueValidationSubmission
+  ): RoundResult {
+    const scores: { playerId: string; points: number; total: number }[] = [];
+    let bestPoints = 0;
+    let winner: Player | undefined;
+
+    for (const player of this.room.players) {
+      const answer = this.answers.get(player.id);
+      const playerResult = validation.results.find((r) => r.playerId === player.id);
+
+      let points = 0;
+      const langCorrect = playerResult?.languageCorrect || false;
+      const meaningCorrect = playerResult?.meaningCorrect || false;
+      const atLeastOneCorrect = langCorrect || meaningCorrect;
+
+      if (langCorrect) points += 100;
+      if (meaningCorrect) points += 100;
+
+      if (answer) {
+        answer.points = points;
+        answer.isCorrect = atLeastOneCorrect;
+      }
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, points);
+      scores.push({
+        playerId: player.id,
+        points,
+        total: updatedPlayer?.score || player.score,
+      });
+
+      if (points > bestPoints) {
+        bestPoints = points;
+        winner = player;
+      }
+    }
+
+    return {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion!,
+      answers: Array.from(this.answers.values()),
+      correctAnswer: `${q.language} — ${q.meaning}`,
       winner,
       scores,
     };
@@ -1821,6 +2014,10 @@ export class GameEngine {
     if (this.geoQuizAutoValidationTimer) {
       clearTimeout(this.geoQuizAutoValidationTimer);
       this.geoQuizAutoValidationTimer = null;
+    }
+    if (this.langueAutoValidationTimer) {
+      clearTimeout(this.langueAutoValidationTimer);
+      this.langueAutoValidationTimer = null;
     }
   }
 }

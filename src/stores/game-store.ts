@@ -1,10 +1,11 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "drawing" | "guessing" | "drawing_reveal"
   | "petitbac_validating"
-  | "geoquiz_validating";
+  | "geoquiz_validating"
+  | "langue_validating";
 
 interface GameStoreState {
   // Game state
@@ -40,6 +41,10 @@ interface GameStoreState {
   geoQuizAnswerResults: GeoQuizAnswerResultData[];
   geoQuizReviewIndex: number;
 
+  // Langue mode
+  langueValidationData: LangueValidationData | null;
+  langueAnswerResults: LangueAnswerResultData[];
+
   // Actions
   setStatus: (status: GameStatus) => void;
   setCurrentQuestion: (question: Question) => void;
@@ -72,6 +77,10 @@ interface GameStoreState {
   setGeoQuizValidatedPlayerIds: (validation: GeoQuizValidationSubmission) => void;
   setGeoQuizHint: (hint: string) => void;
   addGeoQuizAnswerResult: (result: GeoQuizAnswerResultData) => void;
+
+  // Langue actions
+  setLangueValidation: (data: LangueValidationData) => void;
+  addLangueAnswerResult: (result: LangueAnswerResultData) => void;
 
   // Computed
   getProgress: () => number;
@@ -109,6 +118,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   geoQuizHint: null,
   geoQuizAnswerResults: [],
   geoQuizReviewIndex: 0,
+
+  // Langue initial state
+  langueValidationData: null,
+  langueAnswerResults: [],
 
   // Actions
   setStatus: (status) => set({ status }),
@@ -195,6 +208,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       geoQuizHint: null,
       geoQuizAnswerResults: [],
       geoQuizReviewIndex: 0,
+      langueValidationData: null,
+      langueAnswerResults: [],
     }),
 
   finishGame: () => set({ status: "finished" }),
@@ -224,6 +239,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       geoQuizHint: null,
       geoQuizAnswerResults: [],
       geoQuizReviewIndex: 0,
+      langueValidationData: null,
+      langueAnswerResults: [],
     }),
 
   // Drawing actions
@@ -284,6 +301,17 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   addGeoQuizAnswerResult: (result) => set((state) => ({
     geoQuizAnswerResults: [...state.geoQuizAnswerResults, result],
+  })),
+
+  // Langue actions
+  setLangueValidation: (data) => set({
+    langueValidationData: data,
+    langueAnswerResults: [],
+    status: "langue_validating",
+  }),
+
+  addLangueAnswerResult: (result) => set((state) => ({
+    langueAnswerResults: [...state.langueAnswerResults, result],
   })),
 
   // Computed

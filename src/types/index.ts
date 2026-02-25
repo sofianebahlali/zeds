@@ -11,7 +11,6 @@ export interface Player {
   isConnected: boolean;
   score: number;
   roundScore: number;
-  streak: number;
   lastAnswerTime?: number;
 }
 
@@ -39,7 +38,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -217,7 +216,50 @@ export interface PetitBacValidationSubmission {
   validatedAnswers: Record<string, string[]>;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion;
+export interface LangueQuestion extends BaseQuestion {
+  type: "langue";
+  word: string;
+  language: string;
+  meaning: string;
+  acceptedLanguages: string[];
+  acceptedMeanings: string[];
+  difficulty: "easy" | "medium" | "hard";
+}
+
+export interface LanguePlayerAnswerData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  languageAnswer: string;
+  meaningAnswer: string;
+}
+
+export interface LangueValidationData {
+  word: string;
+  correctLanguage: string;
+  correctMeaning: string;
+  playerAnswers: LanguePlayerAnswerData[];
+}
+
+export interface LangueValidationSubmission {
+  results: {
+    playerId: string;
+    languageCorrect: boolean;
+    meaningCorrect: boolean;
+  }[];
+}
+
+export interface LangueAnswerResultData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  languageAnswer: string;
+  meaningAnswer: string;
+  languageCorrect: boolean;
+  meaningCorrect: boolean;
+}
+
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -343,6 +385,11 @@ export interface ServerToClientEvents {
   "geoquiz:hint_revealed": (hint: string) => void;
   "geoquiz:answer_result": (data: GeoQuizAnswerResultData) => void;
 
+  // Langue events
+  "langue:validation_start": (data: LangueValidationData) => void;
+  "langue:validation_result": (validation: LangueValidationSubmission) => void;
+  "langue:answer_result": (data: LangueAnswerResultData) => void;
+
   // Connection events
   "connection:reconnected": (room: Room, player: Player) => void;
   "connection:player_disconnected": (playerId: string) => void;
@@ -377,6 +424,10 @@ export interface ClientToServerEvents {
   "geoquiz:submit_validation": (validation: GeoQuizValidationSubmission) => void;
   "geoquiz:validate_answer": (playerId: string, accepted: boolean) => void;
   "geoquiz:use_hint": () => void;
+
+  // Langue events
+  "langue:submit_validation": (validation: LangueValidationSubmission) => void;
+  "langue:validate_answer": (playerId: string, languageCorrect: boolean, meaningCorrect: boolean) => void;
 
   // Connection events
   "connection:reconnect": (roomCode: string, playerId: string) => void;
@@ -497,5 +548,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Reconnais le lieu et trouve la ville",
     icon: "🌍",
     color: "from-sky-500 to-sky-700",
+  },
+  {
+    id: "langue",
+    name: "Devine la Langue",
+    description: "Devine la langue et la signification du mot",
+    icon: "🗣️",
+    color: "from-rose-500 to-rose-700",
   },
 ];

@@ -14,7 +14,6 @@ interface PlayerState {
   isReady: boolean;
   score: number;
   roundScore: number;
-  streak: number;
 
   // Actions
   setPlayerName: (name: string) => void;
@@ -23,8 +22,6 @@ interface PlayerState {
   setIsReady: (isReady: boolean) => void;
   updateScore: (points: number) => void;
   setRoundScore: (points: number) => void;
-  incrementStreak: () => void;
-  resetStreak: () => void;
   resetSession: () => void;
   resetAll: () => void;
   getPlayer: () => Player;
@@ -43,7 +40,6 @@ export const usePlayerStore = create<PlayerState>()(
       isReady: false,
       score: 0,
       roundScore: 0,
-      streak: 0,
 
       // Actions
       setPlayerName: (name) => set({ playerName: name.trim() }),
@@ -59,18 +55,12 @@ export const usePlayerStore = create<PlayerState>()(
 
       setRoundScore: (points) => set({ roundScore: points }),
 
-      incrementStreak: () =>
-        set((state) => ({ streak: state.streak + 1 })),
-
-      resetStreak: () => set({ streak: 0 }),
-
       resetSession: () =>
         set({
           isHost: false,
           isReady: false,
           score: 0,
           roundScore: 0,
-          streak: 0,
         }),
 
       resetAll: () =>
@@ -82,7 +72,6 @@ export const usePlayerStore = create<PlayerState>()(
           isReady: false,
           score: 0,
           roundScore: 0,
-          streak: 0,
         }),
 
       getPlayer: () => {
@@ -96,7 +85,6 @@ export const usePlayerStore = create<PlayerState>()(
           isConnected: true,
           score: state.score,
           roundScore: state.roundScore,
-          streak: state.streak,
         };
       },
     }),

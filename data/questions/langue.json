@@ -1,0 +1,7570 @@
+[
+  {
+    "id": "langue-001",
+    "type": "langue",
+    "word": "Konnichiwa",
+    "language": "Japonais",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Salut",
+      "salut",
+      "Hello",
+      "hello"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-002",
+    "type": "langue",
+    "word": "Arigatou",
+    "language": "Japonais",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Remerciement",
+      "remerciement"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-003",
+    "type": "langue",
+    "word": "Sakura",
+    "language": "Japonais",
+    "meaning": "Cerisier",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Cerisier",
+      "cerisier",
+      "Fleur de cerisier",
+      "fleur de cerisier",
+      "Cherry blossom",
+      "cherry blossom"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-004",
+    "type": "langue",
+    "word": "Neko",
+    "language": "Japonais",
+    "meaning": "Chat",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Chat",
+      "chat",
+      "Minou",
+      "minou"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-005",
+    "type": "langue",
+    "word": "Inu",
+    "language": "Japonais",
+    "meaning": "Chien",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Chien",
+      "chien"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-006",
+    "type": "langue",
+    "word": "Kawaii",
+    "language": "Japonais",
+    "meaning": "Mignon",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Mignon",
+      "mignon",
+      "Adorable",
+      "adorable",
+      "Cute",
+      "cute"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-007",
+    "type": "langue",
+    "word": "Sayonara",
+    "language": "Japonais",
+    "meaning": "Au revoir",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Au revoir",
+      "au revoir",
+      "Adieu",
+      "adieu",
+      "Goodbye",
+      "goodbye"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-008",
+    "type": "langue",
+    "word": "Yama",
+    "language": "Japonais",
+    "meaning": "Montagne",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Montagne",
+      "montagne",
+      "Mountain",
+      "mountain"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-009",
+    "type": "langue",
+    "word": "Mizu",
+    "language": "Japonais",
+    "meaning": "Eau",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Eau",
+      "eau",
+      "Water",
+      "water"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-010",
+    "type": "langue",
+    "word": "Tsuki",
+    "language": "Japonais",
+    "meaning": "Lune",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Lune",
+      "lune",
+      "Moon",
+      "moon"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-011",
+    "type": "langue",
+    "word": "Kaze",
+    "language": "Japonais",
+    "meaning": "Vent",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Vent",
+      "vent",
+      "Wind",
+      "wind"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-012",
+    "type": "langue",
+    "word": "Hoshi",
+    "language": "Japonais",
+    "meaning": "Etoile",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Etoile",
+      "etoile",
+      "Star",
+      "star"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-013",
+    "type": "langue",
+    "word": "Yuki",
+    "language": "Japonais",
+    "meaning": "Neige",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Neige",
+      "neige",
+      "Snow",
+      "snow"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-014",
+    "type": "langue",
+    "word": "Sensei",
+    "language": "Japonais",
+    "meaning": "Professeur",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Professeur",
+      "professeur",
+      "Maitre",
+      "maitre",
+      "Teacher",
+      "teacher"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-015",
+    "type": "langue",
+    "word": "Tomodachi",
+    "language": "Japonais",
+    "meaning": "Ami",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Ami",
+      "ami",
+      "Copain",
+      "copain",
+      "Friend",
+      "friend"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-016",
+    "type": "langue",
+    "word": "Sumimasen",
+    "language": "Japonais",
+    "meaning": "Excusez-moi",
+    "acceptedLanguages": [
+      "Japonais",
+      "japonais",
+      "Japanese",
+      "japanese"
+    ],
+    "acceptedMeanings": [
+      "Excusez-moi",
+      "excusez-moi",
+      "Pardon",
+      "pardon",
+      "Excuse me",
+      "excuse me"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-017",
+    "type": "langue",
+    "word": "Schmetterling",
+    "language": "Allemand",
+    "meaning": "Papillon",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Papillon",
+      "papillon",
+      "Butterfly",
+      "butterfly"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-018",
+    "type": "langue",
+    "word": "Handschuh",
+    "language": "Allemand",
+    "meaning": "Gant",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Gant",
+      "gant",
+      "Glove",
+      "glove"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-019",
+    "type": "langue",
+    "word": "Krankenwagen",
+    "language": "Allemand",
+    "meaning": "Ambulance",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Ambulance",
+      "ambulance"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-020",
+    "type": "langue",
+    "word": "Kindergarten",
+    "language": "Allemand",
+    "meaning": "Jardin d'enfants",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Jardin d'enfants",
+      "jardin d'enfants",
+      "Ecole maternelle",
+      "ecole maternelle",
+      "Maternelle",
+      "maternelle"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-021",
+    "type": "langue",
+    "word": "Wanderlust",
+    "language": "Allemand",
+    "meaning": "Envie de voyager",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Envie de voyager",
+      "envie de voyager",
+      "Soif de voyage",
+      "soif de voyage",
+      "Desir de voyager",
+      "desir de voyager"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-022",
+    "type": "langue",
+    "word": "Schadenfreude",
+    "language": "Allemand",
+    "meaning": "Joie du malheur d'autrui",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Joie du malheur d'autrui",
+      "joie du malheur d'autrui",
+      "Plaisir malveillant",
+      "plaisir malveillant"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-023",
+    "type": "langue",
+    "word": "Zeitgeist",
+    "language": "Allemand",
+    "meaning": "Esprit du temps",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Esprit du temps",
+      "esprit du temps",
+      "Air du temps",
+      "air du temps"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-024",
+    "type": "langue",
+    "word": "Dummkopf",
+    "language": "Allemand",
+    "meaning": "Idiot",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Idiot",
+      "idiot",
+      "Imbecile",
+      "imbecile",
+      "Stupide",
+      "stupide",
+      "Bete",
+      "bete"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-025",
+    "type": "langue",
+    "word": "Gemutlichkeit",
+    "language": "Allemand",
+    "meaning": "Convivialite",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Convivialite",
+      "convivialite",
+      "Ambiance chaleureuse",
+      "ambiance chaleureuse",
+      "Confort",
+      "confort"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-026",
+    "type": "langue",
+    "word": "Kartoffel",
+    "language": "Allemand",
+    "meaning": "Pomme de terre",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Pomme de terre",
+      "pomme de terre",
+      "Patate",
+      "patate",
+      "Potato",
+      "potato"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-027",
+    "type": "langue",
+    "word": "Eichhornchen",
+    "language": "Allemand",
+    "meaning": "Ecureuil",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Ecureuil",
+      "ecureuil",
+      "Squirrel",
+      "squirrel"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-028",
+    "type": "langue",
+    "word": "Kugelschreiber",
+    "language": "Allemand",
+    "meaning": "Stylo a bille",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Stylo a bille",
+      "stylo a bille",
+      "Stylo",
+      "stylo",
+      "Pen",
+      "pen"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-029",
+    "type": "langue",
+    "word": "Danke",
+    "language": "Allemand",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-030",
+    "type": "langue",
+    "word": "Entschuldigung",
+    "language": "Allemand",
+    "meaning": "Excusez-moi",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Excusez-moi",
+      "excusez-moi",
+      "Pardon",
+      "pardon",
+      "Sorry",
+      "sorry"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-031",
+    "type": "langue",
+    "word": "Fernweh",
+    "language": "Allemand",
+    "meaning": "Mal du voyage",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Mal du voyage",
+      "mal du voyage",
+      "Nostalgie des voyages",
+      "nostalgie des voyages"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-032",
+    "type": "langue",
+    "word": "Ohrwurm",
+    "language": "Allemand",
+    "meaning": "Chanson qui reste en tete",
+    "acceptedLanguages": [
+      "Allemand",
+      "allemand",
+      "German",
+      "german"
+    ],
+    "acceptedMeanings": [
+      "Chanson qui reste en tete",
+      "chanson qui reste en tete",
+      "Ver d'oreille",
+      "ver d'oreille",
+      "Earworm",
+      "earworm"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-033",
+    "type": "langue",
+    "word": "Mariposa",
+    "language": "Espagnol",
+    "meaning": "Papillon",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Papillon",
+      "papillon",
+      "Butterfly",
+      "butterfly"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-034",
+    "type": "langue",
+    "word": "Corazon",
+    "language": "Espagnol",
+    "meaning": "Coeur",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Coeur",
+      "coeur",
+      "Heart",
+      "heart"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-035",
+    "type": "langue",
+    "word": "Estrella",
+    "language": "Espagnol",
+    "meaning": "Etoile",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Etoile",
+      "etoile",
+      "Star",
+      "star"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-036",
+    "type": "langue",
+    "word": "Playa",
+    "language": "Espagnol",
+    "meaning": "Plage",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Plage",
+      "plage",
+      "Beach",
+      "beach"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-037",
+    "type": "langue",
+    "word": "Cerveza",
+    "language": "Espagnol",
+    "meaning": "Biere",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Biere",
+      "biere",
+      "Beer",
+      "beer"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-038",
+    "type": "langue",
+    "word": "Hola",
+    "language": "Espagnol",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Salut",
+      "salut",
+      "Hello",
+      "hello"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-039",
+    "type": "langue",
+    "word": "Gracias",
+    "language": "Espagnol",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-040",
+    "type": "langue",
+    "word": "Perro",
+    "language": "Espagnol",
+    "meaning": "Chien",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Chien",
+      "chien",
+      "Dog",
+      "dog"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-041",
+    "type": "langue",
+    "word": "Gato",
+    "language": "Espagnol",
+    "meaning": "Chat",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Chat",
+      "chat",
+      "Cat",
+      "cat"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-042",
+    "type": "langue",
+    "word": "Tortuga",
+    "language": "Espagnol",
+    "meaning": "Tortue",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Tortue",
+      "tortue",
+      "Turtle",
+      "turtle"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-043",
+    "type": "langue",
+    "word": "Fuego",
+    "language": "Espagnol",
+    "meaning": "Feu",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Feu",
+      "feu",
+      "Fire",
+      "fire",
+      "Flamme",
+      "flamme"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-044",
+    "type": "langue",
+    "word": "Nube",
+    "language": "Espagnol",
+    "meaning": "Nuage",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Nuage",
+      "nuage",
+      "Cloud",
+      "cloud"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-045",
+    "type": "langue",
+    "word": "Hormiga",
+    "language": "Espagnol",
+    "meaning": "Fourmi",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Fourmi",
+      "fourmi",
+      "Ant",
+      "ant"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-046",
+    "type": "langue",
+    "word": "Amigo",
+    "language": "Espagnol",
+    "meaning": "Ami",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Ami",
+      "ami",
+      "Copain",
+      "copain",
+      "Friend",
+      "friend"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-047",
+    "type": "langue",
+    "word": "Biblioteca",
+    "language": "Espagnol",
+    "meaning": "Bibliotheque",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Bibliotheque",
+      "bibliotheque",
+      "Library",
+      "library"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-048",
+    "type": "langue",
+    "word": "Abeja",
+    "language": "Espagnol",
+    "meaning": "Abeille",
+    "acceptedLanguages": [
+      "Espagnol",
+      "espagnol",
+      "Spanish",
+      "spanish"
+    ],
+    "acceptedMeanings": [
+      "Abeille",
+      "abeille",
+      "Bee",
+      "bee"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-049",
+    "type": "langue",
+    "word": "Farfalla",
+    "language": "Italien",
+    "meaning": "Papillon",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "Papillon",
+      "papillon",
+      "Butterfly",
+      "butterfly"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-050",
+    "type": "langue",
+    "word": "Buongiorno",
+    "language": "Italien",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Hello",
+      "hello",
+      "Salut",
+      "salut"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-051",
+    "type": "langue",
+    "word": "Grazie",
+    "language": "Italien",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-052",
+    "type": "langue",
+    "word": "Amore",
+    "language": "Italien",
+    "meaning": "Amour",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "Amour",
+      "amour",
+      "Love",
+      "love"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-053",
+    "type": "langue",
+    "word": "Gelato",
+    "language": "Italien",
+    "meaning": "Glace",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "Glace",
+      "glace",
+      "Ice cream",
+      "ice cream",
+      "Creme glacee",
+      "creme glacee"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-054",
+    "type": "langue",
+    "word": "Cielo",
+    "language": "Italien",
+    "meaning": "Ciel",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "Ciel",
+      "ciel",
+      "Sky",
+      "sky"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-055",
+    "type": "langue",
+    "word": "Ragazzo",
+    "language": "Italien",
+    "meaning": "Garcon",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "Garcon",
+      "garcon",
+      "Boy",
+      "boy",
+      "Jeune homme",
+      "jeune homme"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-056",
+    "type": "langue",
+    "word": "Finestra",
+    "language": "Italien",
+    "meaning": "Fenetre",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "Fenetre",
+      "fenetre",
+      "Window",
+      "window"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-057",
+    "type": "langue",
+    "word": "Spiaggia",
+    "language": "Italien",
+    "meaning": "Plage",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "Plage",
+      "plage",
+      "Beach",
+      "beach"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-058",
+    "type": "langue",
+    "word": "Bellissimo",
+    "language": "Italien",
+    "meaning": "Tres beau",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "Tres beau",
+      "tres beau",
+      "Magnifique",
+      "magnifique",
+      "Superbe",
+      "superbe",
+      "Beautiful",
+      "beautiful"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-059",
+    "type": "langue",
+    "word": "Prego",
+    "language": "Italien",
+    "meaning": "De rien",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "De rien",
+      "de rien",
+      "Je vous en prie",
+      "je vous en prie",
+      "You're welcome",
+      "you're welcome"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-060",
+    "type": "langue",
+    "word": "Ciao",
+    "language": "Italien",
+    "meaning": "Salut",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "Salut",
+      "salut",
+      "Bonjour",
+      "bonjour",
+      "Au revoir",
+      "au revoir",
+      "Hello",
+      "hello"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-061",
+    "type": "langue",
+    "word": "Gatto",
+    "language": "Italien",
+    "meaning": "Chat",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "Chat",
+      "chat",
+      "Cat",
+      "cat"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-062",
+    "type": "langue",
+    "word": "Dolce",
+    "language": "Italien",
+    "meaning": "Doux",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "Doux",
+      "doux",
+      "Sucre",
+      "sucre",
+      "Sweet",
+      "sweet"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-063",
+    "type": "langue",
+    "word": "Tempesta",
+    "language": "Italien",
+    "meaning": "Tempete",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "Tempete",
+      "tempete",
+      "Orage",
+      "orage",
+      "Storm",
+      "storm"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-064",
+    "type": "langue",
+    "word": "Scimmia",
+    "language": "Italien",
+    "meaning": "Singe",
+    "acceptedLanguages": [
+      "Italien",
+      "italien",
+      "Italian",
+      "italian"
+    ],
+    "acceptedMeanings": [
+      "Singe",
+      "singe",
+      "Monkey",
+      "monkey"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-065",
+    "type": "langue",
+    "word": "Obrigado",
+    "language": "Portugais",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-066",
+    "type": "langue",
+    "word": "Saudade",
+    "language": "Portugais",
+    "meaning": "Nostalgie",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Nostalgie",
+      "nostalgie",
+      "Melancolie",
+      "melancolie",
+      "Manque",
+      "manque"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-067",
+    "type": "langue",
+    "word": "Borboleta",
+    "language": "Portugais",
+    "meaning": "Papillon",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Papillon",
+      "papillon",
+      "Butterfly",
+      "butterfly"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-068",
+    "type": "langue",
+    "word": "Cachorro",
+    "language": "Portugais",
+    "meaning": "Chien",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Chien",
+      "chien",
+      "Dog",
+      "dog",
+      "Chiot",
+      "chiot"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-069",
+    "type": "langue",
+    "word": "Abacaxi",
+    "language": "Portugais",
+    "meaning": "Ananas",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Ananas",
+      "ananas",
+      "Pineapple",
+      "pineapple"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-070",
+    "type": "langue",
+    "word": "Praia",
+    "language": "Portugais",
+    "meaning": "Plage",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Plage",
+      "plage",
+      "Beach",
+      "beach"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-071",
+    "type": "langue",
+    "word": "Estrela",
+    "language": "Portugais",
+    "meaning": "Etoile",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Etoile",
+      "etoile",
+      "Star",
+      "star"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-072",
+    "type": "langue",
+    "word": "Floresta",
+    "language": "Portugais",
+    "meaning": "Foret",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Foret",
+      "foret",
+      "Forest",
+      "forest"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-073",
+    "type": "langue",
+    "word": "Chuva",
+    "language": "Portugais",
+    "meaning": "Pluie",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Pluie",
+      "pluie",
+      "Rain",
+      "rain"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-074",
+    "type": "langue",
+    "word": "Coracao",
+    "language": "Portugais",
+    "meaning": "Coeur",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Coeur",
+      "coeur",
+      "Heart",
+      "heart"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-075",
+    "type": "langue",
+    "word": "Bom dia",
+    "language": "Portugais",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Hello",
+      "hello",
+      "Salut",
+      "salut"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-076",
+    "type": "langue",
+    "word": "Gelo",
+    "language": "Portugais",
+    "meaning": "Glace",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Glace",
+      "glace",
+      "Ice",
+      "ice"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-077",
+    "type": "langue",
+    "word": "Tartaruga",
+    "language": "Portugais",
+    "meaning": "Tortue",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Tortue",
+      "tortue",
+      "Turtle",
+      "turtle"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-078",
+    "type": "langue",
+    "word": "Janela",
+    "language": "Portugais",
+    "meaning": "Fenetre",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Fenetre",
+      "fenetre",
+      "Window",
+      "window"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-079",
+    "type": "langue",
+    "word": "Fogo",
+    "language": "Portugais",
+    "meaning": "Feu",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Feu",
+      "feu",
+      "Fire",
+      "fire"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-080",
+    "type": "langue",
+    "word": "Paixao",
+    "language": "Portugais",
+    "meaning": "Passion",
+    "acceptedLanguages": [
+      "Portugais",
+      "portugais",
+      "Portuguese",
+      "portuguese"
+    ],
+    "acceptedMeanings": [
+      "Passion",
+      "passion"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-081",
+    "type": "langue",
+    "word": "Salam",
+    "language": "Arabe",
+    "meaning": "Paix",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "Paix",
+      "paix",
+      "Peace",
+      "peace",
+      "Salut",
+      "salut"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-082",
+    "type": "langue",
+    "word": "Shukran",
+    "language": "Arabe",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-083",
+    "type": "langue",
+    "word": "Habibi",
+    "language": "Arabe",
+    "meaning": "Mon amour",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "Mon amour",
+      "mon amour",
+      "Cheri",
+      "cheri",
+      "Mon cheri",
+      "mon cheri",
+      "My love",
+      "my love"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-084",
+    "type": "langue",
+    "word": "Inshallah",
+    "language": "Arabe",
+    "meaning": "Si Dieu le veut",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "Si Dieu le veut",
+      "si dieu le veut",
+      "God willing",
+      "god willing"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-085",
+    "type": "langue",
+    "word": "Yalla",
+    "language": "Arabe",
+    "meaning": "Allez",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "Allez",
+      "allez",
+      "Let's go",
+      "let's go",
+      "Allons-y",
+      "allons-y",
+      "Viens",
+      "viens"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-086",
+    "type": "langue",
+    "word": "Maktub",
+    "language": "Arabe",
+    "meaning": "C'est ecrit",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "C'est ecrit",
+      "c'est ecrit",
+      "Destin",
+      "destin",
+      "It is written",
+      "it is written"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-087",
+    "type": "langue",
+    "word": "Qamar",
+    "language": "Arabe",
+    "meaning": "Lune",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "Lune",
+      "lune",
+      "Moon",
+      "moon"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-088",
+    "type": "langue",
+    "word": "Shams",
+    "language": "Arabe",
+    "meaning": "Soleil",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "Soleil",
+      "soleil",
+      "Sun",
+      "sun"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-089",
+    "type": "langue",
+    "word": "Bahr",
+    "language": "Arabe",
+    "meaning": "Mer",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "Mer",
+      "mer",
+      "Sea",
+      "sea",
+      "Ocean",
+      "ocean"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-090",
+    "type": "langue",
+    "word": "Kitab",
+    "language": "Arabe",
+    "meaning": "Livre",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "Livre",
+      "livre",
+      "Book",
+      "book"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-091",
+    "type": "langue",
+    "word": "Kalb",
+    "language": "Arabe",
+    "meaning": "Chien",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "Chien",
+      "chien",
+      "Dog",
+      "dog"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-092",
+    "type": "langue",
+    "word": "Sabah al-kheir",
+    "language": "Arabe",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Good morning",
+      "good morning",
+      "Salut",
+      "salut"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-093",
+    "type": "langue",
+    "word": "Maa",
+    "language": "Arabe",
+    "meaning": "Eau",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "Eau",
+      "eau",
+      "Water",
+      "water"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-094",
+    "type": "langue",
+    "word": "Hayat",
+    "language": "Arabe",
+    "meaning": "Vie",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "Vie",
+      "vie",
+      "Life",
+      "life"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-095",
+    "type": "langue",
+    "word": "Jannah",
+    "language": "Arabe",
+    "meaning": "Paradis",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "Paradis",
+      "paradis",
+      "Paradise",
+      "paradise",
+      "Heaven",
+      "heaven"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-096",
+    "type": "langue",
+    "word": "Warda",
+    "language": "Arabe",
+    "meaning": "Rose",
+    "acceptedLanguages": [
+      "Arabe",
+      "arabe",
+      "Arabic",
+      "arabic"
+    ],
+    "acceptedMeanings": [
+      "Rose",
+      "rose",
+      "Fleur",
+      "fleur",
+      "Flower",
+      "flower"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-097",
+    "type": "langue",
+    "word": "Spasibo",
+    "language": "Russe",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-098",
+    "type": "langue",
+    "word": "Privet",
+    "language": "Russe",
+    "meaning": "Salut",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Salut",
+      "salut",
+      "Bonjour",
+      "bonjour",
+      "Hello",
+      "hello"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-099",
+    "type": "langue",
+    "word": "Da",
+    "language": "Russe",
+    "meaning": "Oui",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Oui",
+      "oui",
+      "Yes",
+      "yes"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-100",
+    "type": "langue",
+    "word": "Nyet",
+    "language": "Russe",
+    "meaning": "Non",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Non",
+      "non",
+      "No",
+      "no"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-101",
+    "type": "langue",
+    "word": "Babushka",
+    "language": "Russe",
+    "meaning": "Grand-mere",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Grand-mere",
+      "grand-mere",
+      "Mamie",
+      "mamie",
+      "Grandmother",
+      "grandmother"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-102",
+    "type": "langue",
+    "word": "Vodka",
+    "language": "Russe",
+    "meaning": "Petite eau",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Petite eau",
+      "petite eau",
+      "Eau-de-vie",
+      "eau-de-vie"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-103",
+    "type": "langue",
+    "word": "Kosmos",
+    "language": "Russe",
+    "meaning": "Cosmos",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Cosmos",
+      "cosmos",
+      "Espace",
+      "espace",
+      "Space",
+      "space",
+      "Universe",
+      "universe"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-104",
+    "type": "langue",
+    "word": "Sputnik",
+    "language": "Russe",
+    "meaning": "Compagnon de route",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Compagnon de route",
+      "compagnon de route",
+      "Satellite",
+      "satellite",
+      "Companion",
+      "companion"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-105",
+    "type": "langue",
+    "word": "Matryoshka",
+    "language": "Russe",
+    "meaning": "Poupee gigogne",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Poupee gigogne",
+      "poupee gigogne",
+      "Poupee russe",
+      "poupee russe",
+      "Russian doll",
+      "russian doll"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-106",
+    "type": "langue",
+    "word": "Sobaka",
+    "language": "Russe",
+    "meaning": "Chien",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Chien",
+      "chien",
+      "Dog",
+      "dog"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-107",
+    "type": "langue",
+    "word": "Koshka",
+    "language": "Russe",
+    "meaning": "Chat",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Chat",
+      "chat",
+      "Cat",
+      "cat"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-108",
+    "type": "langue",
+    "word": "Moloko",
+    "language": "Russe",
+    "meaning": "Lait",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Lait",
+      "lait",
+      "Milk",
+      "milk"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-109",
+    "type": "langue",
+    "word": "Solntse",
+    "language": "Russe",
+    "meaning": "Soleil",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Soleil",
+      "soleil",
+      "Sun",
+      "sun"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-110",
+    "type": "langue",
+    "word": "Lyubov",
+    "language": "Russe",
+    "meaning": "Amour",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Amour",
+      "amour",
+      "Love",
+      "love"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-111",
+    "type": "langue",
+    "word": "Khleb",
+    "language": "Russe",
+    "meaning": "Pain",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Pain",
+      "pain",
+      "Bread",
+      "bread"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-112",
+    "type": "langue",
+    "word": "Zdorovo",
+    "language": "Russe",
+    "meaning": "Super",
+    "acceptedLanguages": [
+      "Russe",
+      "russe",
+      "Russian",
+      "russian"
+    ],
+    "acceptedMeanings": [
+      "Super",
+      "super",
+      "Genial",
+      "genial",
+      "Cool",
+      "cool",
+      "Great",
+      "great"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-113",
+    "type": "langue",
+    "word": "Nihao",
+    "language": "Chinois",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Hello",
+      "hello",
+      "Salut",
+      "salut"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-114",
+    "type": "langue",
+    "word": "Xie xie",
+    "language": "Chinois",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-115",
+    "type": "langue",
+    "word": "Zaijian",
+    "language": "Chinois",
+    "meaning": "Au revoir",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "Au revoir",
+      "au revoir",
+      "Goodbye",
+      "goodbye",
+      "Adieu",
+      "adieu"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-116",
+    "type": "langue",
+    "word": "Pengyou",
+    "language": "Chinois",
+    "meaning": "Ami",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "Ami",
+      "ami",
+      "Friend",
+      "friend",
+      "Copain",
+      "copain"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-117",
+    "type": "langue",
+    "word": "Meili",
+    "language": "Chinois",
+    "meaning": "Beaute",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "Beaute",
+      "beaute",
+      "Beautiful",
+      "beautiful",
+      "Beau",
+      "beau",
+      "Belle",
+      "belle"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-118",
+    "type": "langue",
+    "word": "Ai",
+    "language": "Chinois",
+    "meaning": "Amour",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "Amour",
+      "amour",
+      "Love",
+      "love"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-119",
+    "type": "langue",
+    "word": "Long",
+    "language": "Chinois",
+    "meaning": "Dragon",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "Dragon",
+      "dragon"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-120",
+    "type": "langue",
+    "word": "Mao",
+    "language": "Chinois",
+    "meaning": "Chat",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "Chat",
+      "chat",
+      "Cat",
+      "cat"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-121",
+    "type": "langue",
+    "word": "Gou",
+    "language": "Chinois",
+    "meaning": "Chien",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "Chien",
+      "chien",
+      "Dog",
+      "dog"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-122",
+    "type": "langue",
+    "word": "Yue",
+    "language": "Chinois",
+    "meaning": "Lune",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "Lune",
+      "lune",
+      "Moon",
+      "moon"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-123",
+    "type": "langue",
+    "word": "Shan",
+    "language": "Chinois",
+    "meaning": "Montagne",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "Montagne",
+      "montagne",
+      "Mountain",
+      "mountain"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-124",
+    "type": "langue",
+    "word": "Shui",
+    "language": "Chinois",
+    "meaning": "Eau",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "Eau",
+      "eau",
+      "Water",
+      "water"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-125",
+    "type": "langue",
+    "word": "Hua",
+    "language": "Chinois",
+    "meaning": "Fleur",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "Fleur",
+      "fleur",
+      "Flower",
+      "flower"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-126",
+    "type": "langue",
+    "word": "Gongfu",
+    "language": "Chinois",
+    "meaning": "Maitrise",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "Maitrise",
+      "maitrise",
+      "Kung-fu",
+      "kung-fu",
+      "Talent",
+      "talent",
+      "Skill",
+      "skill"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-127",
+    "type": "langue",
+    "word": "Cha",
+    "language": "Chinois",
+    "meaning": "The",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "The",
+      "the",
+      "Tea",
+      "tea"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-128",
+    "type": "langue",
+    "word": "Taiyang",
+    "language": "Chinois",
+    "meaning": "Soleil",
+    "acceptedLanguages": [
+      "Chinois",
+      "chinois",
+      "Mandarin",
+      "mandarin",
+      "Chinese",
+      "chinese"
+    ],
+    "acceptedMeanings": [
+      "Soleil",
+      "soleil",
+      "Sun",
+      "sun"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-129",
+    "type": "langue",
+    "word": "Annyeonghaseyo",
+    "language": "Coreen",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Hello",
+      "hello",
+      "Salut",
+      "salut"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-130",
+    "type": "langue",
+    "word": "Kamsahamnida",
+    "language": "Coreen",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-131",
+    "type": "langue",
+    "word": "Saranghae",
+    "language": "Coreen",
+    "meaning": "Je t'aime",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Je t'aime",
+      "je t'aime",
+      "I love you",
+      "i love you",
+      "Amour",
+      "amour"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-132",
+    "type": "langue",
+    "word": "Oppa",
+    "language": "Coreen",
+    "meaning": "Grand frere",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Grand frere",
+      "grand frere",
+      "Frere aine",
+      "frere aine",
+      "Big brother",
+      "big brother"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-133",
+    "type": "langue",
+    "word": "Aigoo",
+    "language": "Coreen",
+    "meaning": "Oh la la",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Oh la la",
+      "oh la la",
+      "Mon Dieu",
+      "mon dieu",
+      "Oh my",
+      "oh my"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-134",
+    "type": "langue",
+    "word": "Daebak",
+    "language": "Coreen",
+    "meaning": "Genial",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Genial",
+      "genial",
+      "Super",
+      "super",
+      "Incroyable",
+      "incroyable",
+      "Amazing",
+      "amazing"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-135",
+    "type": "langue",
+    "word": "Kimchi",
+    "language": "Coreen",
+    "meaning": "Legumes fermentes",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Legumes fermentes",
+      "legumes fermentes",
+      "Chou fermente",
+      "chou fermente"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-136",
+    "type": "langue",
+    "word": "Noraebang",
+    "language": "Coreen",
+    "meaning": "Karaoke",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Karaoke",
+      "karaoke",
+      "Salle de karaoke",
+      "salle de karaoke"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-137",
+    "type": "langue",
+    "word": "Mukbang",
+    "language": "Coreen",
+    "meaning": "Emission de repas",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Emission de repas",
+      "emission de repas",
+      "Manger en direct",
+      "manger en direct",
+      "Eating show",
+      "eating show"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-138",
+    "type": "langue",
+    "word": "Hwaiting",
+    "language": "Coreen",
+    "meaning": "Courage",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Courage",
+      "courage",
+      "Bonne chance",
+      "bonne chance",
+      "Fighting",
+      "fighting",
+      "Allez",
+      "allez"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-139",
+    "type": "langue",
+    "word": "Gomawo",
+    "language": "Coreen",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-140",
+    "type": "langue",
+    "word": "Babo",
+    "language": "Coreen",
+    "meaning": "Idiot",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Idiot",
+      "idiot",
+      "Bete",
+      "bete",
+      "Stupid",
+      "stupid",
+      "Imbecile",
+      "imbecile"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-141",
+    "type": "langue",
+    "word": "Aegyo",
+    "language": "Coreen",
+    "meaning": "Mignonnerie",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Mignonnerie",
+      "mignonnerie",
+      "Charme",
+      "charme",
+      "Cute act",
+      "cute act"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-142",
+    "type": "langue",
+    "word": "Mul",
+    "language": "Coreen",
+    "meaning": "Eau",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Eau",
+      "eau",
+      "Water",
+      "water"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-143",
+    "type": "langue",
+    "word": "Bam",
+    "language": "Coreen",
+    "meaning": "Nuit",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Nuit",
+      "nuit",
+      "Night",
+      "night"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-144",
+    "type": "langue",
+    "word": "Byeol",
+    "language": "Coreen",
+    "meaning": "Etoile",
+    "acceptedLanguages": [
+      "Coreen",
+      "coreen",
+      "Korean",
+      "korean",
+      "Coréen",
+      "coréen"
+    ],
+    "acceptedMeanings": [
+      "Etoile",
+      "etoile",
+      "Star",
+      "star"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-145",
+    "type": "langue",
+    "word": "Namaste",
+    "language": "Hindi",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Salut",
+      "salut",
+      "Hello",
+      "hello"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-146",
+    "type": "langue",
+    "word": "Dhanyavaad",
+    "language": "Hindi",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-147",
+    "type": "langue",
+    "word": "Pyaar",
+    "language": "Hindi",
+    "meaning": "Amour",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "Amour",
+      "amour",
+      "Love",
+      "love"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-148",
+    "type": "langue",
+    "word": "Dost",
+    "language": "Hindi",
+    "meaning": "Ami",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "Ami",
+      "ami",
+      "Friend",
+      "friend",
+      "Copain",
+      "copain"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-149",
+    "type": "langue",
+    "word": "Pani",
+    "language": "Hindi",
+    "meaning": "Eau",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "Eau",
+      "eau",
+      "Water",
+      "water"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-150",
+    "type": "langue",
+    "word": "Chai",
+    "language": "Hindi",
+    "meaning": "The",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "The",
+      "the",
+      "Tea",
+      "tea"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-151",
+    "type": "langue",
+    "word": "Guru",
+    "language": "Hindi",
+    "meaning": "Maitre",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "Maitre",
+      "maitre",
+      "Professeur",
+      "professeur",
+      "Teacher",
+      "teacher",
+      "Guide",
+      "guide"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-152",
+    "type": "langue",
+    "word": "Jugaad",
+    "language": "Hindi",
+    "meaning": "Systeme D",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "Systeme D",
+      "systeme d",
+      "Debrouillardise",
+      "debrouillardise",
+      "Hack",
+      "hack"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-153",
+    "type": "langue",
+    "word": "Achcha",
+    "language": "Hindi",
+    "meaning": "Bien",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "Bien",
+      "bien",
+      "Bon",
+      "bon",
+      "OK",
+      "ok",
+      "Good",
+      "good"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-154",
+    "type": "langue",
+    "word": "Didi",
+    "language": "Hindi",
+    "meaning": "Grande soeur",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "Grande soeur",
+      "grande soeur",
+      "Soeur ainee",
+      "soeur ainee",
+      "Big sister",
+      "big sister"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-155",
+    "type": "langue",
+    "word": "Roti",
+    "language": "Hindi",
+    "meaning": "Pain",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "Pain",
+      "pain",
+      "Galette",
+      "galette",
+      "Bread",
+      "bread"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-156",
+    "type": "langue",
+    "word": "Ghar",
+    "language": "Hindi",
+    "meaning": "Maison",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "Maison",
+      "maison",
+      "Home",
+      "home",
+      "House",
+      "house"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-157",
+    "type": "langue",
+    "word": "Khushi",
+    "language": "Hindi",
+    "meaning": "Bonheur",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "Bonheur",
+      "bonheur",
+      "Joie",
+      "joie",
+      "Happiness",
+      "happiness"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-158",
+    "type": "langue",
+    "word": "Bahut",
+    "language": "Hindi",
+    "meaning": "Beaucoup",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "Beaucoup",
+      "beaucoup",
+      "Tres",
+      "tres",
+      "Very",
+      "very",
+      "Much",
+      "much"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-159",
+    "type": "langue",
+    "word": "Kal",
+    "language": "Hindi",
+    "meaning": "Hier ou demain",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "Hier ou demain",
+      "hier ou demain",
+      "Yesterday",
+      "yesterday",
+      "Tomorrow",
+      "tomorrow",
+      "Hier",
+      "hier",
+      "Demain",
+      "demain"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-160",
+    "type": "langue",
+    "word": "Paani",
+    "language": "Hindi",
+    "meaning": "Eau",
+    "acceptedLanguages": [
+      "Hindi",
+      "hindi"
+    ],
+    "acceptedMeanings": [
+      "Eau",
+      "eau",
+      "Water",
+      "water"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-161",
+    "type": "langue",
+    "word": "Merhaba",
+    "language": "Turc",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Hello",
+      "hello",
+      "Salut",
+      "salut"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-162",
+    "type": "langue",
+    "word": "Tesekkurler",
+    "language": "Turc",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-163",
+    "type": "langue",
+    "word": "Baklava",
+    "language": "Turc",
+    "meaning": "Patisserie au miel",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "Patisserie au miel",
+      "patisserie au miel",
+      "Gateau",
+      "gateau",
+      "Pastry",
+      "pastry"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-164",
+    "type": "langue",
+    "word": "Dondurma",
+    "language": "Turc",
+    "meaning": "Glace",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "Glace",
+      "glace",
+      "Ice cream",
+      "ice cream",
+      "Creme glacee",
+      "creme glacee"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-165",
+    "type": "langue",
+    "word": "Kedi",
+    "language": "Turc",
+    "meaning": "Chat",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "Chat",
+      "chat",
+      "Cat",
+      "cat"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-166",
+    "type": "langue",
+    "word": "Kopek",
+    "language": "Turc",
+    "meaning": "Chien",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "Chien",
+      "chien",
+      "Dog",
+      "dog"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-167",
+    "type": "langue",
+    "word": "Deniz",
+    "language": "Turc",
+    "meaning": "Mer",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "Mer",
+      "mer",
+      "Sea",
+      "sea",
+      "Ocean",
+      "ocean"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-168",
+    "type": "langue",
+    "word": "Gunes",
+    "language": "Turc",
+    "meaning": "Soleil",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "Soleil",
+      "soleil",
+      "Sun",
+      "sun"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-169",
+    "type": "langue",
+    "word": "Ay",
+    "language": "Turc",
+    "meaning": "Lune",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "Lune",
+      "lune",
+      "Moon",
+      "moon"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-170",
+    "type": "langue",
+    "word": "Cay",
+    "language": "Turc",
+    "meaning": "The",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "The",
+      "the",
+      "Tea",
+      "tea"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-171",
+    "type": "langue",
+    "word": "Guzel",
+    "language": "Turc",
+    "meaning": "Beau",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "Beau",
+      "beau",
+      "Beautiful",
+      "beautiful",
+      "Joli",
+      "joli",
+      "Belle",
+      "belle"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-172",
+    "type": "langue",
+    "word": "Hayat",
+    "language": "Turc",
+    "meaning": "Vie",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "Vie",
+      "vie",
+      "Life",
+      "life"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-173",
+    "type": "langue",
+    "word": "Evet",
+    "language": "Turc",
+    "meaning": "Oui",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "Oui",
+      "oui",
+      "Yes",
+      "yes"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-174",
+    "type": "langue",
+    "word": "Hayir",
+    "language": "Turc",
+    "meaning": "Non",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "Non",
+      "non",
+      "No",
+      "no"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-175",
+    "type": "langue",
+    "word": "Kebap",
+    "language": "Turc",
+    "meaning": "Viande grillee",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "Viande grillee",
+      "viande grillee",
+      "Kebab",
+      "kebab",
+      "Brochette",
+      "brochette",
+      "Grilled meat",
+      "grilled meat"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-176",
+    "type": "langue",
+    "word": "Lokum",
+    "language": "Turc",
+    "meaning": "Loukoum",
+    "acceptedLanguages": [
+      "Turc",
+      "turc",
+      "Turkish",
+      "turkish"
+    ],
+    "acceptedMeanings": [
+      "Loukoum",
+      "loukoum",
+      "Turkish delight",
+      "turkish delight",
+      "Confiserie",
+      "confiserie"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-177",
+    "type": "langue",
+    "word": "Dankjewel",
+    "language": "Neerlandais",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-178",
+    "type": "langue",
+    "word": "Gezellig",
+    "language": "Neerlandais",
+    "meaning": "Convivial",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Convivial",
+      "convivial",
+      "Agreable",
+      "agreable",
+      "Cosy",
+      "cosy",
+      "Chaleureux",
+      "chaleureux"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-179",
+    "type": "langue",
+    "word": "Vlinder",
+    "language": "Neerlandais",
+    "meaning": "Papillon",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Papillon",
+      "papillon",
+      "Butterfly",
+      "butterfly"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-180",
+    "type": "langue",
+    "word": "Kat",
+    "language": "Neerlandais",
+    "meaning": "Chat",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Chat",
+      "chat",
+      "Cat",
+      "cat"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-181",
+    "type": "langue",
+    "word": "Hond",
+    "language": "Neerlandais",
+    "meaning": "Chien",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Chien",
+      "chien",
+      "Dog",
+      "dog"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-182",
+    "type": "langue",
+    "word": "Fiets",
+    "language": "Neerlandais",
+    "meaning": "Velo",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Velo",
+      "velo",
+      "Bicyclette",
+      "bicyclette",
+      "Bike",
+      "bike",
+      "Bicycle",
+      "bicycle"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-183",
+    "type": "langue",
+    "word": "Lekker",
+    "language": "Neerlandais",
+    "meaning": "Delicieux",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Delicieux",
+      "delicieux",
+      "Bon",
+      "bon",
+      "Tasty",
+      "tasty",
+      "Yummy",
+      "yummy"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-184",
+    "type": "langue",
+    "word": "Stroopwafel",
+    "language": "Neerlandais",
+    "meaning": "Gaufre au sirop",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Gaufre au sirop",
+      "gaufre au sirop",
+      "Gaufre",
+      "gaufre",
+      "Waffle",
+      "waffle"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-185",
+    "type": "langue",
+    "word": "Pindakaas",
+    "language": "Neerlandais",
+    "meaning": "Beurre de cacahuete",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Beurre de cacahuete",
+      "beurre de cacahuete",
+      "Peanut butter",
+      "peanut butter"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-186",
+    "type": "langue",
+    "word": "Maan",
+    "language": "Neerlandais",
+    "meaning": "Lune",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Lune",
+      "lune",
+      "Moon",
+      "moon"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-187",
+    "type": "langue",
+    "word": "Zon",
+    "language": "Neerlandais",
+    "meaning": "Soleil",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Soleil",
+      "soleil",
+      "Sun",
+      "sun"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-188",
+    "type": "langue",
+    "word": "Liefde",
+    "language": "Neerlandais",
+    "meaning": "Amour",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Amour",
+      "amour",
+      "Love",
+      "love"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-189",
+    "type": "langue",
+    "word": "Hallo",
+    "language": "Neerlandais",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Hello",
+      "hello",
+      "Salut",
+      "salut"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-190",
+    "type": "langue",
+    "word": "Dag",
+    "language": "Neerlandais",
+    "meaning": "Au revoir",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Au revoir",
+      "au revoir",
+      "Goodbye",
+      "goodbye",
+      "Jour",
+      "jour",
+      "Day",
+      "day"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-191",
+    "type": "langue",
+    "word": "Schildpad",
+    "language": "Neerlandais",
+    "meaning": "Tortue",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Tortue",
+      "tortue",
+      "Turtle",
+      "turtle"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-192",
+    "type": "langue",
+    "word": "Uitsmijter",
+    "language": "Neerlandais",
+    "meaning": "Oeuf au plat",
+    "acceptedLanguages": [
+      "Neerlandais",
+      "neerlandais",
+      "Dutch",
+      "dutch",
+      "Néerlandais",
+      "néerlandais",
+      "Hollandais",
+      "hollandais"
+    ],
+    "acceptedMeanings": [
+      "Oeuf au plat",
+      "oeuf au plat",
+      "Fried egg",
+      "fried egg",
+      "Oeuf",
+      "oeuf"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-193",
+    "type": "langue",
+    "word": "Tack",
+    "language": "Suedois",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-194",
+    "type": "langue",
+    "word": "Hej",
+    "language": "Suedois",
+    "meaning": "Salut",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Salut",
+      "salut",
+      "Bonjour",
+      "bonjour",
+      "Hello",
+      "hello"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-195",
+    "type": "langue",
+    "word": "Fika",
+    "language": "Suedois",
+    "meaning": "Pause cafe",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Pause cafe",
+      "pause cafe",
+      "Coffee break",
+      "coffee break",
+      "Cafe",
+      "cafe",
+      "Gouter",
+      "gouter"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-196",
+    "type": "langue",
+    "word": "Lagom",
+    "language": "Suedois",
+    "meaning": "Juste ce qu'il faut",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Juste ce qu'il faut",
+      "juste ce qu'il faut",
+      "Equilibre",
+      "equilibre",
+      "Moderation",
+      "moderation",
+      "Just right",
+      "just right"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-197",
+    "type": "langue",
+    "word": "Smorgas",
+    "language": "Suedois",
+    "meaning": "Tartine",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Tartine",
+      "tartine",
+      "Sandwich",
+      "sandwich",
+      "Open sandwich",
+      "open sandwich"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-198",
+    "type": "langue",
+    "word": "Katt",
+    "language": "Suedois",
+    "meaning": "Chat",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Chat",
+      "chat",
+      "Cat",
+      "cat"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-199",
+    "type": "langue",
+    "word": "Hund",
+    "language": "Suedois",
+    "meaning": "Chien",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Chien",
+      "chien",
+      "Dog",
+      "dog"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-200",
+    "type": "langue",
+    "word": "Sol",
+    "language": "Suedois",
+    "meaning": "Soleil",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Soleil",
+      "soleil",
+      "Sun",
+      "sun"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-201",
+    "type": "langue",
+    "word": "Vatten",
+    "language": "Suedois",
+    "meaning": "Eau",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Eau",
+      "eau",
+      "Water",
+      "water"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-202",
+    "type": "langue",
+    "word": "Flicka",
+    "language": "Suedois",
+    "meaning": "Fille",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Fille",
+      "fille",
+      "Girl",
+      "girl",
+      "Jeune fille",
+      "jeune fille"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-203",
+    "type": "langue",
+    "word": "Skog",
+    "language": "Suedois",
+    "meaning": "Foret",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Foret",
+      "foret",
+      "Forest",
+      "forest",
+      "Bois",
+      "bois"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-204",
+    "type": "langue",
+    "word": "Fredagsmys",
+    "language": "Suedois",
+    "meaning": "Cocooning du vendredi",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Cocooning du vendredi",
+      "cocooning du vendredi",
+      "Friday cozy",
+      "friday cozy",
+      "Soiree du vendredi",
+      "soiree du vendredi"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-205",
+    "type": "langue",
+    "word": "Godis",
+    "language": "Suedois",
+    "meaning": "Bonbons",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Bonbons",
+      "bonbons",
+      "Candy",
+      "candy",
+      "Friandises",
+      "friandises",
+      "Sucreries",
+      "sucreries"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-206",
+    "type": "langue",
+    "word": "Smultronstaelle",
+    "language": "Suedois",
+    "meaning": "Endroit secret prefere",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Endroit secret prefere",
+      "endroit secret prefere",
+      "Happy place",
+      "happy place",
+      "Coin secret",
+      "coin secret"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-207",
+    "type": "langue",
+    "word": "Sjoe",
+    "language": "Suedois",
+    "meaning": "Lac",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Lac",
+      "lac",
+      "Lake",
+      "lake"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-208",
+    "type": "langue",
+    "word": "Igelkott",
+    "language": "Suedois",
+    "meaning": "Herisson",
+    "acceptedLanguages": [
+      "Suedois",
+      "suedois",
+      "Swedish",
+      "swedish",
+      "Suédois",
+      "suédois"
+    ],
+    "acceptedMeanings": [
+      "Herisson",
+      "herisson",
+      "Hedgehog",
+      "hedgehog"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-209",
+    "type": "langue",
+    "word": "Dzien dobry",
+    "language": "Polonais",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Hello",
+      "hello",
+      "Salut",
+      "salut"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-210",
+    "type": "langue",
+    "word": "Dziekuje",
+    "language": "Polonais",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-211",
+    "type": "langue",
+    "word": "Tak",
+    "language": "Polonais",
+    "meaning": "Oui",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Oui",
+      "oui",
+      "Yes",
+      "yes"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-212",
+    "type": "langue",
+    "word": "Nie",
+    "language": "Polonais",
+    "meaning": "Non",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Non",
+      "non",
+      "No",
+      "no"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-213",
+    "type": "langue",
+    "word": "Pierogi",
+    "language": "Polonais",
+    "meaning": "Raviolis",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Raviolis",
+      "raviolis",
+      "Boulettes",
+      "boulettes",
+      "Dumplings",
+      "dumplings"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-214",
+    "type": "langue",
+    "word": "Kot",
+    "language": "Polonais",
+    "meaning": "Chat",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Chat",
+      "chat",
+      "Cat",
+      "cat"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-215",
+    "type": "langue",
+    "word": "Pies",
+    "language": "Polonais",
+    "meaning": "Chien",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Chien",
+      "chien",
+      "Dog",
+      "dog"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-216",
+    "type": "langue",
+    "word": "Milosc",
+    "language": "Polonais",
+    "meaning": "Amour",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Amour",
+      "amour",
+      "Love",
+      "love"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-217",
+    "type": "langue",
+    "word": "Woda",
+    "language": "Polonais",
+    "meaning": "Eau",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Eau",
+      "eau",
+      "Water",
+      "water"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-218",
+    "type": "langue",
+    "word": "Slonce",
+    "language": "Polonais",
+    "meaning": "Soleil",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Soleil",
+      "soleil",
+      "Sun",
+      "sun"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-219",
+    "type": "langue",
+    "word": "Ksiazka",
+    "language": "Polonais",
+    "meaning": "Livre",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Livre",
+      "livre",
+      "Book",
+      "book"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-220",
+    "type": "langue",
+    "word": "Szczescie",
+    "language": "Polonais",
+    "meaning": "Bonheur",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Bonheur",
+      "bonheur",
+      "Happiness",
+      "happiness",
+      "Joie",
+      "joie",
+      "Chance",
+      "chance"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-221",
+    "type": "langue",
+    "word": "Przepraszam",
+    "language": "Polonais",
+    "meaning": "Excusez-moi",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Excusez-moi",
+      "excusez-moi",
+      "Pardon",
+      "pardon",
+      "Sorry",
+      "sorry"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-222",
+    "type": "langue",
+    "word": "Chleb",
+    "language": "Polonais",
+    "meaning": "Pain",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Pain",
+      "pain",
+      "Bread",
+      "bread"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-223",
+    "type": "langue",
+    "word": "Piekny",
+    "language": "Polonais",
+    "meaning": "Beau",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Beau",
+      "beau",
+      "Beautiful",
+      "beautiful",
+      "Belle",
+      "belle",
+      "Joli",
+      "joli"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-224",
+    "type": "langue",
+    "word": "Przyjaciel",
+    "language": "Polonais",
+    "meaning": "Ami",
+    "acceptedLanguages": [
+      "Polonais",
+      "polonais",
+      "Polish",
+      "polish"
+    ],
+    "acceptedMeanings": [
+      "Ami",
+      "ami",
+      "Friend",
+      "friend",
+      "Copain",
+      "copain"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-225",
+    "type": "langue",
+    "word": "Efcharisto",
+    "language": "Grec",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-226",
+    "type": "langue",
+    "word": "Kalimera",
+    "language": "Grec",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Hello",
+      "hello",
+      "Salut",
+      "salut",
+      "Good morning",
+      "good morning"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-227",
+    "type": "langue",
+    "word": "Opa",
+    "language": "Grec",
+    "meaning": "Joie",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Joie",
+      "joie",
+      "Hourra",
+      "hourra",
+      "Bravo",
+      "bravo",
+      "Exclamation de joie",
+      "exclamation de joie"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-228",
+    "type": "langue",
+    "word": "Thalassa",
+    "language": "Grec",
+    "meaning": "Mer",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Mer",
+      "mer",
+      "Sea",
+      "sea",
+      "Ocean",
+      "ocean"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-229",
+    "type": "langue",
+    "word": "Philotimo",
+    "language": "Grec",
+    "meaning": "Sens de l'honneur",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Sens de l'honneur",
+      "sens de l'honneur",
+      "Honneur",
+      "honneur",
+      "Honor",
+      "honor",
+      "Dignite",
+      "dignite"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-230",
+    "type": "langue",
+    "word": "Meraki",
+    "language": "Grec",
+    "meaning": "Passion dans l'action",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Passion dans l'action",
+      "passion dans l'action",
+      "Faire avec amour",
+      "faire avec amour",
+      "Devotion",
+      "devotion"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-231",
+    "type": "langue",
+    "word": "Agape",
+    "language": "Grec",
+    "meaning": "Amour inconditionnel",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Amour inconditionnel",
+      "amour inconditionnel",
+      "Amour",
+      "amour",
+      "Love",
+      "love"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-232",
+    "type": "langue",
+    "word": "Gata",
+    "language": "Grec",
+    "meaning": "Chat",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Chat",
+      "chat",
+      "Cat",
+      "cat"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-233",
+    "type": "langue",
+    "word": "Skylos",
+    "language": "Grec",
+    "meaning": "Chien",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Chien",
+      "chien",
+      "Dog",
+      "dog"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-234",
+    "type": "langue",
+    "word": "Ouzo",
+    "language": "Grec",
+    "meaning": "Alcool anise",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Alcool anise",
+      "alcool anise",
+      "Pastis",
+      "pastis",
+      "Anise liquor",
+      "anise liquor"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-235",
+    "type": "langue",
+    "word": "Kefi",
+    "language": "Grec",
+    "meaning": "Joie de vivre",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Joie de vivre",
+      "joie de vivre",
+      "Bonne humeur",
+      "bonne humeur",
+      "Joy",
+      "joy"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-236",
+    "type": "langue",
+    "word": "Nero",
+    "language": "Grec",
+    "meaning": "Eau",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Eau",
+      "eau",
+      "Water",
+      "water"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-237",
+    "type": "langue",
+    "word": "Fos",
+    "language": "Grec",
+    "meaning": "Lumiere",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Lumiere",
+      "lumiere",
+      "Light",
+      "light"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-238",
+    "type": "langue",
+    "word": "Iliaki",
+    "language": "Grec",
+    "meaning": "Soleil",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Soleil",
+      "soleil",
+      "Sun",
+      "sun",
+      "Solaire",
+      "solaire"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-239",
+    "type": "langue",
+    "word": "Gyros",
+    "language": "Grec",
+    "meaning": "Viande tournante",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Viande tournante",
+      "viande tournante",
+      "Kebab",
+      "kebab",
+      "Sandwich grec",
+      "sandwich grec"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-240",
+    "type": "langue",
+    "word": "Moussaka",
+    "language": "Grec",
+    "meaning": "Gratin d'aubergines",
+    "acceptedLanguages": [
+      "Grec",
+      "grec",
+      "Greek",
+      "greek"
+    ],
+    "acceptedMeanings": [
+      "Gratin d'aubergines",
+      "gratin d'aubergines",
+      "Aubergine gratin",
+      "aubergine gratin"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-241",
+    "type": "langue",
+    "word": "Jambo",
+    "language": "Swahili",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Hello",
+      "hello",
+      "Salut",
+      "salut"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-242",
+    "type": "langue",
+    "word": "Asante",
+    "language": "Swahili",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-243",
+    "type": "langue",
+    "word": "Hakuna matata",
+    "language": "Swahili",
+    "meaning": "Pas de souci",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Pas de souci",
+      "pas de souci",
+      "Pas de probleme",
+      "pas de probleme",
+      "No worries",
+      "no worries"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-244",
+    "type": "langue",
+    "word": "Simba",
+    "language": "Swahili",
+    "meaning": "Lion",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Lion",
+      "lion"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-245",
+    "type": "langue",
+    "word": "Rafiki",
+    "language": "Swahili",
+    "meaning": "Ami",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Ami",
+      "ami",
+      "Friend",
+      "friend",
+      "Copain",
+      "copain"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-246",
+    "type": "langue",
+    "word": "Safari",
+    "language": "Swahili",
+    "meaning": "Voyage",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Voyage",
+      "voyage",
+      "Expedition",
+      "expedition",
+      "Journey",
+      "journey",
+      "Trip",
+      "trip"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-247",
+    "type": "langue",
+    "word": "Tembo",
+    "language": "Swahili",
+    "meaning": "Elephant",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Elephant",
+      "elephant"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-248",
+    "type": "langue",
+    "word": "Nyumba",
+    "language": "Swahili",
+    "meaning": "Maison",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Maison",
+      "maison",
+      "House",
+      "house",
+      "Home",
+      "home"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-249",
+    "type": "langue",
+    "word": "Maji",
+    "language": "Swahili",
+    "meaning": "Eau",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Eau",
+      "eau",
+      "Water",
+      "water"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-250",
+    "type": "langue",
+    "word": "Jua",
+    "language": "Swahili",
+    "meaning": "Soleil",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Soleil",
+      "soleil",
+      "Sun",
+      "sun"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-251",
+    "type": "langue",
+    "word": "Mwezi",
+    "language": "Swahili",
+    "meaning": "Lune",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Lune",
+      "lune",
+      "Moon",
+      "moon"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-252",
+    "type": "langue",
+    "word": "Nyota",
+    "language": "Swahili",
+    "meaning": "Etoile",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Etoile",
+      "etoile",
+      "Star",
+      "star"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-253",
+    "type": "langue",
+    "word": "Paka",
+    "language": "Swahili",
+    "meaning": "Chat",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Chat",
+      "chat",
+      "Cat",
+      "cat"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-254",
+    "type": "langue",
+    "word": "Mbwa",
+    "language": "Swahili",
+    "meaning": "Chien",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Chien",
+      "chien",
+      "Dog",
+      "dog"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-255",
+    "type": "langue",
+    "word": "Pole pole",
+    "language": "Swahili",
+    "meaning": "Doucement",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Doucement",
+      "doucement",
+      "Lentement",
+      "lentement",
+      "Slowly",
+      "slowly",
+      "Calm",
+      "calm"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-256",
+    "type": "langue",
+    "word": "Karibu",
+    "language": "Swahili",
+    "meaning": "Bienvenue",
+    "acceptedLanguages": [
+      "Swahili",
+      "swahili"
+    ],
+    "acceptedMeanings": [
+      "Bienvenue",
+      "bienvenue",
+      "Welcome",
+      "welcome"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-257",
+    "type": "langue",
+    "word": "Sawadee",
+    "language": "Thai",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Hello",
+      "hello",
+      "Salut",
+      "salut"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-258",
+    "type": "langue",
+    "word": "Khop khun",
+    "language": "Thai",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-259",
+    "type": "langue",
+    "word": "Pad Thai",
+    "language": "Thai",
+    "meaning": "Nouilles sautees",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Nouilles sautees",
+      "nouilles sautees",
+      "Nouilles",
+      "nouilles",
+      "Fried noodles",
+      "fried noodles"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-260",
+    "type": "langue",
+    "word": "Tom Yum",
+    "language": "Thai",
+    "meaning": "Soupe aigre-douce",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Soupe aigre-douce",
+      "soupe aigre-douce",
+      "Soupe",
+      "soupe",
+      "Soup",
+      "soup"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-261",
+    "type": "langue",
+    "word": "Sanuk",
+    "language": "Thai",
+    "meaning": "Amusant",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Amusant",
+      "amusant",
+      "Fun",
+      "fun",
+      "Plaisir",
+      "plaisir",
+      "Drole",
+      "drole"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-262",
+    "type": "langue",
+    "word": "Sabai",
+    "language": "Thai",
+    "meaning": "Bien-etre",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Bien-etre",
+      "bien-etre",
+      "Bien",
+      "bien",
+      "Confort",
+      "confort",
+      "Relax",
+      "relax"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-263",
+    "type": "langue",
+    "word": "Meow",
+    "language": "Thai",
+    "meaning": "Chat",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Chat",
+      "chat",
+      "Cat",
+      "cat"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-264",
+    "type": "langue",
+    "word": "Naam",
+    "language": "Thai",
+    "meaning": "Eau",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Eau",
+      "eau",
+      "Water",
+      "water"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-265",
+    "type": "langue",
+    "word": "Rak",
+    "language": "Thai",
+    "meaning": "Amour",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Amour",
+      "amour",
+      "Love",
+      "love"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-266",
+    "type": "langue",
+    "word": "Chai",
+    "language": "Thai",
+    "meaning": "Oui",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Oui",
+      "oui",
+      "Yes",
+      "yes"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-267",
+    "type": "langue",
+    "word": "Aroi",
+    "language": "Thai",
+    "meaning": "Delicieux",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Delicieux",
+      "delicieux",
+      "Bon",
+      "bon",
+      "Tasty",
+      "tasty",
+      "Yummy",
+      "yummy"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-268",
+    "type": "langue",
+    "word": "Suay",
+    "language": "Thai",
+    "meaning": "Beau",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Beau",
+      "beau",
+      "Beautiful",
+      "beautiful",
+      "Belle",
+      "belle",
+      "Joli",
+      "joli"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-269",
+    "type": "langue",
+    "word": "Dao",
+    "language": "Thai",
+    "meaning": "Etoile",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Etoile",
+      "etoile",
+      "Star",
+      "star"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-270",
+    "type": "langue",
+    "word": "Durian",
+    "language": "Thai",
+    "meaning": "Fruit epineux",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Fruit epineux",
+      "fruit epineux",
+      "Durian",
+      "durian",
+      "Fruit puant",
+      "fruit puant"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-271",
+    "type": "langue",
+    "word": "Tuk-tuk",
+    "language": "Thai",
+    "meaning": "Taxi a trois roues",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Taxi a trois roues",
+      "taxi a trois roues",
+      "Taxi",
+      "taxi",
+      "Rickshaw",
+      "rickshaw"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-272",
+    "type": "langue",
+    "word": "Songthaew",
+    "language": "Thai",
+    "meaning": "Taxi collectif",
+    "acceptedLanguages": [
+      "Thai",
+      "thai",
+      "Thaï",
+      "thaï",
+      "Thailandais",
+      "thailandais"
+    ],
+    "acceptedMeanings": [
+      "Taxi collectif",
+      "taxi collectif",
+      "Minibus",
+      "minibus",
+      "Shared taxi",
+      "shared taxi"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-273",
+    "type": "langue",
+    "word": "Xin chao",
+    "language": "Vietnamien",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Hello",
+      "hello",
+      "Salut",
+      "salut"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-274",
+    "type": "langue",
+    "word": "Cam on",
+    "language": "Vietnamien",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-275",
+    "type": "langue",
+    "word": "Pho",
+    "language": "Vietnamien",
+    "meaning": "Soupe de nouilles",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Soupe de nouilles",
+      "soupe de nouilles",
+      "Soupe",
+      "soupe",
+      "Noodle soup",
+      "noodle soup"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-276",
+    "type": "langue",
+    "word": "Banh mi",
+    "language": "Vietnamien",
+    "meaning": "Sandwich vietnamien",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Sandwich vietnamien",
+      "sandwich vietnamien",
+      "Sandwich",
+      "sandwich",
+      "Pain",
+      "pain"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-277",
+    "type": "langue",
+    "word": "Ao dai",
+    "language": "Vietnamien",
+    "meaning": "Robe traditionnelle",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Robe traditionnelle",
+      "robe traditionnelle",
+      "Robe",
+      "robe",
+      "Traditional dress",
+      "traditional dress"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-278",
+    "type": "langue",
+    "word": "Meo",
+    "language": "Vietnamien",
+    "meaning": "Chat",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Chat",
+      "chat",
+      "Cat",
+      "cat"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-279",
+    "type": "langue",
+    "word": "Cho",
+    "language": "Vietnamien",
+    "meaning": "Chien",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Chien",
+      "chien",
+      "Dog",
+      "dog"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-280",
+    "type": "langue",
+    "word": "Nuoc",
+    "language": "Vietnamien",
+    "meaning": "Eau",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Eau",
+      "eau",
+      "Water",
+      "water"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-281",
+    "type": "langue",
+    "word": "Trang",
+    "language": "Vietnamien",
+    "meaning": "Lune",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Lune",
+      "lune",
+      "Moon",
+      "moon"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-282",
+    "type": "langue",
+    "word": "Dep",
+    "language": "Vietnamien",
+    "meaning": "Beau",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Beau",
+      "beau",
+      "Beautiful",
+      "beautiful",
+      "Belle",
+      "belle",
+      "Joli",
+      "joli"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-283",
+    "type": "langue",
+    "word": "Yeu",
+    "language": "Vietnamien",
+    "meaning": "Amour",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Amour",
+      "amour",
+      "Love",
+      "love",
+      "Aimer",
+      "aimer"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-284",
+    "type": "langue",
+    "word": "Troi",
+    "language": "Vietnamien",
+    "meaning": "Ciel",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Ciel",
+      "ciel",
+      "Sky",
+      "sky"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-285",
+    "type": "langue",
+    "word": "Nha",
+    "language": "Vietnamien",
+    "meaning": "Maison",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Maison",
+      "maison",
+      "House",
+      "house",
+      "Home",
+      "home"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-286",
+    "type": "langue",
+    "word": "Ban",
+    "language": "Vietnamien",
+    "meaning": "Ami",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Ami",
+      "ami",
+      "Friend",
+      "friend",
+      "Copain",
+      "copain"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-287",
+    "type": "langue",
+    "word": "Ngon",
+    "language": "Vietnamien",
+    "meaning": "Delicieux",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Delicieux",
+      "delicieux",
+      "Bon",
+      "bon",
+      "Tasty",
+      "tasty"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-288",
+    "type": "langue",
+    "word": "Xoi",
+    "language": "Vietnamien",
+    "meaning": "Riz gluant",
+    "acceptedLanguages": [
+      "Vietnamien",
+      "vietnamien",
+      "Vietnamese",
+      "vietnamese"
+    ],
+    "acceptedMeanings": [
+      "Riz gluant",
+      "riz gluant",
+      "Sticky rice",
+      "sticky rice",
+      "Riz",
+      "riz"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-289",
+    "type": "langue",
+    "word": "Shalom",
+    "language": "Hebreu",
+    "meaning": "Paix",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "Paix",
+      "paix",
+      "Peace",
+      "peace",
+      "Bonjour",
+      "bonjour",
+      "Hello",
+      "hello"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-290",
+    "type": "langue",
+    "word": "Toda",
+    "language": "Hebreu",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-291",
+    "type": "langue",
+    "word": "Ahava",
+    "language": "Hebreu",
+    "meaning": "Amour",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "Amour",
+      "amour",
+      "Love",
+      "love"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-292",
+    "type": "langue",
+    "word": "Sababa",
+    "language": "Hebreu",
+    "meaning": "Cool",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "Cool",
+      "cool",
+      "Super",
+      "super",
+      "Genial",
+      "genial",
+      "Great",
+      "great"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-293",
+    "type": "langue",
+    "word": "Chutzpah",
+    "language": "Hebreu",
+    "meaning": "Audace",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "Audace",
+      "audace",
+      "Culot",
+      "culot",
+      "Toupet",
+      "toupet",
+      "Nerve",
+      "nerve"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-294",
+    "type": "langue",
+    "word": "Kibbutz",
+    "language": "Hebreu",
+    "meaning": "Communaute agricole",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "Communaute agricole",
+      "communaute agricole",
+      "Ferme collective",
+      "ferme collective",
+      "Community",
+      "community"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-295",
+    "type": "langue",
+    "word": "Mazel tov",
+    "language": "Hebreu",
+    "meaning": "Felicitations",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "Felicitations",
+      "felicitations",
+      "Bravo",
+      "bravo",
+      "Bonne chance",
+      "bonne chance",
+      "Congratulations",
+      "congratulations"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-296",
+    "type": "langue",
+    "word": "Boker tov",
+    "language": "Hebreu",
+    "meaning": "Bonjour",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "Bonjour",
+      "bonjour",
+      "Good morning",
+      "good morning",
+      "Salut",
+      "salut"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-297",
+    "type": "langue",
+    "word": "Mayim",
+    "language": "Hebreu",
+    "meaning": "Eau",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "Eau",
+      "eau",
+      "Water",
+      "water"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-298",
+    "type": "langue",
+    "word": "Shemesh",
+    "language": "Hebreu",
+    "meaning": "Soleil",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "Soleil",
+      "soleil",
+      "Sun",
+      "sun"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-299",
+    "type": "langue",
+    "word": "Chatul",
+    "language": "Hebreu",
+    "meaning": "Chat",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "Chat",
+      "chat",
+      "Cat",
+      "cat"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-300",
+    "type": "langue",
+    "word": "Kelev",
+    "language": "Hebreu",
+    "meaning": "Chien",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "Chien",
+      "chien",
+      "Dog",
+      "dog"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-301",
+    "type": "langue",
+    "word": "Sefer",
+    "language": "Hebreu",
+    "meaning": "Livre",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "Livre",
+      "livre",
+      "Book",
+      "book"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-302",
+    "type": "langue",
+    "word": "Lechaim",
+    "language": "Hebreu",
+    "meaning": "A la vie",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "A la vie",
+      "a la vie",
+      "Sante",
+      "sante",
+      "Cheers",
+      "cheers",
+      "To life",
+      "to life"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-303",
+    "type": "langue",
+    "word": "Tikkun olam",
+    "language": "Hebreu",
+    "meaning": "Reparer le monde",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "Reparer le monde",
+      "reparer le monde",
+      "Healing the world",
+      "healing the world"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-304",
+    "type": "langue",
+    "word": "Geshem",
+    "language": "Hebreu",
+    "meaning": "Pluie",
+    "acceptedLanguages": [
+      "Hebreu",
+      "hebreu",
+      "Hebrew",
+      "hebrew",
+      "Hébreu",
+      "hébreu"
+    ],
+    "acceptedMeanings": [
+      "Pluie",
+      "pluie",
+      "Rain",
+      "rain"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-305",
+    "type": "langue",
+    "word": "Kiitos",
+    "language": "Finnois",
+    "meaning": "Merci",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Merci",
+      "merci",
+      "Thanks",
+      "thanks"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-306",
+    "type": "langue",
+    "word": "Hei",
+    "language": "Finnois",
+    "meaning": "Salut",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Salut",
+      "salut",
+      "Bonjour",
+      "bonjour",
+      "Hello",
+      "hello"
+    ],
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-307",
+    "type": "langue",
+    "word": "Sisu",
+    "language": "Finnois",
+    "meaning": "Courage interieur",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Courage interieur",
+      "courage interieur",
+      "Determination",
+      "determination",
+      "Resilience",
+      "resilience",
+      "Courage",
+      "courage"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-308",
+    "type": "langue",
+    "word": "Sauna",
+    "language": "Finnois",
+    "meaning": "Bain de vapeur",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Bain de vapeur",
+      "bain de vapeur",
+      "Sauna",
+      "sauna",
+      "Hammam",
+      "hammam"
+    ],
+    "difficulty": "easy",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-309",
+    "type": "langue",
+    "word": "Kissa",
+    "language": "Finnois",
+    "meaning": "Chat",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Chat",
+      "chat",
+      "Cat",
+      "cat"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-310",
+    "type": "langue",
+    "word": "Koira",
+    "language": "Finnois",
+    "meaning": "Chien",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Chien",
+      "chien",
+      "Dog",
+      "dog"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-311",
+    "type": "langue",
+    "word": "Vesi",
+    "language": "Finnois",
+    "meaning": "Eau",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Eau",
+      "eau",
+      "Water",
+      "water"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-312",
+    "type": "langue",
+    "word": "Aurinko",
+    "language": "Finnois",
+    "meaning": "Soleil",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Soleil",
+      "soleil",
+      "Sun",
+      "sun"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-313",
+    "type": "langue",
+    "word": "Kuu",
+    "language": "Finnois",
+    "meaning": "Lune",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Lune",
+      "lune",
+      "Moon",
+      "moon"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-314",
+    "type": "langue",
+    "word": "Rakkaus",
+    "language": "Finnois",
+    "meaning": "Amour",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Amour",
+      "amour",
+      "Love",
+      "love"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-315",
+    "type": "langue",
+    "word": "Metsa",
+    "language": "Finnois",
+    "meaning": "Foret",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Foret",
+      "foret",
+      "Forest",
+      "forest",
+      "Bois",
+      "bois"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-316",
+    "type": "langue",
+    "word": "Lumi",
+    "language": "Finnois",
+    "meaning": "Neige",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Neige",
+      "neige",
+      "Snow",
+      "snow"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-317",
+    "type": "langue",
+    "word": "Taehti",
+    "language": "Finnois",
+    "meaning": "Etoile",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Etoile",
+      "etoile",
+      "Star",
+      "star"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-318",
+    "type": "langue",
+    "word": "Kaunis",
+    "language": "Finnois",
+    "meaning": "Beau",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Beau",
+      "beau",
+      "Beautiful",
+      "beautiful",
+      "Belle",
+      "belle",
+      "Joli",
+      "joli"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-319",
+    "type": "langue",
+    "word": "Poronkaesristys",
+    "language": "Finnois",
+    "meaning": "Distance parcourue par un renne",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Distance parcourue par un renne",
+      "distance parcourue par un renne",
+      "Reindeer distance",
+      "reindeer distance"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  },
+  {
+    "id": "langue-320",
+    "type": "langue",
+    "word": "Jaa",
+    "language": "Finnois",
+    "meaning": "Glace",
+    "acceptedLanguages": [
+      "Finnois",
+      "finnois",
+      "Finnish",
+      "finnish"
+    ],
+    "acceptedMeanings": [
+      "Glace",
+      "glace",
+      "Ice",
+      "ice"
+    ],
+    "difficulty": "hard",
+    "timeLimit": 30,
+    "points": 200
+  }
+]
