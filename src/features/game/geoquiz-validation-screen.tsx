@@ -61,8 +61,6 @@ export function GeoQuizValidationScreen() {
                   src={validationData.imageUrl}
                   alt="Lieu"
                   className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                  crossOrigin="anonymous"
                   onError={() => setImageError(true)}
                 />
               )}
@@ -242,8 +240,6 @@ export function GeoQuizValidationScreen() {
                   src={validationData.imageUrl}
                   alt="Lieu"
                   className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                  crossOrigin="anonymous"
                   onError={() => setImageError(true)}
                 />
               )}

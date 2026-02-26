@@ -958,8 +958,6 @@ function GeoQuizQuestionView({
                 src={question.imageUrl}
                 alt="Lieu à deviner"
                 className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
-                crossOrigin="anonymous"
                 onError={() => setImageError(true)}
               />
             )}
