@@ -410,7 +410,7 @@ export class GameEngine {
             id: `drawing_${i + 1}`,
             type: "drawing" as const,
             phrase: "placeholder",
-            timeLimit: this.room.settings.roundDuration || 60,
+            timeLimit: this.room.settings.roundDuration || 90,
             points: 100,
           });
         }
@@ -425,7 +425,7 @@ export class GameEngine {
             type: "petitbac" as const,
             letter: shuffledLetters[i % shuffledLetters.length],
             categories: [...PETITBAC_CATEGORIES],
-            timeLimit: 120,
+            timeLimit: 60,
             points: 100,
           });
         }
@@ -1049,6 +1049,7 @@ export class GameEngine {
   submitPetitBacValidation(validation: PetitBacValidationSubmission): void {
     if (!this.currentQuestion || !this.petitBacValidating) return;
     this.petitBacValidating = false;
+    this.stopTimer(); // Stop timer immediately when validation is submitted
 
     const q = this.currentQuestion as PetitBacQuestion;
     const results = this.calculatePetitBacScores(q, validation);
@@ -1648,7 +1649,7 @@ export class GameEngine {
     // Use the drawing question pool for phrase assignment
     const phrasePool = this.drawingQuestionPool.length > 0
       ? this.drawingQuestionPool
-      : [{ id: "fallback", type: "drawing" as const, phrase: "Un chat qui joue du piano", timeLimit: 60, points: 100 }];
+      : [{ id: "fallback", type: "drawing" as const, phrase: "Un chat qui joue du piano", timeLimit: 90, points: 100 }];
     const shuffled = [...phrasePool].sort(() => Math.random() - 0.5);
     activePlayers.forEach((player, index) => {
       const q = shuffled[index % shuffled.length];
@@ -1662,7 +1663,7 @@ export class GameEngine {
       this.drawingAssignments.set(guesser.id, artist.id);
     }
 
-    const timeLimit = this.room.settings.roundDuration || 60;
+    const timeLimit = this.room.settings.roundDuration || 90;
     this.timeRemaining = timeLimit;
 
     // Emit phase start to room
