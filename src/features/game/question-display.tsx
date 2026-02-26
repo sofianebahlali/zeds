@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, CheckCircle, Tag, Volume2, RotateCcw, MapPin, Eye } from "lucide-react";
 import Image from "next/image";
@@ -911,6 +911,12 @@ function GeoQuizQuestionView({
   onSubmit,
 }: GeoQuizQuestionViewProps) {
   const [imageError, setImageError] = useState(false);
+
+  // Reset image error state when question changes
+  useEffect(() => {
+    setImageError(false);
+  }, [question.imageUrl]);
+
   const geoQuizHint = useGameStore((s) => s.geoQuizHint);
   const { useGeoQuizHint } = useSocket();
 
