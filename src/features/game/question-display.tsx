@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Button, Card, Input, TimerProgress, Badge, Avatar } from "@/components/ui";
 import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
+import { getSocket } from "@/lib/socket";
 import { cn } from "@/lib/utils";
 import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion } from "@/types";
 
@@ -27,6 +28,24 @@ export function QuestionDisplay() {
   const [geoQuizAnswer, setGeoQuizAnswer] = useState("");
   const [langueLanguage, setLangueLanguage] = useState("");
   const [langueMeaning, setLangueMeaning] = useState("");
+
+  // Ref to access latest petitBac answers in the auto-submit effect
+  const petitBacAnswersRef = useRef(petitBacAnswers);
+  petitBacAnswersRef.current = petitBacAnswers;
+
+  // Auto-submit petitBac answers when timer expires (before server starts validation)
+  useEffect(() => {
+    if (
+      currentQuestion?.type === "petitbac" &&
+      timeRemaining === 0 &&
+      !hasAnswered
+    ) {
+      const socket = getSocket();
+      const answers = JSON.stringify(petitBacAnswersRef.current);
+      socket.emit("game:submit_answer", answers);
+      useGameStore.getState().submitAnswer(answers);
+    }
+  }, [timeRemaining, currentQuestion?.type, hasAnswered]);
 
   if (!currentQuestion) return null;
 

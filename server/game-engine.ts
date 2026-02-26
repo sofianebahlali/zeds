@@ -153,6 +153,7 @@ export class GameEngine {
 
   // Petit Bac state
   private petitBacValidating: boolean = false;
+  private petitBacGracePeriod: boolean = false;
 
   // GeoQuiz state
   private geoQuizValidating: boolean = false;
@@ -654,7 +655,7 @@ export class GameEngine {
   submitAnswer(playerId: string, answerText: string): void {
     if (!this.currentQuestion) return;
     if (this.answers.has(playerId)) return; // Already answered
-    if (this.timeRemaining <= 0) return; // Time's up
+    if (this.timeRemaining <= 0 && !this.petitBacGracePeriod) return; // Time's up (except during petit bac grace period)
 
     const responseTime = this.currentQuestion.timeLimit - this.timeRemaining;
 
@@ -689,9 +690,13 @@ export class GameEngine {
 
     if (!this.currentQuestion) return;
 
-    // Petit Bac: enter host validation phase instead of auto-scoring
+    // Petit Bac: grace period for auto-submitted answers, then validation
     if (this.currentQuestion.type === "petitbac") {
-      this.startPetitBacValidation();
+      this.petitBacGracePeriod = true;
+      setTimeout(() => {
+        this.petitBacGracePeriod = false;
+        this.startPetitBacValidation();
+      }, 1500);
       return;
     }
 
