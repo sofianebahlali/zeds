@@ -910,6 +910,7 @@ function GeoQuizQuestionView({
   onChange,
   onSubmit,
 }: GeoQuizQuestionViewProps) {
+  const [imageError, setImageError] = useState(false);
   const geoQuizHint = useGameStore((s) => s.geoQuizHint);
   const { useGeoQuizHint } = useSocket();
 
@@ -947,11 +948,21 @@ function GeoQuizQuestionView({
           className="flex justify-center mb-3"
         >
           <div className="w-full max-w-sm aspect-[4/3] rounded-2xl overflow-hidden bg-surface-800 shadow-lg">
-            <img
-              src={question.imageUrl}
-              alt="Lieu à deviner"
-              className="w-full h-full object-cover"
-            />
+            {imageError ? (
+              <div className="w-full h-full flex flex-col items-center justify-center text-surface-500 gap-2">
+                <MapPin className="w-8 h-8 text-surface-600" />
+                <span className="text-xs">Image indisponible</span>
+              </div>
+            ) : (
+              <img
+                src={question.imageUrl}
+                alt="Lieu à deviner"
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+                crossOrigin="anonymous"
+                onError={() => setImageError(true)}
+              />
+            )}
           </div>
         </motion.div>
       )}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, XCircle, MapPin, Clock, ThumbsUp, ThumbsDown } from "lucide-react";
 import { Button, Card, Avatar, Badge } from "@/components/ui";
@@ -27,6 +27,8 @@ export function GeoQuizValidationScreen() {
   const currentPlayer = currentIndex < reviewQueue.length ? reviewQueue[currentIndex] : null;
   const allReviewed = currentIndex >= reviewQueue.length;
 
+  const [imageError, setImageError] = useState(false);
+
   if (!validationData) return null;
 
   // ==========================================
@@ -50,11 +52,20 @@ export function GeoQuizValidationScreen() {
           {validationData.imageUrl && (
             <div className="flex justify-center mb-2">
               <div className="w-28 h-20 rounded-xl overflow-hidden bg-surface-800">
+              {imageError ? (
+                <div className="w-full h-full flex items-center justify-center text-surface-600">
+                  <MapPin className="w-5 h-5" />
+                </div>
+              ) : (
                 <img
                   src={validationData.imageUrl}
                   alt="Lieu"
                   className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                  crossOrigin="anonymous"
+                  onError={() => setImageError(true)}
                 />
+              )}
               </div>
             </div>
           )}
@@ -222,11 +233,20 @@ export function GeoQuizValidationScreen() {
         {validationData.imageUrl && (
           <div className="flex justify-center mb-2">
             <div className="w-28 h-20 rounded-xl overflow-hidden bg-surface-800">
-              <img
-                src={validationData.imageUrl}
-                alt="Lieu"
-                className="w-full h-full object-cover"
-              />
+              {imageError ? (
+                <div className="w-full h-full flex items-center justify-center text-surface-600">
+                  <MapPin className="w-5 h-5" />
+                </div>
+              ) : (
+                <img
+                  src={validationData.imageUrl}
+                  alt="Lieu"
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                  crossOrigin="anonymous"
+                  onError={() => setImageError(true)}
+                />
+              )}
             </div>
           </div>
         )}
