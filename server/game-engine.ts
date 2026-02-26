@@ -22,6 +22,7 @@ import type {
   LangueQuestion,
   LangueValidationSubmission,
   LanguePlayerAnswerData,
+  MathsQuestion,
   Answer,
   RoundResult,
   ClientToServerEvents,
@@ -268,6 +269,17 @@ export class GameEngine {
     }
   }
 
+  private static loadMathsQuestions(): Question[] {
+    const filePath = path.resolve(__dirname, "../data/questions/maths.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw) as MathsQuestion[];
+    } catch {
+      console.warn("No maths questions found at", filePath);
+      return [];
+    }
+  }
+
   /**
    * Normalize text for accent-insensitive comparison
    */
@@ -397,6 +409,10 @@ export class GameEngine {
         break;
       case "langue":
         pool = GameEngine.loadLangueQuestions();
+        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
+        break;
+      case "maths":
+        pool = GameEngine.loadMathsQuestions();
         if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
         break;
       case "drawing": {
@@ -929,6 +945,10 @@ export class GameEngine {
         const q = this.currentQuestion as LangueQuestion;
         return `${q.language} — ${q.meaning}`;
       }
+      case "maths": {
+        const q = this.currentQuestion as MathsQuestion;
+        return q.options[q.correctIndex];
+      }
       default:
         return "";
     }
@@ -990,6 +1010,14 @@ export class GameEngine {
         const normalizedInput = GameEngine.normalizeForComparison(answer);
         return q.acceptedAnswers.some(
           (accepted) => GameEngine.normalizeForComparison(accepted) === normalizedInput
+        );
+      }
+      case "maths": {
+        const q = this.currentQuestion as MathsQuestion;
+        const correctOption = q.options[q.correctIndex].toLowerCase();
+        return (
+          normalizedAnswer === correctOption ||
+          normalizedAnswer === String(q.correctIndex)
         );
       }
       default:
@@ -1447,7 +1475,12 @@ export class GameEngine {
     });
 
     this.io.to(this.room.code).emit("langue:validation_start", {
-      word: q.word,
+      word: q.targetWord || q.word || "",
+      sentence: q.sentence,
+      sentenceTransliteration: q.sentenceTransliteration,
+      targetWord: q.targetWord || q.word || "",
+      targetWordTransliteration: q.targetWordTransliteration,
+      script: q.script || "latin",
       correctLanguage: q.language,
       correctMeaning: q.meaning,
       playerAnswers: this.languePlayerAnswers,

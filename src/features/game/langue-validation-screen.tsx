@@ -8,6 +8,31 @@ import { useGameStore, usePlayerStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
 
+/** Renders a sentence with the target word highlighted in rose bold */
+function HighlightedSentence({
+  sentence,
+  targetWord,
+  className,
+}: {
+  sentence: string;
+  targetWord: string;
+  className?: string;
+}) {
+  const idx = sentence.indexOf(targetWord);
+  if (idx === -1) {
+    return <span className={className}>{sentence}</span>;
+  }
+  const before = sentence.slice(0, idx);
+  const after = sentence.slice(idx + targetWord.length);
+  return (
+    <span className={className}>
+      {before}
+      <span className="font-bold text-rose-400">{targetWord}</span>
+      {after}
+    </span>
+  );
+}
+
 export function LangueValidationScreen() {
   const validationData = useGameStore((s) => s.langueValidationData);
   const answerResults = useGameStore((s) => s.langueAnswerResults);
@@ -39,16 +64,30 @@ export function LangueValidationScreen() {
         exit={{ opacity: 0, y: -20 }}
         className="flex flex-col h-full px-5 pb-4"
       >
-        {/* Header: word + correct answers */}
+        {/* Header: sentence + correct answers */}
         <div className="text-center mb-4 pt-2">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-800 border border-surface-700 mb-2">
             <span className="text-lg">🗣️</span>
             <span className="text-xs font-medium text-surface-300">Validation</span>
           </div>
-          <div className="flex justify-center mb-2">
-            <div className="px-6 py-3 rounded-xl bg-gradient-to-br from-rose-500 to-rose-700">
-              <span className="text-2xl font-display font-bold text-white">{validationData.word}</span>
-            </div>
+          <div className="px-4 py-3 rounded-xl bg-surface-800/60 border border-surface-700 mb-2">
+            <HighlightedSentence
+              sentence={validationData.sentence || validationData.word}
+              targetWord={validationData.targetWord || validationData.word}
+              className={cn(
+                "leading-relaxed text-surface-100",
+                validationData.script === "non-latin" ? "text-lg" : "text-base"
+              )}
+            />
+            {validationData.script === "non-latin" && validationData.sentenceTransliteration && validationData.targetWordTransliteration && (
+              <div className="mt-1">
+                <HighlightedSentence
+                  sentence={validationData.sentenceTransliteration}
+                  targetWord={validationData.targetWordTransliteration}
+                  className="text-sm text-surface-400 italic leading-relaxed"
+                />
+              </div>
+            )}
           </div>
           <p className="text-surface-400 text-xs">
             {validationData.correctLanguage} &mdash; {validationData.correctMeaning}
@@ -243,10 +282,24 @@ export function LangueValidationScreen() {
           <span className="text-xs font-medium text-surface-300">Validation</span>
         </div>
 
-        <div className="flex justify-center mb-2">
-          <div className="px-6 py-3 rounded-xl bg-gradient-to-br from-rose-500 to-rose-700">
-            <span className="text-2xl font-display font-bold text-white">{validationData.word}</span>
-          </div>
+        <div className="px-4 py-3 rounded-xl bg-surface-800/60 border border-surface-700 mb-2">
+          <HighlightedSentence
+            sentence={validationData.sentence || validationData.word}
+            targetWord={validationData.targetWord || validationData.word}
+            className={cn(
+              "leading-relaxed text-surface-100",
+              validationData.script === "non-latin" ? "text-lg" : "text-base"
+            )}
+          />
+          {validationData.script === "non-latin" && validationData.sentenceTransliteration && validationData.targetWordTransliteration && (
+            <div className="mt-1">
+              <HighlightedSentence
+                sentence={validationData.sentenceTransliteration}
+                targetWord={validationData.targetWordTransliteration}
+                className="text-sm text-surface-400 italic leading-relaxed"
+              />
+            </div>
+          )}
         </div>
 
         <p className="text-surface-400 text-xs">

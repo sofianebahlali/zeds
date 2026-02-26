@@ -38,7 +38,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -218,12 +218,18 @@ export interface PetitBacValidationSubmission {
 
 export interface LangueQuestion extends BaseQuestion {
   type: "langue";
-  word: string;
+  sentence: string;
+  sentenceTransliteration: string | null;
+  targetWord: string;
+  targetWordTransliteration: string | null;
   language: string;
   meaning: string;
   acceptedLanguages: string[];
   acceptedMeanings: string[];
   difficulty: "easy" | "medium" | "hard";
+  script: "latin" | "non-latin";
+  /** @deprecated kept for backward compat with old data */
+  word?: string;
 }
 
 export interface LanguePlayerAnswerData {
@@ -236,6 +242,11 @@ export interface LanguePlayerAnswerData {
 
 export interface LangueValidationData {
   word: string;
+  sentence: string;
+  sentenceTransliteration: string | null;
+  targetWord: string;
+  targetWordTransliteration: string | null;
+  script: "latin" | "non-latin";
   correctLanguage: string;
   correctMeaning: string;
   playerAnswers: LanguePlayerAnswerData[];
@@ -259,7 +270,16 @@ export interface LangueAnswerResultData {
   meaningCorrect: boolean;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion;
+export interface MathsQuestion extends BaseQuestion {
+  type: "maths";
+  question: string;
+  options: string[];
+  correctIndex: number;
+  category: string;
+  difficulty: "easy" | "medium" | "hard";
+}
+
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -559,5 +579,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Devine la langue et la signification du mot",
     icon: "🗣️",
     color: "from-rose-500 to-rose-700",
+  },
+  {
+    id: "maths",
+    name: "Maths",
+    description: "Résous le problème — attention aux pièges !",
+    icon: "🧮",
+    color: "from-indigo-500 to-indigo-700",
   },
 ];

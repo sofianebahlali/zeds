@@ -1047,6 +1047,32 @@ function GeoQuizQuestionView({
 // LANGUE QUESTION VIEW (Devine la Langue)
 // ==========================================
 
+/** Renders a sentence with the target word highlighted in rose bold */
+function HighlightedSentence({
+  sentence,
+  targetWord,
+  className,
+}: {
+  sentence: string;
+  targetWord: string;
+  className?: string;
+}) {
+  const idx = sentence.indexOf(targetWord);
+  if (idx === -1) {
+    // Fallback: just show the whole sentence
+    return <span className={className}>{sentence}</span>;
+  }
+  const before = sentence.slice(0, idx);
+  const after = sentence.slice(idx + targetWord.length);
+  return (
+    <span className={className}>
+      {before}
+      <span className="font-bold text-rose-400">{targetWord}</span>
+      {after}
+    </span>
+  );
+}
+
 interface LangueQuestionViewProps {
   question: LangueQuestion;
   languageAnswer: string;
@@ -1073,6 +1099,8 @@ function LangueQuestionView({
     }
   };
 
+  const isNonLatin = question.script === "non-latin";
+
   return (
     <>
       {/* Header */}
@@ -1082,22 +1110,34 @@ function LangueQuestionView({
           <span className="text-xs font-medium text-surface-300">Devine la Langue</span>
         </div>
         <h2 className="text-lg sm:text-xl font-display font-bold text-surface-100 text-balance">
-          Quelle langue et que signifie ce mot ?
+          Quelle langue ? Que signifie le mot en gras ?
         </h2>
       </div>
 
-      {/* Word display */}
+      {/* Sentence display */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="flex justify-center mb-6"
+        className="flex flex-col items-center gap-3 mb-6 px-4 py-5 rounded-2xl bg-surface-800/60 border border-surface-700"
       >
-        <div className="px-8 py-6 rounded-2xl bg-gradient-to-br from-rose-500 to-rose-700 shadow-lg">
-          <span className="text-3xl sm:text-4xl font-display font-black text-white">
-            {question.word}
-          </span>
-        </div>
+        {/* Native script line */}
+        <HighlightedSentence
+          sentence={question.sentence}
+          targetWord={question.targetWord}
+          className={cn(
+            "text-center leading-relaxed text-surface-100",
+            isNonLatin ? "text-2xl sm:text-3xl" : "text-xl sm:text-2xl"
+          )}
+        />
+        {/* Transliteration line (only for non-latin scripts) */}
+        {isNonLatin && question.sentenceTransliteration && question.targetWordTransliteration && (
+          <HighlightedSentence
+            sentence={question.sentenceTransliteration}
+            targetWord={question.targetWordTransliteration}
+            className="text-base sm:text-lg text-surface-400 text-center leading-relaxed italic"
+          />
+        )}
       </motion.div>
 
       {/* Two input fields */}
@@ -1144,7 +1184,7 @@ function LangueQuestionView({
                 value={meaningAnswer}
                 onChange={(e) => onMeaningChange(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Que signifie ce mot ?"
+                placeholder="Que signifie le mot en gras ?"
                 autoComplete="off"
                 autoCorrect="off"
                 spellCheck={false}
