@@ -8,7 +8,7 @@ import { Button, Card, Input, TimerProgress, Badge, Avatar } from "@/components/
 import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
-import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion } from "@/types";
+import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion } from "@/types";
 
 export function QuestionDisplay() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
@@ -35,7 +35,7 @@ export function QuestionDisplay() {
   const handleSubmit = () => {
     if (hasAnswered) return;
 
-    if (currentQuestion.type === "qcm" && selectedOption !== null) {
+    if ((currentQuestion.type === "qcm" || currentQuestion.type === "maths") && selectedOption !== null) {
       submitAnswer(String(selectedOption));
     } else if (currentQuestion.type === "estimation" && priceGuess.trim()) {
       submitAnswer(priceGuess.trim());
@@ -78,9 +78,9 @@ export function QuestionDisplay() {
 
       {/* Question */}
       <div className="flex-1 flex flex-col">
-        {currentQuestion.type === "qcm" && (
+        {(currentQuestion.type === "qcm" || currentQuestion.type === "maths") && (
           <QCMQuestionView
-            question={currentQuestion as QCMQuestion}
+            question={currentQuestion as QCMQuestion | MathsQuestion}
             selectedOption={selectedOption}
             hasAnswered={hasAnswered}
             onSelect={handleOptionSelect}
@@ -194,7 +194,7 @@ export function QuestionDisplay() {
 }
 
 interface QCMQuestionViewProps {
-  question: QCMQuestion;
+  question: QCMQuestion | MathsQuestion;
   selectedOption: number | null;
   hasAnswered: boolean;
   onSelect: (index: number) => void;
