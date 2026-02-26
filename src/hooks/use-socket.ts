@@ -324,6 +324,11 @@ export function useSocket() {
   }, [socket]);
 
   // Drawing actions
+  const submitDrawingSuggestion = useCallback((suggestion: string) => {
+    socket.emit("drawing:submit_suggestion", suggestion);
+    useGameStore.getState().submitAnswer(suggestion);
+  }, [socket]);
+
   const submitDrawing = useCallback((base64: string) => {
     socket.emit("drawing:submit_drawing", base64);
     useGameStore.getState().submitAnswer(base64.substring(0, 50)); // Mark as answered without storing full base64 in store
@@ -381,6 +386,7 @@ export function useSocket() {
     submitAnswer,
     requestNextRound,
     reconnect,
+    submitDrawingSuggestion,
     submitDrawing,
     submitDrawingGuess,
     advanceDrawingReveal,

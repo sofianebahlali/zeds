@@ -60,7 +60,7 @@ export function DrawingRevealScreen() {
       {/* Reveal content */}
       <div className="flex-1 flex flex-col items-center justify-center gap-3 overflow-y-auto min-h-0">
         <AnimatePresence mode="wait">
-          {/* Step 0: Phrase */}
+          {/* Step 0: Phrase + Suggester */}
           {step >= 0 && (
             <motion.div
               key={`phrase-${revealState.currentChainIndex}`}
@@ -69,7 +69,11 @@ export function DrawingRevealScreen() {
               className="w-full"
             >
               <Card variant="glass" padding="md" className="text-center">
-                <p className="text-surface-400 text-xs mb-1">La phrase était :</p>
+                <div className="flex items-center justify-center gap-2 mb-1">
+                  <span className="text-xl">{currentChain.suggesterAvatar}</span>
+                  <span className="font-medium text-surface-100">{currentChain.suggesterName}</span>
+                  <span className="text-surface-400 text-sm">a suggéré :</span>
+                </div>
                 <p className="text-lg font-display font-bold text-surface-100">
                   &laquo; {currentChain.phrase} &raquo;
                 </p>
@@ -171,9 +175,9 @@ export function DrawingRevealScreen() {
               {drawingScores.scores
                 .sort((a, b) => b.points - a.points)
                 .map((s) => {
-                  const chain = revealState.chains.find(c => c.artistId === s.playerId || c.guesserId === s.playerId);
-                  const name = chain?.artistId === s.playerId ? chain.artistName : chain?.guesserName || "???";
-                  const avatar = chain?.artistId === s.playerId ? chain.artistAvatar : chain?.guesserAvatar || "🦊";
+                  const chain = revealState.chains.find(c => c.artistId === s.playerId || c.guesserId === s.playerId || c.suggesterId === s.playerId);
+                  const name = chain?.artistId === s.playerId ? chain.artistName : chain?.guesserId === s.playerId ? chain.guesserName : chain?.suggesterName || "???";
+                  const avatar = chain?.artistId === s.playerId ? chain.artistAvatar : chain?.guesserId === s.playerId ? chain.guesserAvatar : chain?.suggesterAvatar || "🦊";
                   return (
                     <div key={s.playerId} className="flex items-center justify-between text-sm">
                       <div className="flex items-center gap-2">

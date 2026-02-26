@@ -292,7 +292,7 @@ export interface RoundResult {
 // DRAWING MODE TYPES
 // ==========================================
 
-export type DrawingPhase = "drawing" | "guessing" | "revealing";
+export type DrawingPhase = "suggesting" | "drawing" | "guessing" | "revealing";
 
 export interface DrawingPhaseData {
   phase: DrawingPhase;
@@ -301,6 +301,9 @@ export interface DrawingPhaseData {
 }
 
 export interface DrawingChain {
+  suggesterId: string;
+  suggesterName: string;
+  suggesterAvatar: string;
   artistId: string;
   artistName: string;
   artistAvatar: string;
@@ -412,6 +415,7 @@ export interface ClientToServerEvents {
   "game:request_next_round": () => void;
 
   // Drawing events
+  "drawing:submit_suggestion": (suggestion: string) => void;
   "drawing:submit_drawing": (drawingBase64: string) => void;
   "drawing:submit_guess": (guess: string) => void;
   "drawing:reveal_next": () => void;
@@ -531,7 +535,7 @@ export const GAME_MODES: GameModeInfo[] = [
   {
     id: "drawing",
     name: "Dessine-moi",
-    description: "Dessine une phrase, devine le dessin des autres",
+    description: "Suggère, dessine et devine !",
     icon: "🎨",
     color: "from-purple-500 to-purple-700",
   },

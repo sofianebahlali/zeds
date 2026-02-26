@@ -168,6 +168,8 @@ export class GameEngine {
 
   // Drawing mode state
   private drawingPhase: DrawingPhase = "drawing";
+  private suggestions: Map<string, string> = new Map(); // suggesterId -> suggested phrase
+  private suggestionAssignments: Map<string, string> = new Map(); // drawerId -> suggesterId
   private playerPhrases: Map<string, { phrase: string; questionId: string }> = new Map();
   private drawings: Map<string, string> = new Map();
   private drawingAssignments: Map<string, string> = new Map(); // guesserId -> artistId
@@ -533,10 +535,10 @@ export class GameEngine {
       room.currentRound = this.currentRound;
     }
 
-    // Drawing mode has its own multi-phase flow
+    // Drawing mode has its own multi-phase flow (suggest → draw → guess → reveal)
     if (nextMode === "drawing") {
       this.currentQuestion = nextQuestion;
-      this.startDrawingPhase();
+      this.startSuggestionPhase();
       return;
     }
 
@@ -1627,10 +1629,12 @@ export class GameEngine {
   }
 
   /**
-   * Start the drawing phase: assign phrases and begin timer
+   * Start the suggestion phase: players suggest phrases (30s)
    */
-  private startDrawingPhase(): void {
-    this.drawingPhase = "drawing";
+  private startSuggestionPhase(): void {
+    this.drawingPhase = "suggesting";
+    this.suggestions.clear();
+    this.suggestionAssignments.clear();
     this.drawings.clear();
     this.guesses.clear();
     this.playerPhrases.clear();
@@ -1646,21 +1650,70 @@ export class GameEngine {
       return;
     }
 
-    // Use the drawing question pool for phrase assignment
-    const phrasePool = this.drawingQuestionPool.length > 0
-      ? this.drawingQuestionPool
-      : [{ id: "fallback", type: "drawing" as const, phrase: "Un chat qui joue du piano", timeLimit: 90, points: 100 }];
-    const shuffled = [...phrasePool].sort(() => Math.random() - 0.5);
-    activePlayers.forEach((player, index) => {
-      const q = shuffled[index % shuffled.length];
-      this.playerPhrases.set(player.id, { phrase: q.phrase, questionId: q.id });
+    const timeLimit = 30;
+    this.timeRemaining = timeLimit;
+
+    this.io.to(this.room.code).emit("drawing:phase_start", "suggesting", {
+      phase: "suggesting",
+      timeLimit,
+      totalPlayers: activePlayers.length,
     });
 
-    // Build circular rotation: player[i] draws -> player[(i+1) % n] guesses
-    for (let i = 0; i < activePlayers.length; i++) {
-      const artist = activePlayers[i];
-      const guesser = activePlayers[(i + 1) % activePlayers.length];
-      this.drawingAssignments.set(guesser.id, artist.id);
+    this.startTimer();
+  }
+
+  /**
+   * Submit a suggestion for drawing
+   */
+  submitSuggestion(playerId: string, suggestion: string): void {
+    if (this.drawingPhase !== "suggesting") return;
+    if (this.suggestions.has(playerId)) return;
+
+    this.suggestions.set(playerId, suggestion.trim());
+    this.io.to(this.room.code).emit("game:player_answered", playerId);
+
+    // Check if all active players submitted
+    const activePlayers = this.getActivePlayers();
+    if (this.suggestions.size >= activePlayers.length) {
+      this.stopTimer();
+      this.startDrawingPhase();
+    }
+  }
+
+  /**
+   * Start the drawing phase: assign suggested phrases and begin timer
+   * Rotation: Player[i] suggests → Player[(i+1)] draws → Player[(i+2)] guesses
+   */
+  private startDrawingPhase(): void {
+    this.drawingPhase = "drawing";
+
+    const activePlayers = this.getActivePlayers();
+    const n = activePlayers.length;
+
+    // For players who didn't submit a suggestion, use fallback from pool
+    const fallbackPool = this.drawingQuestionPool.length > 0
+      ? [...this.drawingQuestionPool].sort(() => Math.random() - 0.5)
+      : [{ id: "fallback", type: "drawing" as const, phrase: "Un chat qui joue du piano", timeLimit: 90, points: 100 }];
+    let fallbackIdx = 0;
+    for (const player of activePlayers) {
+      if (!this.suggestions.has(player.id)) {
+        const fb = fallbackPool[fallbackIdx % fallbackPool.length];
+        this.suggestions.set(player.id, fb.phrase);
+        fallbackIdx++;
+      }
+    }
+
+    // Build 3-role circular rotation:
+    // Chain i: Player[i] suggests → Player[(i+1) % n] draws → Player[(i+2) % n] guesses
+    for (let i = 0; i < n; i++) {
+      const suggester = activePlayers[i];
+      const drawer = activePlayers[(i + 1) % n];
+      const guesser = activePlayers[(i + 2) % n];
+
+      const phrase = this.suggestions.get(suggester.id)!;
+      this.playerPhrases.set(drawer.id, { phrase, questionId: `suggestion_${suggester.id}` });
+      this.suggestionAssignments.set(drawer.id, suggester.id);
+      this.drawingAssignments.set(guesser.id, drawer.id);
     }
 
     const timeLimit = this.room.settings.roundDuration || 90;
@@ -1673,12 +1726,14 @@ export class GameEngine {
       totalPlayers: activePlayers.length,
     });
 
-    // Send each player their individual phrase
+    // Send each drawer their assigned phrase
     for (const player of activePlayers) {
-      const phraseData = this.playerPhrases.get(player.id)!;
-      const socketId = this.roomManager.getSocketIdFromPlayerId(player.id);
-      if (socketId) {
-        this.io.to(socketId).emit("drawing:your_phrase", phraseData.phrase, phraseData.questionId);
+      const phraseData = this.playerPhrases.get(player.id);
+      if (phraseData) {
+        const socketId = this.roomManager.getSocketIdFromPlayerId(player.id);
+        if (socketId) {
+          this.io.to(socketId).emit("drawing:your_phrase", phraseData.phrase, phraseData.questionId);
+        }
       }
     }
 
@@ -1691,7 +1746,9 @@ export class GameEngine {
   private onDrawingTimerExpired(): void {
     this.stopTimer();
 
-    if (this.drawingPhase === "drawing") {
+    if (this.drawingPhase === "suggesting") {
+      this.startDrawingPhase();
+    } else if (this.drawingPhase === "drawing") {
       this.startGuessingPhase();
     } else if (this.drawingPhase === "guessing") {
       this.startRevealPhase();
@@ -1772,12 +1829,16 @@ export class GameEngine {
 
     const activePlayers = this.getActivePlayers();
 
-    // Build chains
+    // Build chains with 3 roles: suggester → drawer → guesser
     this.drawingChains = [];
     for (const artist of activePlayers) {
       const phraseData = this.playerPhrases.get(artist.id);
       const drawingData = this.drawings.get(artist.id);
       if (!phraseData) continue;
+
+      // Find the suggester for this artist's phrase
+      const suggesterId = this.suggestionAssignments.get(artist.id) || artist.id;
+      const suggester = this.room.players.find((p) => p.id === suggesterId);
 
       // Find the guesser for this artist
       let guesserId = "";
@@ -1790,6 +1851,9 @@ export class GameEngine {
       const isCorrect = this.fuzzyMatchDrawingGuess(phraseData.phrase, guess);
 
       this.drawingChains.push({
+        suggesterId,
+        suggesterName: suggester?.name || "???",
+        suggesterAvatar: suggester?.avatar || "🦊",
         artistId: artist.id,
         artistName: artist.name,
         artistAvatar: artist.avatar,

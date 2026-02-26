@@ -6,6 +6,7 @@ import { CountdownOverlay } from "./countdown-overlay";
 import { QuestionDisplay } from "./question-display";
 import { RoundResult } from "./round-result";
 import { LeaderboardDisplay } from "./leaderboard-display";
+import { SuggestionPhaseScreen } from "./suggestion-phase-screen";
 import { DrawingPhaseScreen } from "./drawing-phase-screen";
 import { GuessingPhaseScreen } from "./guessing-phase-screen";
 import { DrawingRevealScreen } from "./drawing-reveal-screen";
@@ -33,6 +34,7 @@ export function GameScreen() {
     if (isLangue && status === "langue_validating") return "Validation";
     if (!isDrawingMode) return null;
     switch (status) {
+      case "suggesting": return "Suggère !";
       case "drawing": return "Dessine !";
       case "guessing": return "Devine !";
       case "drawing_reveal": return "Résultats";
@@ -86,6 +88,7 @@ export function GameScreen() {
           )}
           {status === "revealing" && <RoundResult key="result" />}
           {status === "leaderboard" && <LeaderboardDisplay key="leaderboard" />}
+          {status === "suggesting" && <SuggestionPhaseScreen key="suggesting" />}
           {status === "drawing" && <DrawingPhaseScreen key="drawing" />}
           {status === "guessing" && <GuessingPhaseScreen key="guessing" />}
           {status === "drawing_reveal" && <DrawingRevealScreen key="drawing-reveal" />}

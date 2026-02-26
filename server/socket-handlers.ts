@@ -300,6 +300,19 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     // DRAWING EVENTS
     // ==========================================
 
+    socket.on("drawing:submit_suggestion", (suggestion: string) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.submitSuggestion(playerId, suggestion);
+    });
+
     socket.on("drawing:submit_drawing", (drawingBase64: string) => {
       const playerId = roomManager.getPlayerIdFromSocket(socket.id);
       if (!playerId) return;

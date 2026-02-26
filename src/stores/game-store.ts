@@ -2,7 +2,7 @@ import { create } from "zustand";
 import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
-  | "drawing" | "guessing" | "drawing_reveal"
+  | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
   | "petitbac_validating"
   | "geoquiz_validating"
   | "langue_validating";
@@ -257,7 +257,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     timeRemaining: timeLimit,
     hasAnswered: false,
     answeredPlayers: [],
-    status: phase === "drawing" ? "drawing" : phase === "guessing" ? "guessing" : "drawing_reveal",
+    status: phase === "suggesting" ? "suggesting" : phase === "drawing" ? "drawing" : phase === "guessing" ? "guessing" : "drawing_reveal",
   }),
 
   setDrawingRevealState: (state) => set({
