@@ -21,6 +21,14 @@ export const QUESTION_THEMES = [
   "People & Célébrités",
   "Art & Architecture",
   "Fêtes & Traditions",
+  "Football",
+  "Jeux vidéo",
+  "Manga & Anime",
+  "Tennis",
+  "NBA & Basket",
+  "Politique",
+  "Culture Internet",
+  "Vie quotidienne",
 ] as const;
 
 export type QuestionTheme = (typeof QUESTION_THEMES)[number];
