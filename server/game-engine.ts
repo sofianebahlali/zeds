@@ -24,6 +24,7 @@ import type {
   LanguePlayerAnswerData,
   MathsQuestion,
   GuessGameQuestion,
+  GuessGameValidationSubmission,
   LineupQuestion,
   LineupMatch,
   LineupGuessResult,
@@ -174,6 +175,12 @@ export class GameEngine {
   private langueAutoValidationTimer: NodeJS.Timeout | null = null;
   private langueDecisions: Map<string, { languageCorrect: boolean; meaningCorrect: boolean }> = new Map();
   private languePlayerAnswers: LanguePlayerAnswerData[] = [];
+
+  // GuessGame validation state
+  private guessGameValidating: boolean = false;
+  private guessGameAutoValidationTimer: NodeJS.Timeout | null = null;
+  private guessGameDecisions: Map<string, boolean> = new Map();
+  private guessGamePlayerAnswers: { playerId: string; playerName: string; playerAvatar: string; answer: string }[] = [];
 
   // Drawing mode state
   private drawingPhase: DrawingPhase = "drawing";
@@ -831,6 +838,12 @@ export class GameEngine {
       return;
     }
 
+    // GuessGame: enter host validation phase instead of auto-scoring
+    if (this.currentQuestion.type === "guessgame") {
+      this.startGuessGameValidation();
+      return;
+    }
+
     // Lineup: show reveal screen first, then finalize scores
     if (this.currentQuestion.type === "lineup") {
       const q = this.currentQuestion as LineupQuestion;
@@ -877,9 +890,9 @@ export class GameEngine {
       if (this.room.settings.showLeaderboardBetweenRounds) {
         setTimeout(() => {
           this.nextRound();
-        }, 5000);
+        }, 8000);
       }
-    }, 3000);
+    }, 6000);
   }
 
   /**
@@ -1351,9 +1364,9 @@ export class GameEngine {
       if (this.room.settings.showLeaderboardBetweenRounds) {
         setTimeout(() => {
           this.nextRound();
-        }, 5000);
+        }, 8000);
       }
-    }, 3000);
+    }, 6000);
   }
 
   /**
@@ -1449,9 +1462,9 @@ export class GameEngine {
       if (this.room.settings.showLeaderboardBetweenRounds) {
         setTimeout(() => {
           this.nextRound();
-        }, 5000);
+        }, 8000);
       }
-    }, 3000);
+    }, 6000);
   }
 
   /**
@@ -1486,23 +1499,8 @@ export class GameEngine {
         const myAnswer = (myAnswers[category] || "").toLowerCase().trim();
         if (!myAnswer) continue;
 
-        // Count validated players with the exact same answer
-        let sameAnswerCount = 0;
-        for (const vpId of validatedPlayers) {
-          const vpAnswerObj = this.answers.get(vpId);
-          if (!vpAnswerObj) continue;
-          try {
-            const parsed = JSON.parse(vpAnswerObj.answer);
-            const theirAnswer = (parsed[category] || "").toLowerCase().trim();
-            if (theirAnswer === myAnswer) sameAnswerCount++;
-          } catch {}
-        }
-
-        totalPoints += sameAnswerCount > 1 ? 50 : 100;
+        totalPoints += 30;
       }
-
-      // Normalize to max 100 points per round
-      totalPoints = Math.round(totalPoints / q.categories.length);
 
       if (answer) {
         answer.points = totalPoints;
@@ -1726,9 +1724,9 @@ export class GameEngine {
       if (this.room.settings.showLeaderboardBetweenRounds) {
         setTimeout(() => {
           this.nextRound();
-        }, 5000);
+        }, 8000);
       }
-    }, 3000);
+    }, 6000);
   }
 
   /**
@@ -1962,9 +1960,9 @@ export class GameEngine {
       if (this.room.settings.showLeaderboardBetweenRounds) {
         setTimeout(() => {
           this.nextRound();
-        }, 5000);
+        }, 8000);
       }
-    }, 3000);
+    }, 6000);
   }
 
   private calculateLangueScores(
@@ -2013,6 +2011,196 @@ export class GameEngine {
       winner,
       scores,
     };
+  }
+
+  // ==========================================
+  // GUESS GAME VALIDATION METHODS
+  // ==========================================
+
+  private startGuessGameValidation(): void {
+    this.guessGameValidating = true;
+    this.guessGameDecisions.clear();
+    const q = this.currentQuestion as GuessGameQuestion;
+    const activePlayers = this.getActivePlayers();
+
+    // Ensure all players have an answer entry
+    for (const player of activePlayers) {
+      if (!this.answers.has(player.id)) {
+        this.answers.set(player.id, {
+          playerId: player.id,
+          questionId: q.id,
+          answer: "",
+          timestamp: Date.now(),
+        });
+      }
+    }
+
+    this.guessGamePlayerAnswers = activePlayers.map((player) => {
+      const answer = this.answers.get(player.id);
+      return {
+        playerId: player.id,
+        playerName: player.name,
+        playerAvatar: player.avatar,
+        answer: answer?.answer || "",
+      };
+    });
+
+    this.io.to(this.room.code).emit("guessgame:validation_start", {
+      gameTitle: q.gameTitle,
+      imageUrl: q.imageUrl,
+      playerAnswers: this.guessGamePlayerAnswers,
+    });
+
+    // Auto-validation timeout: 60 seconds
+    this.guessGameAutoValidationTimer = setTimeout(() => {
+      if (this.guessGameValidating) {
+        for (const pa of this.guessGamePlayerAnswers) {
+          if (this.guessGameDecisions.has(pa.playerId)) continue;
+          if (!pa.answer) {
+            this.guessGameDecisions.set(pa.playerId, false);
+            continue;
+          }
+          const normalized = GameEngine.normalizeForComparison(pa.answer);
+          const isMatch = q.acceptedAnswers.some(
+            (accepted) => GameEngine.normalizeForComparison(accepted) === normalized
+          );
+          this.guessGameDecisions.set(pa.playerId, isMatch);
+          this.io.to(this.room.code).emit("guessgame:answer_result", {
+            playerId: pa.playerId,
+            playerName: pa.playerName,
+            playerAvatar: pa.playerAvatar,
+            answer: pa.answer,
+            accepted: isMatch,
+          });
+        }
+        setTimeout(() => {
+          this.finalizeGuessGameFromDecisions();
+        }, 1500);
+      }
+    }, 60000);
+  }
+
+  validateSingleGuessGameAnswer(playerId: string, accepted: boolean): void {
+    if (!this.guessGameValidating || !this.currentQuestion) return;
+    if (this.guessGameDecisions.has(playerId)) return;
+
+    this.guessGameDecisions.set(playerId, accepted);
+
+    const pa = this.guessGamePlayerAnswers.find((p) => p.playerId === playerId);
+    if (!pa) return;
+
+    this.io.to(this.room.code).emit("guessgame:answer_result", {
+      playerId: pa.playerId,
+      playerName: pa.playerName,
+      playerAvatar: pa.playerAvatar,
+      answer: pa.answer,
+      accepted,
+    });
+
+    const playersToReview = this.guessGamePlayerAnswers.filter(
+      (p) => p.answer.trim().length > 0
+    );
+    const allReviewed = playersToReview.every((p) =>
+      this.guessGameDecisions.has(p.playerId)
+    );
+
+    if (allReviewed) {
+      for (const p of this.guessGamePlayerAnswers) {
+        if (!this.guessGameDecisions.has(p.playerId)) {
+          this.guessGameDecisions.set(p.playerId, false);
+        }
+      }
+      setTimeout(() => {
+        this.finalizeGuessGameFromDecisions();
+      }, 2000);
+    }
+  }
+
+  private finalizeGuessGameFromDecisions(): void {
+    if (!this.guessGameValidating) return;
+
+    const validatedPlayerIds = Array.from(this.guessGameDecisions.entries())
+      .filter(([, accepted]) => accepted)
+      .map(([id]) => id);
+
+    this.submitGuessGameValidation({ validatedPlayerIds });
+  }
+
+  submitGuessGameValidation(validation: GuessGameValidationSubmission): void {
+    if (!this.currentQuestion || !this.guessGameValidating) return;
+    this.guessGameValidating = false;
+
+    if (this.guessGameAutoValidationTimer) {
+      clearTimeout(this.guessGameAutoValidationTimer);
+      this.guessGameAutoValidationTimer = null;
+    }
+
+    const q = this.currentQuestion as GuessGameQuestion;
+    const scores: { playerId: string; points: number; total: number }[] = [];
+    let bestPoints = 0;
+    let winner: Player | undefined;
+
+    for (const player of this.room.players) {
+      const answer = this.answers.get(player.id);
+      const isValidated = validation.validatedPlayerIds.includes(player.id);
+
+      let points = 0;
+      if (isValidated && answer) {
+        points = q.points;
+
+        // Speed bonus: faster responses get more points
+        if (answer.responseTime !== undefined) {
+          const speedBonus = Math.max(0, Math.round((q.timeLimit - answer.responseTime) / q.timeLimit * 50));
+          points += speedBonus;
+        }
+      }
+
+      if (answer) {
+        answer.points = points;
+        answer.isCorrect = isValidated;
+      }
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, points);
+      scores.push({
+        playerId: player.id,
+        points,
+        total: updatedPlayer?.score || player.score,
+      });
+
+      if (points > bestPoints) {
+        bestPoints = points;
+        winner = player;
+      }
+    }
+
+    const results: RoundResult = {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion,
+      answers: Array.from(this.answers.values()),
+      correctAnswer: q.gameTitle,
+      winner,
+      scores,
+    };
+
+    this.io.to(this.room.code).emit("guessgame:validation_result", validation);
+    this.updateLoseStreaks(results);
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+    this.io.to(this.room.code).emit("game:round_end", results);
+
+    if (this.currentTeams) {
+      this.processTeamRoundEnd(results.scores);
+    }
+
+    setTimeout(() => {
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+
+      if (this.room.settings.showLeaderboardBetweenRounds) {
+        setTimeout(() => {
+          this.nextRound();
+        }, 8000);
+      }
+    }, 6000);
   }
 
   // ==========================================
@@ -2391,7 +2579,7 @@ export class GameEngine {
 
       setTimeout(() => {
         this.nextRound();
-      }, 5000);
+      }, 8000);
       return;
     }
 
@@ -2544,6 +2732,10 @@ export class GameEngine {
     if (this.langueAutoValidationTimer) {
       clearTimeout(this.langueAutoValidationTimer);
       this.langueAutoValidationTimer = null;
+    }
+    if (this.guessGameAutoValidationTimer) {
+      clearTimeout(this.guessGameAutoValidationTimer);
+      this.guessGameAutoValidationTimer = null;
     }
   }
 }

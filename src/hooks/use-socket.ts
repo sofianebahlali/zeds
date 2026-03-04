@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch } from "@/types";
 
 // Module-level flag: listeners are attached ONCE across all component instances
 let listenersAttached = false;
@@ -91,6 +91,11 @@ function setupSocketListeners() {
   // Game events
   socket.on("game:mode_changed", (mode: GameMode) => {
     useRoomStore.getState().setGameMode(mode);
+    useGameStore.getState().setModeTransition(mode);
+    // Auto-clear after animation
+    setTimeout(() => {
+      useGameStore.getState().setModeTransition(null);
+    }, 2500);
   });
 
   socket.on("game:starting", (countdown: number) => {
@@ -193,6 +198,19 @@ function setupSocketListeners() {
 
   socket.on("langue:answer_result", (data: LangueAnswerResultData) => {
     useGameStore.getState().addLangueAnswerResult(data);
+  });
+
+  // GuessGame events
+  socket.on("guessgame:validation_start", (data: GuessGameValidationData) => {
+    useGameStore.getState().setGuessGameValidation(data);
+  });
+
+  socket.on("guessgame:validation_result", (_validation: GuessGameValidationSubmission) => {
+    // round_end follows immediately
+  });
+
+  socket.on("guessgame:answer_result", (data: GuessGameAnswerResultData) => {
+    useGameStore.getState().addGuessGameAnswerResult(data);
   });
 
   // Lineup events
@@ -400,6 +418,10 @@ export function useSocket() {
     socket.emit("langue:submit_validation", validation);
   }, [socket]);
 
+  const validateGuessGameAnswer = useCallback((playerId: string, accepted: boolean) => {
+    socket.emit("guessgame:validate_answer", playerId, accepted);
+  }, [socket]);
+
   const submitLineupGuess = useCallback((guess: string) => {
     if (useGameStore.getState().timeRemaining > 0) {
       socket.emit("game:submit_answer", guess);
@@ -436,6 +458,7 @@ export function useSocket() {
     useGeoQuizHint,
     validateLangueAnswer,
     submitLangueValidation,
+    validateGuessGameAnswer,
     submitLineupGuess,
     skipLineupReveal,
   };

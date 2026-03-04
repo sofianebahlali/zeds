@@ -216,6 +216,35 @@ export interface GeoQuizAnswerResultData {
   accepted: boolean;
 }
 
+// ==========================================
+// GUESS GAME VALIDATION TYPES
+// ==========================================
+
+export interface GuessGamePlayerAnswerData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  answer: string;
+}
+
+export interface GuessGameValidationData {
+  gameTitle: string;
+  imageUrl: string;
+  playerAnswers: GuessGamePlayerAnswerData[];
+}
+
+export interface GuessGameValidationSubmission {
+  validatedPlayerIds: string[];
+}
+
+export interface GuessGameAnswerResultData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  answer: string;
+  accepted: boolean;
+}
+
 export interface PetitBacQuestion extends BaseQuestion {
   type: "petitbac";
   letter: string;
@@ -489,6 +518,11 @@ export interface ServerToClientEvents {
   "langue:validation_result": (validation: LangueValidationSubmission) => void;
   "langue:answer_result": (data: LangueAnswerResultData) => void;
 
+  // GuessGame events
+  "guessgame:validation_start": (data: GuessGameValidationData) => void;
+  "guessgame:validation_result": (validation: GuessGameValidationSubmission) => void;
+  "guessgame:answer_result": (data: GuessGameAnswerResultData) => void;
+
   // Lineup events
   "lineup:guess_result": (result: LineupGuessResult) => void;
   "lineup:reveal": (match: LineupMatch, scores: { playerId: string; foundCount: number }[]) => void;
@@ -536,6 +570,9 @@ export interface ClientToServerEvents {
   // Langue events
   "langue:submit_validation": (validation: LangueValidationSubmission) => void;
   "langue:validate_answer": (playerId: string, languageCorrect: boolean, meaningCorrect: boolean) => void;
+
+  // GuessGame events
+  "guessgame:validate_answer": (playerId: string, accepted: boolean) => void;
 
   // Lineup events
   "lineup:skip_reveal": () => void;

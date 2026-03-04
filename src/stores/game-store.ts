@@ -1,11 +1,12 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
   | "petitbac_validating"
   | "geoquiz_validating"
   | "langue_validating"
+  | "guessgame_validating"
   | "lineup_revealing";
 
 interface GameStoreState {
@@ -50,12 +51,19 @@ interface GameStoreState {
   teamData: TeamRoundData | null;
   teamRoundResult: TeamRoundResult | null;
 
+  // GuessGame mode
+  guessGameValidationData: GuessGameValidationData | null;
+  guessGameAnswerResults: GuessGameAnswerResultData[];
+
   // Lineup mode
   lineupFoundPlayers: { teamSide: 1 | 2; playerIndex: number; displayName: string; foundByPlayerId: string }[];
   lineupMyFoundCount: number;
   lineupLastGuessCorrect: boolean | null;
   lineupRevealScores: { playerId: string; foundCount: number }[] | null;
   lineupRevealMatch: LineupMatch | null;
+
+  // Mode transition
+  modeTransition: GameMode | null;
 
   // Actions
   setStatus: (status: GameStatus) => void;
@@ -94,10 +102,17 @@ interface GameStoreState {
   setLangueValidation: (data: LangueValidationData) => void;
   addLangueAnswerResult: (result: LangueAnswerResultData) => void;
 
+  // GuessGame actions
+  setGuessGameValidation: (data: GuessGameValidationData) => void;
+  addGuessGameAnswerResult: (result: GuessGameAnswerResultData) => void;
+
   // Lineup actions
   addLineupFoundPlayer: (result: LineupGuessResult) => void;
   setLineupLastGuessCorrect: (correct: boolean | null) => void;
   setLineupReveal: (match: LineupMatch, scores: { playerId: string; foundCount: number }[]) => void;
+
+  // Mode transition
+  setModeTransition: (mode: GameMode | null) => void;
 
   // Team actions
   setTeamRoundStart: (data: TeamRoundData) => void;
@@ -144,12 +159,19 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   langueValidationData: null,
   langueAnswerResults: [],
 
+  // GuessGame initial state
+  guessGameValidationData: null,
+  guessGameAnswerResults: [],
+
   // Lineup initial state
   lineupFoundPlayers: [],
   lineupMyFoundCount: 0,
   lineupLastGuessCorrect: null,
   lineupRevealScores: null,
   lineupRevealMatch: null,
+
+  // Mode transition initial state
+  modeTransition: null,
 
   // Team initial state
   teamData: null,
@@ -246,11 +268,14 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       geoQuizReviewIndex: 0,
       langueValidationData: null,
       langueAnswerResults: [],
+      guessGameValidationData: null,
+      guessGameAnswerResults: [],
       lineupFoundPlayers: [],
       lineupMyFoundCount: 0,
       lineupLastGuessCorrect: null,
       lineupRevealScores: null,
       lineupRevealMatch: null,
+      modeTransition: null,
       teamData: null,
       teamRoundResult: null,
     }),
@@ -284,10 +309,13 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       geoQuizReviewIndex: 0,
       langueValidationData: null,
       langueAnswerResults: [],
+      guessGameValidationData: null,
+      guessGameAnswerResults: [],
       lineupFoundPlayers: [],
       lineupMyFoundCount: 0,
       lineupLastGuessCorrect: null,
       lineupRevealMatch: null,
+      modeTransition: null,
       teamData: null,
       teamRoundResult: null,
     }),
@@ -363,6 +391,17 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     langueAnswerResults: [...state.langueAnswerResults, result],
   })),
 
+  // GuessGame actions
+  setGuessGameValidation: (data) => set({
+    guessGameValidationData: data,
+    guessGameAnswerResults: [],
+    status: "guessgame_validating",
+  }),
+
+  addGuessGameAnswerResult: (result) => set((state) => ({
+    guessGameAnswerResults: [...state.guessGameAnswerResults, result],
+  })),
+
   // Lineup actions
   addLineupFoundPlayer: (result) => set((state) => {
     if (!result.correct || result.teamSide === undefined || result.playerIndex === undefined) return {};
@@ -388,6 +427,9 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     lineupRevealScores: scores,
     status: "lineup_revealing",
   }),
+
+  // Mode transition
+  setModeTransition: (mode) => set({ modeTransition: mode }),
 
   // Team actions
   setTeamRoundStart: (data) => set({ teamData: data, teamRoundResult: null }),

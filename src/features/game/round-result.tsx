@@ -7,7 +7,7 @@ import { Card, Avatar, Badge } from "@/components/ui";
 import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
-import type { EstimationQuestion, PetitBacQuestion } from "@/types";
+import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion } from "@/types";
 
 const PETITBAC_CATEGORY_ICONS: Record<string, string> = {
   "Prénom": "👤",
@@ -257,6 +257,12 @@ export function RoundResult() {
                               const dev = Math.round(Math.abs(guess - real) / real * 100);
                               return `${guess.toLocaleString("fr-FR")} ${unit} (${dev}% d'écart)`;
                             })()
+                          : (roundResult.question.type === "qcm" || roundResult.question.type === "maths")
+                          ? (() => {
+                              const idx = parseInt(answer.answer, 10);
+                              const opts = (roundResult.question as QCMQuestion | MathsQuestion).options;
+                              return (!isNaN(idx) && opts && opts[idx]) ? opts[idx] : (answer.answer || "Pas de réponse");
+                            })()
                           : answer.answer || "Pas de réponse"}
                       </p>
                     )}
@@ -419,15 +425,6 @@ function PetitBacRoundResult({
                 const answer = (parsedAnswers[score.playerId]?.[category] || "").trim();
                 const isValidated = petitBacValidatedAnswers?.[category]?.includes(score.playerId) ?? false;
 
-                // Check if another validated player has the same answer (shared = 50pts)
-                const isShared = isValidated && (petitBacValidatedAnswers?.[category] || []).some(
-                  (otherId) => {
-                    if (otherId === score.playerId) return false;
-                    const otherAnswer = (parsedAnswers[otherId]?.[category] || "").toLowerCase().trim();
-                    return otherAnswer === answer.toLowerCase();
-                  }
-                );
-
                 return (
                   <div
                     key={score.playerId}
@@ -457,11 +454,8 @@ function PetitBacRoundResult({
                         {isValidated ? (
                           <>
                             <CheckCircle className="w-4 h-4 text-success-400" />
-                            <span className={cn(
-                              "text-xs font-bold",
-                              isShared ? "text-accent-400" : "text-success-400"
-                            )}>
-                              {isShared ? "50" : "100"}
+                            <span className="text-xs font-bold text-success-400">
+                              30
                             </span>
                           </>
                         ) : (
