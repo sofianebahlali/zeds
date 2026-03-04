@@ -47,7 +47,7 @@ interface GameStoreState {
 
   // Actions
   setStatus: (status: GameStatus) => void;
-  setCurrentQuestion: (question: Question) => void;
+  setCurrentQuestion: (question: Question, round?: number) => void;
   setTimeRemaining: (time: number) => void;
   decrementTime: () => void;
   setCountdown: (countdown: number) => void;
@@ -126,16 +126,17 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   // Actions
   setStatus: (status) => set({ status }),
 
-  setCurrentQuestion: (question) =>
-    set({
+  setCurrentQuestion: (question, round) =>
+    set((state) => ({
       currentQuestion: question,
+      currentRound: round ?? state.currentRound,
       timeRemaining: question.timeLimit,
       myAnswer: null,
       hasAnswered: false,
       answeredPlayers: [],
       status: "question",
       geoQuizHint: null,
-    }),
+    })),
 
   setTimeRemaining: (time) => set({ timeRemaining: time }),
 

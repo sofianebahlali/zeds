@@ -104,8 +104,8 @@ function setupSocketListeners() {
     useGameStore.getState().setCountdown(countdown);
   });
 
-  socket.on("game:round_start", (_round: number, question: Question) => {
-    useGameStore.getState().setCurrentQuestion(question);
+  socket.on("game:round_start", (round: number, question: Question) => {
+    useGameStore.getState().setCurrentQuestion(question, round);
   });
 
   socket.on("game:time_update", (time: number) => {
