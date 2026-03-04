@@ -818,8 +818,8 @@
     "acceptedAnswers": [
       "Raft"
     ],
-    "genre": "Adventure",
-    "releaseYear": 2022,
+    "genre": "Приключенческие игры",
+    "releaseYear": 20,
     "developer": "Redbeet Interactive",
     "difficulty": "medium",
     "timeLimit": 20,
@@ -866,8 +866,8 @@
     "acceptedAnswers": [
       "Phasmophobia"
     ],
-    "genre": "Action",
-    "releaseYear": 2020,
+    "genre": "Экшены",
+    "releaseYear": 18,
     "developer": "Kinetic Games",
     "difficulty": "medium",
     "timeLimit": 20,
@@ -946,8 +946,8 @@
       "Hunt: Showdown",
       "Hunt Showdown"
     ],
-    "genre": "Action",
-    "releaseYear": 2019,
+    "genre": "Экшены",
+    "releaseYear": 27,
     "developer": "Crytek",
     "difficulty": "hard",
     "timeLimit": 20,
@@ -1062,6 +1062,2172 @@
     "releaseYear": 2013,
     "developer": "Gaijin Entertainment",
     "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-067",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-067.jpg",
+    "gameTitle": "God of War",
+    "acceptedAnswers": [
+      "God of War",
+      "God of War 2018"
+    ],
+    "genre": "Action",
+    "releaseYear": 2022,
+    "developer": "Santa Monica Studio",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-068",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-068.jpg",
+    "gameTitle": "The Last of Us™ Part I",
+    "acceptedAnswers": [
+      "The Last of Us Part I",
+      "The Last of Us",
+      "TLOU"
+    ],
+    "genre": "Action",
+    "releaseYear": 2023,
+    "developer": "Naughty Dog LLC",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-069",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-069.jpg",
+    "gameTitle": "Ghost of Tsushima DIRECTOR'S CUT",
+    "acceptedAnswers": [
+      "Ghost of Tsushima",
+      "Ghost of Tsushima Director's Cut"
+    ],
+    "genre": "Action",
+    "releaseYear": 2024,
+    "developer": "Sucker Punch Productions",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-070",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-070.jpg",
+    "gameTitle": "Days Gone",
+    "acceptedAnswers": [
+      "Days Gone"
+    ],
+    "genre": "Action",
+    "releaseYear": 2021,
+    "developer": "Bend Studio",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-071",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-071.jpg",
+    "gameTitle": "DEATH STRANDING",
+    "acceptedAnswers": [
+      "Death Stranding"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "KOJIMA PRODUCTIONS",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-072",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-072.jpg",
+    "gameTitle": "UNCHARTED™: Legacy of Thieves Collection",
+    "acceptedAnswers": [
+      "Uncharted: Legacy of Thieves",
+      "Uncharted",
+      "Uncharted 4"
+    ],
+    "genre": "Adventure",
+    "releaseYear": 2022,
+    "developer": "Naughty Dog LLC",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-073",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-073.jpg",
+    "gameTitle": "Horizon Forbidden West™ Complete Edition",
+    "acceptedAnswers": [
+      "Horizon Forbidden West",
+      "Horizon 2"
+    ],
+    "genre": "Action",
+    "releaseYear": 2024,
+    "developer": "Guerrilla",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-074",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-074.jpg",
+    "gameTitle": "STAR WARS Jedi: Fallen Order™",
+    "acceptedAnswers": [
+      "Star Wars Jedi: Fallen Order",
+      "Jedi Fallen Order"
+    ],
+    "genre": "Action",
+    "releaseYear": 2019,
+    "developer": "Respawn Entertainment",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-075",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-075.jpg",
+    "gameTitle": "STAR WARS Jedi: Survivor™",
+    "acceptedAnswers": [
+      "Star Wars Jedi: Survivor",
+      "Jedi Survivor"
+    ],
+    "genre": "Action",
+    "releaseYear": 2023,
+    "developer": "Respawn",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-076",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-076.jpg",
+    "gameTitle": "Returnal™",
+    "acceptedAnswers": [
+      "Returnal"
+    ],
+    "genre": "Action",
+    "releaseYear": 2023,
+    "developer": "Housemarque",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-078",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-078.jpg",
+    "gameTitle": "A Plague Tale: Requiem",
+    "acceptedAnswers": [
+      "A Plague Tale: Requiem",
+      "A Plague Tale 2"
+    ],
+    "genre": "Action",
+    "releaseYear": 2022,
+    "developer": "Asobo Studio",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-079",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-079.jpg",
+    "gameTitle": "A Plague Tale: Innocence",
+    "acceptedAnswers": [
+      "A Plague Tale: Innocence",
+      "A Plague Tale"
+    ],
+    "genre": "Action",
+    "releaseYear": 2019,
+    "developer": "Asobo Studio",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-081",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-081.jpg",
+    "gameTitle": "Sleeping Dogs: Definitive Edition",
+    "acceptedAnswers": [
+      "Sleeping Dogs"
+    ],
+    "genre": "Action",
+    "releaseYear": 2014,
+    "developer": "United Front Games",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-082",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-082.jpg",
+    "gameTitle": "Resident Evil Village",
+    "acceptedAnswers": [
+      "Resident Evil Village",
+      "RE Village",
+      "RE8"
+    ],
+    "genre": "Action",
+    "releaseYear": 2021,
+    "developer": "CAPCOM Co., Ltd.",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-083",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-083.jpg",
+    "gameTitle": "Resident Evil 2",
+    "acceptedAnswers": [
+      "Resident Evil 2",
+      "RE2",
+      "Resident Evil 2 Remake"
+    ],
+    "genre": "Action",
+    "releaseYear": 2019,
+    "developer": "CAPCOM Co., Ltd.",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-084",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-084.jpg",
+    "gameTitle": "Resident Evil 4",
+    "acceptedAnswers": [
+      "Resident Evil 4",
+      "RE4",
+      "Resident Evil 4 Remake"
+    ],
+    "genre": "Action",
+    "releaseYear": 2023,
+    "developer": "CAPCOM Co., Ltd.",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-085",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-085.jpg",
+    "gameTitle": "Resident Evil 7 Biohazard",
+    "acceptedAnswers": [
+      "Resident Evil 7",
+      "RE7",
+      "Resident Evil 7: Biohazard"
+    ],
+    "genre": "Action",
+    "releaseYear": 2017,
+    "developer": "CAPCOM Co., Ltd.",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-086",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-086.jpg",
+    "gameTitle": "DARK SOULS™: REMASTERED",
+    "acceptedAnswers": [
+      "Dark Souls Remastered",
+      "Dark Souls",
+      "Dark Souls 1"
+    ],
+    "genre": "Action",
+    "releaseYear": 2018,
+    "developer": "QLOC",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-087",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-087.jpg",
+    "gameTitle": "Lies of P",
+    "acceptedAnswers": [
+      "Lies of P"
+    ],
+    "genre": "Action",
+    "releaseYear": 2023,
+    "developer": "NEOWIZ",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-088",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-088.jpg",
+    "gameTitle": "Nioh 2 – The Complete Edition",
+    "acceptedAnswers": [
+      "Nioh 2"
+    ],
+    "genre": "Action",
+    "releaseYear": 2021,
+    "developer": "KOEI TECMO GAMES CO., LTD.",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-089",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-089.jpg",
+    "gameTitle": "Sifu",
+    "acceptedAnswers": [
+      "Sifu"
+    ],
+    "genre": "Action",
+    "releaseYear": 2023,
+    "developer": "Sloclap",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-090",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-090.jpg",
+    "gameTitle": "CODE VEIN",
+    "acceptedAnswers": [
+      "Code Vein"
+    ],
+    "genre": "Action",
+    "releaseYear": 2019,
+    "developer": "Bandai Namco Studios",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-091",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-091.jpg",
+    "gameTitle": "REMNANT II®",
+    "acceptedAnswers": [
+      "Remnant 2",
+      "Remnant II"
+    ],
+    "genre": "Action",
+    "releaseYear": 2023,
+    "developer": "Gunfire Games",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-092",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-092.jpg",
+    "gameTitle": "Remnant: From the Ashes",
+    "acceptedAnswers": [
+      "Remnant: From the Ashes",
+      "Remnant"
+    ],
+    "genre": "Action",
+    "releaseYear": 2019,
+    "developer": "Gunfire Games",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-093",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-093.jpg",
+    "gameTitle": "DOOM Eternal",
+    "acceptedAnswers": [
+      "Doom Eternal",
+      "DOOM Eternal"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "id Software",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-094",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-094.jpg",
+    "gameTitle": "DOOM",
+    "acceptedAnswers": [
+      "Doom",
+      "DOOM",
+      "Doom 2016"
+    ],
+    "genre": "Action",
+    "releaseYear": 2016,
+    "developer": "id Software",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-095",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-095.jpg",
+    "gameTitle": "Dead Space",
+    "acceptedAnswers": [
+      "Dead Space",
+      "Dead Space Remake"
+    ],
+    "genre": "Action",
+    "releaseYear": 2023,
+    "developer": "Motive",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-096",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-096.jpg",
+    "gameTitle": "Titanfall® 2",
+    "acceptedAnswers": [
+      "Titanfall 2",
+      "Titanfall"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "Respawn Entertainment",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-097",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-097.jpg",
+    "gameTitle": "Metro Exodus",
+    "acceptedAnswers": [
+      "Metro Exodus",
+      "Metro"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "4A Games",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-098",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-098.jpg",
+    "gameTitle": "Half-Life: Alyx",
+    "acceptedAnswers": [
+      "Half-Life: Alyx",
+      "Half-Life Alyx",
+      "HL Alyx"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "Valve",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-099",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-099.jpg",
+    "gameTitle": "Half-Life 2",
+    "acceptedAnswers": [
+      "Half-Life 2",
+      "HL2"
+    ],
+    "genre": "Action",
+    "releaseYear": 2004,
+    "developer": "Valve",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-100",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-100.jpg",
+    "gameTitle": "Ghostrunner",
+    "acceptedAnswers": [
+      "Ghostrunner"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "One More Level",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-101",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-101.jpg",
+    "gameTitle": "Prey",
+    "acceptedAnswers": [
+      "Prey",
+      "Prey 2017"
+    ],
+    "genre": "Action",
+    "releaseYear": 2017,
+    "developer": "Arkane Studios",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-102",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-102.jpg",
+    "gameTitle": "Dishonored 2",
+    "acceptedAnswers": [
+      "Dishonored 2",
+      "Dishonored"
+    ],
+    "genre": "Action",
+    "releaseYear": 2016,
+    "developer": "Arkane Studios",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-103",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-103.jpg",
+    "gameTitle": "DEATHLOOP",
+    "acceptedAnswers": [
+      "Deathloop"
+    ],
+    "genre": "Action",
+    "releaseYear": 2021,
+    "developer": "Arkane Studios",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-104",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-104.jpg",
+    "gameTitle": "BioShock Infinite",
+    "acceptedAnswers": [
+      "BioShock Infinite",
+      "Bioshock Infinite"
+    ],
+    "genre": "Action",
+    "releaseYear": 2013,
+    "developer": "Irrational Games",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-105",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-105.jpg",
+    "gameTitle": "BioShock™ Remastered",
+    "acceptedAnswers": [
+      "BioShock Remastered",
+      "BioShock",
+      "Bioshock"
+    ],
+    "genre": "Action",
+    "releaseYear": 2016,
+    "developer": "2K Boston",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-106",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-106.jpg",
+    "gameTitle": "Tom Clancy's Rainbow Six Siege",
+    "acceptedAnswers": [
+      "Rainbow Six Siege",
+      "R6 Siege",
+      "R6S"
+    ],
+    "genre": "Action",
+    "releaseYear": 2015,
+    "developer": "Ubisoft Montreal",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-107",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-107.jpg",
+    "gameTitle": "Fallout 4",
+    "acceptedAnswers": [
+      "Fallout 4"
+    ],
+    "genre": "RPG",
+    "releaseYear": 2015,
+    "developer": "Bethesda Game Studios",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-108",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-108.jpg",
+    "gameTitle": "Fallout: New Vegas",
+    "acceptedAnswers": [
+      "Fallout: New Vegas",
+      "Fallout New Vegas",
+      "FNV"
+    ],
+    "genre": "Action",
+    "releaseYear": 2010,
+    "developer": "Obsidian Entertainment",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-109",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-109.jpg",
+    "gameTitle": "The Elder Scrolls V: Skyrim Special Edition",
+    "acceptedAnswers": [
+      "Skyrim",
+      "The Elder Scrolls V: Skyrim",
+      "Skyrim Special Edition"
+    ],
+    "genre": "RPG",
+    "releaseYear": 2016,
+    "developer": "Bethesda Game Studios",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-110",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-110.jpg",
+    "gameTitle": "Starfield",
+    "acceptedAnswers": [
+      "Starfield"
+    ],
+    "genre": "RPG",
+    "releaseYear": 2023,
+    "developer": "Bethesda Game Studios",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-111",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-111.jpg",
+    "gameTitle": "Disco Elysium - The Final Cut",
+    "acceptedAnswers": [
+      "Disco Elysium"
+    ],
+    "genre": "RPG",
+    "releaseYear": 2019,
+    "developer": "ZA/UM",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-112",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-112.jpg",
+    "gameTitle": "Divinity: Original Sin 2 - Definitive Edition",
+    "acceptedAnswers": [
+      "Divinity: Original Sin 2",
+      "Divinity Original Sin 2",
+      "DOS2"
+    ],
+    "genre": "Adventure",
+    "releaseYear": 2017,
+    "developer": "Larian Studios",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-113",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-113.jpg",
+    "gameTitle": "Pathfinder: Wrath of the Righteous - Enhanced Edition",
+    "acceptedAnswers": [
+      "Pathfinder: Wrath of the Righteous",
+      "Pathfinder WOTR"
+    ],
+    "genre": "Action",
+    "releaseYear": 2021,
+    "developer": "Owlcat Games",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-114",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-114.jpg",
+    "gameTitle": "Dragon's Dogma 2",
+    "acceptedAnswers": [
+      "Dragon's Dogma 2",
+      "Dragons Dogma 2"
+    ],
+    "genre": "Action",
+    "releaseYear": 2024,
+    "developer": "CAPCOM Co., Ltd.",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-115",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-115.jpg",
+    "gameTitle": "Dragon's Dogma: Dark Arisen",
+    "acceptedAnswers": [
+      "Dragon's Dogma: Dark Arisen",
+      "Dragon's Dogma",
+      "Dragons Dogma"
+    ],
+    "genre": "Action",
+    "releaseYear": 2016,
+    "developer": "Capcom",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-116",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-116.jpg",
+    "gameTitle": "Tales of ARISE",
+    "acceptedAnswers": [
+      "Tales of Arise"
+    ],
+    "genre": "Action",
+    "releaseYear": 2023,
+    "developer": "Bandai Namco Studios Inc.",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-117",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-117.jpg",
+    "gameTitle": "SCARLET NEXUS",
+    "acceptedAnswers": [
+      "Scarlet Nexus"
+    ],
+    "genre": "Action",
+    "releaseYear": 2021,
+    "developer": "BANDAI NAMCO Studios Inc.",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-118",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-118.jpg",
+    "gameTitle": "Like a Dragon: Infinite Wealth",
+    "acceptedAnswers": [
+      "Like a Dragon: Infinite Wealth",
+      "Infinite Wealth"
+    ],
+    "genre": "Action",
+    "releaseYear": 2024,
+    "developer": "Ryu Ga Gotoku Studio",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-119",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-119.jpg",
+    "gameTitle": "Yakuza: Like a Dragon",
+    "acceptedAnswers": [
+      "Yakuza: Like a Dragon",
+      "Yakuza Like a Dragon"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "Ryu Ga Gotoku Studio",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-120",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-120.jpg",
+    "gameTitle": "Yakuza 0",
+    "acceptedAnswers": [
+      "Yakuza 0",
+      "Yakuza Zero"
+    ],
+    "genre": "Action",
+    "releaseYear": 2018,
+    "developer": "Ryu Ga Gotoku Studio",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-121",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-121.jpg",
+    "gameTitle": "Persona 5 Royal",
+    "acceptedAnswers": [
+      "Persona 5 Royal",
+      "Persona 5",
+      "P5R"
+    ],
+    "genre": "RPG",
+    "releaseYear": 2022,
+    "developer": "ATLUS",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-122",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-122.jpg",
+    "gameTitle": "Persona 3 Reload",
+    "acceptedAnswers": [
+      "Persona 3 Reload",
+      "Persona 3",
+      "P3R"
+    ],
+    "genre": "Adventure",
+    "releaseYear": 2024,
+    "developer": "ATLUS",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-123",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-123.jpg",
+    "gameTitle": "Persona 4 Golden",
+    "acceptedAnswers": [
+      "Persona 4 Golden",
+      "Persona 4",
+      "P4G"
+    ],
+    "genre": "RPG",
+    "releaseYear": 2020,
+    "developer": "ATLUS",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-124",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-124.jpg",
+    "gameTitle": "FINAL FANTASY VII REMAKE INTERGRADE",
+    "acceptedAnswers": [
+      "Final Fantasy VII Remake",
+      "FF7 Remake",
+      "FF7R"
+    ],
+    "genre": "Action",
+    "releaseYear": 2022,
+    "developer": "Square Enix",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-125",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-125.jpg",
+    "gameTitle": "FINAL FANTASY XV WINDOWS EDITION",
+    "acceptedAnswers": [
+      "Final Fantasy XV",
+      "FF15",
+      "FFXV"
+    ],
+    "genre": "RPG",
+    "releaseYear": 2018,
+    "developer": "Square Enix",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-126",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-126.jpg",
+    "gameTitle": "The Forest",
+    "acceptedAnswers": [
+      "The Forest"
+    ],
+    "genre": "Action",
+    "releaseYear": 2018,
+    "developer": "Endnight Games Ltd",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-127",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-127.jpg",
+    "gameTitle": "Sons Of The Forest",
+    "acceptedAnswers": [
+      "Sons of the Forest",
+      "Sons of The Forest"
+    ],
+    "genre": "Action",
+    "releaseYear": 2024,
+    "developer": "Endnight Games Ltd",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-128",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-128.jpg",
+    "gameTitle": "Grounded",
+    "acceptedAnswers": [
+      "Grounded"
+    ],
+    "genre": "Action",
+    "releaseYear": 2022,
+    "developer": "Obsidian Entertainment",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-129",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-129.jpg",
+    "gameTitle": "Subnautica",
+    "acceptedAnswers": [
+      "Subnautica"
+    ],
+    "genre": "Adventure",
+    "releaseYear": 2018,
+    "developer": "Unknown Worlds Entertainment",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-130",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-130.jpg",
+    "gameTitle": "Subnautica: Below Zero",
+    "acceptedAnswers": [
+      "Subnautica: Below Zero",
+      "Subnautica Below Zero"
+    ],
+    "genre": "Adventure",
+    "releaseYear": 2021,
+    "developer": "Unknown Worlds Entertainment",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-131",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-131.jpg",
+    "gameTitle": "Project Zomboid",
+    "acceptedAnswers": [
+      "Project Zomboid"
+    ],
+    "genre": "Indie",
+    "releaseYear": 2013,
+    "developer": "The Indie Stone",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-132",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-132.jpg",
+    "gameTitle": "ASTRONEER",
+    "acceptedAnswers": [
+      "Astroneer"
+    ],
+    "genre": "Adventure",
+    "releaseYear": 2019,
+    "developer": "System Era Softworks",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-133",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-133.jpg",
+    "gameTitle": "Barotrauma",
+    "acceptedAnswers": [
+      "Barotrauma"
+    ],
+    "genre": "Acción",
+    "releaseYear": 14,
+    "developer": "FakeFish",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-134",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-134.jpg",
+    "gameTitle": "Celeste",
+    "acceptedAnswers": [
+      "Celeste"
+    ],
+    "genre": "Action",
+    "releaseYear": 2018,
+    "developer": "Maddy Makes Games Inc.",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-135",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-135.jpg",
+    "gameTitle": "Cuphead",
+    "acceptedAnswers": [
+      "Cuphead"
+    ],
+    "genre": "Action",
+    "releaseYear": 2017,
+    "developer": "Studio MDHR Entertainment Inc.",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-136",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-136.jpg",
+    "gameTitle": "Dead Cells",
+    "acceptedAnswers": [
+      "Dead Cells"
+    ],
+    "genre": "Action",
+    "releaseYear": 2018,
+    "developer": "Motion Twin",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-137",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-137.jpg",
+    "gameTitle": "Slay the Spire",
+    "acceptedAnswers": [
+      "Slay the Spire"
+    ],
+    "genre": "Indie",
+    "releaseYear": 2019,
+    "developer": "Mega Crit",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-138",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-138.jpg",
+    "gameTitle": "Enter the Gungeon",
+    "acceptedAnswers": [
+      "Enter the Gungeon"
+    ],
+    "genre": "Action",
+    "releaseYear": 2016,
+    "developer": "Dodge Roll",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-139",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-139.jpg",
+    "gameTitle": "Risk of Rain 2",
+    "acceptedAnswers": [
+      "Risk of Rain 2",
+      "Risk of Rain",
+      "ROR2"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "Hopoo Games",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-140",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-140.jpg",
+    "gameTitle": "Hades II",
+    "acceptedAnswers": [
+      "Hades II",
+      "Hades 2"
+    ],
+    "genre": "Action",
+    "releaseYear": 2025,
+    "developer": "Supergiant Games",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-141",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-141.jpg",
+    "gameTitle": "Cult of the Lamb",
+    "acceptedAnswers": [
+      "Cult of the Lamb"
+    ],
+    "genre": "Action",
+    "releaseYear": 2022,
+    "developer": "Massive Monster",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-142",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-142.jpg",
+    "gameTitle": "Brotato",
+    "acceptedAnswers": [
+      "Brotato"
+    ],
+    "genre": "Action",
+    "releaseYear": 2023,
+    "developer": "Blobfish",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-143",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-143.jpg",
+    "gameTitle": "Noita",
+    "acceptedAnswers": [
+      "Noita"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "Nolla Games",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-144",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-144.jpg",
+    "gameTitle": "Spelunky 2",
+    "acceptedAnswers": [
+      "Spelunky 2",
+      "Spelunky"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "Mossmouth",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-145",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-145.jpg",
+    "gameTitle": "Into the Breach",
+    "acceptedAnswers": [
+      "Into the Breach"
+    ],
+    "genre": "Indie",
+    "releaseYear": 2018,
+    "developer": "Subset Games",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-146",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-146.jpg",
+    "gameTitle": "FTL: Faster Than Light",
+    "acceptedAnswers": [
+      "FTL",
+      "FTL: Faster Than Light"
+    ],
+    "genre": "Indie",
+    "releaseYear": 2012,
+    "developer": "Subset Games",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-147",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-147.jpg",
+    "gameTitle": "Inscryption",
+    "acceptedAnswers": [
+      "Inscryption"
+    ],
+    "genre": "Adventure",
+    "releaseYear": 2021,
+    "developer": "Daniel Mullins Games",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-148",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-148.jpg",
+    "gameTitle": "Katana ZERO",
+    "acceptedAnswers": [
+      "Katana ZERO",
+      "Katana Zero"
+    ],
+    "genre": "Action",
+    "releaseYear": 2019,
+    "developer": "Askiisoft",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-149",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-149.jpg",
+    "gameTitle": "Hotline Miami",
+    "acceptedAnswers": [
+      "Hotline Miami"
+    ],
+    "genre": "Action",
+    "releaseYear": 2012,
+    "developer": "Dennaton Games",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-150",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-150.jpg",
+    "gameTitle": "Neon White",
+    "acceptedAnswers": [
+      "Neon White"
+    ],
+    "genre": "Action",
+    "releaseYear": 2022,
+    "developer": "Angel Matrix",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-151",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-151.jpg",
+    "gameTitle": "Hi-Fi RUSH",
+    "acceptedAnswers": [
+      "Hi-Fi Rush",
+      "Hi-Fi RUSH"
+    ],
+    "genre": "Action",
+    "releaseYear": 2023,
+    "developer": "Tango Gameworks",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-152",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-152.jpg",
+    "gameTitle": "Ori and the Blind Forest",
+    "acceptedAnswers": [
+      "Ori and the Blind Forest",
+      "Ori"
+    ],
+    "genre": "Action",
+    "releaseYear": 2015,
+    "developer": "Moon Studios GmbH",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-153",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-153.jpg",
+    "gameTitle": "Ori and the Will of the Wisps",
+    "acceptedAnswers": [
+      "Ori and the Will of the Wisps"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "Moon Studios GmbH",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-154",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-154.jpg",
+    "gameTitle": "TUNIC",
+    "acceptedAnswers": [
+      "Tunic"
+    ],
+    "genre": "Action",
+    "releaseYear": 2022,
+    "developer": "TUNIC Team",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-155",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-155.jpg",
+    "gameTitle": "Psychonauts 2",
+    "acceptedAnswers": [
+      "Psychonauts 2",
+      "Psychonauts"
+    ],
+    "genre": "Action",
+    "releaseYear": 2021,
+    "developer": "Double Fine Productions",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-156",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-156.jpg",
+    "gameTitle": "Undertale",
+    "acceptedAnswers": [
+      "Undertale"
+    ],
+    "genre": "Indie",
+    "releaseYear": 2015,
+    "developer": "tobyfox",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-157",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-157.jpg",
+    "gameTitle": "OMORI",
+    "acceptedAnswers": [
+      "Omori"
+    ],
+    "genre": "Adventure",
+    "releaseYear": 2020,
+    "developer": "OMOCAT, LLC",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-158",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-158.jpg",
+    "gameTitle": "Spiritfarer®: Farewell Edition",
+    "acceptedAnswers": [
+      "Spiritfarer"
+    ],
+    "genre": "Adventure",
+    "releaseYear": 2020,
+    "developer": "Thunder Lotus",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-159",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-159.jpg",
+    "gameTitle": "Outer Wilds",
+    "acceptedAnswers": [
+      "Outer Wilds"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "Mobius Digital",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-160",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-160.jpg",
+    "gameTitle": "Break The Targets",
+    "acceptedAnswers": [
+      "Return of the Obra Dinn",
+      "Obra Dinn"
+    ],
+    "genre": "Action",
+    "releaseYear": 2018,
+    "developer": "Q'Prod",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-161",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-161.jpg",
+    "gameTitle": "Firewatch",
+    "acceptedAnswers": [
+      "Firewatch"
+    ],
+    "genre": "Adventure",
+    "releaseYear": 2016,
+    "developer": "Campo Santo",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-162",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-162.jpg",
+    "gameTitle": "The Stanley Parable: Ultra Deluxe",
+    "acceptedAnswers": [
+      "The Stanley Parable",
+      "The Stanley Parable: Ultra Deluxe"
+    ],
+    "genre": "Adventure",
+    "releaseYear": 2022,
+    "developer": "Crows Crows Crows",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-163",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-163.jpg",
+    "gameTitle": "Superliminal",
+    "acceptedAnswers": [
+      "Superliminal"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "Pillow Castle",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-164",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-164.jpg",
+    "gameTitle": "RimWorld",
+    "acceptedAnswers": [
+      "RimWorld",
+      "Rimworld"
+    ],
+    "genre": "Indie",
+    "releaseYear": 2018,
+    "developer": "Ludeon Studios",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-165",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-165.jpg",
+    "gameTitle": "Factorio",
+    "acceptedAnswers": [
+      "Factorio"
+    ],
+    "genre": "Casual",
+    "releaseYear": 2020,
+    "developer": "Wube Software LTD.",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-166",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-166.jpg",
+    "gameTitle": "Dyson Sphere Program",
+    "acceptedAnswers": [
+      "Dyson Sphere Program",
+      "DSP"
+    ],
+    "genre": "Indie",
+    "releaseYear": 2021,
+    "developer": "Youthcat Studio",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-167",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-167.jpg",
+    "gameTitle": "Cities: Skylines",
+    "acceptedAnswers": [
+      "Cities: Skylines",
+      "Cities Skylines"
+    ],
+    "genre": "Simulation",
+    "releaseYear": 2015,
+    "developer": "Colossal Order",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-168",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-168.jpg",
+    "gameTitle": "Cities: Skylines II",
+    "acceptedAnswers": [
+      "Cities: Skylines II",
+      "Cities Skylines 2"
+    ],
+    "genre": "Simulation",
+    "releaseYear": 2023,
+    "developer": "Iceflake Studios",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-169",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-169.jpg",
+    "gameTitle": "Euro Truck Simulator 2",
+    "acceptedAnswers": [
+      "Euro Truck Simulator 2",
+      "ETS2"
+    ],
+    "genre": "Инди",
+    "releaseYear": 12,
+    "developer": "SCS Software",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-170",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-170.jpg",
+    "gameTitle": "Stellaris",
+    "acceptedAnswers": [
+      "Stellaris"
+    ],
+    "genre": "Simulation",
+    "releaseYear": 2016,
+    "developer": "Paradox Development Studio",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-171",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-171.jpg",
+    "gameTitle": "Crusader Kings III",
+    "acceptedAnswers": [
+      "Crusader Kings III",
+      "Crusader Kings 3",
+      "CK3"
+    ],
+    "genre": "RPG",
+    "releaseYear": 2020,
+    "developer": "Paradox Development Studio",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-172",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-172.jpg",
+    "gameTitle": "Europa Universalis IV",
+    "acceptedAnswers": [
+      "Europa Universalis IV",
+      "EU4"
+    ],
+    "genre": "Simulation",
+    "releaseYear": 2013,
+    "developer": "Paradox Development Studio",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-173",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-173.jpg",
+    "gameTitle": "Total War: WARHAMMER III",
+    "acceptedAnswers": [
+      "Total War: Warhammer III",
+      "Total War Warhammer 3",
+      "Warhammer 3"
+    ],
+    "genre": "Action",
+    "releaseYear": 2022,
+    "developer": "CREATIVE ASSEMBLY",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-174",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-174.jpg",
+    "gameTitle": "Age of Empires IV: Anniversary Edition",
+    "acceptedAnswers": [
+      "Age of Empires IV",
+      "Age of Empires 4",
+      "AOE4"
+    ],
+    "genre": "Strategy",
+    "releaseYear": 2021,
+    "developer": "World's Edge",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-175",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-175.jpg",
+    "gameTitle": "Mount & Blade II: Bannerlord",
+    "acceptedAnswers": [
+      "Mount & Blade II: Bannerlord",
+      "Bannerlord",
+      "Mount and Blade 2"
+    ],
+    "genre": "Action",
+    "releaseYear": 2022,
+    "developer": "TaleWorlds Entertainment",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-176",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-176.jpg",
+    "gameTitle": "Deep Rock Galactic",
+    "acceptedAnswers": [
+      "Deep Rock Galactic",
+      "DRG"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "Ghost Ship Games",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-177",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-177.jpg",
+    "gameTitle": "Warhammer: Vermintide 2",
+    "acceptedAnswers": [
+      "Warhammer: Vermintide 2",
+      "Vermintide 2"
+    ],
+    "genre": "Action",
+    "releaseYear": 2018,
+    "developer": "Fatshark",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-178",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-178.jpg",
+    "gameTitle": "Warhammer 40,000: Darktide",
+    "acceptedAnswers": [
+      "Warhammer 40,000: Darktide",
+      "Darktide",
+      "Warhammer Darktide"
+    ],
+    "genre": "Action",
+    "releaseYear": 2022,
+    "developer": "Fatshark",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-179",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-179.jpg",
+    "gameTitle": "Dead by Daylight",
+    "acceptedAnswers": [
+      "Dead by Daylight",
+      "DBD"
+    ],
+    "genre": "Action",
+    "releaseYear": 2016,
+    "developer": "Behaviour Interactive Inc.",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-180",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-180.jpg",
+    "gameTitle": "Rocket League®",
+    "acceptedAnswers": [
+      "Rocket League"
+    ],
+    "genre": "Action",
+    "releaseYear": 2015,
+    "developer": "Psyonix LLC",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-181",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-181.jpg",
+    "gameTitle": "Fall Guys",
+    "acceptedAnswers": [
+      "Fall Guys"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "Mediatonic",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-182",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-182.jpg",
+    "gameTitle": "Human Fall Flat",
+    "acceptedAnswers": [
+      "Human: Fall Flat",
+      "Human Fall Flat"
+    ],
+    "genre": "Adventure",
+    "releaseYear": 2016,
+    "developer": "No Brakes Games",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-183",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-183.jpg",
+    "gameTitle": "Gang Beasts",
+    "acceptedAnswers": [
+      "Gang Beasts"
+    ],
+    "genre": "Action",
+    "releaseYear": 2017,
+    "developer": "Boneloaf",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-184",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-184.jpg",
+    "gameTitle": "Overcooked! 2",
+    "acceptedAnswers": [
+      "Overcooked! 2",
+      "Overcooked 2",
+      "Overcooked"
+    ],
+    "genre": "Action",
+    "releaseYear": 2018,
+    "developer": "Ghost Town Games Ltd.",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-185",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-185.jpg",
+    "gameTitle": "Sea of Thieves: 2025 Edition",
+    "acceptedAnswers": [
+      "Sea of Thieves"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "Rare Ltd",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-186",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-186.jpg",
+    "gameTitle": "Mortal Kombat 11",
+    "acceptedAnswers": [
+      "Mortal Kombat 11",
+      "MK11"
+    ],
+    "genre": "Action",
+    "releaseYear": 2019,
+    "developer": "NetherRealm Studios",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-187",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-187.jpg",
+    "gameTitle": "Street Fighter™ 6",
+    "acceptedAnswers": [
+      "Street Fighter 6",
+      "SF6"
+    ],
+    "genre": "Action",
+    "releaseYear": 2023,
+    "developer": "CAPCOM Co., Ltd.",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-188",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-188.jpg",
+    "gameTitle": "TEKKEN 8",
+    "acceptedAnswers": [
+      "Tekken 8"
+    ],
+    "genre": "Action",
+    "releaseYear": 2024,
+    "developer": "Bandai Namco Studios Inc.",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-189",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-189.jpg",
+    "gameTitle": "DRAGON BALL FighterZ",
+    "acceptedAnswers": [
+      "Dragon Ball FighterZ",
+      "DBFZ"
+    ],
+    "genre": "Action",
+    "releaseYear": 2018,
+    "developer": "Arc System Works",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-190",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-190.jpg",
+    "gameTitle": "GUILTY GEAR -STRIVE-",
+    "acceptedAnswers": [
+      "Guilty Gear Strive",
+      "GGST",
+      "Guilty Gear -Strive-"
+    ],
+    "genre": "Action",
+    "releaseYear": 2021,
+    "developer": "Arc System Works",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-191",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-191.jpg",
+    "gameTitle": "Outlast",
+    "acceptedAnswers": [
+      "Outlast"
+    ],
+    "genre": "Action",
+    "releaseYear": 2013,
+    "developer": "Red Barrels",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-192",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-192.jpg",
+    "gameTitle": "Outlast 2",
+    "acceptedAnswers": [
+      "Outlast 2"
+    ],
+    "genre": "Action",
+    "releaseYear": 2017,
+    "developer": "Red Barrels",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-193",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-193.jpg",
+    "gameTitle": "Alien: Isolation",
+    "acceptedAnswers": [
+      "Alien: Isolation",
+      "Alien Isolation"
+    ],
+    "genre": "Action",
+    "releaseYear": 2014,
+    "developer": "Creative Assembly",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-194",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-194.jpg",
+    "gameTitle": "Amnesia: The Dark Descent",
+    "acceptedAnswers": [
+      "Amnesia: The Dark Descent",
+      "Amnesia"
+    ],
+    "genre": "Action",
+    "releaseYear": 2010,
+    "developer": "Frictional Games",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-195",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-195.jpg",
+    "gameTitle": "Borderlands 3",
+    "acceptedAnswers": [
+      "Borderlands 3"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "Gearbox Software",
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-196",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-196.jpg",
+    "gameTitle": "Path of Exile",
+    "acceptedAnswers": [
+      "Path of Exile",
+      "POE"
+    ],
+    "genre": "Action",
+    "releaseYear": 2013,
+    "developer": "Grinding Gear Games",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-197",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-197.jpg",
+    "gameTitle": "Lost Ark",
+    "acceptedAnswers": [
+      "Lost Ark"
+    ],
+    "genre": "Action",
+    "releaseYear": 2022,
+    "developer": "Smilegate RPG",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-198",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-198.jpg",
+    "gameTitle": "New World: Aeternum",
+    "acceptedAnswers": [
+      "New World"
+    ],
+    "genre": "Action",
+    "releaseYear": 2021,
+    "developer": "Amazon Game Studios",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-199",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-199.jpg",
+    "gameTitle": "METAL GEAR SOLID V: THE PHANTOM PAIN",
+    "acceptedAnswers": [
+      "Metal Gear Solid V",
+      "MGSV",
+      "Metal Gear Solid V: The Phantom Pain"
+    ],
+    "genre": "Action",
+    "releaseYear": 2015,
+    "developer": "KONAMI",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-200",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-200.jpg",
+    "gameTitle": "HITMAN World of Assassination",
+    "acceptedAnswers": [
+      "Hitman 3",
+      "Hitman: World of Assassination",
+      "Hitman WoA"
+    ],
+    "genre": "Action",
+    "releaseYear": 2022,
+    "developer": "IO Interactive A/S",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-201",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-201.jpg",
+    "gameTitle": "Warhammer 40,000: Space Marine 2",
+    "acceptedAnswers": [
+      "Warhammer 40,000: Space Marine 2",
+      "Space Marine 2"
+    ],
+    "genre": "Экшены",
+    "releaseYear": 9,
+    "developer": "Saber Interactive",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-202",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-202.jpg",
+    "gameTitle": "Dying Light",
+    "acceptedAnswers": [
+      "Dying Light"
+    ],
+    "genre": "Action",
+    "releaseYear": 2015,
+    "developer": "Techland",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-203",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-203.jpg",
+    "gameTitle": "Dying Light 2 Stay Human: Reloaded Edition",
+    "acceptedAnswers": [
+      "Dying Light 2",
+      "Dying Light 2 Stay Human"
+    ],
+    "genre": "Action",
+    "releaseYear": 2022,
+    "developer": "Techland",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-204",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-204.jpg",
+    "gameTitle": "Control Ultimate Edition",
+    "acceptedAnswers": [
+      "Control"
+    ],
+    "genre": "Action",
+    "releaseYear": 2020,
+    "developer": "Remedy Entertainment",
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "gg-205",
+    "type": "guessgame",
+    "imageUrl": "/images/guessgame/gg-205.jpg",
+    "gameTitle": "Kenshi",
+    "acceptedAnswers": [
+      "Kenshi"
+    ],
+    "genre": "Action",
+    "releaseYear": 2018,
+    "developer": "Lo-Fi Games",
+    "difficulty": "hard",
     "timeLimit": 20,
     "points": 100
   }
