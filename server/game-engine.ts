@@ -33,6 +33,9 @@ import type {
   DrawingRevealState,
   DrawingRoundResult,
   DrawingScoreBreakdown,
+  TeamInfo,
+  TeamRoundData,
+  TeamRoundResult,
 } from "../src/types";
 import { PETITBAC_CATEGORIES } from "../src/types";
 import { getQuestions as getDbQuestions, getTotalCount as getDbTotalCount } from "./question-db";
@@ -179,11 +182,18 @@ export class GameEngine {
   private guesses: Map<string, string> = new Map();
   private drawingChains: DrawingChain[] = [];
   private revealState: DrawingRevealState | null = null;
+  private lastDrawingScores: { playerId: string; points: number }[] = [];
+
+  // Team rounds state
+  private teamRoundsEnabled: boolean = false;
+  private currentTeams: TeamInfo[] | null = null;
+  private teamBurstRemaining: number = 0;
 
   constructor(room: Room, io: TypedIO, roomManager: RoomManager) {
     this.room = room;
     this.io = io;
     this.roomManager = roomManager;
+    this.teamRoundsEnabled = room.settings.teamRoundsEnabled ?? false;
     this.prepareQuestions();
   }
 
@@ -568,6 +578,27 @@ export class GameEngine {
       room.currentRound = this.currentRound;
     }
 
+    // Team burst logic (skip for drawing mode)
+    if (this.teamRoundsEnabled && nextMode !== "drawing") {
+      if (this.teamBurstRemaining > 0) {
+        // Already in a burst, decrement and re-emit
+        this.teamBurstRemaining--;
+        this.io.to(this.room.code).emit("game:team_round_start", {
+          teams: this.currentTeams!,
+          burstRoundsRemaining: this.teamBurstRemaining,
+        });
+      } else if (this.currentTeams === null && Math.random() < 0.3) {
+        // ~30% chance to start a new burst
+        const burstLength = 1 + Math.floor(Math.random() * 3); // 1-3
+        this.teamBurstRemaining = burstLength - 1; // -1 because current round counts
+        this.currentTeams = this.splitPlayersIntoTeams();
+        this.io.to(this.room.code).emit("game:team_round_start", {
+          teams: this.currentTeams,
+          burstRoundsRemaining: this.teamBurstRemaining,
+        });
+      }
+    }
+
     // Drawing mode has its own multi-phase flow (suggest → draw → guess → reveal)
     if (nextMode === "drawing") {
       this.currentQuestion = nextQuestion;
@@ -741,8 +772,16 @@ export class GameEngine {
     // Update room status
     this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
 
+    // Update lose streaks
+    this.updateLoseStreaks(results);
+
     // Send results
     this.io.to(this.room.code).emit("game:round_end", results);
+
+    // Team round end processing
+    if (this.currentTeams) {
+      this.processTeamRoundEnd(results.scores);
+    }
 
     // Show leaderboard after a delay
     setTimeout(() => {
@@ -756,6 +795,34 @@ export class GameEngine {
         }, 5000);
       }
     }, 3000);
+  }
+
+  /**
+   * Update lose streaks based on round results
+   */
+  private updateLoseStreaks(results: RoundResult): void {
+    for (const player of this.room.players) {
+      const scoreEntry = results.scores.find((s) => s.playerId === player.id);
+      if (scoreEntry && scoreEntry.points === 0) {
+        player.loseStreak++;
+      } else {
+        player.loseStreak = 0;
+      }
+    }
+  }
+
+  /**
+   * Update lose streaks for drawing mode (uses different score format)
+   */
+  private updateDrawingLoseStreaks(scores: { playerId: string; points: number }[]): void {
+    for (const player of this.room.players) {
+      const scoreEntry = scores.find((s) => s.playerId === player.id);
+      if (scoreEntry && scoreEntry.points === 0) {
+        player.loseStreak++;
+      } else {
+        player.loseStreak = 0;
+      }
+    }
   }
 
   /**
@@ -1124,11 +1191,19 @@ export class GameEngine {
     // Broadcast validated answers to everyone before round_end
     this.io.to(this.room.code).emit("petitbac:validation_result", validation);
 
+    // Update lose streaks
+    this.updateLoseStreaks(results);
+
     // Update room status
     this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
 
     // Send results
     this.io.to(this.room.code).emit("game:round_end", results);
+
+    // Team round end processing
+    if (this.currentTeams) {
+      this.processTeamRoundEnd(results.scores);
+    }
 
     // Show leaderboard after a delay
     setTimeout(() => {
@@ -1390,11 +1465,19 @@ export class GameEngine {
     // Broadcast validation result
     this.io.to(this.room.code).emit("geoquiz:validation_result", validation);
 
+    // Update lose streaks
+    this.updateLoseStreaks(results);
+
     // Update room status
     this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
 
     // Send results
     this.io.to(this.room.code).emit("game:round_end", results);
+
+    // Team round end processing
+    if (this.currentTeams) {
+      this.processTeamRoundEnd(results.scores);
+    }
 
     // Reset hint users for next round
     this.geoQuizHintUsers.clear();
@@ -1624,9 +1707,17 @@ export class GameEngine {
 
     this.io.to(this.room.code).emit("langue:validation_result", validation);
 
+    // Update lose streaks
+    this.updateLoseStreaks(results);
+
     this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
 
     this.io.to(this.room.code).emit("game:round_end", results);
+
+    // Team round end processing
+    if (this.currentTeams) {
+      this.processTeamRoundEnd(results.scores);
+    }
 
     setTimeout(() => {
       const leaderboard = this.roomManager.getLeaderboard(this.room.code);
@@ -1939,6 +2030,7 @@ export class GameEngine {
 
     // Calculate scores
     const scores = this.calculateDrawingScores();
+    this.lastDrawingScores = scores;
 
     // Initialize reveal navigation
     this.revealState = {
@@ -2055,7 +2147,8 @@ export class GameEngine {
       this.revealState.currentChainIndex++;
       this.revealState.currentStep = 0;
     } else {
-      // All chains revealed — show leaderboard then proceed
+      // All chains revealed — update lose streaks, show leaderboard then proceed
+      this.updateDrawingLoseStreaks(this.lastDrawingScores);
       this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
       const leaderboard = this.roomManager.getLeaderboard(this.room.code);
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
@@ -2099,6 +2192,68 @@ export class GameEngine {
       this.finishGame();
     } else {
       this.startRound();
+    }
+  }
+
+  // ==========================================
+  // TEAM ROUNDS HELPERS
+  // ==========================================
+
+  private splitPlayersIntoTeams(): TeamInfo[] {
+    const playerIds = this.room.players
+      .filter((p) => p.isConnected)
+      .map((p) => p.id);
+    // Shuffle
+    for (let i = playerIds.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [playerIds[i], playerIds[j]] = [playerIds[j], playerIds[i]];
+    }
+    const mid = Math.ceil(playerIds.length / 2);
+    return [
+      { id: "blue", name: "Les Bleus", playerIds: playerIds.slice(0, mid) },
+      { id: "red", name: "Les Rouges", playerIds: playerIds.slice(mid) },
+    ];
+  }
+
+  private processTeamRoundEnd(roundScores: { playerId: string; points: number }[]): void {
+    if (!this.currentTeams) return;
+
+    const teamTotals: Record<string, number> = { blue: 0, red: 0 };
+    for (const team of this.currentTeams) {
+      for (const pid of team.playerIds) {
+        const entry = roundScores.find((s) => s.playerId === pid);
+        teamTotals[team.id] += entry?.points || 0;
+      }
+    }
+
+    const winningTeamId: "blue" | "red" | "tie" =
+      teamTotals.blue > teamTotals.red ? "blue" :
+      teamTotals.red > teamTotals.blue ? "red" : "tie";
+
+    // Award team bonus (+50) to winning team members
+    const TEAM_BONUS = 50;
+    if (winningTeamId !== "tie") {
+      const winningTeam = this.currentTeams.find((t) => t.id === winningTeamId)!;
+      for (const pid of winningTeam.playerIds) {
+        this.roomManager.updatePlayerScore(pid, TEAM_BONUS);
+      }
+    }
+
+    const teamResult: TeamRoundResult = {
+      teams: this.currentTeams.map((t) => ({
+        teamId: t.id,
+        teamName: t.name,
+        totalPoints: teamTotals[t.id],
+        playerIds: t.playerIds,
+      })),
+      winningTeamId,
+    };
+
+    this.io.to(this.room.code).emit("game:team_round_end", teamResult);
+
+    // If burst is over, clear teams
+    if (this.teamBurstRemaining <= 0) {
+      this.currentTeams = null;
     }
   }
 

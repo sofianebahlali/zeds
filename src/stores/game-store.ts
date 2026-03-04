@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, TeamRoundData, TeamRoundResult } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
@@ -45,6 +45,10 @@ interface GameStoreState {
   langueValidationData: LangueValidationData | null;
   langueAnswerResults: LangueAnswerResultData[];
 
+  // Team rounds
+  teamData: TeamRoundData | null;
+  teamRoundResult: TeamRoundResult | null;
+
   // Actions
   setStatus: (status: GameStatus) => void;
   setCurrentQuestion: (question: Question, round?: number) => void;
@@ -81,6 +85,10 @@ interface GameStoreState {
   // Langue actions
   setLangueValidation: (data: LangueValidationData) => void;
   addLangueAnswerResult: (result: LangueAnswerResultData) => void;
+
+  // Team actions
+  setTeamRoundStart: (data: TeamRoundData) => void;
+  setTeamRoundEnd: (result: TeamRoundResult) => void;
 
   // Computed
   getProgress: () => number;
@@ -122,6 +130,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   // Langue initial state
   langueValidationData: null,
   langueAnswerResults: [],
+
+  // Team initial state
+  teamData: null,
+  teamRoundResult: null,
 
   // Actions
   setStatus: (status) => set({ status }),
@@ -211,6 +223,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       geoQuizReviewIndex: 0,
       langueValidationData: null,
       langueAnswerResults: [],
+      teamData: null,
+      teamRoundResult: null,
     }),
 
   finishGame: () => set({ status: "finished" }),
@@ -242,6 +256,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       geoQuizReviewIndex: 0,
       langueValidationData: null,
       langueAnswerResults: [],
+      teamData: null,
+      teamRoundResult: null,
     }),
 
   // Drawing actions
@@ -313,6 +329,14 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   addLangueAnswerResult: (result) => set((state) => ({
     langueAnswerResults: [...state.langueAnswerResults, result],
+  })),
+
+  // Team actions
+  setTeamRoundStart: (data) => set({ teamData: data, teamRoundResult: null }),
+  setTeamRoundEnd: (result) => set((state) => ({
+    teamRoundResult: result,
+    // Clear teamData if burst is over (remaining was 0)
+    teamData: state.teamData && state.teamData.burstRoundsRemaining <= 0 ? null : state.teamData,
   })),
 
   // Computed

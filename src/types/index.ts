@@ -12,6 +12,7 @@ export interface Player {
   score: number;
   roundScore: number;
   lastAnswerTime?: number;
+  loseStreak: number;
 }
 
 export type PlayerStatus = "idle" | "ready" | "answering" | "answered" | "disconnected";
@@ -38,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -52,6 +53,27 @@ export interface GameSettings {
   showLeaderboardBetweenRounds: boolean;
   difficulty: "easy" | "medium" | "hard";
   playlist: GameModeConfig[];
+  teamRoundsEnabled: boolean;
+}
+
+// ==========================================
+// TEAM TYPES
+// ==========================================
+
+export interface TeamInfo {
+  id: "blue" | "red";
+  name: string;
+  playerIds: string[];
+}
+
+export interface TeamRoundData {
+  teams: TeamInfo[];
+  burstRoundsRemaining: number;
+}
+
+export interface TeamRoundResult {
+  teams: { teamId: "blue" | "red"; teamName: string; totalPoints: number; playerIds: string[] }[];
+  winningTeamId: "blue" | "red" | "tie";
 }
 
 export const DEFAULT_PLAYLIST: GameModeConfig[] = [
@@ -68,6 +90,7 @@ export const DEFAULT_GAME_SETTINGS: GameSettings = {
   showLeaderboardBetweenRounds: true,
   difficulty: "medium",
   playlist: DEFAULT_PLAYLIST,
+  teamRoundsEnabled: false,
 };
 
 // ==========================================
@@ -290,7 +313,49 @@ export interface GuessGameQuestion extends BaseQuestion {
   difficulty: "easy" | "medium" | "hard";
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion;
+// ==========================================
+// LINEUP MODE TYPES
+// ==========================================
+
+export interface LineupPlayer {
+  pos: string;
+  name: string;
+  num: number;
+  alt: string[];
+}
+
+export interface LineupTeam {
+  name: string;
+  flag: string;
+  formation: string;
+  players: LineupPlayer[];
+}
+
+export interface LineupMatch {
+  id: string;
+  competition: string;
+  date: string;
+  score: string;
+  team1: LineupTeam;
+  team2: LineupTeam;
+}
+
+export interface LineupQuestion extends BaseQuestion {
+  type: "lineup";
+  match: LineupMatch;
+}
+
+export interface LineupGuessResult {
+  playerId: string;
+  correct: boolean;
+  teamSide?: 1 | 2;
+  playerIndex?: number;
+  displayName?: string;
+  foundCount: number;
+  totalPlayers: number;
+}
+
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -423,6 +488,13 @@ export interface ServerToClientEvents {
   "langue:validation_start": (data: LangueValidationData) => void;
   "langue:validation_result": (validation: LangueValidationSubmission) => void;
   "langue:answer_result": (data: LangueAnswerResultData) => void;
+
+  // Lineup events
+  "lineup:guess_result": (result: LineupGuessResult) => void;
+
+  // Team events
+  "game:team_round_start": (data: TeamRoundData) => void;
+  "game:team_round_end": (result: TeamRoundResult) => void;
 
   // Connection events
   "connection:reconnected": (room: Room, player: Player) => void;
@@ -604,5 +676,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Devine le jeu vidéo à partir du screenshot",
     icon: "🎮",
     color: "from-violet-500 to-violet-700",
+  },
+  {
+    id: "lineup",
+    name: "Compos",
+    description: "Retrouve les 22 joueurs d'un match mythique",
+    icon: "⚽",
+    color: "from-lime-500 to-lime-700",
   },
 ];

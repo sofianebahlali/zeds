@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useGameStore, useRoomStore } from "@/stores";
+import { useGameStore, useRoomStore, usePlayerStore } from "@/stores";
 import { CountdownOverlay } from "./countdown-overlay";
 import { QuestionDisplay } from "./question-display";
 import { RoundResult } from "./round-result";
@@ -15,12 +15,16 @@ import { GeoQuizValidationScreen } from "./geoquiz-validation-screen";
 import { LangueValidationScreen } from "./langue-validation-screen";
 import { ScreenContainer } from "@/components/layout";
 import { GAME_MODES } from "@/types";
+import { useSocket } from "@/hooks";
 
 export function GameScreen() {
   const status = useGameStore((s) => s.status);
   const currentRound = useGameStore((s) => s.currentRound);
   const totalRounds = useGameStore((s) => s.totalRounds);
+  const teamData = useGameStore((s) => s.teamData);
   const room = useRoomStore((s) => s.room);
+  const { socket } = useSocket();
+  const myPlayerId = `player_${socket.id}`;
   const currentGameMode = room?.gameMode;
   const isDrawingMode = currentGameMode === "drawing";
   const isPetitBac = currentGameMode === "petitbac";
@@ -79,8 +83,36 @@ export function GameScreen() {
         </motion.div>
       </div>
 
+      {/* Team banner */}
+      {teamData && (
+        <div className="fixed top-14 left-4 right-4 z-10 flex justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-900/90 border border-surface-700"
+          >
+            {teamData.teams.map((team) => {
+              const isMyTeam = team.playerIds.includes(myPlayerId);
+              return (
+                <span
+                  key={team.id}
+                  className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                    team.id === "blue"
+                      ? isMyTeam ? "bg-blue-500 text-white" : "bg-blue-500/20 text-blue-400"
+                      : isMyTeam ? "bg-red-500 text-white" : "bg-red-500/20 text-red-400"
+                  }`}
+                >
+                  {team.name}
+                  {isMyTeam && " (toi)"}
+                </span>
+              );
+            })}
+          </motion.div>
+        </div>
+      )}
+
       {/* Main content */}
-      <div className="w-full h-screen-safe pt-16 pb-safe-bottom">
+      <div className={`w-full h-screen-safe ${teamData ? "pt-24" : "pt-16"} pb-safe-bottom`}>
         <AnimatePresence mode="wait">
           {status === "countdown" && <CountdownOverlay key="countdown" />}
           {(status === "question" || status === "answering") && (

@@ -37,6 +37,7 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
           isConnected: true,
           score: 0,
           roundScore: 0,
+          loseStreak: 0,
         };
 
         const room = roomManager.createRoom(player);
@@ -71,6 +72,7 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
           isConnected: true,
           score: 0,
           roundScore: 0,
+          loseStreak: 0,
         };
 
         const room = roomManager.joinRoom(code, player);

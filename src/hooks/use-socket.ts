@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, TeamRoundData, TeamRoundResult } from "@/types";
 
 // Module-level flag: listeners are attached ONCE across all component instances
 let listenersAttached = false;
@@ -193,6 +193,15 @@ function setupSocketListeners() {
 
   socket.on("langue:answer_result", (data: LangueAnswerResultData) => {
     useGameStore.getState().addLangueAnswerResult(data);
+  });
+
+  // Team events
+  socket.on("game:team_round_start", (data: TeamRoundData) => {
+    useGameStore.getState().setTeamRoundStart(data);
+  });
+
+  socket.on("game:team_round_end", (result: TeamRoundResult) => {
+    useGameStore.getState().setTeamRoundEnd(result);
   });
 
   // Connection events

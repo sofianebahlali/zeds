@@ -130,7 +130,7 @@ export function LobbyScreen() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="mb-6"
+              className="mb-6 space-y-4"
             >
               <PlaylistBuilder
                 playlist={playlist}
@@ -138,6 +138,30 @@ export function LobbyScreen() {
                   updateRoomSettings({ playlist: newPlaylist });
                 }}
               />
+              <Card>
+                <label className="flex items-center justify-between cursor-pointer">
+                  <div>
+                    <p className="text-sm font-medium text-surface-100">Manches en équipe</p>
+                    <p className="text-xs text-surface-500">Active des manches aléatoires en équipe</p>
+                  </div>
+                  <button
+                    role="switch"
+                    aria-checked={room.settings.teamRoundsEnabled}
+                    onClick={() => updateRoomSettings({ teamRoundsEnabled: !room.settings.teamRoundsEnabled })}
+                    className={cn(
+                      "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
+                      room.settings.teamRoundsEnabled ? "bg-brand-500" : "bg-surface-700"
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "inline-block h-4 w-4 rounded-full bg-white transition-transform",
+                        room.settings.teamRoundsEnabled ? "translate-x-6" : "translate-x-1"
+                      )}
+                    />
+                  </button>
+                </label>
+              </Card>
             </motion.div>
           )}
         </AnimatePresence>

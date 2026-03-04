@@ -85,6 +85,7 @@ export const usePlayerStore = create<PlayerState>()(
           isConnected: true,
           score: state.score,
           roundScore: state.roundScore,
+          loseStreak: 0,
         };
       },
     }),

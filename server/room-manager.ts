@@ -12,6 +12,7 @@ const DEFAULT_SETTINGS: GameSettings = {
   showLeaderboardBetweenRounds: true,
   difficulty: "medium",
   playlist: [...DEFAULT_PLAYLIST],
+  teamRoundsEnabled: false,
 };
 
 export class RoomManager {
@@ -93,6 +94,7 @@ export class RoomManager {
       isConnected: true,
       score: 0,
       roundScore: 0,
+      loseStreak: 0,
     };
 
     room.players.push(newPlayer);
@@ -323,6 +325,7 @@ export class RoomManager {
     room.players.forEach((p) => {
       p.score = 0;
       p.roundScore = 0;
+      p.loseStreak = 0;
     });
     room.currentRound = 0;
   }
