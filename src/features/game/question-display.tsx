@@ -1314,7 +1314,7 @@ function GuessGameQuestionView({
         </motion.div>
       )}
 
-      {/* Answer input with autocomplete */}
+      {/* Answer input */}
       <div className="flex-1 flex flex-col justify-end">
         {hasAnswered ? (
           <motion.div
@@ -1334,55 +1334,18 @@ function GuessGameQuestionView({
           </motion.div>
         ) : (
           <div className="space-y-3">
-            <div className="relative">
-              <Input
-                ref={inputRef}
-                value={answer}
-                onChange={(e) => handleInputChange(e.target.value)}
-                onKeyDown={handleKeyDown}
-                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                onFocus={() => {
-                  if (suggestions.length > 0) setShowSuggestions(true);
-                }}
-                placeholder="Nom du jeu..."
-                autoFocus
-                autoComplete="off"
-                autoCorrect="off"
-                autoCapitalize="off"
-                spellCheck={false}
-              />
-
-              {/* Autocomplete dropdown */}
-              <AnimatePresence>
-                {showSuggestions && suggestions.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    className="absolute z-50 w-full mt-1 rounded-xl bg-surface-800 border border-surface-700 shadow-xl overflow-hidden"
-                  >
-                    {suggestions.map((title, i) => (
-                      <button
-                        key={title}
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          selectSuggestion(title);
-                        }}
-                        className={cn(
-                          "w-full text-left px-4 py-2.5 text-sm transition-colors",
-                          "hover:bg-surface-700",
-                          i === selectedSuggestionIndex
-                            ? "bg-violet-500/20 text-violet-300"
-                            : "text-surface-200"
-                        )}
-                      >
-                        {title}
-                      </button>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+            <Input
+              ref={inputRef}
+              value={answer}
+              onChange={(e) => onChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Nom du jeu..."
+              autoFocus
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+            />
 
             <Button
               variant="primary"
