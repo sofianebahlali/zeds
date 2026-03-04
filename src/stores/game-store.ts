@@ -56,11 +56,12 @@ interface GameStoreState {
   guessGameAnswerResults: GuessGameAnswerResultData[];
 
   // Lineup mode
-  lineupFoundPlayers: { teamSide: 1 | 2; playerIndex: number; displayName: string; foundByPlayerId: string }[];
+  lineupFoundPlayers: { teamSide: 1 | 2; playerIndex: number; displayName: string; foundByPlayerIds: string[] }[];
   lineupMyFoundCount: number;
   lineupLastGuessCorrect: boolean | null;
   lineupRevealScores: { playerId: string; foundCount: number }[] | null;
   lineupRevealMatch: LineupMatch | null;
+  lineupAlsoFoundNotifications: { displayName: string; playerName: string }[];
 
   // Mode transition
   modeTransition: GameMode | null;
@@ -107,9 +108,10 @@ interface GameStoreState {
   addGuessGameAnswerResult: (result: GuessGameAnswerResultData) => void;
 
   // Lineup actions
-  addLineupFoundPlayer: (result: LineupGuessResult) => void;
+  addLineupFoundPlayer: (result: LineupGuessResult, myPlayerId: string, playerName?: string) => void;
   setLineupLastGuessCorrect: (correct: boolean | null) => void;
   setLineupReveal: (match: LineupMatch, scores: { playerId: string; foundCount: number }[]) => void;
+  addLineupAlsoFoundNotification: (displayName: string, playerName: string) => void;
 
   // Mode transition
   setModeTransition: (mode: GameMode | null) => void;
@@ -169,6 +171,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   lineupLastGuessCorrect: null,
   lineupRevealScores: null,
   lineupRevealMatch: null,
+  lineupAlsoFoundNotifications: [],
 
   // Mode transition initial state
   modeTransition: null,
@@ -193,6 +196,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       lineupFoundPlayers: [],
       lineupMyFoundCount: 0,
       lineupLastGuessCorrect: null,
+      lineupAlsoFoundNotifications: [],
     })),
 
   setTimeRemaining: (time) => set({ timeRemaining: time }),
@@ -403,19 +407,33 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   })),
 
   // Lineup actions
-  addLineupFoundPlayer: (result) => set((state) => {
+  addLineupFoundPlayer: (result, myPlayerId, playerName) => set((state) => {
     if (!result.correct || result.teamSide === undefined || result.playerIndex === undefined) return {};
-    // Avoid duplicates
-    const exists = state.lineupFoundPlayers.some(
+    const existingIdx = state.lineupFoundPlayers.findIndex(
       (p) => p.teamSide === result.teamSide && p.playerIndex === result.playerIndex
     );
-    if (exists) return {};
+    if (existingIdx >= 0) {
+      // Player already found — add this finder if not already in the list
+      const existing = state.lineupFoundPlayers[existingIdx];
+      if (existing.foundByPlayerIds.includes(result.playerId)) return {};
+      const updated = [...state.lineupFoundPlayers];
+      updated[existingIdx] = {
+        ...existing,
+        foundByPlayerIds: [...existing.foundByPlayerIds, result.playerId],
+      };
+      // If someone else found a player I already found, add notification
+      const notifications = [...state.lineupAlsoFoundNotifications];
+      if (result.playerId !== myPlayerId && existing.foundByPlayerIds.includes(myPlayerId) && playerName) {
+        notifications.push({ displayName: existing.displayName, playerName });
+      }
+      return { lineupFoundPlayers: updated, lineupAlsoFoundNotifications: notifications };
+    }
     return {
       lineupFoundPlayers: [...state.lineupFoundPlayers, {
         teamSide: result.teamSide!,
         playerIndex: result.playerIndex!,
         displayName: result.displayName || "",
-        foundByPlayerId: result.playerId,
+        foundByPlayerIds: [result.playerId],
       }],
     };
   }),
@@ -427,6 +445,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     lineupRevealScores: scores,
     status: "lineup_revealing",
   }),
+
+  addLineupAlsoFoundNotification: (displayName, playerName) => set((state) => ({
+    lineupAlsoFoundNotifications: [...state.lineupAlsoFoundNotifications, { displayName, playerName }],
+  })),
 
   // Mode transition
   setModeTransition: (mode) => set({ modeTransition: mode }),

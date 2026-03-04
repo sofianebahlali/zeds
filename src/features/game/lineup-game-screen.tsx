@@ -55,11 +55,13 @@ function PlayerSlot({
   player,
   found,
   foundByMe,
+  foundByOther,
   globalIndex,
 }: {
   player: LineupPlayer;
   found: boolean;
   foundByMe: boolean;
+  foundByOther: boolean;
   globalIndex: number;
 }) {
   return (
@@ -75,7 +77,7 @@ function PlayerSlot({
           found
             ? foundByMe
               ? "bg-lime-500 border-lime-400 text-white"
-              : "bg-blue-500 border-blue-400 text-white"
+              : "bg-surface-600/80 border-surface-500 text-surface-300"
             : "bg-surface-700/60 border-surface-600 text-surface-400"
         )}
       >
@@ -87,7 +89,7 @@ function PlayerSlot({
           found
             ? foundByMe
               ? "text-lime-400"
-              : "text-blue-400"
+              : "text-surface-400"
             : "text-surface-500"
         )}
       >
@@ -111,7 +113,7 @@ function TeamFormation({
   flag: string;
   formation: string;
   players: LineupPlayer[];
-  foundPlayers: { teamSide: 1 | 2; playerIndex: number; displayName: string; foundByPlayerId: string }[];
+  foundPlayers: { teamSide: 1 | 2; playerIndex: number; displayName: string; foundByPlayerIds: string[] }[];
   globalOffset: number;
   myPlayerId: string;
   isReversed: boolean;
@@ -130,21 +132,14 @@ function TeamFormation({
         {orderedRows.map((row, rowIdx) => (
           <div key={rowIdx} className="flex justify-center gap-3">
             {row.map((player) => {
-              // Find global index of this player in the team
               const playerIdx = players.indexOf(player);
-              const isFound = foundPlayers.some(
-                (fp) =>
-                  fp.playerIndex === playerIdx &&
-                  ((globalOffset === 0 && fp.teamSide === 1) ||
-                    (globalOffset > 0 && fp.teamSide === 2))
+              const teamSide = globalOffset === 0 ? 1 : 2;
+              const fp = foundPlayers.find(
+                (fp) => fp.playerIndex === playerIdx && fp.teamSide === teamSide
               );
-              const foundByMe = foundPlayers.some(
-                (fp) =>
-                  fp.playerIndex === playerIdx &&
-                  ((globalOffset === 0 && fp.teamSide === 1) ||
-                    (globalOffset > 0 && fp.teamSide === 2)) &&
-                  fp.foundByPlayerId === myPlayerId
-              );
+              const isFound = !!fp;
+              const foundByMe = !!fp && fp.foundByPlayerIds.includes(myPlayerId);
+              const foundByOther = !!fp && fp.foundByPlayerIds.some((id) => id !== myPlayerId);
 
               return (
                 <PlayerSlot
@@ -152,6 +147,7 @@ function TeamFormation({
                   player={player}
                   found={isFound}
                   foundByMe={foundByMe}
+                  foundByOther={foundByOther}
                   globalIndex={globalOffset + playerIdx}
                 />
               );
@@ -159,6 +155,41 @@ function TeamFormation({
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+function AlsoFoundNotifications() {
+  const notifications = useGameStore((s) => s.lineupAlsoFoundNotifications);
+  const [visible, setVisible] = useState<{ displayName: string; playerName: string; id: number }[]>([]);
+  const nextIdRef = useRef(0);
+
+  useEffect(() => {
+    if (notifications.length === 0) return;
+    const latest = notifications[notifications.length - 1];
+    const id = nextIdRef.current++;
+    setVisible((prev) => [...prev, { ...latest, id }]);
+    const timer = setTimeout(() => {
+      setVisible((prev) => prev.filter((n) => n.id !== id));
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, [notifications.length]);
+
+  return (
+    <div className="fixed top-16 right-2 z-50 flex flex-col gap-1 pointer-events-none">
+      <AnimatePresence>
+        {visible.map((n) => (
+          <motion.div
+            key={n.id}
+            initial={{ opacity: 0, x: 40, scale: 0.9 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 40, scale: 0.9 }}
+            className="bg-surface-800/90 border border-surface-600/50 rounded-lg px-2.5 py-1.5 text-[10px] text-surface-300 backdrop-blur-sm"
+          >
+            <span className="text-surface-400 font-medium">{n.playerName}</span> a aussi trouvé <span className="text-lime-400 font-medium">{n.displayName}</span>
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 }
@@ -217,6 +248,8 @@ export function LineupGameScreen() {
       exit={{ opacity: 0 }}
       className="flex flex-col h-full px-3 py-2 gap-2"
     >
+      <AlsoFoundNotifications />
+
       {/* Match header */}
       <div className="text-center space-y-1">
         <div className="text-[11px] text-surface-400 font-medium uppercase tracking-wide">

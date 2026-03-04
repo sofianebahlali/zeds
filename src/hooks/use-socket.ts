@@ -216,11 +216,14 @@ function setupSocketListeners() {
   // Lineup events
   socket.on("lineup:guess_result", (result: LineupGuessResult) => {
     const store = useGameStore.getState();
+    const myPlayerId = `player_${socket.id}`;
     if (result.correct) {
-      store.addLineupFoundPlayer(result);
+      // Find the guesser's name for notifications
+      const room = useRoomStore.getState().room;
+      const guesserPlayer = room?.players.find((p) => p.id === result.playerId);
+      store.addLineupFoundPlayer(result, myPlayerId, guesserPlayer?.name);
     }
     // Update my own count
-    const myPlayerId = `player_${socket.id}`;
     if (result.playerId === myPlayerId) {
       store.setLineupLastGuessCorrect(result.correct);
       if (result.correct) {

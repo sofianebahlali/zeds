@@ -196,6 +196,7 @@ export class GameEngine {
 
   // Lineup mode state
   private lineupFoundPlayers: Map<string, Set<number>> = new Map(); // playerId -> set of found player global indices (0-21)
+  private lineupGlobalFound: Map<number, Set<string>> = new Map(); // global player index -> set of playerIds who found them
   private lineupRevealTimer: NodeJS.Timeout | null = null;
 
   // Team rounds state
@@ -649,6 +650,7 @@ export class GameEngine {
     // Lineup mode: reset per-round tracking
     if (nextMode === "lineup") {
       this.lineupFoundPlayers.clear();
+      this.lineupGlobalFound.clear();
     }
 
     this.currentQuestion = nextQuestion;
@@ -1280,6 +1282,12 @@ export class GameEngine {
       const playerIndex = teamSide === 1 ? matchedIndex : matchedIndex - match.team1.players.length;
       const displayName = allPlayers[matchedIndex].name;
 
+      // Track global found
+      if (!this.lineupGlobalFound.has(matchedIndex)) {
+        this.lineupGlobalFound.set(matchedIndex, new Set());
+      }
+      this.lineupGlobalFound.get(matchedIndex)!.add(playerId);
+
       // Award points immediately
       const points = this.currentQuestion.points;
       this.roomManager.updatePlayerScore(playerId, points);
@@ -1318,17 +1326,34 @@ export class GameEngine {
     let winner: Player | undefined;
     let bestCount = 0;
 
+    // Compute exclusive finds: lineup players found by only 1 person
+    const exclusiveFindsByPlayer = new Map<string, number>();
+    for (const [, finders] of this.lineupGlobalFound) {
+      if (finders.size === 1) {
+        const soloFinder = finders.values().next().value!;
+        exclusiveFindsByPlayer.set(soloFinder, (exclusiveFindsByPlayer.get(soloFinder) || 0) + 1);
+      }
+    }
+
     for (const player of this.room.players) {
       const found = this.lineupFoundPlayers.get(player.id);
       const foundCount = found ? found.size : 0;
-      // Points were already awarded in real-time, just report totals
+      const exclusiveCount = exclusiveFindsByPlayer.get(player.id) || 0;
+
+      // Award x2 bonus for exclusive finds (extra points on top of what was already given)
+      const bonusPoints = exclusiveCount * q.points;
+      if (bonusPoints > 0) {
+        this.roomManager.updatePlayerScore(player.id, bonusPoints);
+      }
+
+      const totalPoints = foundCount * q.points + bonusPoints;
       if (foundCount > bestCount) {
         bestCount = foundCount;
         winner = player;
       }
       scores.push({
         playerId: player.id,
-        points: foundCount * q.points,
+        points: totalPoints,
         total: player.score,
       });
     }
@@ -1357,6 +1382,7 @@ export class GameEngine {
     this.updateLoseStreaks(results);
     this.io.to(this.room.code).emit("game:round_end", results);
     this.lineupFoundPlayers.clear();
+    this.lineupGlobalFound.clear();
 
     setTimeout(() => {
       const leaderboard = this.roomManager.getLeaderboard(this.room.code);
