@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, TeamRoundData, TeamRoundResult } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
@@ -49,6 +49,11 @@ interface GameStoreState {
   teamData: TeamRoundData | null;
   teamRoundResult: TeamRoundResult | null;
 
+  // Lineup mode
+  lineupFoundPlayers: { teamSide: 1 | 2; playerIndex: number; displayName: string; foundByPlayerId: string }[];
+  lineupMyFoundCount: number;
+  lineupLastGuessCorrect: boolean | null;
+
   // Actions
   setStatus: (status: GameStatus) => void;
   setCurrentQuestion: (question: Question, round?: number) => void;
@@ -85,6 +90,10 @@ interface GameStoreState {
   // Langue actions
   setLangueValidation: (data: LangueValidationData) => void;
   addLangueAnswerResult: (result: LangueAnswerResultData) => void;
+
+  // Lineup actions
+  addLineupFoundPlayer: (result: LineupGuessResult) => void;
+  setLineupLastGuessCorrect: (correct: boolean | null) => void;
 
   // Team actions
   setTeamRoundStart: (data: TeamRoundData) => void;
@@ -131,6 +140,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   langueValidationData: null,
   langueAnswerResults: [],
 
+  // Lineup initial state
+  lineupFoundPlayers: [],
+  lineupMyFoundCount: 0,
+  lineupLastGuessCorrect: null,
+
   // Team initial state
   teamData: null,
   teamRoundResult: null,
@@ -148,6 +162,9 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       answeredPlayers: [],
       status: "question",
       geoQuizHint: null,
+      lineupFoundPlayers: [],
+      lineupMyFoundCount: 0,
+      lineupLastGuessCorrect: null,
     })),
 
   setTimeRemaining: (time) => set({ timeRemaining: time }),
@@ -223,6 +240,9 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       geoQuizReviewIndex: 0,
       langueValidationData: null,
       langueAnswerResults: [],
+      lineupFoundPlayers: [],
+      lineupMyFoundCount: 0,
+      lineupLastGuessCorrect: null,
       teamData: null,
       teamRoundResult: null,
     }),
@@ -256,6 +276,9 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       geoQuizReviewIndex: 0,
       langueValidationData: null,
       langueAnswerResults: [],
+      lineupFoundPlayers: [],
+      lineupMyFoundCount: 0,
+      lineupLastGuessCorrect: null,
       teamData: null,
       teamRoundResult: null,
     }),
@@ -330,6 +353,26 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   addLangueAnswerResult: (result) => set((state) => ({
     langueAnswerResults: [...state.langueAnswerResults, result],
   })),
+
+  // Lineup actions
+  addLineupFoundPlayer: (result) => set((state) => {
+    if (!result.correct || result.teamSide === undefined || result.playerIndex === undefined) return {};
+    // Avoid duplicates
+    const exists = state.lineupFoundPlayers.some(
+      (p) => p.teamSide === result.teamSide && p.playerIndex === result.playerIndex
+    );
+    if (exists) return {};
+    return {
+      lineupFoundPlayers: [...state.lineupFoundPlayers, {
+        teamSide: result.teamSide!,
+        playerIndex: result.playerIndex!,
+        displayName: result.displayName || "",
+        foundByPlayerId: result.playerId,
+      }],
+    };
+  }),
+
+  setLineupLastGuessCorrect: (correct) => set({ lineupLastGuessCorrect: correct }),
 
   // Team actions
   setTeamRoundStart: (data) => set({ teamData: data, teamRoundResult: null }),

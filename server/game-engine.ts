@@ -24,6 +24,9 @@ import type {
   LanguePlayerAnswerData,
   MathsQuestion,
   GuessGameQuestion,
+  LineupQuestion,
+  LineupMatch,
+  LineupGuessResult,
   Answer,
   RoundResult,
   ClientToServerEvents,
@@ -184,6 +187,9 @@ export class GameEngine {
   private revealState: DrawingRevealState | null = null;
   private lastDrawingScores: { playerId: string; points: number }[] = [];
 
+  // Lineup mode state
+  private lineupFoundPlayers: Map<string, Set<number>> = new Map(); // playerId -> set of found player global indices (0-21)
+
   // Team rounds state
   private teamRoundsEnabled: boolean = false;
   private currentTeams: TeamInfo[] | null = null;
@@ -299,6 +305,17 @@ export class GameEngine {
       return JSON.parse(raw) as GuessGameQuestion[];
     } catch {
       console.warn("No guessgame questions found at", filePath);
+      return [];
+    }
+  }
+
+  private static loadLineupMatches(): LineupMatch[] {
+    const filePath = path.resolve(__dirname, "../data/questions/lineups.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw) as LineupMatch[];
+    } catch {
+      console.warn("No lineup questions found at", filePath);
       return [];
     }
   }
@@ -442,6 +459,21 @@ export class GameEngine {
         pool = GameEngine.loadGuessGameQuestions();
         if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
         break;
+      case "lineup": {
+        const matches = GameEngine.loadLineupMatches();
+        if (matches.length === 0) {
+          pool = [...SAMPLE_QUESTIONS];
+          break;
+        }
+        const shuffledMatches = matches.sort(() => Math.random() - 0.5).slice(0, count);
+        return shuffledMatches.map((match, i) => ({
+          id: `lineup_${i + 1}`,
+          type: "lineup" as const,
+          match,
+          timeLimit: 120,
+          points: 10, // points per player found
+        }));
+      }
       case "drawing": {
         // For drawing, each "round" is a full draw→guess→reveal cycle
         // We use a placeholder question; actual phrases come from drawingQuestionPool
@@ -578,8 +610,8 @@ export class GameEngine {
       room.currentRound = this.currentRound;
     }
 
-    // Team burst logic (skip for drawing mode)
-    if (this.teamRoundsEnabled && nextMode !== "drawing") {
+    // Team burst logic (skip for drawing and lineup modes)
+    if (this.teamRoundsEnabled && nextMode !== "drawing" && nextMode !== "lineup") {
       if (this.teamBurstRemaining > 0) {
         // Already in a burst, decrement and re-emit
         this.teamBurstRemaining--;
@@ -604,6 +636,11 @@ export class GameEngine {
       this.currentQuestion = nextQuestion;
       this.startSuggestionPhase();
       return;
+    }
+
+    // Lineup mode: reset per-round tracking
+    if (nextMode === "lineup") {
+      this.lineupFoundPlayers.clear();
     }
 
     this.currentQuestion = nextQuestion;
@@ -671,6 +708,26 @@ export class GameEngine {
         acceptedAnswers: [],
       };
     }
+    if (question.type === "lineup") {
+      // Send match info but hide player names — client shows empty slots
+      const hideTeamPlayers = (team: LineupMatch["team1"]) => ({
+        ...team,
+        players: team.players.map((p) => ({
+          pos: p.pos,
+          name: "",
+          num: p.num,
+          alt: [],
+        })),
+      });
+      return {
+        ...question,
+        match: {
+          ...question.match,
+          team1: hideTeamPlayers(question.match.team1),
+          team2: hideTeamPlayers(question.match.team2),
+        },
+      };
+    }
     // petitbac: nothing to hide
     return question;
   }
@@ -708,6 +765,13 @@ export class GameEngine {
    */
   submitAnswer(playerId: string, answerText: string): void {
     if (!this.currentQuestion) return;
+
+    // Lineup mode: continuous multi-answer per round
+    if (this.currentQuestion.type === "lineup") {
+      this.handleLineupGuess(playerId, answerText);
+      return;
+    }
+
     if (this.answers.has(playerId)) return; // Already answered
     if (this.timeRemaining <= 0 && !this.petitBacGracePeriod) return; // Time's up (except during petit bac grace period)
 
@@ -763,6 +827,26 @@ export class GameEngine {
     // Langue: enter host validation phase instead of auto-scoring
     if (this.currentQuestion.type === "langue") {
       this.startLangueValidation();
+      return;
+    }
+
+    // Lineup: scores already awarded in real-time, just finalize
+    if (this.currentQuestion.type === "lineup") {
+      const results = this.calculateLineupScores();
+      this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+      this.updateLoseStreaks(results);
+      this.io.to(this.room.code).emit("game:round_end", results);
+      this.lineupFoundPlayers.clear();
+
+      setTimeout(() => {
+        const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+        this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+        if (this.room.settings.showLeaderboardBetweenRounds) {
+          setTimeout(() => {
+            this.nextRound();
+          }, 5000);
+        }
+      }, 3000);
       return;
     }
 
@@ -1046,6 +1130,10 @@ export class GameEngine {
       }
       case "guessgame":
         return (this.currentQuestion as GuessGameQuestion).gameTitle;
+      case "lineup": {
+        const q = this.currentQuestion as LineupQuestion;
+        return `${q.match.team1.name} vs ${q.match.team2.name}`;
+      }
       default:
         return "";
     }
@@ -1124,9 +1212,121 @@ export class GameEngine {
           (accepted) => GameEngine.normalizeForComparison(accepted) === normalizedInput
         );
       }
+      case "lineup":
+        // Lineup scoring is handled in handleLineupGuess
+        return false;
       default:
         return false;
     }
+  }
+
+  // ==========================================
+  // LINEUP METHODS
+  // ==========================================
+
+  /**
+   * Handle a lineup guess: check if the guessed name matches any unfound player
+   */
+  private handleLineupGuess(playerId: string, guess: string): void {
+    if (!this.currentQuestion || this.currentQuestion.type !== "lineup") return;
+    if (this.timeRemaining <= 0) return;
+
+    const match = (this.currentQuestion as LineupQuestion).match;
+    const allPlayers = [...match.team1.players, ...match.team2.players];
+
+    // Initialize tracking for this player if needed
+    if (!this.lineupFoundPlayers.has(playerId)) {
+      this.lineupFoundPlayers.set(playerId, new Set());
+    }
+    const found = this.lineupFoundPlayers.get(playerId)!;
+
+    const normalizedGuess = GameEngine.normalizeForComparison(guess);
+    if (normalizedGuess.length < 2) return; // Too short
+
+    // Check against all 22 players
+    let matchedIndex = -1;
+    for (let i = 0; i < allPlayers.length; i++) {
+      if (found.has(i)) continue; // Already found by this player
+
+      const p = allPlayers[i];
+      // Check main name and all alternatives
+      const allNames = [p.name, ...p.alt];
+      for (const name of allNames) {
+        if (GameEngine.normalizeForComparison(name) === normalizedGuess) {
+          matchedIndex = i;
+          break;
+        }
+      }
+      if (matchedIndex >= 0) break;
+    }
+
+    if (matchedIndex >= 0) {
+      found.add(matchedIndex);
+      const teamSide: 1 | 2 = matchedIndex < match.team1.players.length ? 1 : 2;
+      const playerIndex = teamSide === 1 ? matchedIndex : matchedIndex - match.team1.players.length;
+      const displayName = allPlayers[matchedIndex].name;
+
+      // Award points immediately
+      const points = this.currentQuestion.points;
+      this.roomManager.updatePlayerScore(playerId, points);
+
+      // Send result to all players
+      const result: LineupGuessResult = {
+        playerId,
+        correct: true,
+        teamSide,
+        playerIndex,
+        displayName,
+        foundCount: found.size,
+        totalPlayers: allPlayers.length,
+      };
+      this.io.to(this.room.code).emit("lineup:guess_result", result);
+    } else {
+      // Wrong guess — only notify the guesser
+      const result: LineupGuessResult = {
+        playerId,
+        correct: false,
+        foundCount: found.size,
+        totalPlayers: allPlayers.length,
+      };
+      // Emit to all (client filters display)
+      this.io.to(this.room.code).emit("lineup:guess_result", result);
+    }
+  }
+
+  /**
+   * Calculate lineup scores at end of round
+   */
+  private calculateLineupScores(): RoundResult {
+    const q = this.currentQuestion as LineupQuestion;
+    const allPlayers = [...q.match.team1.players, ...q.match.team2.players];
+    const scores: { playerId: string; points: number; total: number }[] = [];
+    let winner: Player | undefined;
+    let bestCount = 0;
+
+    for (const player of this.room.players) {
+      const found = this.lineupFoundPlayers.get(player.id);
+      const foundCount = found ? found.size : 0;
+      // Points were already awarded in real-time, just report totals
+      if (foundCount > bestCount) {
+        bestCount = foundCount;
+        winner = player;
+      }
+      scores.push({
+        playerId: player.id,
+        points: foundCount * q.points,
+        total: player.score,
+      });
+    }
+
+    return {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion!,
+      answers: [],
+      correctAnswer: `${allPlayers.length} joueurs`,
+      winner,
+      scores,
+    };
   }
 
   // ==========================================

@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, TeamRoundData, TeamRoundResult } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult } from "@/types";
 
 // Module-level flag: listeners are attached ONCE across all component instances
 let listenersAttached = false;
@@ -195,6 +195,22 @@ function setupSocketListeners() {
     useGameStore.getState().addLangueAnswerResult(data);
   });
 
+  // Lineup events
+  socket.on("lineup:guess_result", (result: LineupGuessResult) => {
+    const store = useGameStore.getState();
+    if (result.correct) {
+      store.addLineupFoundPlayer(result);
+    }
+    // Update my own count
+    const myPlayerId = `player_${socket.id}`;
+    if (result.playerId === myPlayerId) {
+      store.setLineupLastGuessCorrect(result.correct);
+      if (result.correct) {
+        useGameStore.setState({ lineupMyFoundCount: result.foundCount });
+      }
+    }
+  });
+
   // Team events
   socket.on("game:team_round_start", (data: TeamRoundData) => {
     useGameStore.getState().setTeamRoundStart(data);
@@ -380,6 +396,12 @@ export function useSocket() {
     socket.emit("langue:submit_validation", validation);
   }, [socket]);
 
+  const submitLineupGuess = useCallback((guess: string) => {
+    if (useGameStore.getState().timeRemaining > 0) {
+      socket.emit("game:submit_answer", guess);
+    }
+  }, [socket]);
+
   return {
     socket,
     connect,
@@ -406,5 +428,6 @@ export function useSocket() {
     useGeoQuizHint,
     validateLangueAnswer,
     submitLangueValidation,
+    submitLineupGuess,
   };
 }

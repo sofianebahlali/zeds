@@ -13,6 +13,7 @@ import { DrawingRevealScreen } from "./drawing-reveal-screen";
 import { PetitBacValidationScreen } from "./petitbac-validation-screen";
 import { GeoQuizValidationScreen } from "./geoquiz-validation-screen";
 import { LangueValidationScreen } from "./langue-validation-screen";
+import { LineupGameScreen } from "./lineup-game-screen";
 import { ScreenContainer } from "@/components/layout";
 import { GAME_MODES } from "@/types";
 import { useSocket } from "@/hooks";
@@ -30,6 +31,7 @@ export function GameScreen() {
   const isPetitBac = currentGameMode === "petitbac";
   const isGeoQuiz = currentGameMode === "geoquiz";
   const isLangue = currentGameMode === "langue";
+  const isLineup = currentGameMode === "lineup";
   const currentModeInfo = GAME_MODES.find((m) => m.id === currentGameMode);
 
   const getPhaseLabel = () => {
@@ -116,7 +118,7 @@ export function GameScreen() {
         <AnimatePresence mode="wait">
           {status === "countdown" && <CountdownOverlay key="countdown" />}
           {(status === "question" || status === "answering") && (
-            <QuestionDisplay key="question" />
+            isLineup ? <LineupGameScreen key="lineup" /> : <QuestionDisplay key="question" />
           )}
           {status === "revealing" && <RoundResult key="result" />}
           {status === "leaderboard" && <LeaderboardDisplay key="leaderboard" />}
