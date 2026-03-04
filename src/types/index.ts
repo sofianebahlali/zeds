@@ -491,6 +491,7 @@ export interface ServerToClientEvents {
 
   // Lineup events
   "lineup:guess_result": (result: LineupGuessResult) => void;
+  "lineup:reveal": (match: LineupMatch, scores: { playerId: string; foundCount: number }[]) => void;
 
   // Team events
   "game:team_round_start": (data: TeamRoundData) => void;
@@ -535,6 +536,9 @@ export interface ClientToServerEvents {
   // Langue events
   "langue:submit_validation": (validation: LangueValidationSubmission) => void;
   "langue:validate_answer": (playerId: string, languageCorrect: boolean, meaningCorrect: boolean) => void;
+
+  // Lineup events
+  "lineup:skip_reveal": () => void;
 
   // Connection events
   "connection:reconnect": (roomCode: string, playerId: string) => void;

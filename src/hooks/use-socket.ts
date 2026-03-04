@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch } from "@/types";
 
 // Module-level flag: listeners are attached ONCE across all component instances
 let listenersAttached = false;
@@ -211,6 +211,10 @@ function setupSocketListeners() {
     }
   });
 
+  socket.on("lineup:reveal", (_match: LineupMatch, scores: { playerId: string; foundCount: number }[]) => {
+    useGameStore.getState().setLineupReveal(scores);
+  });
+
   // Team events
   socket.on("game:team_round_start", (data: TeamRoundData) => {
     useGameStore.getState().setTeamRoundStart(data);
@@ -402,6 +406,10 @@ export function useSocket() {
     }
   }, [socket]);
 
+  const skipLineupReveal = useCallback(() => {
+    socket.emit("lineup:skip_reveal");
+  }, [socket]);
+
   return {
     socket,
     connect,
@@ -429,5 +437,6 @@ export function useSocket() {
     validateLangueAnswer,
     submitLangueValidation,
     submitLineupGuess,
+    skipLineupReveal,
   };
 }

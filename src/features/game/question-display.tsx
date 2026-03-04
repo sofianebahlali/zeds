@@ -10,7 +10,6 @@ import { useSocket } from "@/hooks";
 import { getSocket } from "@/lib/socket";
 import { cn } from "@/lib/utils";
 import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion } from "@/types";
-import GAME_TITLES from "@/../data/questions/guessgame-titles.json";
 
 export function QuestionDisplay() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
@@ -1264,70 +1263,16 @@ function GuessGameQuestionView({
   onSubmit,
 }: GuessGameQuestionViewProps) {
   const [imageError, setImageError] = useState(false);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { submitAnswer } = useSocket();
 
   useEffect(() => {
     setImageError(false);
   }, [question.imageUrl]);
 
-  const handleInputChange = (value: string) => {
-    onChange(value);
-    if (value.trim().length >= 2) {
-      const lower = value.toLowerCase();
-      const filtered = (GAME_TITLES as string[])
-        .filter((t) => t.toLowerCase().includes(lower))
-        .slice(0, 6);
-      setSuggestions(filtered);
-      setShowSuggestions(filtered.length > 0);
-      setSelectedSuggestionIndex(-1);
-    } else {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
-  };
-
-  const selectSuggestion = (title: string) => {
-    onChange(title);
-    setSuggestions([]);
-    setShowSuggestions(false);
-    // Submit directly since onChange state update is async
-    if (!hasAnswered) {
-      submitAnswer(title);
-    }
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (showSuggestions && suggestions.length > 0) {
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        setSelectedSuggestionIndex((prev) =>
-          prev < suggestions.length - 1 ? prev + 1 : 0
-        );
-        return;
-      }
-      if (e.key === "ArrowUp") {
-        e.preventDefault();
-        setSelectedSuggestionIndex((prev) =>
-          prev > 0 ? prev - 1 : suggestions.length - 1
-        );
-        return;
-      }
-      if (e.key === "Enter" && selectedSuggestionIndex >= 0) {
-        e.preventDefault();
-        selectSuggestion(suggestions[selectedSuggestionIndex]);
-        return;
-      }
-    }
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       onSubmit();
-    }
-    if (e.key === "Escape") {
-      setShowSuggestions(false);
     }
   };
 

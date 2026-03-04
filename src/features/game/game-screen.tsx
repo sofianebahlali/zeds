@@ -14,6 +14,7 @@ import { PetitBacValidationScreen } from "./petitbac-validation-screen";
 import { GeoQuizValidationScreen } from "./geoquiz-validation-screen";
 import { LangueValidationScreen } from "./langue-validation-screen";
 import { LineupGameScreen } from "./lineup-game-screen";
+import { LineupRevealScreen } from "./lineup-reveal-screen";
 import { ScreenContainer } from "@/components/layout";
 import { GAME_MODES } from "@/types";
 import { useSocket } from "@/hooks";
@@ -129,6 +130,7 @@ export function GameScreen() {
           {status === "petitbac_validating" && <PetitBacValidationScreen key="petitbac-validation" />}
           {status === "geoquiz_validating" && <GeoQuizValidationScreen key="geoquiz-validation" />}
           {status === "langue_validating" && <LangueValidationScreen key="langue-validation" />}
+          {status === "lineup_revealing" && <LineupRevealScreen key="lineup-reveal" />}
         </AnimatePresence>
       </div>
     </ScreenContainer>

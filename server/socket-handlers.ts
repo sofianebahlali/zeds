@@ -299,6 +299,23 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     });
 
     // ==========================================
+    // LINEUP EVENTS
+    // ==========================================
+
+    socket.on("lineup:skip_reveal", () => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.skipLineupReveal();
+    });
+
+    // ==========================================
     // DRAWING EVENTS
     // ==========================================
 

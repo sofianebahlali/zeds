@@ -9,7 +9,14 @@ import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
 import type { LineupQuestion, LineupPlayer } from "@/types";
 
-// Map position codes to row placement in a 4-row formation layout
+// Sort value for lateral position: L-positions left, center middle, R-positions right
+function getPositionSide(pos: string): number {
+  if (pos.startsWith("L")) return 0; // Left side (LB, LW, LM, LWB)
+  if (pos.startsWith("R")) return 2; // Right side (RB, RW, RM, RWB)
+  return 1; // Center (CB, CM, CDM, CAM, CF, ST)
+}
+
+// Map position codes to row placement in a formation layout
 function getFormationRows(formation: string, players: LineupPlayer[]): LineupPlayer[][] {
   // Parse formation like "4-2-3-1" or "4-3-3" or "3-5-2"
   const parts = formation.split("-").map(Number);
@@ -23,7 +30,10 @@ function getFormationRows(formation: string, players: LineupPlayer[]): LineupPla
 
   let idx = 0;
   for (const count of parts) {
-    rows.push(outfield.slice(idx, idx + count));
+    const row = outfield.slice(idx, idx + count);
+    // Sort within row: L-positions left, center middle, R-positions right
+    row.sort((a, b) => getPositionSide(a.pos) - getPositionSide(b.pos));
+    rows.push(row);
     idx += count;
   }
 

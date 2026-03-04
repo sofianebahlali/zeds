@@ -5,7 +5,8 @@ type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" 
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
   | "petitbac_validating"
   | "geoquiz_validating"
-  | "langue_validating";
+  | "langue_validating"
+  | "lineup_revealing";
 
 interface GameStoreState {
   // Game state
@@ -53,6 +54,7 @@ interface GameStoreState {
   lineupFoundPlayers: { teamSide: 1 | 2; playerIndex: number; displayName: string; foundByPlayerId: string }[];
   lineupMyFoundCount: number;
   lineupLastGuessCorrect: boolean | null;
+  lineupRevealScores: { playerId: string; foundCount: number }[] | null;
 
   // Actions
   setStatus: (status: GameStatus) => void;
@@ -94,6 +96,7 @@ interface GameStoreState {
   // Lineup actions
   addLineupFoundPlayer: (result: LineupGuessResult) => void;
   setLineupLastGuessCorrect: (correct: boolean | null) => void;
+  setLineupReveal: (scores: { playerId: string; foundCount: number }[]) => void;
 
   // Team actions
   setTeamRoundStart: (data: TeamRoundData) => void;
@@ -144,6 +147,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   lineupFoundPlayers: [],
   lineupMyFoundCount: 0,
   lineupLastGuessCorrect: null,
+  lineupRevealScores: null,
 
   // Team initial state
   teamData: null,
@@ -243,6 +247,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       lineupFoundPlayers: [],
       lineupMyFoundCount: 0,
       lineupLastGuessCorrect: null,
+      lineupRevealScores: null,
       teamData: null,
       teamRoundResult: null,
     }),
@@ -373,6 +378,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   }),
 
   setLineupLastGuessCorrect: (correct) => set({ lineupLastGuessCorrect: correct }),
+
+  setLineupReveal: (scores) => set({
+    lineupRevealScores: scores,
+    status: "lineup_revealing",
+  }),
 
   // Team actions
   setTeamRoundStart: (data) => set({ teamData: data, teamRoundResult: null }),

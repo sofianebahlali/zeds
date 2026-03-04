@@ -189,6 +189,7 @@ export class GameEngine {
 
   // Lineup mode state
   private lineupFoundPlayers: Map<string, Set<number>> = new Map(); // playerId -> set of found player global indices (0-21)
+  private lineupRevealTimer: NodeJS.Timeout | null = null;
 
   // Team rounds state
   private teamRoundsEnabled: boolean = false;
@@ -830,23 +831,23 @@ export class GameEngine {
       return;
     }
 
-    // Lineup: scores already awarded in real-time, just finalize
+    // Lineup: show reveal screen first, then finalize scores
     if (this.currentQuestion.type === "lineup") {
-      const results = this.calculateLineupScores();
-      this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
-      this.updateLoseStreaks(results);
-      this.io.to(this.room.code).emit("game:round_end", results);
-      this.lineupFoundPlayers.clear();
+      const q = this.currentQuestion as LineupQuestion;
 
-      setTimeout(() => {
-        const leaderboard = this.roomManager.getLeaderboard(this.room.code);
-        this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
-        if (this.room.settings.showLeaderboardBetweenRounds) {
-          setTimeout(() => {
-            this.nextRound();
-          }, 5000);
-        }
-      }, 3000);
+      // Build per-player found counts for the reveal screen
+      const revealScores = this.room.players.map((p) => ({
+        playerId: p.id,
+        foundCount: this.lineupFoundPlayers.get(p.id)?.size ?? 0,
+      }));
+
+      // Emit reveal with full match data
+      this.io.to(this.room.code).emit("lineup:reveal", q.match, revealScores);
+
+      // Auto-advance after 30 seconds
+      this.lineupRevealTimer = setTimeout(() => {
+        this.finalizeLineupRound();
+      }, 30000);
       return;
     }
 
@@ -1327,6 +1328,41 @@ export class GameEngine {
       winner,
       scores,
     };
+  }
+
+  /**
+   * Finalize the lineup round after reveal screen
+   */
+  private finalizeLineupRound(): void {
+    if (this.lineupRevealTimer) {
+      clearTimeout(this.lineupRevealTimer);
+      this.lineupRevealTimer = null;
+    }
+
+    const results = this.calculateLineupScores();
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+    this.updateLoseStreaks(results);
+    this.io.to(this.room.code).emit("game:round_end", results);
+    this.lineupFoundPlayers.clear();
+
+    setTimeout(() => {
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+      if (this.room.settings.showLeaderboardBetweenRounds) {
+        setTimeout(() => {
+          this.nextRound();
+        }, 5000);
+      }
+    }, 3000);
+  }
+
+  /**
+   * Host skips the lineup reveal screen
+   */
+  public skipLineupReveal(): void {
+    if (this.lineupRevealTimer) {
+      this.finalizeLineupRound();
+    }
   }
 
   // ==========================================
