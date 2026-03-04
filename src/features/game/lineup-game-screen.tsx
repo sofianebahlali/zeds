@@ -17,7 +17,8 @@ function getPositionSide(pos: string): number {
 }
 
 // Map position codes to row placement in a formation layout
-function getFormationRows(formation: string, players: LineupPlayer[]): LineupPlayer[][] {
+// mirrorSides: when true, L-positions go right and R-positions go left (for the team facing downward)
+function getFormationRows(formation: string, players: LineupPlayer[], mirrorSides = false): LineupPlayer[][] {
   // Parse formation like "4-2-3-1" or "4-3-3" or "3-5-2"
   const parts = formation.split("-").map(Number);
   const rows: LineupPlayer[][] = [];
@@ -32,7 +33,12 @@ function getFormationRows(formation: string, players: LineupPlayer[]): LineupPla
   for (const count of parts) {
     const row = outfield.slice(idx, idx + count);
     // Sort within row: L-positions left, center middle, R-positions right
-    row.sort((a, b) => getPositionSide(a.pos) - getPositionSide(b.pos));
+    // Mirror for the top team (facing down) so their LB appears on viewer's right
+    row.sort((a, b) =>
+      mirrorSides
+        ? getPositionSide(b.pos) - getPositionSide(a.pos)
+        : getPositionSide(a.pos) - getPositionSide(b.pos)
+    );
     rows.push(row);
     idx += count;
   }
@@ -110,7 +116,8 @@ function TeamFormation({
   myPlayerId: string;
   isReversed: boolean;
 }) {
-  const rows = getFormationRows(formation, players);
+  // Top team (not reversed) faces down → mirror L/R sides
+  const rows = getFormationRows(formation, players, !isReversed);
   const orderedRows = isReversed ? [...rows].reverse() : rows;
 
   return (

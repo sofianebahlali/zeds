@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
@@ -55,6 +55,7 @@ interface GameStoreState {
   lineupMyFoundCount: number;
   lineupLastGuessCorrect: boolean | null;
   lineupRevealScores: { playerId: string; foundCount: number }[] | null;
+  lineupRevealMatch: LineupMatch | null;
 
   // Actions
   setStatus: (status: GameStatus) => void;
@@ -96,7 +97,7 @@ interface GameStoreState {
   // Lineup actions
   addLineupFoundPlayer: (result: LineupGuessResult) => void;
   setLineupLastGuessCorrect: (correct: boolean | null) => void;
-  setLineupReveal: (scores: { playerId: string; foundCount: number }[]) => void;
+  setLineupReveal: (match: LineupMatch, scores: { playerId: string; foundCount: number }[]) => void;
 
   // Team actions
   setTeamRoundStart: (data: TeamRoundData) => void;
@@ -148,6 +149,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   lineupMyFoundCount: 0,
   lineupLastGuessCorrect: null,
   lineupRevealScores: null,
+  lineupRevealMatch: null,
 
   // Team initial state
   teamData: null,
@@ -248,6 +250,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       lineupMyFoundCount: 0,
       lineupLastGuessCorrect: null,
       lineupRevealScores: null,
+      lineupRevealMatch: null,
       teamData: null,
       teamRoundResult: null,
     }),
@@ -284,6 +287,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       lineupFoundPlayers: [],
       lineupMyFoundCount: 0,
       lineupLastGuessCorrect: null,
+      lineupRevealMatch: null,
       teamData: null,
       teamRoundResult: null,
     }),
@@ -379,7 +383,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   setLineupLastGuessCorrect: (correct) => set({ lineupLastGuessCorrect: correct }),
 
-  setLineupReveal: (scores) => set({
+  setLineupReveal: (match, scores) => set({
+    lineupRevealMatch: match,
     lineupRevealScores: scores,
     status: "lineup_revealing",
   }),

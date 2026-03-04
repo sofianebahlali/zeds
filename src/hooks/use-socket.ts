@@ -211,8 +211,8 @@ function setupSocketListeners() {
     }
   });
 
-  socket.on("lineup:reveal", (_match: LineupMatch, scores: { playerId: string; foundCount: number }[]) => {
-    useGameStore.getState().setLineupReveal(scores);
+  socket.on("lineup:reveal", (match: LineupMatch, scores: { playerId: string; foundCount: number }[]) => {
+    useGameStore.getState().setLineupReveal(match, scores);
   });
 
   // Team events

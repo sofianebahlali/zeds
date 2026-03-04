@@ -18,7 +18,7 @@ function getPositionSide(pos: string): number {
   return 1;
 }
 
-function getFormationRows(formation: string, players: LineupPlayer[]): LineupPlayer[][] {
+function getFormationRows(formation: string, players: LineupPlayer[], mirrorSides = false): LineupPlayer[][] {
   const parts = formation.split("-").map(Number);
   const rows: LineupPlayer[][] = [];
   const gk = players.filter((p) => p.pos === "GK");
@@ -27,7 +27,11 @@ function getFormationRows(formation: string, players: LineupPlayer[]): LineupPla
   let idx = 0;
   for (const count of parts) {
     const row = outfield.slice(idx, idx + count);
-    row.sort((a, b) => getPositionSide(a.pos) - getPositionSide(b.pos));
+    row.sort((a, b) =>
+      mirrorSides
+        ? getPositionSide(b.pos) - getPositionSide(a.pos)
+        : getPositionSide(a.pos) - getPositionSide(b.pos)
+    );
     rows.push(row);
     idx += count;
   }
@@ -68,7 +72,8 @@ function RevealTeamFormation({
   players: LineupPlayer[];
   isReversed: boolean;
 }) {
-  const rows = getFormationRows(formation, players);
+  // Top team (not reversed) faces down → mirror L/R sides
+  const rows = getFormationRows(formation, players, !isReversed);
   const orderedRows = isReversed ? [...rows].reverse() : rows;
 
   return (
@@ -92,6 +97,7 @@ function RevealTeamFormation({
 
 export function LineupRevealScreen() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
+  const lineupRevealMatch = useGameStore((s) => s.lineupRevealMatch);
   const lineupRevealScores = useGameStore((s) => s.lineupRevealScores);
   const players = useRoomStore((s) => s.players);
   const isHost = usePlayerStore((s) => s.isHost);
@@ -111,8 +117,9 @@ export function LineupRevealScreen() {
 
   if (!currentQuestion || currentQuestion.type !== "lineup") return null;
 
-  const q = currentQuestion as LineupQuestion;
-  const { match } = q;
+  // Use the full match data from the reveal event (with player names)
+  // Fall back to currentQuestion match (which has names hidden) if reveal data not yet received
+  const match = lineupRevealMatch ?? (currentQuestion as LineupQuestion).match;
 
   // Sort scores by foundCount descending
   const sortedScores = [...(lineupRevealScores || [])].sort(
