@@ -23,6 +23,7 @@ import type {
   LangueValidationSubmission,
   LanguePlayerAnswerData,
   MathsQuestion,
+  GuessGameQuestion,
   Answer,
   RoundResult,
   ClientToServerEvents,
@@ -281,6 +282,17 @@ export class GameEngine {
     }
   }
 
+  private static loadGuessGameQuestions(): Question[] {
+    const filePath = path.resolve(__dirname, "../data/questions/guessgame.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw) as GuessGameQuestion[];
+    } catch {
+      console.warn("No guessgame questions found at", filePath);
+      return [];
+    }
+  }
+
   /**
    * Normalize text for accent-insensitive comparison
    */
@@ -414,6 +426,10 @@ export class GameEngine {
         break;
       case "maths":
         pool = GameEngine.loadMathsQuestions();
+        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
+        break;
+      case "guessgame":
+        pool = GameEngine.loadGuessGameQuestions();
         if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
         break;
       case "drawing": {
@@ -615,6 +631,13 @@ export class GameEngine {
         meaning: "",
         acceptedLanguages: [],
         acceptedMeanings: [],
+      };
+    }
+    if (question.type === "guessgame") {
+      return {
+        ...question,
+        gameTitle: "",
+        acceptedAnswers: [],
       };
     }
     // petitbac: nothing to hide
@@ -954,6 +977,8 @@ export class GameEngine {
         const q = this.currentQuestion as MathsQuestion;
         return q.options[q.correctIndex];
       }
+      case "guessgame":
+        return (this.currentQuestion as GuessGameQuestion).gameTitle;
       default:
         return "";
     }
@@ -1023,6 +1048,13 @@ export class GameEngine {
         return (
           normalizedAnswer === correctOption ||
           normalizedAnswer === String(q.correctIndex)
+        );
+      }
+      case "guessgame": {
+        const q = this.currentQuestion as GuessGameQuestion;
+        const normalizedInput = GameEngine.normalizeForComparison(answer);
+        return q.acceptedAnswers.some(
+          (accepted) => GameEngine.normalizeForComparison(accepted) === normalizedInput
         );
       }
       default:
@@ -1754,7 +1786,7 @@ export class GameEngine {
       this.drawingAssignments.set(guesser.id, drawer.id);
     }
 
-    const timeLimit = this.room.settings.roundDuration || 90;
+    const timeLimit = 120;
     this.timeRemaining = timeLimit;
 
     // Emit phase start to room

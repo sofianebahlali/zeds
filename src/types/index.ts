@@ -38,7 +38,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -279,7 +279,18 @@ export interface MathsQuestion extends BaseQuestion {
   difficulty: "easy" | "medium" | "hard";
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion;
+export interface GuessGameQuestion extends BaseQuestion {
+  type: "guessgame";
+  imageUrl: string;
+  gameTitle: string;
+  acceptedAnswers: string[];
+  genre?: string;
+  releaseYear?: number;
+  developer?: string;
+  difficulty: "easy" | "medium" | "hard";
+}
+
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -586,5 +597,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Résous le problème — attention aux pièges !",
     icon: "🧮",
     color: "from-indigo-500 to-indigo-700",
+  },
+  {
+    id: "guessgame",
+    name: "Guess the Game",
+    description: "Devine le jeu vidéo à partir du screenshot",
+    icon: "🎮",
+    color: "from-violet-500 to-violet-700",
   },
 ];

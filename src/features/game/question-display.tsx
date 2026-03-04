@@ -2,14 +2,15 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle, Tag, Volume2, RotateCcw, MapPin, Eye } from "lucide-react";
+import { Send, CheckCircle, Tag, Volume2, RotateCcw, MapPin, Eye, Gamepad2 } from "lucide-react";
 import Image from "next/image";
 import { Button, Card, Input, TimerProgress, Badge, Avatar } from "@/components/ui";
 import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { getSocket } from "@/lib/socket";
 import { cn } from "@/lib/utils";
-import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion } from "@/types";
+import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion } from "@/types";
+import GAME_TITLES from "@/../data/questions/guessgame-titles.json";
 
 export function QuestionDisplay() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
@@ -28,6 +29,7 @@ export function QuestionDisplay() {
   const [geoQuizAnswer, setGeoQuizAnswer] = useState("");
   const [langueLanguage, setLangueLanguage] = useState("");
   const [langueMeaning, setLangueMeaning] = useState("");
+  const [guessGameAnswer, setGuessGameAnswer] = useState("");
 
   // Ref to access latest petitBac answers in the auto-submit effect
   const petitBacAnswersRef = useRef(petitBacAnswers);
@@ -68,6 +70,8 @@ export function QuestionDisplay() {
       submitAnswer(geoQuizAnswer.trim());
     } else if (currentQuestion.type === "langue" && (langueLanguage.trim() || langueMeaning.trim())) {
       submitAnswer(JSON.stringify({ language: langueLanguage.trim(), meaning: langueMeaning.trim() }));
+    } else if (currentQuestion.type === "guessgame" && guessGameAnswer.trim()) {
+      submitAnswer(guessGameAnswer.trim());
     } else if (textAnswer.trim()) {
       submitAnswer(textAnswer.trim());
     }
@@ -164,6 +168,16 @@ export function QuestionDisplay() {
             answers={petitBacAnswers}
             hasAnswered={hasAnswered}
             onChange={setPetitBacAnswers}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "guessgame" && (
+          <GuessGameQuestionView
+            question={currentQuestion as GuessGameQuestion}
+            answer={guessGameAnswer}
+            hasAnswered={hasAnswered}
+            onChange={setGuessGameAnswer}
             onSubmit={handleSubmit}
           />
         )}
@@ -1219,6 +1233,218 @@ function LangueQuestionView({
               fullWidth
               onClick={onSubmit}
               disabled={!languageAnswer.trim() && !meaningAnswer.trim()}
+              rightIcon={<Send className="w-5 h-5" />}
+            >
+              Valider
+            </Button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ==========================================
+// GUESS THE GAME QUESTION VIEW
+// ==========================================
+
+interface GuessGameQuestionViewProps {
+  question: GuessGameQuestion;
+  answer: string;
+  hasAnswered: boolean;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+}
+
+function GuessGameQuestionView({
+  question,
+  answer,
+  hasAnswered,
+  onChange,
+  onSubmit,
+}: GuessGameQuestionViewProps) {
+  const [imageError, setImageError] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { submitAnswer } = useSocket();
+
+  useEffect(() => {
+    setImageError(false);
+  }, [question.imageUrl]);
+
+  const handleInputChange = (value: string) => {
+    onChange(value);
+    if (value.trim().length >= 2) {
+      const lower = value.toLowerCase();
+      const filtered = (GAME_TITLES as string[])
+        .filter((t) => t.toLowerCase().includes(lower))
+        .slice(0, 6);
+      setSuggestions(filtered);
+      setShowSuggestions(filtered.length > 0);
+      setSelectedSuggestionIndex(-1);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+
+  const selectSuggestion = (title: string) => {
+    onChange(title);
+    setSuggestions([]);
+    setShowSuggestions(false);
+    // Submit directly since onChange state update is async
+    if (!hasAnswered) {
+      submitAnswer(title);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (showSuggestions && suggestions.length > 0) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSelectedSuggestionIndex((prev) =>
+          prev < suggestions.length - 1 ? prev + 1 : 0
+        );
+        return;
+      }
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSelectedSuggestionIndex((prev) =>
+          prev > 0 ? prev - 1 : suggestions.length - 1
+        );
+        return;
+      }
+      if (e.key === "Enter" && selectedSuggestionIndex >= 0) {
+        e.preventDefault();
+        selectSuggestion(suggestions[selectedSuggestionIndex]);
+        return;
+      }
+    }
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSubmit();
+    }
+    if (e.key === "Escape") {
+      setShowSuggestions(false);
+    }
+  };
+
+  return (
+    <>
+      {/* Header */}
+      <div className="mb-3 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-800 border border-surface-700 mb-2">
+          <span className="text-lg">🎮</span>
+          <span className="text-xs font-medium text-surface-300">Guess the Game</span>
+        </div>
+        <h2 className="text-lg sm:text-xl font-display font-bold text-surface-100 text-balance">
+          Quel est ce jeu vidéo ?
+        </h2>
+      </div>
+
+      {/* Screenshot */}
+      {question.imageUrl && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="flex justify-center mb-4"
+        >
+          <div className="w-full max-w-md aspect-video rounded-2xl overflow-hidden bg-surface-800 shadow-lg">
+            {imageError ? (
+              <div className="w-full h-full flex flex-col items-center justify-center text-surface-500 gap-2">
+                <Gamepad2 className="w-8 h-8 text-surface-600" />
+                <span className="text-xs">Image indisponible</span>
+              </div>
+            ) : (
+              <img
+                src={question.imageUrl}
+                alt="Screenshot de jeu vidéo"
+                className="w-full h-full object-cover"
+                onError={() => setImageError(true)}
+              />
+            )}
+          </div>
+        </motion.div>
+      )}
+
+      {/* Answer input with autocomplete */}
+      <div className="flex-1 flex flex-col justify-end">
+        {hasAnswered ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center"
+          >
+            <Card className="inline-block">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-success-400" />
+                <div className="text-left">
+                  <p className="text-sm text-surface-400">Ta réponse :</p>
+                  <p className="text-lg font-medium text-surface-100">{answer}</p>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        ) : (
+          <div className="space-y-3">
+            <div className="relative">
+              <Input
+                ref={inputRef}
+                value={answer}
+                onChange={(e) => handleInputChange(e.target.value)}
+                onKeyDown={handleKeyDown}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                onFocus={() => {
+                  if (suggestions.length > 0) setShowSuggestions(true);
+                }}
+                placeholder="Nom du jeu..."
+                autoFocus
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck={false}
+              />
+
+              {/* Autocomplete dropdown */}
+              <AnimatePresence>
+                {showSuggestions && suggestions.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    className="absolute z-50 w-full mt-1 rounded-xl bg-surface-800 border border-surface-700 shadow-xl overflow-hidden"
+                  >
+                    {suggestions.map((title, i) => (
+                      <button
+                        key={title}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          selectSuggestion(title);
+                        }}
+                        className={cn(
+                          "w-full text-left px-4 py-2.5 text-sm transition-colors",
+                          "hover:bg-surface-700",
+                          i === selectedSuggestionIndex
+                            ? "bg-violet-500/20 text-violet-300"
+                            : "text-surface-200"
+                        )}
+                      >
+                        {title}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onSubmit}
+              disabled={!answer.trim()}
               rightIcon={<Send className="w-5 h-5" />}
             >
               Valider
