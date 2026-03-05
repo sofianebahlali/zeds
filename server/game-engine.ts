@@ -41,7 +41,7 @@ import type {
   TeamRoundData,
   TeamRoundResult,
 } from "../src/types";
-import { PETITBAC_CATEGORIES } from "../src/types";
+import { PETITBAC_ALL_CATEGORIES, PETITBAC_CATEGORIES_PER_ROUND } from "../src/types";
 import { getQuestions as getDbQuestions, getTotalCount as getDbTotalCount } from "./question-db";
 
 type TypedIO = Server<ClientToServerEvents, ServerToClientEvents>;
@@ -509,11 +509,14 @@ export class GameEngine {
         const shuffledLetters = [...PETITBAC_LETTERS].sort(() => Math.random() - 0.5);
         const questions: Question[] = [];
         for (let i = 0; i < count; i++) {
+          // Pick random categories for each round
+          const shuffledCategories = [...PETITBAC_ALL_CATEGORIES].sort(() => Math.random() - 0.5);
+          const roundCategories = shuffledCategories.slice(0, PETITBAC_CATEGORIES_PER_ROUND);
           questions.push({
             id: `petitbac_${i + 1}`,
             type: "petitbac" as const,
             letter: shuffledLetters[i % shuffledLetters.length],
-            categories: [...PETITBAC_CATEGORIES],
+            categories: roundCategories,
             timeLimit: 60,
             points: 100,
           });

@@ -166,7 +166,7 @@ export interface DrawingQuestion extends BaseQuestion {
   category?: string;
 }
 
-export const PETITBAC_CATEGORIES = [
+export const PETITBAC_ALL_CATEGORIES = [
   "Prénom",
   "Pokémon",
   "Joueur de foot",
@@ -175,7 +175,21 @@ export const PETITBAC_CATEGORIES = [
   "Fruit/Légume",
   "Film",
   "Partie du corps/os",
+  "Capitale",
+  "Célébrité (non footballeur)",
+  "Président/Dirigeant de pays",
+  "Personnage de Manga",
+  "Jeu vidéo",
+  "Marque",
+  "Chose qu'on ne peut pas acheter",
+  "Arme sur COD",
+  "Unité de mesure",
+  "Monument",
+  "Antagoniste (hors manga)",
+  "Défaut",
 ] as const;
+
+export const PETITBAC_CATEGORIES_PER_ROUND = 8;
 
 export interface GeoQuizQuestion extends BaseQuestion {
   type: "geoquiz";
