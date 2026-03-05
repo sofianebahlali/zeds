@@ -15263,5 +15263,4094 @@
         }
       ]
     }
+  },
+  {
+    "id": "cdm-1998-final",
+    "competition": "Coupe du Monde 1998 — Finale",
+    "date": "1998-07-12",
+    "score": "3-0",
+    "team1": {
+      "name": "France",
+      "flag": "🇫🇷",
+      "formation": "4-3-2-1",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 16,
+          "name": "Barthez",
+          "alt": [
+            "Fabien Barthez"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 15,
+          "name": "Thuram",
+          "alt": [
+            "Lilian Thuram"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 8,
+          "name": "Desailly",
+          "alt": [
+            "Marcel Desailly"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 18,
+          "name": "Leboeuf",
+          "alt": [
+            "Frank Leboeuf"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 3,
+          "name": "Lizarazu",
+          "alt": [
+            "Bixente Lizarazu"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 7,
+          "name": "Deschamps",
+          "alt": [
+            "Didier Deschamps"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 17,
+          "name": "Petit",
+          "alt": [
+            "Emmanuel Petit"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 19,
+          "name": "Karembeu",
+          "alt": [
+            "Christian Karembeu"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 10,
+          "name": "Zidane",
+          "alt": [
+            "Zinedine Zidane",
+            "Zinédine Zidane",
+            "Zizou"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 6,
+          "name": "Djorkaeff",
+          "alt": [
+            "Youri Djorkaeff"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Guivarc'h",
+          "alt": [
+            "Stéphane Guivarc'h",
+            "Stephane Guivarch"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Brésil",
+      "flag": "🇧🇷",
+      "formation": "4-4-2",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Taffarel",
+          "alt": [
+            "Claudio Taffarel",
+            "Cláudio Taffarel"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 2,
+          "name": "Cafu",
+          "alt": [
+            "Marcos Evangelista de Moraes",
+            "Cafú"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 3,
+          "name": "Aldair",
+          "alt": [
+            "Aldair Santos",
+            "Aldair Nascimento Santos"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 4,
+          "name": "Júnior Baiano",
+          "alt": [
+            "Junior Baiano"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 6,
+          "name": "Roberto Carlos",
+          "alt": [
+            "Roberto Carlos da Silva"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 8,
+          "name": "Dunga",
+          "alt": [
+            "Carlos Caetano Bledorn Verri"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 5,
+          "name": "César Sampaio",
+          "alt": [
+            "Cesar Sampaio",
+            "Carlos César Sampaio"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 18,
+          "name": "Leonardo",
+          "alt": [
+            "Leonardo Araújo",
+            "Leonardo Araujo"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 10,
+          "name": "Rivaldo",
+          "alt": [
+            "Rivaldo Vítor Borba Ferreira",
+            "Rivaldo Vitor Borba Ferreira"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 20,
+          "name": "Bebeto",
+          "alt": [
+            "José Roberto Gama de Oliveira"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Ronaldo",
+          "alt": [
+            "Ronaldo Nazário",
+            "Ronaldo Nazario",
+            "R9"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "cdm-2002-final",
+    "competition": "Coupe du Monde 2002 — Finale",
+    "date": "2002-06-30",
+    "score": "2-0",
+    "team1": {
+      "name": "Brésil",
+      "flag": "🇧🇷",
+      "formation": "3-4-2-1",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Marcos",
+          "alt": [
+            "Marcos Roberto Silveira Reis"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 3,
+          "name": "Lúcio",
+          "alt": [
+            "Lucio",
+            "Lucimar Ferreira da Silva"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 4,
+          "name": "Roque Júnior",
+          "alt": [
+            "Roque Junior",
+            "José Vítor Roque Júnior"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "Edmílson",
+          "alt": [
+            "Edmilson",
+            "José Edmílson Gomes de Moraes"
+          ]
+        },
+        {
+          "pos": "RWB",
+          "num": 2,
+          "name": "Cafu",
+          "alt": [
+            "Marcos Evangelista de Moraes",
+            "Cafú"
+          ]
+        },
+        {
+          "pos": "LWB",
+          "num": 6,
+          "name": "Roberto Carlos",
+          "alt": [
+            "Roberto Carlos da Silva"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Gilberto Silva",
+          "alt": [
+            "Gilberto Aparecido da Silva"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 15,
+          "name": "Kléberson",
+          "alt": [
+            "Kleberson",
+            "José Kléberson Pereira"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 10,
+          "name": "Rivaldo",
+          "alt": [
+            "Rivaldo Vítor Borba Ferreira"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 11,
+          "name": "Ronaldinho",
+          "alt": [
+            "Ronaldinho Gaúcho",
+            "Ronaldinho Gaucho",
+            "Ronaldo de Assis Moreira"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Ronaldo",
+          "alt": [
+            "Ronaldo Nazário",
+            "Ronaldo Nazario",
+            "R9"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Allemagne",
+      "flag": "🇩🇪",
+      "formation": "3-4-2-1",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Kahn",
+          "alt": [
+            "Oliver Kahn"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 2,
+          "name": "Linke",
+          "alt": [
+            "Thomas Linke"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 21,
+          "name": "Metzelder",
+          "alt": [
+            "Christoph Metzelder"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "Ramelow",
+          "alt": [
+            "Carsten Ramelow"
+          ]
+        },
+        {
+          "pos": "RWB",
+          "num": 19,
+          "name": "Schneider",
+          "alt": [
+            "Bernd Schneider"
+          ]
+        },
+        {
+          "pos": "LWB",
+          "num": 17,
+          "name": "Bode",
+          "alt": [
+            "Marco Bode"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 8,
+          "name": "Hamann",
+          "alt": [
+            "Dietmar Hamann",
+            "Didi Hamann"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 22,
+          "name": "Frings",
+          "alt": [
+            "Torsten Frings"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 16,
+          "name": "Jeremies",
+          "alt": [
+            "Jens Jeremies"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 7,
+          "name": "Neuville",
+          "alt": [
+            "Oliver Neuville"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 11,
+          "name": "Klose",
+          "alt": [
+            "Miroslav Klose"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "cdm-2006-final",
+    "competition": "Coupe du Monde 2006 — Finale",
+    "date": "2006-07-09",
+    "score": "1-1 (tab 5-3)",
+    "team1": {
+      "name": "Italie",
+      "flag": "🇮🇹",
+      "formation": "4-4-1-1",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Buffon",
+          "alt": [
+            "Gianluigi Buffon"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 19,
+          "name": "Zambrotta",
+          "alt": [
+            "Gianluca Zambrotta"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "Cannavaro",
+          "alt": [
+            "Fabio Cannavaro"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 23,
+          "name": "Materazzi",
+          "alt": [
+            "Marco Materazzi"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 3,
+          "name": "Grosso",
+          "alt": [
+            "Fabio Grosso"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 21,
+          "name": "Pirlo",
+          "alt": [
+            "Andrea Pirlo"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Gattuso",
+          "alt": [
+            "Gennaro Gattuso",
+            "Rino Gattuso"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 16,
+          "name": "Camoranesi",
+          "alt": [
+            "Mauro Camoranesi"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 20,
+          "name": "Perrotta",
+          "alt": [
+            "Simone Perrotta"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 10,
+          "name": "Totti",
+          "alt": [
+            "Francesco Totti"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Toni",
+          "alt": [
+            "Luca Toni"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "France",
+      "flag": "🇫🇷",
+      "formation": "4-2-3-1",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 16,
+          "name": "Barthez",
+          "alt": [
+            "Fabien Barthez"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 19,
+          "name": "Sagnol",
+          "alt": [
+            "Willy Sagnol"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 15,
+          "name": "Thuram",
+          "alt": [
+            "Lilian Thuram"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "Gallas",
+          "alt": [
+            "William Gallas"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 3,
+          "name": "Abidal",
+          "alt": [
+            "Éric Abidal",
+            "Eric Abidal"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 4,
+          "name": "Vieira",
+          "alt": [
+            "Patrick Vieira"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 6,
+          "name": "Makélélé",
+          "alt": [
+            "Claude Makelele",
+            "Claude Makélélé"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 10,
+          "name": "Zidane",
+          "alt": [
+            "Zinedine Zidane",
+            "Zinédine Zidane",
+            "Zizou"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 22,
+          "name": "Ribéry",
+          "alt": [
+            "Franck Ribery",
+            "Franck Ribéry"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 7,
+          "name": "Malouda",
+          "alt": [
+            "Florent Malouda"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 12,
+          "name": "Henry",
+          "alt": [
+            "Thierry Henry"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "cdm-2014-qf1",
+    "competition": "Coupe du Monde 2014 — Quart de finale",
+    "date": "2014-07-04",
+    "score": "0-1",
+    "team1": {
+      "name": "France",
+      "flag": "🇫🇷",
+      "formation": "4-3-3",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Lloris",
+          "alt": [
+            "Hugo Lloris"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 2,
+          "name": "Debuchy",
+          "alt": [
+            "Mathieu Debuchy"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 4,
+          "name": "Varane",
+          "alt": [
+            "Raphaël Varane",
+            "Raphael Varane"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "Sakho",
+          "alt": [
+            "Mamadou Sakho"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 3,
+          "name": "Evra",
+          "alt": [
+            "Patrice Evra"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 6,
+          "name": "Cabaye",
+          "alt": [
+            "Yohan Cabaye"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 19,
+          "name": "Pogba",
+          "alt": [
+            "Paul Pogba"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 14,
+          "name": "Matuidi",
+          "alt": [
+            "Blaise Matuidi"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 8,
+          "name": "Valbuena",
+          "alt": [
+            "Mathieu Valbuena"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 11,
+          "name": "Griezmann",
+          "alt": [
+            "Antoine Griezmann"
+          ]
+        },
+        {
+          "pos": "CF",
+          "num": 10,
+          "name": "Benzema",
+          "alt": [
+            "Karim Benzema"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Allemagne",
+      "flag": "🇩🇪",
+      "formation": "4-3-3",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Neuer",
+          "alt": [
+            "Manuel Neuer"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 16,
+          "name": "Lahm",
+          "alt": [
+            "Philipp Lahm"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "Hummels",
+          "alt": [
+            "Mats Hummels"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 20,
+          "name": "Boateng",
+          "alt": [
+            "Jérôme Boateng",
+            "Jerome Boateng"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 4,
+          "name": "Höwedes",
+          "alt": [
+            "Benedikt Howedes",
+            "Benedikt Höwedes"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 6,
+          "name": "Khedira",
+          "alt": [
+            "Sami Khedira"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 7,
+          "name": "Schweinsteiger",
+          "alt": [
+            "Bastian Schweinsteiger"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 18,
+          "name": "Kroos",
+          "alt": [
+            "Toni Kroos"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 8,
+          "name": "Özil",
+          "alt": [
+            "Mesut Ozil",
+            "Mesut Özil"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 13,
+          "name": "Müller",
+          "alt": [
+            "Thomas Muller",
+            "Thomas Müller"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 11,
+          "name": "Klose",
+          "alt": [
+            "Miroslav Klose"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "cdm-2014-qf2",
+    "competition": "Coupe du Monde 2014 — Quart de finale",
+    "date": "2014-07-04",
+    "score": "2-1",
+    "team1": {
+      "name": "Brésil",
+      "flag": "🇧🇷",
+      "formation": "4-2-3-1",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 12,
+          "name": "Júlio César",
+          "alt": [
+            "Julio Cesar",
+            "Júlio César Soares de Espíndola"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 23,
+          "name": "Maicon",
+          "alt": [
+            "Maicon Douglas Sisenando"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 3,
+          "name": "Thiago Silva",
+          "alt": [
+            "Thiago Emiliano da Silva"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 4,
+          "name": "David Luiz",
+          "alt": [
+            "David Luiz Moreira Marinho"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 6,
+          "name": "Marcelo",
+          "alt": [
+            "Marcelo Vieira",
+            "Marcelo Vieira da Silva Júnior"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 5,
+          "name": "Fernandinho",
+          "alt": [
+            "Fernando Luiz Rosa"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Paulinho",
+          "alt": [
+            "José Paulo Bezerra Maciel Júnior"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 7,
+          "name": "Hulk",
+          "alt": [
+            "Givanildo Vieira de Sousa"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 11,
+          "name": "Oscar",
+          "alt": [
+            "Oscar dos Santos Emboaba Júnior"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 10,
+          "name": "Neymar",
+          "alt": [
+            "Neymar Jr",
+            "Neymar da Silva Santos Júnior"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Fred",
+          "alt": [
+            "Frederico Chaves Guedes"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Colombie",
+      "flag": "🇨🇴",
+      "formation": "4-2-3-1",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Ospina",
+          "alt": [
+            "David Ospina"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 18,
+          "name": "Zúñiga",
+          "alt": [
+            "Juan Zuniga",
+            "Juan Camilo Zúñiga"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 2,
+          "name": "Zapata",
+          "alt": [
+            "Cristián Zapata",
+            "Cristian Zapata"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 3,
+          "name": "Yepes",
+          "alt": [
+            "Mario Yepes",
+            "Mario Alberto Yepes"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 7,
+          "name": "Armero",
+          "alt": [
+            "Pablo Armero"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 6,
+          "name": "Sánchez",
+          "alt": [
+            "Carlos Sanchez",
+            "Carlos Sánchez Moreno"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 13,
+          "name": "Guarín",
+          "alt": [
+            "Fredy Guarin",
+            "Freddy Guarín"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 11,
+          "name": "Cuadrado",
+          "alt": [
+            "Juan Cuadrado",
+            "Juan Guillermo Cuadrado"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 14,
+          "name": "Ibarbo",
+          "alt": [
+            "Víctor Ibarbo",
+            "Victor Ibarbo"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 10,
+          "name": "James Rodríguez",
+          "alt": [
+            "James Rodriguez",
+            "James David Rodríguez Rubio"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Gutiérrez",
+          "alt": [
+            "Teófilo Gutiérrez",
+            "Teofilo Gutierrez"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "cdm-2018-qf",
+    "competition": "Coupe du Monde 2018 — Quart de finale",
+    "date": "2018-07-06",
+    "score": "1-2",
+    "team1": {
+      "name": "Brésil",
+      "flag": "🇧🇷",
+      "formation": "4-2-3-1",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Alisson",
+          "alt": [
+            "Alisson Becker"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 22,
+          "name": "Fagner",
+          "alt": [
+            "Fagner Conserva Lemos"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 2,
+          "name": "Thiago Silva",
+          "alt": [
+            "Thiago Emiliano da Silva"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 3,
+          "name": "Miranda",
+          "alt": [
+            "João Miranda de Souza Filho"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 12,
+          "name": "Marcelo",
+          "alt": [
+            "Marcelo Vieira",
+            "Marcelo Vieira da Silva Júnior"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 17,
+          "name": "Fernandinho",
+          "alt": [
+            "Fernando Luiz Rosa"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 15,
+          "name": "Paulinho",
+          "alt": [
+            "José Paulo Bezerra Maciel Júnior"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 19,
+          "name": "Willian",
+          "alt": [
+            "Willian Borges da Silva"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 11,
+          "name": "Coutinho",
+          "alt": [
+            "Philippe Coutinho",
+            "Philippe Coutinho Correia"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 10,
+          "name": "Neymar",
+          "alt": [
+            "Neymar Jr",
+            "Neymar da Silva Santos Júnior"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Gabriel Jesus",
+          "alt": [
+            "Gabriel Fernando de Jesus"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Belgique",
+      "flag": "🇧🇪",
+      "formation": "3-4-3",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Courtois",
+          "alt": [
+            "Thibaut Courtois"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 2,
+          "name": "Alderweireld",
+          "alt": [
+            "Toby Alderweireld"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 4,
+          "name": "Kompany",
+          "alt": [
+            "Vincent Kompany"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "Vertonghen",
+          "alt": [
+            "Jan Vertonghen"
+          ]
+        },
+        {
+          "pos": "RWB",
+          "num": 15,
+          "name": "Meunier",
+          "alt": [
+            "Thomas Meunier"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 6,
+          "name": "Witsel",
+          "alt": [
+            "Axel Witsel"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Fellaini",
+          "alt": [
+            "Marouane Fellaini"
+          ]
+        },
+        {
+          "pos": "LWB",
+          "num": 22,
+          "name": "Chadli",
+          "alt": [
+            "Nacer Chadli"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 7,
+          "name": "De Bruyne",
+          "alt": [
+            "Kevin De Bruyne"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Lukaku",
+          "alt": [
+            "Romelu Lukaku"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 10,
+          "name": "Hazard",
+          "alt": [
+            "Eden Hazard"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "cdm-2022-qf1",
+    "competition": "Coupe du Monde 2022 — Quart de finale",
+    "date": "2022-12-10",
+    "score": "1-2",
+    "team1": {
+      "name": "Angleterre",
+      "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+      "formation": "4-3-3",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Pickford",
+          "alt": [
+            "Jordan Pickford"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 2,
+          "name": "Walker",
+          "alt": [
+            "Kyle Walker"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "Stones",
+          "alt": [
+            "John Stones"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 6,
+          "name": "Maguire",
+          "alt": [
+            "Harry Maguire"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 3,
+          "name": "Shaw",
+          "alt": [
+            "Luke Shaw"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Henderson",
+          "alt": [
+            "Jordan Henderson"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 4,
+          "name": "Rice",
+          "alt": [
+            "Declan Rice"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 22,
+          "name": "Bellingham",
+          "alt": [
+            "Jude Bellingham"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 17,
+          "name": "Saka",
+          "alt": [
+            "Bukayo Saka"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Kane",
+          "alt": [
+            "Harry Kane"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 20,
+          "name": "Foden",
+          "alt": [
+            "Phil Foden"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "France",
+      "flag": "🇫🇷",
+      "formation": "4-2-3-1",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Lloris",
+          "alt": [
+            "Hugo Lloris"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 5,
+          "name": "Koundé",
+          "alt": [
+            "Jules Kounde",
+            "Jules Koundé"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 4,
+          "name": "Varane",
+          "alt": [
+            "Raphaël Varane",
+            "Raphael Varane"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 18,
+          "name": "Upamecano",
+          "alt": [
+            "Dayot Upamecano"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 22,
+          "name": "T. Hernández",
+          "alt": [
+            "Theo Hernandez",
+            "Théo Hernández"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 8,
+          "name": "Tchouaméni",
+          "alt": [
+            "Aurelien Tchouameni",
+            "Aurélien Tchouaméni"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 14,
+          "name": "Rabiot",
+          "alt": [
+            "Adrien Rabiot"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 11,
+          "name": "Dembélé",
+          "alt": [
+            "Ousmane Dembele",
+            "Ousmane Dembélé"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 7,
+          "name": "Griezmann",
+          "alt": [
+            "Antoine Griezmann"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 10,
+          "name": "Mbappé",
+          "alt": [
+            "Kylian Mbappe",
+            "Kylian Mbappé"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Giroud",
+          "alt": [
+            "Olivier Giroud"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "cdm-2022-qf2",
+    "competition": "Coupe du Monde 2022 — Quart de finale",
+    "date": "2022-12-09",
+    "score": "2-2 (tab 4-3)",
+    "team1": {
+      "name": "Argentine",
+      "flag": "🇦🇷",
+      "formation": "3-5-2",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 23,
+          "name": "E. Martínez",
+          "alt": [
+            "Emiliano Martinez",
+            "Emiliano Martínez",
+            "Dibu Martinez"
+          ]
+        },
+        {
+          "pos": "RWB",
+          "num": 26,
+          "name": "Molina",
+          "alt": [
+            "Nahuel Molina"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 13,
+          "name": "Romero",
+          "alt": [
+            "Cristian Romero",
+            "Cuti Romero"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 19,
+          "name": "Otamendi",
+          "alt": [
+            "Nicolás Otamendi",
+            "Nicolas Otamendi"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 25,
+          "name": "L. Martínez",
+          "alt": [
+            "Lisandro Martinez",
+            "Lisandro Martínez"
+          ]
+        },
+        {
+          "pos": "LWB",
+          "num": 8,
+          "name": "Acuña",
+          "alt": [
+            "Marcos Acuna",
+            "Marcos Acuña"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 7,
+          "name": "De Paul",
+          "alt": [
+            "Rodrigo De Paul"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 24,
+          "name": "Enzo Fernández",
+          "alt": [
+            "Enzo Fernandez"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 20,
+          "name": "Mac Allister",
+          "alt": [
+            "Alexis Mac Allister"
+          ]
+        },
+        {
+          "pos": "CF",
+          "num": 10,
+          "name": "Messi",
+          "alt": [
+            "Lionel Messi",
+            "Leo Messi"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Álvarez",
+          "alt": [
+            "Julian Alvarez",
+            "Julián Álvarez"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Pays-Bas",
+      "flag": "🇳🇱",
+      "formation": "3-4-1-2",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Noppert",
+          "alt": [
+            "Andries Noppert"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 2,
+          "name": "Timber",
+          "alt": [
+            "Jurriën Timber",
+            "Jurrien Timber"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 4,
+          "name": "Van Dijk",
+          "alt": [
+            "Virgil van Dijk"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "Aké",
+          "alt": [
+            "Nathan Ake",
+            "Nathan Aké"
+          ]
+        },
+        {
+          "pos": "RWB",
+          "num": 22,
+          "name": "Dumfries",
+          "alt": [
+            "Denzel Dumfries"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 15,
+          "name": "De Roon",
+          "alt": [
+            "Marten de Roon"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 21,
+          "name": "F. de Jong",
+          "alt": [
+            "Frenkie de Jong"
+          ]
+        },
+        {
+          "pos": "LWB",
+          "num": 17,
+          "name": "Blind",
+          "alt": [
+            "Daley Blind"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 8,
+          "name": "Gakpo",
+          "alt": [
+            "Cody Gakpo"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 7,
+          "name": "Bergwijn",
+          "alt": [
+            "Steven Bergwijn"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 10,
+          "name": "Depay",
+          "alt": [
+            "Memphis Depay"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "copa-2019-final",
+    "competition": "Copa América 2019 — Finale",
+    "date": "2019-07-07",
+    "score": "3-1",
+    "team1": {
+      "name": "Brésil",
+      "flag": "🇧🇷",
+      "formation": "4-2-3-1",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Alisson",
+          "alt": [
+            "Alisson Becker"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 13,
+          "name": "Dani Alves",
+          "alt": [
+            "Daniel Alves",
+            "Dani Alves da Silva"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 4,
+          "name": "Marquinhos",
+          "alt": [
+            "Marcos Aoás Corrêa"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 2,
+          "name": "Thiago Silva",
+          "alt": [
+            "Thiago Emiliano da Silva"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 12,
+          "name": "Alex Sandro",
+          "alt": [
+            "Alex Sandro Lobo Silva"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 5,
+          "name": "Casemiro",
+          "alt": [
+            "Carlos Henrique Casimiro",
+            "Carlos Casemiro"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Arthur",
+          "alt": [
+            "Arthur Melo",
+            "Arthur Henrique Ramos de Oliveira Melo"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 9,
+          "name": "G. Jesus",
+          "alt": [
+            "Gabriel Jesus"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 11,
+          "name": "P. Coutinho",
+          "alt": [
+            "Philippe Coutinho",
+            "Coutinho"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 19,
+          "name": "Éverton",
+          "alt": [
+            "Everton Soares",
+            "Cebolinha"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 20,
+          "name": "R. Firmino",
+          "alt": [
+            "Roberto Firmino"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Pérou",
+      "flag": "🇵🇪",
+      "formation": "4-2-3-1",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "P. Gallese",
+          "alt": [
+            "Pedro Gallese"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 17,
+          "name": "L. Advíncula",
+          "alt": [
+            "Luis Advíncula"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 15,
+          "name": "C. Zambrano",
+          "alt": [
+            "Carlos Zambrano"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 2,
+          "name": "L. Abram",
+          "alt": [
+            "Luis Abram"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 6,
+          "name": "M. Trauco",
+          "alt": [
+            "Miguel Trauco"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 13,
+          "name": "R. Tapia",
+          "alt": [
+            "Renato Tapia"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 19,
+          "name": "Y. Yotún",
+          "alt": [
+            "Yoshimar Yotún"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 20,
+          "name": "É. Flores",
+          "alt": [
+            "Edison Flores"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 8,
+          "name": "C. Cueva",
+          "alt": [
+            "Christian Cueva"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 18,
+          "name": "A. Carrillo",
+          "alt": [
+            "André Carrillo"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "P. Guerrero",
+          "alt": [
+            "Paolo Guerrero"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "copa-2021-final",
+    "competition": "Copa América 2021 — Finale",
+    "date": "2021-07-10",
+    "score": "1-0",
+    "team1": {
+      "name": "Argentine",
+      "flag": "🇦🇷",
+      "formation": "4-4-2",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 23,
+          "name": "E. Martinez",
+          "alt": [
+            "Emiliano Martinez",
+            "Dibu Martinez"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 4,
+          "name": "G. Montiel",
+          "alt": [
+            "Gonzalo Montiel"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 13,
+          "name": "C. Romero",
+          "alt": [
+            "Cristian Romero",
+            "Cuti Romero"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 19,
+          "name": "N. Otamendi",
+          "alt": [
+            "Nicolás Otamendi"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 8,
+          "name": "M. Acuña",
+          "alt": [
+            "Marcos Acuña"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 7,
+          "name": "R. De Paul",
+          "alt": [
+            "Rodrigo De Paul"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 5,
+          "name": "L. Paredes",
+          "alt": [
+            "Leandro Paredes"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 20,
+          "name": "G. Lo Celso",
+          "alt": [
+            "Giovani Lo Celso"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 11,
+          "name": "Á. Di María",
+          "alt": [
+            "Angel Di Maria",
+            "Fideo"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 22,
+          "name": "L. Martinez",
+          "alt": [
+            "Lautaro Martinez",
+            "El Toro"
+          ]
+        },
+        {
+          "pos": "CF",
+          "num": 10,
+          "name": "L. Messi",
+          "alt": [
+            "Lionel Messi",
+            "Leo Messi"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Brésil",
+      "flag": "🇧🇷",
+      "formation": "4-3-3",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 23,
+          "name": "Ederson",
+          "alt": [
+            "Ederson Moraes"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 2,
+          "name": "Danilo",
+          "alt": [
+            "Danilo Luiz da Silva"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 4,
+          "name": "Marquinhos",
+          "alt": [
+            "Marcos Aoás Corrêa"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 3,
+          "name": "Thiago Silva",
+          "alt": [
+            "Thiago Emiliano da Silva"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 16,
+          "name": "Renan Lodi",
+          "alt": [
+            "Renan Augusto Lodi dos Santos"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 5,
+          "name": "Casemiro",
+          "alt": [
+            "Carlos Henrique Casimiro",
+            "Carlos Casemiro"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Fred",
+          "alt": [
+            "Frederico Rodrigues de Paula Santos"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 17,
+          "name": "Lucas Paquetá",
+          "alt": [
+            "Lucas Tolentino Coelho de Lima",
+            "Paqueta"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 19,
+          "name": "Éverton",
+          "alt": [
+            "Everton Soares",
+            "Cebolinha"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 10,
+          "name": "Neymar",
+          "alt": [
+            "Neymar Jr",
+            "Neymar da Silva Santos Júnior"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 7,
+          "name": "Richarlison",
+          "alt": [
+            "Richarlison de Andrade"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "copa-2024-final",
+    "competition": "Copa América 2024 — Finale",
+    "date": "2024-07-14",
+    "score": "1-0 (a.p.)",
+    "team1": {
+      "name": "Argentine",
+      "flag": "🇦🇷",
+      "formation": "4-3-3",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 23,
+          "name": "E. Martinez",
+          "alt": [
+            "Emiliano Martinez",
+            "Dibu Martinez"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 4,
+          "name": "G. Montiel",
+          "alt": [
+            "Gonzalo Montiel"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 13,
+          "name": "C. Romero",
+          "alt": [
+            "Cristian Romero",
+            "Cuti Romero"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 25,
+          "name": "L. Martinez",
+          "alt": [
+            "Lisandro Martinez",
+            "Licha Martinez"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 3,
+          "name": "N. Tagliafico",
+          "alt": [
+            "Nicolás Tagliafico"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 7,
+          "name": "R. De Paul",
+          "alt": [
+            "Rodrigo De Paul"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 24,
+          "name": "E. Fernández",
+          "alt": [
+            "Enzo Fernandez",
+            "Enzo Fernández"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 20,
+          "name": "A. Mac Allister",
+          "alt": [
+            "Alexis Mac Allister"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 11,
+          "name": "Á. Di María",
+          "alt": [
+            "Angel Di Maria",
+            "Fideo"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "J. Álvarez",
+          "alt": [
+            "Julián Alvarez",
+            "Julian Alvarez"
+          ]
+        },
+        {
+          "pos": "CF",
+          "num": 10,
+          "name": "L. Messi",
+          "alt": [
+            "Lionel Messi",
+            "Leo Messi"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Colombie",
+      "flag": "🇨🇴",
+      "formation": "4-3-3",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 12,
+          "name": "C. Vargas",
+          "alt": [
+            "Camilo Vargas"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 4,
+          "name": "S. Arias",
+          "alt": [
+            "Santiago Arias"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 23,
+          "name": "D. Sánchez",
+          "alt": [
+            "Davinson Sanchez",
+            "Davinson Sánchez"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 2,
+          "name": "C. Cuesta",
+          "alt": [
+            "Carlos Cuesta"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 17,
+          "name": "J. Mojica",
+          "alt": [
+            "Johan Mojica"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 16,
+          "name": "J. Lerma",
+          "alt": [
+            "Jefferson Lerma"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 6,
+          "name": "R. Ríos",
+          "alt": [
+            "Richard Rios",
+            "Richard Ríos"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 11,
+          "name": "J. Arias",
+          "alt": [
+            "Jhon Arias"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 10,
+          "name": "J. Rodríguez",
+          "alt": [
+            "James Rodriguez",
+            "James"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 7,
+          "name": "L. Díaz",
+          "alt": [
+            "Luis Diaz",
+            "Luis Díaz"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 24,
+          "name": "J. Córdoba",
+          "alt": [
+            "Jhon Cordoba",
+            "Jhon Córdoba"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "euro-2004-final",
+    "competition": "Euro 2004 — Finale",
+    "date": "2004-07-04",
+    "score": "1-0",
+    "team1": {
+      "name": "Grèce",
+      "flag": "🇬🇷",
+      "formation": "4-4-2",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "A. Nikopolidis",
+          "alt": [
+            "Antonis Nikopolidis",
+            "Antonios Nikopolidis"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 2,
+          "name": "G. Seitaridis",
+          "alt": [
+            "Giourkas Seitaridis",
+            "Georgios Seitaridis"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "T. Dellas",
+          "alt": [
+            "Traianos Dellas"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 19,
+          "name": "M. Kapsis",
+          "alt": [
+            "Michalis Kapsis"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 14,
+          "name": "T. Fyssas",
+          "alt": [
+            "Takis Fyssas",
+            "Panagiotis Fyssas"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 8,
+          "name": "S. Giannakopoulos",
+          "alt": [
+            "Stelios Giannakopoulos",
+            "Stelios"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 7,
+          "name": "T. Zagorakis",
+          "alt": [
+            "Theo Zagorakis",
+            "Theodoros Zagorakis"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 6,
+          "name": "A. Basinas",
+          "alt": [
+            "Angelos Basinas"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 21,
+          "name": "K. Katsouranis",
+          "alt": [
+            "Kostas Katsouranis",
+            "Konstantinos Katsouranis"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "A. Charisteas",
+          "alt": [
+            "Angelos Charisteas"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 15,
+          "name": "Z. Vryzas",
+          "alt": [
+            "Zisis Vryzas",
+            "Zissis Vryzas"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Portugal",
+      "flag": "🇵🇹",
+      "formation": "4-4-2",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Ricardo",
+          "alt": [
+            "Ricardo Pereira",
+            "Ricardo Alexandre"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 13,
+          "name": "Miguel",
+          "alt": [
+            "Miguel Monteiro"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 4,
+          "name": "Jorge Andrade",
+          "alt": [
+            "Jorge Manuel Andrade"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 16,
+          "name": "Ricardo Carvalho",
+          "alt": [
+            "Ricardo Alberto Carvalho"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 14,
+          "name": "Nuno Valente",
+          "alt": [
+            "Nuno Jorge Valente"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 7,
+          "name": "Luís Figo",
+          "alt": [
+            "Luis Figo",
+            "Figo"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 6,
+          "name": "Costinha",
+          "alt": [
+            "Francisco José Rodrigues da Costa"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 18,
+          "name": "Maniche",
+          "alt": [
+            "Nuno Ricardo de Oliveira Ribeiro"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 20,
+          "name": "Deco",
+          "alt": [
+            "Anderson Luís de Souza",
+            "Deco Sousa"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 17,
+          "name": "C. Ronaldo",
+          "alt": [
+            "Cristiano Ronaldo"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Pauleta",
+          "alt": [
+            "Pedro Miguel Pauleta",
+            "Pedro Pauleta"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "ldc-2007-final",
+    "competition": "Ligue des Champions 2006-07 — Finale",
+    "date": "2007-05-23",
+    "score": "2-1",
+    "team1": {
+      "name": "AC Milan",
+      "flag": "🇮🇹",
+      "formation": "4-3-2-1",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Dida",
+          "alt": [
+            "Nelson de Jesus Silva",
+            "Dida Nélson"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 44,
+          "name": "M. Oddo",
+          "alt": [
+            "Massimo Oddo"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 13,
+          "name": "A. Nesta",
+          "alt": [
+            "Alessandro Nesta"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 3,
+          "name": "P. Maldini",
+          "alt": [
+            "Paolo Maldini"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 18,
+          "name": "M. Jankulovski",
+          "alt": [
+            "Marek Jankulovski"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 21,
+          "name": "A. Pirlo",
+          "alt": [
+            "Andrea Pirlo"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "G. Gattuso",
+          "alt": [
+            "Gennaro Gattuso",
+            "Rino Gattuso"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 23,
+          "name": "M. Ambrosini",
+          "alt": [
+            "Massimo Ambrosini"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 10,
+          "name": "C. Seedorf",
+          "alt": [
+            "Clarence Seedorf"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 22,
+          "name": "Kaká",
+          "alt": [
+            "Ricardo Izecson dos Santos Leite",
+            "Kaka"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "F. Inzaghi",
+          "alt": [
+            "Filippo Inzaghi",
+            "Pippo Inzaghi"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Liverpool",
+      "flag": "🇬🇧",
+      "formation": "4-4-2",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 25,
+          "name": "Pepe Reina",
+          "alt": [
+            "José Reina",
+            "Reina"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 3,
+          "name": "S. Finnan",
+          "alt": [
+            "Steve Finnan",
+            "Stephen Finnan"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "D. Agger",
+          "alt": [
+            "Daniel Agger"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 23,
+          "name": "J. Carragher",
+          "alt": [
+            "Jamie Carragher"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 6,
+          "name": "J. A. Riise",
+          "alt": [
+            "John Arne Riise"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 16,
+          "name": "J. Pennant",
+          "alt": [
+            "Jermaine Pennant"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 14,
+          "name": "X. Alonso",
+          "alt": [
+            "Xabi Alonso"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 20,
+          "name": "J. Mascherano",
+          "alt": [
+            "Javier Mascherano"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 32,
+          "name": "B. Zenden",
+          "alt": [
+            "Boudewijn Zenden"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 8,
+          "name": "S. Gerrard",
+          "alt": [
+            "Steven Gerrard"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 18,
+          "name": "D. Kuyt",
+          "alt": [
+            "Dirk Kuyt"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "ldc-2008-final",
+    "competition": "Ligue des Champions 2007-08 — Finale",
+    "date": "2008-05-21",
+    "score": "1-1 (tab 6-5)",
+    "team1": {
+      "name": "Manchester United",
+      "flag": "🇬🇧",
+      "formation": "4-4-2",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "E. van der Sar",
+          "alt": [
+            "Edwin van der Sar"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 6,
+          "name": "W. Brown",
+          "alt": [
+            "Wes Brown",
+            "Wesley Brown"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "R. Ferdinand",
+          "alt": [
+            "Rio Ferdinand"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 15,
+          "name": "N. Vidić",
+          "alt": [
+            "Nemanja Vidic",
+            "Nemanja Vidić"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 3,
+          "name": "P. Evra",
+          "alt": [
+            "Patrice Evra"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 4,
+          "name": "O. Hargreaves",
+          "alt": [
+            "Owen Hargreaves"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 16,
+          "name": "M. Carrick",
+          "alt": [
+            "Michael Carrick"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 18,
+          "name": "P. Scholes",
+          "alt": [
+            "Paul Scholes"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 7,
+          "name": "C. Ronaldo",
+          "alt": [
+            "Cristiano Ronaldo"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 10,
+          "name": "W. Rooney",
+          "alt": [
+            "Wayne Rooney"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 32,
+          "name": "C. Tévez",
+          "alt": [
+            "Carlos Tevez",
+            "Carlos Tévez"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Chelsea",
+      "flag": "🇬🇧",
+      "formation": "4-3-3",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "P. Čech",
+          "alt": [
+            "Petr Cech",
+            "Petr Čech"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 5,
+          "name": "M. Essien",
+          "alt": [
+            "Michael Essien"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 6,
+          "name": "R. Carvalho",
+          "alt": [
+            "Ricardo Carvalho"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 26,
+          "name": "J. Terry",
+          "alt": [
+            "John Terry"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 3,
+          "name": "A. Cole",
+          "alt": [
+            "Ashley Cole"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 4,
+          "name": "C. Makélélé",
+          "alt": [
+            "Claude Makelele",
+            "Claude Makélélé"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 13,
+          "name": "M. Ballack",
+          "alt": [
+            "Michael Ballack"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "F. Lampard",
+          "alt": [
+            "Frank Lampard"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 10,
+          "name": "J. Cole",
+          "alt": [
+            "Joe Cole"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 11,
+          "name": "D. Drogba",
+          "alt": [
+            "Didier Drogba"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 15,
+          "name": "F. Malouda",
+          "alt": [
+            "Florent Malouda"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "ldc-2009-final",
+    "competition": "Ligue des Champions 2008-09 — Finale",
+    "date": "2009-05-27",
+    "score": "2-0",
+    "team1": {
+      "name": "Barcelone",
+      "flag": "🇪🇸",
+      "formation": "4-3-3",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "V. Valdés",
+          "alt": [
+            "Víctor Valdés",
+            "Victor Valdes"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "C. Puyol",
+          "alt": [
+            "Carles Puyol"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 3,
+          "name": "G. Piqué",
+          "alt": [
+            "Gerard Pique",
+            "Gerard Piqué"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 24,
+          "name": "Yaya Touré",
+          "alt": [
+            "Yaya Toure",
+            "Gnégnéri Yaya Touré"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 16,
+          "name": "Sylvinho",
+          "alt": [
+            "Sylvinho Mendes",
+            "Sylvio Mendes Campos Júnior"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 28,
+          "name": "S. Busquets",
+          "alt": [
+            "Sergio Busquets"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 6,
+          "name": "Xavi",
+          "alt": [
+            "Xavi Hernandez",
+            "Xavier Hernández"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "A. Iniesta",
+          "alt": [
+            "Andrés Iniesta",
+            "Andres Iniesta"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 10,
+          "name": "L. Messi",
+          "alt": [
+            "Lionel Messi",
+            "Leo Messi"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "S. Eto'o",
+          "alt": [
+            "Samuel Eto'o",
+            "Samuel Eto'o Fils"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 14,
+          "name": "T. Henry",
+          "alt": [
+            "Thierry Henry"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Manchester United",
+      "flag": "🇬🇧",
+      "formation": "4-4-2",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "E. van der Sar",
+          "alt": [
+            "Edwin van der Sar"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 22,
+          "name": "J. O'Shea",
+          "alt": [
+            "John O'Shea"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "R. Ferdinand",
+          "alt": [
+            "Rio Ferdinand"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 15,
+          "name": "N. Vidić",
+          "alt": [
+            "Nemanja Vidic",
+            "Nemanja Vidić"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 3,
+          "name": "P. Evra",
+          "alt": [
+            "Patrice Evra"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 13,
+          "name": "Park Ji-Sung",
+          "alt": [
+            "Ji-Sung Park",
+            "Park Ji Sung"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 16,
+          "name": "M. Carrick",
+          "alt": [
+            "Michael Carrick"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Anderson",
+          "alt": [
+            "Anderson Luís de Abreu Oliveira"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 11,
+          "name": "R. Giggs",
+          "alt": [
+            "Ryan Giggs"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 7,
+          "name": "C. Ronaldo",
+          "alt": [
+            "Cristiano Ronaldo"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 10,
+          "name": "W. Rooney",
+          "alt": [
+            "Wayne Rooney"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "myth-istanbul-2005",
+    "competition": "Ligue des Champions 2004-05 — Finale",
+    "date": "2005-05-25",
+    "score": "3-3 (tab 2-3)",
+    "team1": {
+      "name": "AC Milan",
+      "flag": "🇮🇹",
+      "formation": "4-3-1-2",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Dida",
+          "alt": [
+            "Nelson Dida",
+            "Nelson de Jesus Silva"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 2,
+          "name": "Cafu",
+          "alt": [
+            "Marcos Cafu",
+            "Marcos Evangelista de Moraes"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 13,
+          "name": "Nesta",
+          "alt": [
+            "Alessandro Nesta"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 31,
+          "name": "Stam",
+          "alt": [
+            "Jaap Stam",
+            "Jakob Stam"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 3,
+          "name": "Maldini",
+          "alt": [
+            "Paolo Maldini"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Gattuso",
+          "alt": [
+            "Gennaro Gattuso",
+            "Rino Gattuso"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 21,
+          "name": "Pirlo",
+          "alt": [
+            "Andrea Pirlo"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 20,
+          "name": "Seedorf",
+          "alt": [
+            "Clarence Seedorf"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 22,
+          "name": "Kaká",
+          "alt": [
+            "Kaka",
+            "Ricardo Izecson dos Santos Leite"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 11,
+          "name": "Crespo",
+          "alt": [
+            "Hernan Crespo",
+            "Hernán Crespo"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 7,
+          "name": "Shevchenko",
+          "alt": [
+            "Andriy Shevchenko",
+            "Andriy Chevtchenko"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Liverpool",
+      "flag": "🇬🇧",
+      "formation": "4-4-1-1",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Dudek",
+          "alt": [
+            "Jerzy Dudek"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 3,
+          "name": "Finnan",
+          "alt": [
+            "Steve Finnan",
+            "Stephen Finnan"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 23,
+          "name": "Carragher",
+          "alt": [
+            "Jamie Carragher"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 4,
+          "name": "Hyypiä",
+          "alt": [
+            "Sami Hyypia",
+            "Sami Hyypiä"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 21,
+          "name": "Traoré",
+          "alt": [
+            "Djimi Traore",
+            "Djimi Traoré"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 14,
+          "name": "Alonso",
+          "alt": [
+            "Xabi Alonso"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Gerrard",
+          "alt": [
+            "Steven Gerrard",
+            "Steve Gerrard"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 6,
+          "name": "Riise",
+          "alt": [
+            "John Arne Riise"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 7,
+          "name": "Kewell",
+          "alt": [
+            "Harry Kewell"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 10,
+          "name": "Luis García",
+          "alt": [
+            "Luis Garcia"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 5,
+          "name": "Baroš",
+          "alt": [
+            "Milan Baros",
+            "Milan Baroš"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "myth-man-utd-bayern-1999",
+    "competition": "Ligue des Champions 1998-99 — Finale",
+    "date": "1999-05-26",
+    "score": "2-1",
+    "team1": {
+      "name": "Manchester United",
+      "flag": "🇬🇧",
+      "formation": "4-4-2",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Schmeichel",
+          "alt": [
+            "Peter Schmeichel"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 2,
+          "name": "G. Neville",
+          "alt": [
+            "Gary Neville"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 6,
+          "name": "Stam",
+          "alt": [
+            "Jaap Stam",
+            "Jakob Stam"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "Johnsen",
+          "alt": [
+            "Ronny Johnsen"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 3,
+          "name": "Irwin",
+          "alt": [
+            "Denis Irwin"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 7,
+          "name": "Beckham",
+          "alt": [
+            "David Beckham"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Butt",
+          "alt": [
+            "Nicky Butt",
+            "Nicholas Butt"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 15,
+          "name": "Blomqvist",
+          "alt": [
+            "Jesper Blomqvist"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 11,
+          "name": "Giggs",
+          "alt": [
+            "Ryan Giggs"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 19,
+          "name": "Yorke",
+          "alt": [
+            "Dwight Yorke"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Cole",
+          "alt": [
+            "Andy Cole",
+            "Andrew Cole"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Bayern Munich",
+      "flag": "🇩🇪",
+      "formation": "4-4-2",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Kahn",
+          "alt": [
+            "Oliver Kahn"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 2,
+          "name": "Babbel",
+          "alt": [
+            "Markus Babbel"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 25,
+          "name": "Linke",
+          "alt": [
+            "Thomas Linke"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 4,
+          "name": "Kuffour",
+          "alt": [
+            "Samuel Kuffour",
+            "Samuel Osei Kuffour"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 18,
+          "name": "Tarnat",
+          "alt": [
+            "Michael Tarnat"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 10,
+          "name": "Matthäus",
+          "alt": [
+            "Lothar Matthaus",
+            "Lothar Matthäus"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 16,
+          "name": "Jeremies",
+          "alt": [
+            "Jens Jeremies"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 11,
+          "name": "Effenberg",
+          "alt": [
+            "Stefan Effenberg"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 14,
+          "name": "Basler",
+          "alt": [
+            "Mario Basler"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 19,
+          "name": "Jancker",
+          "alt": [
+            "Carsten Jancker"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 21,
+          "name": "Zickler",
+          "alt": [
+            "Alexander Zickler"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "myth-barca-chelsea-2009",
+    "competition": "Ligue des Champions 2008-09 — Demi-finale",
+    "date": "2009-05-06",
+    "score": "1-1",
+    "team1": {
+      "name": "Chelsea",
+      "flag": "🇬🇧",
+      "formation": "4-2-3-1",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Čech",
+          "alt": [
+            "Petr Cech",
+            "Petr Čech"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 17,
+          "name": "Bosingwa",
+          "alt": [
+            "José Bosingwa",
+            "Jose Bosingwa"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 26,
+          "name": "Terry",
+          "alt": [
+            "John Terry"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 33,
+          "name": "Alex",
+          "alt": [
+            "Alex Rodrigo Dias da Costa"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 3,
+          "name": "A. Cole",
+          "alt": [
+            "Ashley Cole"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 5,
+          "name": "Essien",
+          "alt": [
+            "Michael Essien"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 13,
+          "name": "Ballack",
+          "alt": [
+            "Michael Ballack"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Lampard",
+          "alt": [
+            "Frank Lampard"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 15,
+          "name": "Malouda",
+          "alt": [
+            "Florent Malouda"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 11,
+          "name": "Drogba",
+          "alt": [
+            "Didier Drogba"
+          ]
+        },
+        {
+          "pos": "CF",
+          "num": 39,
+          "name": "Anelka",
+          "alt": [
+            "Nicolas Anelka"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Barcelone",
+      "flag": "🇪🇸",
+      "formation": "4-3-3",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Valdés",
+          "alt": [
+            "Victor Valdes",
+            "Víctor Valdés"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 20,
+          "name": "Dani Alves",
+          "alt": [
+            "Daniel Alves"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 3,
+          "name": "Piqué",
+          "alt": [
+            "Gerard Pique",
+            "Gerard Piqué"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 24,
+          "name": "Yaya Touré",
+          "alt": [
+            "Yaya Toure",
+            "Gnegneri Yaya Toure"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 22,
+          "name": "Abidal",
+          "alt": [
+            "Eric Abidal",
+            "Éric Abidal"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 28,
+          "name": "Busquets",
+          "alt": [
+            "Sergio Busquets"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 6,
+          "name": "Xavi",
+          "alt": [
+            "Xavi Hernandez",
+            "Xavier Hernandez"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Iniesta",
+          "alt": [
+            "Andres Iniesta",
+            "Andrés Iniesta"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 15,
+          "name": "Keita",
+          "alt": [
+            "Seydou Keita"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 10,
+          "name": "Messi",
+          "alt": [
+            "Lionel Messi",
+            "Leo Messi"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Eto'o",
+          "alt": [
+            "Samuel Eto'o",
+            "Samuel Etoo"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "myth-manita-2010",
+    "competition": "Liga 2010-11 — Clasico",
+    "date": "2010-11-29",
+    "score": "5-0",
+    "team1": {
+      "name": "Barcelone",
+      "flag": "🇪🇸",
+      "formation": "4-3-3",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Valdés",
+          "alt": [
+            "Victor Valdes",
+            "Víctor Valdés"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 2,
+          "name": "Dani Alves",
+          "alt": [
+            "Daniel Alves"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 3,
+          "name": "Piqué",
+          "alt": [
+            "Gerard Pique",
+            "Gerard Piqué"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "Puyol",
+          "alt": [
+            "Carles Puyol"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 22,
+          "name": "Abidal",
+          "alt": [
+            "Eric Abidal",
+            "Éric Abidal"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 16,
+          "name": "Busquets",
+          "alt": [
+            "Sergio Busquets"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 6,
+          "name": "Xavi",
+          "alt": [
+            "Xavi Hernandez",
+            "Xavier Hernandez"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Iniesta",
+          "alt": [
+            "Andres Iniesta",
+            "Andrés Iniesta"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 10,
+          "name": "Messi",
+          "alt": [
+            "Lionel Messi",
+            "Leo Messi"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 17,
+          "name": "Pedro",
+          "alt": [
+            "Pedro Rodriguez",
+            "Pedro Rodríguez"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 7,
+          "name": "Villa",
+          "alt": [
+            "David Villa"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Real Madrid",
+      "flag": "🇪🇸",
+      "formation": "4-2-3-1",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Casillas",
+          "alt": [
+            "Iker Casillas"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 4,
+          "name": "Sergio Ramos",
+          "alt": [
+            "Ramos"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 2,
+          "name": "Carvalho",
+          "alt": [
+            "Ricardo Carvalho"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 3,
+          "name": "Pepe",
+          "alt": [
+            "Képler Laveran de Lima Ferreira"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 12,
+          "name": "Marcelo",
+          "alt": [
+            "Marcelo Vieira"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 14,
+          "name": "Xabi Alonso",
+          "alt": [
+            "Xabi Alonso"
+          ]
+        },
+        {
+          "pos": "CDM",
+          "num": 24,
+          "name": "Khedira",
+          "alt": [
+            "Sami Khedira"
+          ]
+        },
+        {
+          "pos": "CAM",
+          "num": 23,
+          "name": "Özil",
+          "alt": [
+            "Mesut Ozil",
+            "Mesut Özil"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 22,
+          "name": "Di María",
+          "alt": [
+            "Angel Di Maria",
+            "Ángel Di María"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 7,
+          "name": "Cristiano Ronaldo",
+          "alt": [
+            "Ronaldo",
+            "CR7"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Benzema",
+          "alt": [
+            "Karim Benzema"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "myth-barca-real-2009",
+    "competition": "Liga 2008-09 — Clasico",
+    "date": "2009-05-02",
+    "score": "2-6",
+    "team1": {
+      "name": "Real Madrid",
+      "flag": "🇪🇸",
+      "formation": "4-4-2",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Casillas",
+          "alt": [
+            "Iker Casillas"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 4,
+          "name": "Sergio Ramos",
+          "alt": [
+            "Ramos"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "Cannavaro",
+          "alt": [
+            "Fabio Cannavaro"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 21,
+          "name": "Metzelder",
+          "alt": [
+            "Christoph Metzelder"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 16,
+          "name": "Heinze",
+          "alt": [
+            "Gabriel Heinze"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 11,
+          "name": "Robben",
+          "alt": [
+            "Arjen Robben"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 6,
+          "name": "Lass Diarra",
+          "alt": [
+            "Lassana Diarra",
+            "Lass"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Gago",
+          "alt": [
+            "Fernando Gago"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 12,
+          "name": "Marcelo",
+          "alt": [
+            "Marcelo Vieira"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 7,
+          "name": "Raúl",
+          "alt": [
+            "Raul",
+            "Raúl González"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 20,
+          "name": "Higuaín",
+          "alt": [
+            "Gonzalo Higuain",
+            "Gonzalo Higuaín"
+          ]
+        }
+      ]
+    },
+    "team2": {
+      "name": "Barcelone",
+      "flag": "🇪🇸",
+      "formation": "4-3-3",
+      "players": [
+        {
+          "pos": "GK",
+          "num": 1,
+          "name": "Valdés",
+          "alt": [
+            "Victor Valdes",
+            "Víctor Valdés"
+          ]
+        },
+        {
+          "pos": "RB",
+          "num": 20,
+          "name": "Dani Alves",
+          "alt": [
+            "Daniel Alves"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 3,
+          "name": "Piqué",
+          "alt": [
+            "Gerard Pique",
+            "Gerard Piqué"
+          ]
+        },
+        {
+          "pos": "CB",
+          "num": 5,
+          "name": "Puyol",
+          "alt": [
+            "Carles Puyol"
+          ]
+        },
+        {
+          "pos": "LB",
+          "num": 22,
+          "name": "Abidal",
+          "alt": [
+            "Eric Abidal",
+            "Éric Abidal"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 24,
+          "name": "Yaya Touré",
+          "alt": [
+            "Yaya Toure",
+            "Gnegneri Yaya Toure"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 6,
+          "name": "Xavi",
+          "alt": [
+            "Xavi Hernandez",
+            "Xavier Hernandez"
+          ]
+        },
+        {
+          "pos": "CM",
+          "num": 8,
+          "name": "Iniesta",
+          "alt": [
+            "Andres Iniesta",
+            "Andrés Iniesta"
+          ]
+        },
+        {
+          "pos": "LW",
+          "num": 14,
+          "name": "Henry",
+          "alt": [
+            "Thierry Henry"
+          ]
+        },
+        {
+          "pos": "ST",
+          "num": 9,
+          "name": "Eto'o",
+          "alt": [
+            "Samuel Eto'o",
+            "Samuel Etoo"
+          ]
+        },
+        {
+          "pos": "RW",
+          "num": 10,
+          "name": "Messi",
+          "alt": [
+            "Lionel Messi",
+            "Leo Messi"
+          ]
+        }
+      ]
+    }
   }
 ]
