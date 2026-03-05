@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Send, CheckCircle } from "lucide-react";
 import { Button, Input, Badge } from "@/components/ui";
@@ -14,6 +14,17 @@ export function GuessingPhaseScreen() {
   const hasAnswered = useGameStore((s) => s.hasAnswered);
   const { submitDrawingGuess } = useSocket();
   const [guess, setGuess] = useState("");
+  const guessRef = useRef(guess);
+  const autoSubmittedRef = useRef(false);
+  guessRef.current = guess;
+
+  // Auto-submit guess when timer expires
+  useEffect(() => {
+    if (timeRemaining <= 0 && !hasAnswered && !autoSubmittedRef.current) {
+      autoSubmittedRef.current = true;
+      submitDrawingGuess(guessRef.current.trim() || "...");
+    }
+  }, [timeRemaining, hasAnswered, submitDrawingGuess]);
 
   const handleSubmit = () => {
     if (hasAnswered || !guess.trim()) return;
@@ -53,12 +64,16 @@ export function GuessingPhaseScreen() {
       {/* Drawing image */}
       <div className="flex-1 flex items-center justify-center min-h-0">
         <div className="w-full max-w-sm aspect-square rounded-xl overflow-hidden bg-white shadow-lg">
-          {drawingToGuess ? (
+          {drawingToGuess && drawingToGuess !== "NO_DRAWING" ? (
             <img
               src={drawingToGuess}
               alt="Dessin à deviner"
               className="w-full h-full object-contain"
             />
+          ) : drawingToGuess === "NO_DRAWING" ? (
+            <div className="w-full h-full flex items-center justify-center text-surface-400 text-center px-4">
+              <p>Le joueur n&apos;a pas envoyé de dessin...</p>
+            </div>
           ) : (
             <div className="w-full h-full flex items-center justify-center text-surface-500">
               Chargement du dessin...

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Send, CheckCircle } from "lucide-react";
 import { Button, Badge } from "@/components/ui";
@@ -15,6 +15,23 @@ export function DrawingPhaseScreen() {
   const hasAnswered = useGameStore((s) => s.hasAnswered);
   const { submitDrawing } = useSocket();
   const canvasRef = useRef<DrawingCanvasHandle>(null);
+  const autoSubmittedRef = useRef(false);
+
+  // Auto-submit drawing when timer expires
+  useEffect(() => {
+    if (timeRemaining <= 0 && !hasAnswered && !autoSubmittedRef.current) {
+      autoSubmittedRef.current = true;
+      const base64 = canvasRef.current?.exportAsBase64();
+      if (base64) {
+        submitDrawing(base64);
+      }
+    }
+  }, [timeRemaining, hasAnswered, submitDrawing]);
+
+  // Reset auto-submit flag when phase changes
+  useEffect(() => {
+    autoSubmittedRef.current = false;
+  }, [drawingPhrase]);
 
   const handleSubmit = () => {
     if (hasAnswered) return;

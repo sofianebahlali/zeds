@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Lightbulb, Send, CheckCircle } from "lucide-react";
 import { Button, Input } from "@/components/ui";
@@ -13,6 +13,20 @@ export function SuggestionPhaseScreen() {
   const hasAnswered = useGameStore((s) => s.hasAnswered);
   const { submitDrawingSuggestion } = useSocket();
   const [suggestion, setSuggestion] = useState("");
+  const suggestionRef = useRef(suggestion);
+  const autoSubmittedRef = useRef(false);
+  suggestionRef.current = suggestion;
+
+  // Auto-submit suggestion when timer expires (if player typed something)
+  useEffect(() => {
+    if (timeRemaining <= 0 && !hasAnswered && !autoSubmittedRef.current) {
+      autoSubmittedRef.current = true;
+      if (suggestionRef.current.trim()) {
+        submitDrawingSuggestion(suggestionRef.current.trim());
+      }
+      // If empty, server will use fallback phrase from pool
+    }
+  }, [timeRemaining, hasAnswered, submitDrawingSuggestion]);
 
   const handleSubmit = () => {
     if (hasAnswered || !suggestion.trim()) return;

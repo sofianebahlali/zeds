@@ -438,7 +438,7 @@ export interface DrawingChain {
   guesserName: string;
   guesserAvatar: string;
   guess: string;
-  isGuessCorrect: boolean;
+  isGuessCorrect: boolean | null;
 }
 
 export interface DrawingRevealState {
@@ -502,6 +502,7 @@ export interface ServerToClientEvents {
   "drawing:reveal_state": (revealState: DrawingRevealState) => void;
   "drawing:reveal_step": (chainIndex: number, step: number) => void;
   "drawing:round_scores": (result: DrawingRoundResult) => void;
+  "drawing:chain_validated": (chainIndex: number, accepted: boolean) => void;
 
   // Petit Bac events
   "petitbac:validation_start": (data: PetitBacValidationData) => void;
@@ -558,6 +559,7 @@ export interface ClientToServerEvents {
   "drawing:submit_guess": (guess: string) => void;
   "drawing:reveal_next": () => void;
   "drawing:reveal_prev": () => void;
+  "drawing:validate_chain": (chainIndex: number, accepted: boolean) => void;
 
   // Petit Bac events
   "petitbac:submit_validation": (validation: PetitBacValidationSubmission) => void;

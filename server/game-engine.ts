@@ -193,6 +193,9 @@ export class GameEngine {
   private drawingChains: DrawingChain[] = [];
   private revealState: DrawingRevealState | null = null;
   private lastDrawingScores: { playerId: string; points: number }[] = [];
+  private drawingValidating: boolean = false;
+  private drawingAutoValidationTimer: NodeJS.Timeout | null = null;
+  private drawingChainDecisions: Map<number, boolean> = new Map();
 
   // Lineup mode state
   private lineupFoundPlayers: Map<string, Set<number>> = new Map(); // playerId -> set of found player global indices (0-21)
@@ -2406,8 +2409,9 @@ export class GameEngine {
       if (artistId) {
         const drawingData = this.drawings.get(artistId) || "";
         const socketId = this.roomManager.getSocketIdFromPlayerId(player.id);
-        if (socketId && drawingData) {
-          this.io.to(socketId).emit("drawing:your_guess_target", drawingData);
+        if (socketId) {
+          // Always emit, even if drawingData is empty (artist didn't submit)
+          this.io.to(socketId).emit("drawing:your_guess_target", drawingData || "NO_DRAWING");
         }
       }
     }

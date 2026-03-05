@@ -373,20 +373,21 @@ export function useSocket() {
     socket.emit("connection:reconnect", roomCode, playerId);
   }, [socket]);
 
-  // Drawing actions
+  // Drawing actions — don't call submitAnswer() because it sets status="answering"
+  // which overrides the drawing phase status and causes the screen to flip to QuestionDisplay
   const submitDrawingSuggestion = useCallback((suggestion: string) => {
     socket.emit("drawing:submit_suggestion", suggestion);
-    useGameStore.getState().submitAnswer(suggestion);
+    useGameStore.setState({ hasAnswered: true, myAnswer: suggestion });
   }, [socket]);
 
   const submitDrawing = useCallback((base64: string) => {
     socket.emit("drawing:submit_drawing", base64);
-    useGameStore.getState().submitAnswer(base64.substring(0, 50)); // Mark as answered without storing full base64 in store
+    useGameStore.setState({ hasAnswered: true, myAnswer: base64.substring(0, 50) });
   }, [socket]);
 
   const submitDrawingGuess = useCallback((guess: string) => {
     socket.emit("drawing:submit_guess", guess);
-    useGameStore.getState().submitAnswer(guess);
+    useGameStore.setState({ hasAnswered: true, myAnswer: guess });
   }, [socket]);
 
   const advanceDrawingReveal = useCallback(() => {
