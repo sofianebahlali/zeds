@@ -401,6 +401,19 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
       gameEngine.retreatReveal();
     });
 
+    socket.on("drawing:validate_chain", (chainIndex: number, accepted: boolean) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.validateChain(chainIndex, accepted);
+    });
+
     // ==========================================
     // CONNECTION EVENTS
     // ==========================================
@@ -416,6 +429,12 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
       socket.join(room.code);
       socket.emit("connection:reconnected", room, player);
       socket.to(room.code).emit("connection:player_reconnected", player.id);
+
+      // Re-register in game engine if game is in progress
+      const gameEngine = gameEngines.get(room.code);
+      if (gameEngine) {
+        gameEngine.handlePlayerReconnect(playerId);
+      }
     });
 
     socket.on("disconnect", () => {
@@ -468,7 +487,7 @@ function handlePlayerDisconnect(
     gameEngine.handlePlayerDisconnect(player.id);
   }
 
-  // Schedule removal after timeout (30 seconds)
+  // Schedule removal after timeout (120 seconds — generous for mobile app switching)
   setTimeout(() => {
     const currentRoom = roomManager.getRoom(room.code);
     if (!currentRoom) return;
@@ -484,5 +503,5 @@ function handlePlayerDisconnect(
         }
       }
     }
-  }, 30000);
+  }, 120000);
 }

@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle, XCircle, Send, Clock } from "lucide-react";
+import { CheckCircle, XCircle, Send } from "lucide-react";
 import { Button, Card, Avatar, Badge } from "@/components/ui";
 import { useGameStore, usePlayerStore } from "@/stores";
 import { useSocket } from "@/hooks";
@@ -70,69 +70,7 @@ export function PetitBacValidationScreen() {
     submitPetitBacValidation({ validatedAnswers });
   };
 
-  // Non-host: waiting screen
-  if (!isHost) {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="flex flex-col items-center justify-center h-full px-5"
-      >
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          className="mb-6"
-        >
-          <Clock className="w-12 h-12 text-cyan-400" />
-        </motion.div>
-        <h2 className="text-xl font-display font-bold text-surface-100 mb-2">
-          Validation en cours
-        </h2>
-        <p className="text-surface-400 text-center">
-          L&apos;hôte vérifie les réponses...
-        </p>
-
-        {/* Show own answers */}
-        <div className="mt-8 w-full max-w-sm">
-          <Card>
-            <h3 className="text-sm font-medium text-surface-400 mb-3">
-              Tes réponses — Lettre{" "}
-              <span className="text-cyan-400 font-bold">{validationData.letter}</span>
-            </h3>
-            <div className="space-y-2">
-              {validationData.categories.map((category) => {
-                const myData = validationData.playerAnswers.find(
-                  (pa) => pa.playerId === myPlayerId
-                );
-                const answer = myData?.answers[category] || "";
-                return (
-                  <div key={category} className="flex items-center gap-2">
-                    <span className="text-sm shrink-0">
-                      {CATEGORY_ICONS[category] || "📝"}
-                    </span>
-                    <span className="text-xs text-surface-400 w-28 shrink-0 truncate">
-                      {category}
-                    </span>
-                    <span
-                      className={cn(
-                        "text-sm flex-1 truncate",
-                        answer ? "text-surface-100" : "text-surface-600 italic"
-                      )}
-                    >
-                      {answer || "—"}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </Card>
-        </div>
-      </motion.div>
-    );
-  }
-
-  // Host: validation UI
+  // Both host and non-host see all answers
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -154,7 +92,7 @@ export function PetitBacValidationScreen() {
           </div>
         </div>
         <p className="text-surface-400 text-xs">
-          Valide ou rejette les réponses de chaque joueur
+          {isHost ? "Valide ou rejette les réponses de chaque joueur" : "L'hôte vérifie les réponses..."}
         </p>
       </div>
 
@@ -187,8 +125,8 @@ export function PetitBacValidationScreen() {
                 return (
                   <button
                     key={pa.playerId}
-                    onClick={() => toggleValidation(category, pa.playerId)}
-                    disabled={!answer}
+                    onClick={() => isHost && toggleValidation(category, pa.playerId)}
+                    disabled={!answer || !isHost}
                     className={cn(
                       "w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left transition-colors",
                       "border",
@@ -229,18 +167,20 @@ export function PetitBacValidationScreen() {
         ))}
       </div>
 
-      {/* Submit button */}
-      <div className="mt-4">
-        <Button
-          variant="primary"
-          size="lg"
-          fullWidth
-          onClick={handleSubmit}
-          rightIcon={<Send className="w-5 h-5" />}
-        >
-          Valider les résultats
-        </Button>
-      </div>
+      {/* Submit button (host only) */}
+      {isHost && (
+        <div className="mt-4">
+          <Button
+            variant="primary"
+            size="lg"
+            fullWidth
+            onClick={handleSubmit}
+            rightIcon={<Send className="w-5 h-5" />}
+          >
+            Valider les résultats
+          </Button>
+        </div>
+      )}
     </motion.div>
   );
 }

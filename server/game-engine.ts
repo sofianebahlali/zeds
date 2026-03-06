@@ -2333,7 +2333,7 @@ export class GameEngine {
       this.drawingAssignments.set(guesser.id, drawer.id);
     }
 
-    const timeLimit = 120;
+    const timeLimit = 160;
     this.timeRemaining = timeLimit;
 
     // Emit phase start to room
@@ -2466,8 +2466,6 @@ export class GameEngine {
 
       const guesser = this.room.players.find((p) => p.id === guesserId);
       const guess = this.guesses.get(guesserId) || "";
-      const isCorrect = this.fuzzyMatchDrawingGuess(phraseData.phrase, guess);
-
       this.drawingChains.push({
         suggesterId,
         suggesterName: suggester?.name || "???",
@@ -2481,15 +2479,11 @@ export class GameEngine {
         guesserName: guesser?.name || "???",
         guesserAvatar: guesser?.avatar || "🦊",
         guess,
-        isGuessCorrect: isCorrect,
+        isGuessCorrect: null, // Host will validate manually
       });
     }
 
-    // Calculate scores
-    const scores = this.calculateDrawingScores();
-    this.lastDrawingScores = scores;
-
-    // Initialize reveal navigation
+    // Initialize reveal navigation (scores calculated after host validates all chains)
     this.revealState = {
       chains: this.drawingChains,
       currentChainIndex: 0,
@@ -2497,11 +2491,7 @@ export class GameEngine {
     };
 
     this.io.to(this.room.code).emit("drawing:reveal_state", this.revealState);
-    this.io.to(this.room.code).emit("drawing:round_scores", {
-      roundNumber: this.currentRound,
-      chains: this.drawingChains,
-      scores,
-    });
+    // Don't emit scores yet — host validates each chain first
   }
 
   /**
@@ -2592,11 +2582,44 @@ export class GameEngine {
   /**
    * Host advances the reveal (next step or next chain)
    */
+  /**
+   * Host validates a chain (accepts or rejects the guess)
+   */
+  validateChain(chainIndex: number, accepted: boolean): void {
+    if (!this.revealState || chainIndex >= this.drawingChains.length) return;
+
+    this.drawingChains[chainIndex].isGuessCorrect = accepted;
+    this.revealState.chains = this.drawingChains;
+
+    // Broadcast to all clients
+    this.io.to(this.room.code).emit("drawing:chain_validated", chainIndex, accepted);
+
+    // Check if all chains are validated
+    const allValidated = this.drawingChains.every((c) => c.isGuessCorrect !== null);
+    if (allValidated) {
+      // Calculate and emit scores now that all chains are validated
+      const scores = this.calculateDrawingScores();
+      this.lastDrawingScores = scores;
+      this.io.to(this.room.code).emit("drawing:round_scores", {
+        roundNumber: this.currentRound,
+        chains: this.drawingChains,
+        scores,
+      });
+    }
+  }
+
   advanceReveal(): void {
     if (!this.revealState) return;
 
     const totalSteps = 4;
     const totalChains = this.revealState.chains.length;
+
+    // At step 3 (verdict), don't advance until host has validated this chain
+    const currentChain = this.drawingChains[this.revealState.currentChainIndex];
+    if (this.revealState.currentStep === 2 && currentChain?.isGuessCorrect === null) {
+      // Host needs to validate before we can show the verdict
+      return;
+    }
 
     if (this.revealState.currentStep < totalSteps - 1) {
       this.revealState.currentStep++;

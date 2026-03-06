@@ -19,6 +19,21 @@ function setupSocketListeners() {
     console.log("Socket connected");
     useUIStore.getState().setConnected(true);
     useUIStore.getState().setReconnecting(false);
+
+    // Auto-reconnect to room if we have stored session info
+    const sessionData = typeof window !== "undefined" ? localStorage.getItem("quizz_session") : null;
+    if (sessionData) {
+      try {
+        const { roomCode, playerId } = JSON.parse(sessionData);
+        const currentRoom = useRoomStore.getState().room;
+        // Only auto-reconnect if we're not already in a room
+        if (roomCode && playerId && !currentRoom) {
+          console.log(`Auto-reconnecting to room ${roomCode} as ${playerId}`);
+          useUIStore.getState().setReconnecting(true);
+          socket.emit("connection:reconnect", roomCode, playerId);
+        }
+      } catch {}
+    }
   });
 
   socket.on("disconnect", () => {
@@ -41,6 +56,14 @@ function setupSocketListeners() {
       type: "success",
       message: player.isHost ? "Room créée !" : "Tu as rejoint la room !",
     });
+
+    // Save session for auto-reconnect on mobile app switch
+    if (typeof window !== "undefined") {
+      localStorage.setItem("quizz_session", JSON.stringify({
+        roomCode: room.code,
+        playerId: player.id,
+      }));
+    }
   });
 
   socket.on("room:player_joined", (player: Player) => {
@@ -86,6 +109,11 @@ function setupSocketListeners() {
   socket.on("room:error", (message: string) => {
     useUIStore.getState().setError(message);
     useUIStore.getState().setLoading(false);
+    useUIStore.getState().setReconnecting(false);
+    // Clear stored session on error (room may no longer exist)
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("quizz_session");
+    }
   });
 
   // Game events
@@ -134,6 +162,10 @@ function setupSocketListeners() {
     useRoomStore.getState().setPlayers(finalScores);
     useGameStore.getState().finishGame();
     useUIStore.getState().setScreen("scoreboard");
+    // Clear stored session when game is over
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("quizz_session");
+    }
   });
 
   // Drawing events
@@ -159,6 +191,10 @@ function setupSocketListeners() {
 
   socket.on("drawing:round_scores", (result: DrawingRoundResult) => {
     useGameStore.getState().setDrawingScores(result);
+  });
+
+  socket.on("drawing:chain_validated", (chainIndex: number, accepted: boolean) => {
+    useGameStore.getState().updateChainValidation(chainIndex, accepted);
   });
 
   // Petit Bac events
@@ -252,6 +288,14 @@ function setupSocketListeners() {
     useUIStore.getState().setReconnecting(false);
     useUIStore.getState().setConnected(true);
 
+    // Update stored session
+    if (typeof window !== "undefined") {
+      localStorage.setItem("quizz_session", JSON.stringify({
+        roomCode: room.code,
+        playerId: player.id,
+      }));
+    }
+
     if (room.status === "playing") {
       useUIStore.getState().setScreen("game");
     } else if (room.status === "finished") {
@@ -330,6 +374,10 @@ export function useSocket() {
     socket.emit("room:leave");
     useRoomStore.getState().setRoom(null);
     useUIStore.getState().setScreen("home");
+    // Clear stored session
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("quizz_session");
+    }
     useGameStore.getState().resetGame();
   }, [socket]);
 
@@ -398,6 +446,10 @@ export function useSocket() {
     socket.emit("drawing:reveal_prev");
   }, [socket]);
 
+  const validateDrawingChain = useCallback((chainIndex: number, accepted: boolean) => {
+    socket.emit("drawing:validate_chain", chainIndex, accepted);
+  }, [socket]);
+
   const submitPetitBacValidation = useCallback((validation: PetitBacValidationSubmission) => {
     socket.emit("petitbac:submit_validation", validation);
   }, [socket]);
@@ -456,6 +508,7 @@ export function useSocket() {
     submitDrawingGuess,
     advanceDrawingReveal,
     retreatDrawingReveal,
+    validateDrawingChain,
     submitPetitBacValidation,
     submitGeoQuizValidation,
     validateGeoQuizAnswer,

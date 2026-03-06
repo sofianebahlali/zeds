@@ -88,6 +88,7 @@ interface GameStoreState {
   setDrawingRevealState: (state: DrawingRevealState) => void;
   updateDrawingRevealStep: (chainIndex: number, step: number) => void;
   setDrawingScores: (result: DrawingRoundResult) => void;
+  updateChainValidation: (chainIndex: number, accepted: boolean) => void;
 
   // Petit Bac actions
   setPetitBacValidation: (data: PetitBacValidationData) => void;
@@ -353,6 +354,15 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   })),
 
   setDrawingScores: (result) => set({ drawingScores: result }),
+
+  updateChainValidation: (chainIndex, accepted) => set((state) => {
+    if (!state.drawingRevealState) return {};
+    const newChains = [...state.drawingRevealState.chains];
+    newChains[chainIndex] = { ...newChains[chainIndex], isGuessCorrect: accepted };
+    return {
+      drawingRevealState: { ...state.drawingRevealState, chains: newChains },
+    };
+  }),
 
   // Petit Bac actions
   setPetitBacValidation: (data) => set({

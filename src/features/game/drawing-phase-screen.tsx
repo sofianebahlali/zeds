@@ -56,7 +56,7 @@ export function DrawingPhaseScreen() {
           <div className="flex-1 h-2 bg-surface-800 rounded-full overflow-hidden">
             <motion.div
               className="h-full bg-brand-500 rounded-full"
-              animate={{ width: `${Math.max(0, (timeRemaining / 60) * 100)}%` }}
+              animate={{ width: `${Math.max(0, (timeRemaining / 160) * 100)}%` }}
               transition={{ duration: 0.5 }}
             />
           </div>

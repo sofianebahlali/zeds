@@ -49,9 +49,9 @@ export function getSocket(): TypedSocket {
     socket = io(SOCKET_URL, {
       autoConnect: false,
       reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 5000,
+      reconnectionAttempts: 20,
+      reconnectionDelay: 500,
+      reconnectionDelayMax: 10000,
       timeout: 20000,
       transports: ["websocket", "polling"],
     }) as TypedSocket;

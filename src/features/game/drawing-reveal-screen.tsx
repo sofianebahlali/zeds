@@ -6,12 +6,13 @@ import { Button, Card, Badge } from "@/components/ui";
 import { useGameStore, usePlayerStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
+import { ThumbsUp, ThumbsDown } from "lucide-react";
 
 export function DrawingRevealScreen() {
   const isHost = usePlayerStore((s) => s.isHost);
   const revealState = useGameStore((s) => s.drawingRevealState);
   const drawingScores = useGameStore((s) => s.drawingScores);
-  const { advanceDrawingReveal, retreatDrawingReveal } = useSocket();
+  const { advanceDrawingReveal, retreatDrawingReveal, validateDrawingChain } = useSocket();
 
   if (!revealState || revealState.chains.length === 0) {
     return (
@@ -112,7 +113,7 @@ export function DrawingRevealScreen() {
             </motion.div>
           )}
 
-          {/* Step 2: Guess */}
+          {/* Step 2: Guess + Host validation */}
           {step >= 2 && (
             <motion.div
               key={`guess-${revealState.currentChainIndex}`}
@@ -130,11 +131,43 @@ export function DrawingRevealScreen() {
                   &laquo; {currentChain.guess || "..."} &raquo;
                 </p>
               </Card>
+
+              {/* Host validation buttons — show when not yet validated */}
+              {isHost && currentChain.isGuessCorrect === null && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="flex gap-3 mt-4 justify-center"
+                >
+                  <Button
+                    variant="secondary"
+                    className="flex-1 max-w-[160px] border-danger-500/40 hover:bg-danger-500/10"
+                    onClick={() => validateDrawingChain(revealState.currentChainIndex, false)}
+                  >
+                    <ThumbsDown className="w-5 h-5 text-danger-400" />
+                    <span className="text-danger-400">Raté</span>
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    className="flex-1 max-w-[160px] border-success-500/40 hover:bg-success-500/10"
+                    onClick={() => validateDrawingChain(revealState.currentChainIndex, true)}
+                  >
+                    <ThumbsUp className="w-5 h-5 text-success-400" />
+                    <span className="text-success-400">Validé</span>
+                  </Button>
+                </motion.div>
+              )}
+              {!isHost && currentChain.isGuessCorrect === null && (
+                <p className="text-surface-500 text-sm mt-3 text-center">
+                  L&apos;hôte valide la réponse...
+                </p>
+              )}
             </motion.div>
           )}
 
-          {/* Step 3: Verdict */}
-          {step >= 3 && (
+          {/* Step 3: Verdict (shown after host validation) */}
+          {step >= 3 && currentChain.isGuessCorrect !== null && (
             <motion.div
               key={`verdict-${revealState.currentChainIndex}`}
               initial={{ scale: 0.5, opacity: 0 }}
