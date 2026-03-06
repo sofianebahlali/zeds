@@ -24,10 +24,12 @@ import type {
   LanguePlayerAnswerData,
   MathsQuestion,
   GuessGameQuestion,
+  ParcoursValidationSubmission,
   GuessGameValidationSubmission,
   LineupQuestion,
   LineupMatch,
   LineupGuessResult,
+  JerseyNumberQuestion,
   Answer,
   RoundResult,
   ClientToServerEvents,
@@ -46,73 +48,10 @@ import { getQuestions as getDbQuestions, getTotalCount as getDbTotalCount } from
 
 type TypedIO = Server<ClientToServerEvents, ServerToClientEvents>;
 
-// Sample questions for demo purposes
+// Sample questions for demo/fallback (sport, jeux vidéo, manga)
 const SAMPLE_QUESTIONS: Question[] = [
   {
     id: "q1",
-    type: "qcm",
-    question: "Quelle est la capitale de la France ?",
-    options: ["Lyon", "Paris", "Marseille", "Bordeaux"],
-    correctIndex: 1,
-    timeLimit: 20,
-    points: 100,
-  },
-  {
-    id: "q2",
-    type: "qcm",
-    question: "Combien de continents y a-t-il sur Terre ?",
-    options: ["5", "6", "7", "8"],
-    correctIndex: 2,
-    timeLimit: 15,
-    points: 100,
-  },
-  {
-    id: "q3",
-    type: "qcm",
-    question: "Quel est le plus grand océan du monde ?",
-    options: ["Atlantique", "Indien", "Pacifique", "Arctique"],
-    correctIndex: 2,
-    timeLimit: 15,
-    points: 100,
-  },
-  {
-    id: "q4",
-    type: "open",
-    question: "Quel animal est le meilleur ami de l'homme ?",
-    answers: ["chien", "le chien", "un chien"],
-    caseSensitive: false,
-    timeLimit: 20,
-    points: 100,
-  },
-  {
-    id: "q5",
-    type: "qcm",
-    question: "En quelle année a eu lieu la Révolution française ?",
-    options: ["1776", "1789", "1804", "1815"],
-    correctIndex: 1,
-    timeLimit: 20,
-    points: 100,
-  },
-  {
-    id: "q6",
-    type: "qcm",
-    question: "Quel est l'élément chimique avec le symbole 'O' ?",
-    options: ["Or", "Osmium", "Oxygène", "Oganesson"],
-    correctIndex: 2,
-    timeLimit: 15,
-    points: 100,
-  },
-  {
-    id: "q7",
-    type: "open",
-    question: "Quelle planète est surnommée la planète rouge ?",
-    answers: ["mars", "Mars"],
-    caseSensitive: false,
-    timeLimit: 15,
-    points: 100,
-  },
-  {
-    id: "q8",
     type: "qcm",
     question: "Combien de joueurs composent une équipe de football ?",
     options: ["9", "10", "11", "12"],
@@ -121,19 +60,82 @@ const SAMPLE_QUESTIONS: Question[] = [
     points: 100,
   },
   {
-    id: "q9",
+    id: "q2",
     type: "qcm",
-    question: "Quel est le plus long fleuve du monde ?",
-    options: ["Amazone", "Nil", "Yangtsé", "Mississippi"],
+    question: "Quel pays a remporté la Coupe du Monde 2022 ?",
+    options: ["Brésil", "France", "Argentine", "Croatie"],
+    correctIndex: 2,
+    timeLimit: 20,
+    points: 100,
+  },
+  {
+    id: "q3",
+    type: "qcm",
+    question: "Dans quel jeu vidéo incarne-t-on Link ?",
+    options: ["Mario", "Zelda", "Metroid", "Pokémon"],
+    correctIndex: 1,
+    timeLimit: 15,
+    points: 100,
+  },
+  {
+    id: "q4",
+    type: "open",
+    question: "Quel est le manga le plus vendu au monde ?",
+    answers: ["one piece", "One Piece"],
+    caseSensitive: false,
+    timeLimit: 20,
+    points: 100,
+  },
+  {
+    id: "q5",
+    type: "qcm",
+    question: "Combien de Grand Chelem Rafael Nadal a-t-il remportés ?",
+    options: ["18", "20", "22", "24"],
+    correctIndex: 2,
+    timeLimit: 20,
+    points: 100,
+  },
+  {
+    id: "q6",
+    type: "qcm",
+    question: "Quel personnage de manga possède le Gear 5 ?",
+    options: ["Naruto", "Goku", "Luffy", "Ichigo"],
+    correctIndex: 2,
+    timeLimit: 15,
+    points: 100,
+  },
+  {
+    id: "q7",
+    type: "open",
+    question: "Quel joueur NBA est surnommé 'The King' ?",
+    answers: ["lebron james", "lebron", "LeBron James"],
+    caseSensitive: false,
+    timeLimit: 15,
+    points: 100,
+  },
+  {
+    id: "q8",
+    type: "qcm",
+    question: "Quel est le jeu le plus vendu de tous les temps ?",
+    options: ["GTA V", "Minecraft", "Tetris", "Wii Sports"],
     correctIndex: 1,
     timeLimit: 20,
     points: 100,
   },
   {
+    id: "q9",
+    type: "qcm",
+    question: "Dans Dragon Ball, quelle est la transformation ultime de Goku ?",
+    options: ["Super Saiyan 3", "Super Saiyan God", "Ultra Instinct", "Super Saiyan Blue"],
+    correctIndex: 2,
+    timeLimit: 15,
+    points: 100,
+  },
+  {
     id: "q10",
     type: "open",
-    question: "Quel fruit est connu pour avoir fait tomber Newton ?",
-    answers: ["pomme", "une pomme", "la pomme"],
+    question: "Quel footballeur est surnommé CR7 ?",
+    answers: ["cristiano ronaldo", "ronaldo", "Cristiano Ronaldo"],
     caseSensitive: false,
     timeLimit: 15,
     points: 100,
@@ -175,6 +177,12 @@ export class GameEngine {
   private langueAutoValidationTimer: NodeJS.Timeout | null = null;
   private langueDecisions: Map<string, { languageCorrect: boolean; meaningCorrect: boolean }> = new Map();
   private languePlayerAnswers: LanguePlayerAnswerData[] = [];
+
+  // Parcours validation state
+  private parcoursValidating: boolean = false;
+  private parcoursAutoValidationTimer: NodeJS.Timeout | null = null;
+  private parcoursDecisions: Map<string, boolean> = new Map();
+  private parcoursPlayerAnswers: { playerId: string; playerName: string; playerAvatar: string; answer: string }[] = [];
 
   // GuessGame validation state
   private guessGameValidating: boolean = false;
@@ -328,6 +336,17 @@ export class GameEngine {
       return JSON.parse(raw) as LineupMatch[];
     } catch {
       console.warn("No lineup questions found at", filePath);
+      return [];
+    }
+  }
+
+  private static loadJerseyNumberQuestions(): Question[] {
+    const filePath = path.resolve(__dirname, "../data/questions/jerseynumber.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw) as JerseyNumberQuestion[];
+    } catch {
+      console.warn("No jerseynumber questions found at", filePath);
       return [];
     }
   }
@@ -523,6 +542,10 @@ export class GameEngine {
         }
         return questions;
       }
+      case "jerseynumber":
+        pool = GameEngine.loadJerseyNumberQuestions();
+        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
+        break;
       default:
         pool = [...SAMPLE_QUESTIONS];
         break;
@@ -846,6 +869,12 @@ export class GameEngine {
       return;
     }
 
+    // Parcours: enter host validation phase instead of auto-scoring
+    if (this.currentQuestion.type === "parcours") {
+      this.startParcoursValidation();
+      return;
+    }
+
     // GuessGame: enter host validation phase instead of auto-scoring
     if (this.currentQuestion.type === "guessgame") {
       this.startGuessGameValidation();
@@ -1156,6 +1185,10 @@ export class GameEngine {
         const q = this.currentQuestion as LineupQuestion;
         return `${q.match.team1.name} vs ${q.match.team2.name}`;
       }
+      case "jerseynumber": {
+        const q = this.currentQuestion as JerseyNumberQuestion;
+        return `N°${q.correctNumber}`;
+      }
       default:
         return "";
     }
@@ -1212,13 +1245,9 @@ export class GameEngine {
       case "langue":
         // Langue scoring is handled manually by host validation
         return false;
-      case "parcours": {
-        const q = this.currentQuestion as ParcoursQuestion;
-        const normalizedInput = GameEngine.normalizeForComparison(answer);
-        return q.acceptedAnswers.some(
-          (accepted) => GameEngine.normalizeForComparison(accepted) === normalizedInput
-        );
-      }
+      case "parcours":
+        // Parcours scoring is handled manually by host validation
+        return false;
       case "maths": {
         const q = this.currentQuestion as MathsQuestion;
         const correctOption = q.options[q.correctIndex].toLowerCase();
@@ -1237,6 +1266,11 @@ export class GameEngine {
       case "lineup":
         // Lineup scoring is handled in handleLineupGuess
         return false;
+      case "jerseynumber": {
+        const q = this.currentQuestion as JerseyNumberQuestion;
+        const guess = parseInt(answer.trim(), 10);
+        return !isNaN(guess) && guess === q.correctNumber;
+      }
       default:
         return false;
     }
@@ -1274,7 +1308,16 @@ export class GameEngine {
       // Check main name and all alternatives
       const allNames = [p.name, ...p.alt];
       for (const name of allNames) {
-        if (GameEngine.normalizeForComparison(name) === normalizedGuess) {
+        const normalizedName = GameEngine.normalizeForComparison(name);
+        // Exact match
+        if (normalizedName === normalizedGuess) {
+          matchedIndex = i;
+          break;
+        }
+        // Last-name match: "Messi" matches "Lionel Messi", "De Rossi" matches "Daniele De Rossi"
+        // Guess must be ≥3 chars and match the end of the name at a word boundary
+        if (normalizedGuess.length >= 3 && normalizedName.endsWith(normalizedGuess) &&
+            normalizedName[normalizedName.length - normalizedGuess.length - 1] === " ") {
           matchedIndex = i;
           break;
         }
@@ -2049,6 +2092,199 @@ export class GameEngine {
   // GUESS GAME VALIDATION METHODS
   // ==========================================
 
+  // ==========================================
+  // PARCOURS VALIDATION METHODS
+  // ==========================================
+
+  private startParcoursValidation(): void {
+    this.parcoursValidating = true;
+    this.parcoursDecisions.clear();
+    const q = this.currentQuestion as ParcoursQuestion;
+    const activePlayers = this.getActivePlayers();
+
+    // Ensure all players have an answer entry
+    for (const player of activePlayers) {
+      if (!this.answers.has(player.id)) {
+        this.answers.set(player.id, {
+          playerId: player.id,
+          questionId: q.id,
+          answer: "",
+          timestamp: Date.now(),
+        });
+      }
+    }
+
+    this.parcoursPlayerAnswers = activePlayers.map((player) => {
+      const answer = this.answers.get(player.id);
+      return {
+        playerId: player.id,
+        playerName: player.name,
+        playerAvatar: player.avatar,
+        answer: answer?.answer || "",
+      };
+    });
+
+    this.io.to(this.room.code).emit("parcours:validation_start", {
+      clubs: q.clubs,
+      playerAnswers: this.parcoursPlayerAnswers,
+    });
+
+    // Auto-validation timeout: 60 seconds
+    this.parcoursAutoValidationTimer = setTimeout(() => {
+      if (this.parcoursValidating) {
+        for (const pa of this.parcoursPlayerAnswers) {
+          if (this.parcoursDecisions.has(pa.playerId)) continue;
+          if (!pa.answer) {
+            this.parcoursDecisions.set(pa.playerId, false);
+            continue;
+          }
+          const normalized = GameEngine.normalizeForComparison(pa.answer);
+          const isMatch = q.acceptedAnswers.some(
+            (accepted) => GameEngine.normalizeForComparison(accepted) === normalized
+          );
+          this.parcoursDecisions.set(pa.playerId, isMatch);
+          this.io.to(this.room.code).emit("parcours:answer_result", {
+            playerId: pa.playerId,
+            playerName: pa.playerName,
+            playerAvatar: pa.playerAvatar,
+            answer: pa.answer,
+            accepted: isMatch,
+          });
+        }
+        setTimeout(() => {
+          this.finalizeParcoursFromDecisions();
+        }, 1500);
+      }
+    }, 60000);
+  }
+
+  validateSingleParcoursAnswer(playerId: string, accepted: boolean): void {
+    if (!this.parcoursValidating || !this.currentQuestion) return;
+    if (this.parcoursDecisions.has(playerId)) return;
+
+    this.parcoursDecisions.set(playerId, accepted);
+
+    const pa = this.parcoursPlayerAnswers.find((p) => p.playerId === playerId);
+    if (!pa) return;
+
+    this.io.to(this.room.code).emit("parcours:answer_result", {
+      playerId: pa.playerId,
+      playerName: pa.playerName,
+      playerAvatar: pa.playerAvatar,
+      answer: pa.answer,
+      accepted,
+    });
+
+    const playersToReview = this.parcoursPlayerAnswers.filter(
+      (p) => p.answer.trim().length > 0
+    );
+    const allReviewed = playersToReview.every((p) =>
+      this.parcoursDecisions.has(p.playerId)
+    );
+
+    if (allReviewed) {
+      for (const p of this.parcoursPlayerAnswers) {
+        if (!this.parcoursDecisions.has(p.playerId)) {
+          this.parcoursDecisions.set(p.playerId, false);
+        }
+      }
+      setTimeout(() => {
+        this.finalizeParcoursFromDecisions();
+      }, 2000);
+    }
+  }
+
+  private finalizeParcoursFromDecisions(): void {
+    if (!this.parcoursValidating) return;
+
+    const validatedPlayerIds = Array.from(this.parcoursDecisions.entries())
+      .filter(([, accepted]) => accepted)
+      .map(([id]) => id);
+
+    this.submitParcoursValidation({ validatedPlayerIds });
+  }
+
+  submitParcoursValidation(validation: ParcoursValidationSubmission): void {
+    if (!this.currentQuestion || !this.parcoursValidating) return;
+    this.parcoursValidating = false;
+
+    if (this.parcoursAutoValidationTimer) {
+      clearTimeout(this.parcoursAutoValidationTimer);
+      this.parcoursAutoValidationTimer = null;
+    }
+
+    const q = this.currentQuestion as ParcoursQuestion;
+    const scores: { playerId: string; points: number; total: number }[] = [];
+    let bestPoints = 0;
+    let winner: Player | undefined;
+
+    for (const player of this.room.players) {
+      const answer = this.answers.get(player.id);
+      const isValidated = validation.validatedPlayerIds.includes(player.id);
+
+      let points = 0;
+      if (isValidated && answer) {
+        points = q.points;
+
+        // Speed bonus: faster responses get more points
+        if (answer.responseTime !== undefined) {
+          const speedBonus = Math.max(0, Math.round((q.timeLimit - answer.responseTime) / q.timeLimit * 50));
+          points += speedBonus;
+        }
+      }
+
+      if (answer) {
+        answer.points = points;
+        answer.isCorrect = isValidated;
+      }
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, points);
+      scores.push({
+        playerId: player.id,
+        points,
+        total: updatedPlayer?.score || player.score,
+      });
+
+      if (points > bestPoints) {
+        bestPoints = points;
+        winner = player;
+      }
+    }
+
+    const results: RoundResult = {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion,
+      answers: Array.from(this.answers.values()),
+      correctAnswer: q.playerName,
+      winner,
+      scores,
+    };
+
+    this.io.to(this.room.code).emit("parcours:validation_result", validation);
+    this.updateLoseStreaks(results);
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+    this.io.to(this.room.code).emit("game:round_end", results);
+
+    if (this.currentTeams) {
+      this.processTeamRoundEnd(results.scores);
+    }
+
+    setTimeout(() => {
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+
+      if (this.room.settings.showLeaderboardBetweenRounds) {
+        setTimeout(() => {
+          this.nextRound();
+        }, 8000);
+      }
+    }, 6000);
+  }
+
+  // ==========================================
+  // GUESS GAME VALIDATION METHODS
+  // ==========================================
+
   private startGuessGameValidation(): void {
     this.guessGameValidating = true;
     this.guessGameDecisions.clear();
@@ -2765,6 +3001,10 @@ export class GameEngine {
     if (this.langueAutoValidationTimer) {
       clearTimeout(this.langueAutoValidationTimer);
       this.langueAutoValidationTimer = null;
+    }
+    if (this.parcoursAutoValidationTimer) {
+      clearTimeout(this.parcoursAutoValidationTimer);
+      this.parcoursAutoValidationTimer = null;
     }
     if (this.guessGameAutoValidationTimer) {
       clearTimeout(this.guessGameAutoValidationTimer);

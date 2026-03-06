@@ -37,6 +37,7 @@ export function RoundResult() {
   const isParcours = roundResult.question.type === "parcours";
   const isPetitBac = roundResult.question.type === "petitbac";
   const isGeoQuiz = roundResult.question.type === "geoquiz";
+  const isJerseyNumber = roundResult.question.type === "jerseynumber";
 
   if (isPetitBac) {
     return (
@@ -106,6 +107,10 @@ export function RoundResult() {
             ? isCorrect
               ? "Bien localisé !"
               : "Perdu !"
+            : isJerseyNumber
+            ? isCorrect
+              ? "Bien deviné !"
+              : "Perdu !"
             : isCorrect
             ? "Bonne réponse !"
             : "Raté !"}
@@ -149,6 +154,8 @@ export function RoundResult() {
                 ? "Le joueur était :"
                 : isGeoQuiz
                 ? "La ville était :"
+                : isJerseyNumber
+                ? "Le vrai numéro :"
                 : "La bonne réponse était :"}
             </p>
             <p
@@ -263,6 +270,8 @@ export function RoundResult() {
                               const opts = (roundResult.question as QCMQuestion | MathsQuestion).options;
                               return (!isNaN(idx) && opts && opts[idx]) ? opts[idx] : (answer.answer || "Pas de réponse");
                             })()
+                          : isJerseyNumber
+                          ? (answer.answer ? `N°${answer.answer}` : "Pas de réponse")
                           : answer.answer || "Pas de réponse"}
                       </p>
                     )}

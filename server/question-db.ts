@@ -8,27 +8,13 @@ import type { QCMQuestion, OpenQuestion, Question } from "../src/types";
 // ==========================================
 
 export const QUESTION_THEMES = [
-  "Culture générale",
-  "Cinéma & Séries",
-  "Musique",
   "Sport",
-  "Histoire",
-  "Géographie",
-  "Sciences & Nature",
-  "Gastronomie",
-  "Littérature & BD",
-  "Jeux vidéo & Tech",
-  "People & Célébrités",
-  "Art & Architecture",
-  "Fêtes & Traditions",
   "Football",
-  "Jeux vidéo",
-  "Manga & Anime",
   "Tennis",
   "NBA & Basket",
-  "Politique",
-  "Culture Internet",
-  "Vie quotidienne",
+  "Jeux vidéo",
+  "Jeux vidéo & Tech",
+  "Manga & Anime",
 ] as const;
 
 export type QuestionTheme = (typeof QUESTION_THEMES)[number];

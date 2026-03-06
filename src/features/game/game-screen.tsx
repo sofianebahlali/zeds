@@ -13,6 +13,7 @@ import { DrawingRevealScreen } from "./drawing-reveal-screen";
 import { PetitBacValidationScreen } from "./petitbac-validation-screen";
 import { GeoQuizValidationScreen } from "./geoquiz-validation-screen";
 import { LangueValidationScreen } from "./langue-validation-screen";
+import { ParcoursValidationScreen } from "./parcours-validation-screen";
 import { GuessGameValidationScreen } from "./guessgame-validation-screen";
 import { LineupGameScreen } from "./lineup-game-screen";
 import { LineupRevealScreen } from "./lineup-reveal-screen";
@@ -42,6 +43,7 @@ export function GameScreen() {
     if (isPetitBac && status === "petitbac_validating") return "Validation";
     if (isGeoQuiz && status === "geoquiz_validating") return "Validation";
     if (isLangue && status === "langue_validating") return "Validation";
+    if (status === "parcours_validating") return "Validation";
     if (status === "guessgame_validating") return "Validation";
     if (!isDrawingMode) return null;
     switch (status) {
@@ -180,6 +182,7 @@ export function GameScreen() {
           {status === "petitbac_validating" && <PetitBacValidationScreen key="petitbac-validation" />}
           {status === "geoquiz_validating" && <GeoQuizValidationScreen key="geoquiz-validation" />}
           {status === "langue_validating" && <LangueValidationScreen key="langue-validation" />}
+          {status === "parcours_validating" && <ParcoursValidationScreen key="parcours-validation" />}
           {status === "guessgame_validating" && <GuessGameValidationScreen key="guessgame-validation" />}
           {status === "lineup_revealing" && <LineupRevealScreen key="lineup-reveal" />}
         </AnimatePresence>

@@ -299,6 +299,23 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     });
 
     // ==========================================
+    // PARCOURS EVENTS
+    // ==========================================
+
+    socket.on("parcours:validate_answer", (targetPlayerId: string, accepted: boolean) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.validateSingleParcoursAnswer(targetPlayerId, accepted);
+    });
+
+    // ==========================================
     // GUESSGAME EVENTS
     // ==========================================
 

@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -231,6 +231,34 @@ export interface GeoQuizAnswerResultData {
 }
 
 // ==========================================
+// PARCOURS VALIDATION TYPES
+// ==========================================
+
+export interface ParcoursPlayerAnswerData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  answer: string;
+}
+
+export interface ParcoursValidationData {
+  clubs: ParcoursClub[];
+  playerAnswers: ParcoursPlayerAnswerData[];
+}
+
+export interface ParcoursValidationSubmission {
+  validatedPlayerIds: string[];
+}
+
+export interface ParcoursAnswerResultData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  answer: string;
+  accepted: boolean;
+}
+
+// ==========================================
 // GUESS GAME VALIDATION TYPES
 // ==========================================
 
@@ -360,6 +388,17 @@ export interface GuessGameQuestion extends BaseQuestion {
 // LINEUP MODE TYPES
 // ==========================================
 
+export interface JerseyNumberQuestion extends BaseQuestion {
+  type: "jerseynumber";
+  playerName: string;
+  team: string;
+  position: string;
+  correctNumber: number;
+  league?: string;
+  nationality?: string;
+  difficulty: "easy" | "medium" | "hard";
+}
+
 export interface LineupPlayer {
   pos: string;
   name: string;
@@ -398,7 +437,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -533,6 +572,11 @@ export interface ServerToClientEvents {
   "langue:validation_result": (validation: LangueValidationSubmission) => void;
   "langue:answer_result": (data: LangueAnswerResultData) => void;
 
+  // Parcours events
+  "parcours:validation_start": (data: ParcoursValidationData) => void;
+  "parcours:validation_result": (validation: ParcoursValidationSubmission) => void;
+  "parcours:answer_result": (data: ParcoursAnswerResultData) => void;
+
   // GuessGame events
   "guessgame:validation_start": (data: GuessGameValidationData) => void;
   "guessgame:validation_result": (validation: GuessGameValidationSubmission) => void;
@@ -586,6 +630,9 @@ export interface ClientToServerEvents {
   // Langue events
   "langue:submit_validation": (validation: LangueValidationSubmission) => void;
   "langue:validate_answer": (playerId: string, languageCorrect: boolean, meaningCorrect: boolean) => void;
+
+  // Parcours events
+  "parcours:validate_answer": (playerId: string, accepted: boolean) => void;
 
   // GuessGame events
   "guessgame:validate_answer": (playerId: string, accepted: boolean) => void;
@@ -740,5 +787,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Retrouve les 22 joueurs d'un match mythique",
     icon: "⚽",
     color: "from-lime-500 to-lime-700",
+  },
+  {
+    id: "jerseynumber",
+    name: "Devine le Numéro",
+    description: "Quel est le numéro de maillot de ce joueur ?",
+    icon: "👕",
+    color: "from-teal-500 to-teal-700",
   },
 ];

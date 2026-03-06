@@ -1,11 +1,12 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
   | "petitbac_validating"
   | "geoquiz_validating"
   | "langue_validating"
+  | "parcours_validating"
   | "guessgame_validating"
   | "lineup_revealing";
 
@@ -50,6 +51,10 @@ interface GameStoreState {
   // Team rounds
   teamData: TeamRoundData | null;
   teamRoundResult: TeamRoundResult | null;
+
+  // Parcours mode
+  parcoursValidationData: ParcoursValidationData | null;
+  parcoursAnswerResults: ParcoursAnswerResultData[];
 
   // GuessGame mode
   guessGameValidationData: GuessGameValidationData | null;
@@ -102,6 +107,10 @@ interface GameStoreState {
   // Langue actions
   setLangueValidation: (data: LangueValidationData) => void;
   addLangueAnswerResult: (result: LangueAnswerResultData) => void;
+
+  // Parcours actions
+  setParcoursValidation: (data: ParcoursValidationData) => void;
+  addParcoursAnswerResult: (result: ParcoursAnswerResultData) => void;
 
   // GuessGame actions
   setGuessGameValidation: (data: GuessGameValidationData) => void;
@@ -160,6 +169,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   // Langue initial state
   langueValidationData: null,
   langueAnswerResults: [],
+
+  // Parcours initial state
+  parcoursValidationData: null,
+  parcoursAnswerResults: [],
 
   // GuessGame initial state
   guessGameValidationData: null,
@@ -272,6 +285,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       geoQuizReviewIndex: 0,
       langueValidationData: null,
       langueAnswerResults: [],
+      parcoursValidationData: null,
+      parcoursAnswerResults: [],
       guessGameValidationData: null,
       guessGameAnswerResults: [],
       lineupFoundPlayers: [],
@@ -313,6 +328,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       geoQuizReviewIndex: 0,
       langueValidationData: null,
       langueAnswerResults: [],
+      parcoursValidationData: null,
+      parcoursAnswerResults: [],
       guessGameValidationData: null,
       guessGameAnswerResults: [],
       lineupFoundPlayers: [],
@@ -393,6 +410,17 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   addLangueAnswerResult: (result) => set((state) => ({
     langueAnswerResults: [...state.langueAnswerResults, result],
+  })),
+
+  // Parcours actions
+  setParcoursValidation: (data) => set({
+    parcoursValidationData: data,
+    parcoursAnswerResults: [],
+    status: "parcours_validating",
+  }),
+
+  addParcoursAnswerResult: (result) => set((state) => ({
+    parcoursAnswerResults: [...state.parcoursAnswerResults, result],
   })),
 
   // GuessGame actions

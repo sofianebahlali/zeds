@@ -9,7 +9,7 @@ import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { getSocket } from "@/lib/socket";
 import { cn } from "@/lib/utils";
-import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion } from "@/types";
+import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion } from "@/types";
 
 export function QuestionDisplay() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
@@ -29,6 +29,7 @@ export function QuestionDisplay() {
   const [langueLanguage, setLangueLanguage] = useState("");
   const [langueMeaning, setLangueMeaning] = useState("");
   const [guessGameAnswer, setGuessGameAnswer] = useState("");
+  const [jerseyGuess, setJerseyGuess] = useState("");
 
   // Ref to access latest petitBac answers in the auto-submit effect
   const petitBacAnswersRef = useRef(petitBacAnswers);
@@ -71,6 +72,8 @@ export function QuestionDisplay() {
       submitAnswer(JSON.stringify({ language: langueLanguage.trim(), meaning: langueMeaning.trim() }));
     } else if (currentQuestion.type === "guessgame" && guessGameAnswer.trim()) {
       submitAnswer(guessGameAnswer.trim());
+    } else if (currentQuestion.type === "jerseynumber" && jerseyGuess.trim()) {
+      submitAnswer(jerseyGuess.trim());
     } else if (textAnswer.trim()) {
       submitAnswer(textAnswer.trim());
     }
@@ -177,6 +180,16 @@ export function QuestionDisplay() {
             answer={guessGameAnswer}
             hasAnswered={hasAnswered}
             onChange={setGuessGameAnswer}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "jerseynumber" && (
+          <JerseyNumberQuestionView
+            question={currentQuestion as JerseyNumberQuestion}
+            guess={jerseyGuess}
+            hasAnswered={hasAnswered}
+            onChange={setJerseyGuess}
             onSubmit={handleSubmit}
           />
         )}
@@ -1353,6 +1366,126 @@ function GuessGameQuestionView({
               fullWidth
               onClick={onSubmit}
               disabled={!answer.trim()}
+              rightIcon={<Send className="w-5 h-5" />}
+            >
+              Valider
+            </Button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ==========================================
+// JERSEY NUMBER QUESTION VIEW
+// ==========================================
+
+interface JerseyNumberQuestionViewProps {
+  question: JerseyNumberQuestion;
+  guess: string;
+  hasAnswered: boolean;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+}
+
+function JerseyNumberQuestionView({
+  question,
+  guess,
+  hasAnswered,
+  onChange,
+  onSubmit,
+}: JerseyNumberQuestionViewProps) {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSubmit();
+    }
+  };
+
+  return (
+    <>
+      {/* Player info */}
+      <div className="mb-6 text-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center mb-4 shadow-lg"
+        >
+          <span className="text-4xl">👕</span>
+        </motion.div>
+
+        <h2 className="text-2xl sm:text-3xl font-display font-bold text-surface-100 mb-3">
+          {question.playerName}
+        </h2>
+
+        <div className="flex items-center justify-center gap-2 flex-wrap">
+          <Badge variant="default" size="sm">
+            {question.team}
+          </Badge>
+          <Badge variant="default" size="sm">
+            {question.position}
+          </Badge>
+          {question.league && (
+            <Badge variant="default" size="sm">
+              {question.league}
+            </Badge>
+          )}
+        </div>
+
+        <p className="text-surface-400 text-sm mt-3">
+          Quel est son numéro de maillot ?
+        </p>
+      </div>
+
+      {/* Number input */}
+      <div className="flex-1 flex flex-col justify-end">
+        {hasAnswered ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center"
+          >
+            <Card className="inline-block">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-success-400" />
+                <div className="text-left">
+                  <p className="text-sm text-surface-400">Ta réponse :</p>
+                  <p className="text-2xl font-display font-bold text-surface-100">
+                    N°{guess}
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        ) : (
+          <div className="space-y-4">
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-bold text-surface-400">
+                N°
+              </span>
+              <Input
+                value={guess}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/[^\d]/g, "");
+                  if (val === "" || (parseInt(val, 10) >= 0 && parseInt(val, 10) <= 99)) {
+                    onChange(val);
+                  }
+                }}
+                onKeyDown={handleKeyDown}
+                placeholder="0"
+                inputMode="numeric"
+                autoFocus
+                autoComplete="off"
+                className="text-center text-2xl font-display font-bold pl-12"
+              />
+            </div>
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onSubmit}
+              disabled={!guess.trim()}
               rightIcon={<Send className="w-5 h-5" />}
             >
               Valider

@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch } from "@/types";
 
 // Module-level flag: listeners are attached ONCE across all component instances
 let listenersAttached = false;
@@ -198,6 +198,19 @@ function setupSocketListeners() {
 
   socket.on("langue:answer_result", (data: LangueAnswerResultData) => {
     useGameStore.getState().addLangueAnswerResult(data);
+  });
+
+  // Parcours events
+  socket.on("parcours:validation_start", (data: ParcoursValidationData) => {
+    useGameStore.getState().setParcoursValidation(data);
+  });
+
+  socket.on("parcours:validation_result", (_validation: ParcoursValidationSubmission) => {
+    // round_end follows immediately
+  });
+
+  socket.on("parcours:answer_result", (data: ParcoursAnswerResultData) => {
+    useGameStore.getState().addParcoursAnswerResult(data);
   });
 
   // GuessGame events
@@ -422,6 +435,10 @@ export function useSocket() {
     socket.emit("langue:submit_validation", validation);
   }, [socket]);
 
+  const validateParcoursAnswer = useCallback((playerId: string, accepted: boolean) => {
+    socket.emit("parcours:validate_answer", playerId, accepted);
+  }, [socket]);
+
   const validateGuessGameAnswer = useCallback((playerId: string, accepted: boolean) => {
     socket.emit("guessgame:validate_answer", playerId, accepted);
   }, [socket]);
@@ -462,6 +479,7 @@ export function useSocket() {
     useGeoQuizHint,
     validateLangueAnswer,
     submitLangueValidation,
+    validateParcoursAnswer,
     validateGuessGameAnswer,
     submitLineupGuess,
     skipLineupReveal,
