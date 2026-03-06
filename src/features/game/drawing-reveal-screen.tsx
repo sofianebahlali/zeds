@@ -132,8 +132,8 @@ export function DrawingRevealScreen() {
                 </p>
               </Card>
 
-              {/* Host validation buttons — show when not yet validated */}
-              {isHost && currentChain.isGuessCorrect === null && (
+              {/* Host validation buttons — visible to all, interactive for host only */}
+              {currentChain.isGuessCorrect === null && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -144,6 +144,7 @@ export function DrawingRevealScreen() {
                     variant="secondary"
                     className="flex-1 max-w-[160px] border-danger-500/40 hover:bg-danger-500/10"
                     onClick={() => validateDrawingChain(revealState.currentChainIndex, false)}
+                    disabled={!isHost}
                   >
                     <ThumbsDown className="w-5 h-5 text-danger-400" />
                     <span className="text-danger-400">Raté</span>
@@ -152,16 +153,12 @@ export function DrawingRevealScreen() {
                     variant="secondary"
                     className="flex-1 max-w-[160px] border-success-500/40 hover:bg-success-500/10"
                     onClick={() => validateDrawingChain(revealState.currentChainIndex, true)}
+                    disabled={!isHost}
                   >
                     <ThumbsUp className="w-5 h-5 text-success-400" />
                     <span className="text-success-400">Validé</span>
                   </Button>
                 </motion.div>
-              )}
-              {!isHost && currentChain.isGuessCorrect === null && (
-                <p className="text-surface-500 text-sm mt-3 text-center">
-                  L&apos;hôte valide la réponse...
-                </p>
               )}
             </motion.div>
           )}
@@ -231,31 +228,26 @@ export function DrawingRevealScreen() {
         </motion.div>
       )}
 
-      {/* Host navigation */}
-      {isHost ? (
-        <div className="flex gap-3">
-          <Button
-            variant="secondary"
-            className="flex-shrink-0"
-            onClick={retreatDrawingReveal}
-            disabled={isFirst}
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </Button>
-          <Button
-            variant="primary"
-            className="flex-1"
-            onClick={advanceDrawingReveal}
-          >
-            {isLastChain && isLastStep ? "Terminer" : "Suivant"}
-            {!(isLastChain && isLastStep) && <ChevronRight className="w-5 h-5" />}
-          </Button>
-        </div>
-      ) : (
-        <p className="text-center text-surface-500 text-sm py-2">
-          L&apos;hôte contrôle la présentation...
-        </p>
-      )}
+      {/* Navigation — visible to all, interactive for host only */}
+      <div className="flex gap-3">
+        <Button
+          variant="secondary"
+          className="flex-shrink-0"
+          onClick={retreatDrawingReveal}
+          disabled={isFirst || !isHost}
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </Button>
+        <Button
+          variant="primary"
+          className="flex-1"
+          onClick={advanceDrawingReveal}
+          disabled={!isHost}
+        >
+          {isLastChain && isLastStep ? "Terminer" : "Suivant"}
+          {!(isLastChain && isLastStep) && <ChevronRight className="w-5 h-5" />}
+        </Button>
+      </div>
     </motion.div>
   );
 }
