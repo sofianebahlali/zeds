@@ -17,6 +17,7 @@ import { ParcoursValidationScreen } from "./parcours-validation-screen";
 import { GuessGameValidationScreen } from "./guessgame-validation-screen";
 import { LineupGameScreen } from "./lineup-game-screen";
 import { LineupRevealScreen } from "./lineup-reveal-screen";
+import { GameChat } from "./game-chat";
 import { ScreenContainer } from "@/components/layout";
 import { GAME_MODES } from "@/types";
 import { useSocket } from "@/hooks";
@@ -187,6 +188,9 @@ export function GameScreen() {
           {status === "lineup_revealing" && <LineupRevealScreen key="lineup-reveal" />}
         </AnimatePresence>
       </div>
+
+      {/* In-game chat */}
+      <GameChat />
     </ScreenContainer>
   );
 }

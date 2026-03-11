@@ -3,16 +3,51 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction } from "@/types";
+import { useChatStore } from "@/stores/chat-store";
 
 // Module-level flag: listeners are attached ONCE across all component instances
 let listenersAttached = false;
+
+function setupVisibilityHandler() {
+  if (typeof document === "undefined") return;
+
+  let wasConnected = false;
+
+  document.addEventListener("visibilitychange", () => {
+    const socket = getSocket();
+
+    if (document.visibilityState === "hidden") {
+      // Tab going to background — remember connection state
+      wasConnected = socket.connected;
+    } else if (document.visibilityState === "visible") {
+      // Tab coming back to foreground — reconnect if needed
+      if (wasConnected && !socket.connected) {
+        console.log("Tab visible again, reconnecting socket...");
+        connectSocket();
+        // Try app-level reconnect if we were in a room
+        const room = useRoomStore.getState().room;
+        const playerStore = usePlayerStore.getState();
+        if (room && playerStore.playerId) {
+          setTimeout(() => {
+            if (socket.connected) {
+              socket.emit("connection:reconnect", room.code, playerStore.playerId!);
+            }
+          }, 500);
+        }
+      }
+    }
+  });
+}
 
 function setupSocketListeners() {
   if (listenersAttached) return;
   listenersAttached = true;
 
   const socket = getSocket();
+
+  // Visibility handler to prevent tab-switch disconnects
+  setupVisibilityHandler();
 
   // Connection events
   socket.on("connect", () => {
@@ -21,9 +56,13 @@ function setupSocketListeners() {
     useUIStore.getState().setReconnecting(false);
   });
 
-  socket.on("disconnect", () => {
-    console.log("Socket disconnected");
+  socket.on("disconnect", (reason) => {
+    console.log("Socket disconnected:", reason);
     useUIStore.getState().setConnected(false);
+    // If server disconnected us (transport close from tab switch), try to reconnect immediately
+    if (reason === "transport close" || reason === "ping timeout") {
+      socket.connect();
+    }
   });
 
   socket.on("connect_error", (error) => {
@@ -258,6 +297,16 @@ function setupSocketListeners() {
     useGameStore.getState().setTeamRoundEnd(result);
   });
 
+  // Chat events
+  socket.on("chat:message", (message: ChatMessage) => {
+    useChatStore.getState().addMessage(message);
+  });
+
+  // Reaction events
+  socket.on("reaction:laugh", (reaction: AnswerReaction) => {
+    useChatStore.getState().addReaction(reaction);
+  });
+
   // Connection events
   socket.on("connection:reconnected", (room: Room, player: Player) => {
     useRoomStore.getState().setRoom(room);
@@ -453,6 +502,14 @@ export function useSocket() {
     socket.emit("lineup:skip_reveal");
   }, [socket]);
 
+  const sendChatMessage = useCallback((message: string) => {
+    socket.emit("chat:send_message", message);
+  }, [socket]);
+
+  const sendLaughReaction = useCallback((targetPlayerId: string, roundNumber: number) => {
+    socket.emit("reaction:laugh", targetPlayerId, roundNumber);
+  }, [socket]);
+
   return {
     socket,
     connect,
@@ -483,5 +540,7 @@ export function useSocket() {
     validateGuessGameAnswer,
     submitLineupGuess,
     skipLineupReveal,
+    sendChatMessage,
+    sendLaughReaction,
   };
 }

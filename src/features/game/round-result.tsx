@@ -1,10 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, XCircle, Trophy, Zap } from "lucide-react";
 import { Card, Avatar, Badge } from "@/components/ui";
 import { useGameStore, useRoomStore } from "@/stores";
+import { useChatStore } from "@/stores/chat-store";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
 import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion } from "@/types";
@@ -19,6 +20,48 @@ const PETITBAC_CATEGORY_ICONS: Record<string, string> = {
   "Film": "🎬",
   "Partie du corps/os": "🦴",
 };
+
+function LaughButton({ targetPlayerId, roundNumber, myPlayerId }: { targetPlayerId: string; roundNumber: number; myPlayerId: string }) {
+  const { sendLaughReaction } = useSocket();
+  const reactions = useChatStore((s) => s.reactions);
+
+  const laughCount = reactions.filter(
+    (r) => r.targetPlayerId === targetPlayerId && r.roundNumber === roundNumber
+  ).length;
+
+  const alreadyLaughed = reactions.some(
+    (r) => r.playerId === myPlayerId && r.targetPlayerId === targetPlayerId && r.roundNumber === roundNumber
+  );
+
+  if (targetPlayerId === myPlayerId) return null;
+
+  return (
+    <button
+      onClick={() => {
+        if (!alreadyLaughed) sendLaughReaction(targetPlayerId, roundNumber);
+      }}
+      className={cn(
+        "flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-xs transition-all",
+        alreadyLaughed
+          ? "bg-amber-500/20 border border-amber-500/30"
+          : "bg-surface-800 border border-surface-700 hover:bg-amber-500/10 hover:border-amber-500/20"
+      )}
+    >
+      <span className="text-sm">😂</span>
+      <AnimatePresence>
+        {laughCount > 0 && (
+          <motion.span
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            className="text-amber-400 font-bold"
+          >
+            {laughCount}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </button>
+  );
+}
 
 export function RoundResult() {
   const roundResult = useGameStore((s) => s.roundResult);
@@ -276,7 +319,14 @@ export function RoundResult() {
                       </p>
                     )}
                   </div>
-                  <div className="text-right">
+                  <div className="flex items-center gap-2">
+                    {answer && !answer.isCorrect && (
+                      <LaughButton
+                        targetPlayerId={score.playerId}
+                        roundNumber={roundResult.roundNumber}
+                        myPlayerId={myPlayerId}
+                      />
+                    )}
                     <span
                       className={cn(
                         "font-display font-bold",
@@ -468,7 +518,14 @@ function PetitBacRoundResult({
                             </span>
                           </>
                         ) : (
-                          <XCircle className="w-4 h-4 text-danger-400/60" />
+                          <>
+                            <LaughButton
+                              targetPlayerId={score.playerId}
+                              roundNumber={roundResult.roundNumber}
+                              myPlayerId={myPlayerId}
+                            />
+                            <XCircle className="w-4 h-4 text-danger-400/60" />
+                          </>
                         )}
                       </span>
                     )}

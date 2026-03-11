@@ -419,6 +419,57 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     });
 
     // ==========================================
+    // CHAT EVENTS
+    // ==========================================
+
+    socket.on("chat:send_message", (message: string) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const player = room.players.find((p) => p.id === playerId);
+      if (!player) return;
+
+      const trimmed = message.trim().slice(0, 200);
+      if (!trimmed) return;
+
+      const chatMessage = {
+        id: `msg_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        playerId: player.id,
+        playerName: player.name,
+        playerAvatar: player.avatar,
+        message: trimmed,
+        timestamp: Date.now(),
+      };
+
+      io.to(room.code).emit("chat:message", chatMessage);
+    });
+
+    // ==========================================
+    // REACTION EVENTS
+    // ==========================================
+
+    socket.on("reaction:laugh", (targetPlayerId: string, roundNumber: number) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const player = room.players.find((p) => p.id === playerId);
+      if (!player) return;
+
+      io.to(room.code).emit("reaction:laugh", {
+        playerId: player.id,
+        playerName: player.name,
+        targetPlayerId,
+        roundNumber,
+      });
+    });
+
+    // ==========================================
     // CONNECTION EVENTS
     // ==========================================
 

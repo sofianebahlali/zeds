@@ -244,6 +244,7 @@ export interface ParcoursPlayerAnswerData {
 export interface ParcoursValidationData {
   clubs: ParcoursClub[];
   playerAnswers: ParcoursPlayerAnswerData[];
+  correctAnswer: string;
 }
 
 export interface ParcoursValidationSubmission {
@@ -594,6 +595,12 @@ export interface ServerToClientEvents {
   "connection:reconnected": (room: Room, player: Player) => void;
   "connection:player_disconnected": (playerId: string) => void;
   "connection:player_reconnected": (playerId: string) => void;
+
+  // Chat events
+  "chat:message": (message: ChatMessage) => void;
+
+  // Reaction events
+  "reaction:laugh": (reaction: AnswerReaction) => void;
 }
 
 export interface ClientToServerEvents {
@@ -642,6 +649,32 @@ export interface ClientToServerEvents {
 
   // Connection events
   "connection:reconnect": (roomCode: string, playerId: string) => void;
+
+  // Chat events
+  "chat:send_message": (message: string) => void;
+
+  // Reaction events
+  "reaction:laugh": (targetPlayerId: string, roundNumber: number) => void;
+}
+
+// ==========================================
+// CHAT & REACTIONS
+// ==========================================
+
+export interface ChatMessage {
+  id: string;
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  message: string;
+  timestamp: number;
+}
+
+export interface AnswerReaction {
+  playerId: string;
+  playerName: string;
+  targetPlayerId: string;
+  roundNumber: number;
 }
 
 // ==========================================

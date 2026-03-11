@@ -59,6 +59,13 @@ export function ParcoursValidationScreen() {
             <span className="text-xs font-medium text-surface-300">Validation Parcours</span>
           </div>
           <ClubTimeline />
+          {/* Correct answer for the validator */}
+          <div className="mt-2 px-4 py-2 rounded-xl bg-accent-500/10 border border-accent-500/30">
+            <p className="text-xs text-surface-400 mb-0.5">Le joueur est :</p>
+            <p className="text-lg font-display font-bold text-accent-400">
+              {validationData.correctAnswer}
+            </p>
+          </div>
         </div>
 
         {/* Progress dots */}

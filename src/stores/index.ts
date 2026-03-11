@@ -9,3 +9,4 @@ export {
   useNotifications,
   useConnectionStatus,
 } from "./ui-store";
+export { useChatStore } from "./chat-store";

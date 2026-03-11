@@ -2127,6 +2127,7 @@ export class GameEngine {
     this.io.to(this.room.code).emit("parcours:validation_start", {
       clubs: q.clubs,
       playerAnswers: this.parcoursPlayerAnswers,
+      correctAnswer: q.playerName,
     });
 
     // Auto-validation timeout: 60 seconds
