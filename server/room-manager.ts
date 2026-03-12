@@ -13,6 +13,8 @@ const DEFAULT_SETTINGS: GameSettings = {
   difficulty: "medium",
   playlist: [...DEFAULT_PLAYLIST],
   teamRoundsEnabled: false,
+  hideScoresBetweenRounds: false,
+  shufflePlaylist: false,
 };
 
 export class RoomManager {
