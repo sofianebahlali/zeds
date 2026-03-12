@@ -591,6 +591,11 @@ export class GameEngine {
       this.questions.push(...segQuestions);
     }
 
+    // Shuffle questions across modes if enabled
+    if (this.room.settings.shufflePlaylist) {
+      this.questions = this.questions.sort(() => Math.random() - 0.5);
+    }
+
     // Update totalRounds to match actual questions
     this.room.settings.totalRounds = this.questions.length;
     this.room.totalRounds = this.questions.length;

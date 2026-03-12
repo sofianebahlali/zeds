@@ -162,6 +162,54 @@ export function LobbyScreen() {
                   </button>
                 </label>
               </Card>
+              <Card>
+                <label className="flex items-center justify-between cursor-pointer">
+                  <div>
+                    <p className="text-sm font-medium text-surface-100">Cacher les scores</p>
+                    <p className="text-xs text-surface-500">Les scores ne sont révélés qu&apos;à la fin</p>
+                  </div>
+                  <button
+                    role="switch"
+                    aria-checked={room.settings.hideScoresBetweenRounds}
+                    onClick={() => updateRoomSettings({ hideScoresBetweenRounds: !room.settings.hideScoresBetweenRounds })}
+                    className={cn(
+                      "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
+                      room.settings.hideScoresBetweenRounds ? "bg-brand-500" : "bg-surface-700"
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "inline-block h-4 w-4 rounded-full bg-white transition-transform",
+                        room.settings.hideScoresBetweenRounds ? "translate-x-6" : "translate-x-1"
+                      )}
+                    />
+                  </button>
+                </label>
+              </Card>
+              <Card>
+                <label className="flex items-center justify-between cursor-pointer">
+                  <div>
+                    <p className="text-sm font-medium text-surface-100">Mixer les manches</p>
+                    <p className="text-xs text-surface-500">Mélange les modes pour varier les plaisirs</p>
+                  </div>
+                  <button
+                    role="switch"
+                    aria-checked={room.settings.shufflePlaylist}
+                    onClick={() => updateRoomSettings({ shufflePlaylist: !room.settings.shufflePlaylist })}
+                    className={cn(
+                      "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
+                      room.settings.shufflePlaylist ? "bg-brand-500" : "bg-surface-700"
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "inline-block h-4 w-4 rounded-full bg-white transition-transform",
+                        room.settings.shufflePlaylist ? "translate-x-6" : "translate-x-1"
+                      )}
+                    />
+                  </button>
+                </label>
+              </Card>
             </motion.div>
           )}
         </AnimatePresence>

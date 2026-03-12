@@ -51,6 +51,8 @@ export interface GameSettings {
   roundDuration: number; // seconds
   totalRounds: number; // computed from playlist
   showLeaderboardBetweenRounds: boolean;
+  hideScoresBetweenRounds: boolean;
+  shufflePlaylist: boolean;
   difficulty: "easy" | "medium" | "hard";
   playlist: GameModeConfig[];
   teamRoundsEnabled: boolean;
@@ -88,6 +90,8 @@ export const DEFAULT_GAME_SETTINGS: GameSettings = {
   roundDuration: 30,
   totalRounds: 10,
   showLeaderboardBetweenRounds: true,
+  hideScoresBetweenRounds: false,
+  shufflePlaylist: false,
   difficulty: "medium",
   playlist: DEFAULT_PLAYLIST,
   teamRoundsEnabled: false,

@@ -9,11 +9,13 @@ import { cn } from "@/lib/utils";
 
 export function LeaderboardDisplay() {
   const players = useRoomStore((s) => s.players);
+  const room = useRoomStore((s) => s.room);
   const currentRound = useGameStore((s) => s.currentRound);
   const totalRounds = useGameStore((s) => s.totalRounds);
   const teamRoundResult = useGameStore((s) => s.teamRoundResult);
   const teamData = useGameStore((s) => s.teamData);
   const { socket } = useSocket();
+  const hideScores = room?.settings.hideScoresBetweenRounds ?? false;
 
   const myPlayerId = `player_${socket.id}`;
   const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
@@ -125,12 +127,14 @@ export function LeaderboardDisplay() {
               )}
             >
               {/* Score bar background */}
-              <motion.div
-                className="absolute inset-0 bg-surface-800/50"
-                initial={{ width: 0 }}
-                animate={{ width: `${scorePercentage}%` }}
-                transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-              />
+              {!hideScores && (
+                <motion.div
+                  className="absolute inset-0 bg-surface-800/50"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${scorePercentage}%` }}
+                  transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                />
+              )}
 
               {/* Content */}
               <div className="relative flex items-center gap-4 p-4">
@@ -161,7 +165,7 @@ export function LeaderboardDisplay() {
                 </div>
                 <div className="text-right">
                   <span className="text-2xl font-display font-bold text-surface-100">
-                    {player.score}
+                    {hideScores ? "?" : player.score}
                   </span>
                   <span className="text-surface-500 text-sm ml-1">pts</span>
                 </div>
