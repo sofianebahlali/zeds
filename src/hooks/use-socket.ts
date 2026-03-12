@@ -166,7 +166,7 @@ function setupSocketListeners() {
 
   socket.on("game:leaderboard", (players: Player[]) => {
     useRoomStore.getState().setPlayers(players);
-    useGameStore.getState().setStatus("leaderboard");
+    // Don't show leaderboard between rounds — scores are revealed at game end (scoreboard screen)
   });
 
   socket.on("game:finished", (finalScores: Player[]) => {

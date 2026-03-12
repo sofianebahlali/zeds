@@ -923,17 +923,13 @@ export class GameEngine {
       this.processTeamRoundEnd(results.scores);
     }
 
-    // Show leaderboard after a delay
+    // Update scores then auto-proceed (no leaderboard screen between rounds)
     setTimeout(() => {
       const leaderboard = this.roomManager.getLeaderboard(this.room.code);
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
-
-      // Auto-proceed to next round after showing leaderboard
-      if (this.room.settings.showLeaderboardBetweenRounds) {
-        setTimeout(() => {
-          this.nextRound();
-        }, 8000);
-      }
+      setTimeout(() => {
+        this.nextRound();
+      }, 2000);
     }, 6000);
   }
 
@@ -1441,11 +1437,9 @@ export class GameEngine {
     setTimeout(() => {
       const leaderboard = this.roomManager.getLeaderboard(this.room.code);
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
-      if (this.room.settings.showLeaderboardBetweenRounds) {
-        setTimeout(() => {
-          this.nextRound();
-        }, 8000);
-      }
+      setTimeout(() => {
+        this.nextRound();
+      }, 2000);
     }, 6000);
   }
 
@@ -1539,11 +1533,9 @@ export class GameEngine {
       const leaderboard = this.roomManager.getLeaderboard(this.room.code);
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
 
-      if (this.room.settings.showLeaderboardBetweenRounds) {
-        setTimeout(() => {
-          this.nextRound();
-        }, 8000);
-      }
+      setTimeout(() => {
+        this.nextRound();
+      }, 2000);
     }, 6000);
   }
 
@@ -1801,11 +1793,9 @@ export class GameEngine {
       const leaderboard = this.roomManager.getLeaderboard(this.room.code);
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
 
-      if (this.room.settings.showLeaderboardBetweenRounds) {
-        setTimeout(() => {
-          this.nextRound();
-        }, 8000);
-      }
+      setTimeout(() => {
+        this.nextRound();
+      }, 2000);
     }, 6000);
   }
 
@@ -2037,11 +2027,9 @@ export class GameEngine {
       const leaderboard = this.roomManager.getLeaderboard(this.room.code);
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
 
-      if (this.room.settings.showLeaderboardBetweenRounds) {
-        setTimeout(() => {
-          this.nextRound();
-        }, 8000);
-      }
+      setTimeout(() => {
+        this.nextRound();
+      }, 2000);
     }, 6000);
   }
 
@@ -2279,11 +2267,9 @@ export class GameEngine {
       const leaderboard = this.roomManager.getLeaderboard(this.room.code);
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
 
-      if (this.room.settings.showLeaderboardBetweenRounds) {
-        setTimeout(() => {
-          this.nextRound();
-        }, 8000);
-      }
+      setTimeout(() => {
+        this.nextRound();
+      }, 2000);
     }, 6000);
   }
 
@@ -2469,11 +2455,9 @@ export class GameEngine {
       const leaderboard = this.roomManager.getLeaderboard(this.room.code);
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
 
-      if (this.room.settings.showLeaderboardBetweenRounds) {
-        setTimeout(() => {
-          this.nextRound();
-        }, 8000);
-      }
+      setTimeout(() => {
+        this.nextRound();
+      }, 2000);
     }, 6000);
   }
 
@@ -2846,7 +2830,7 @@ export class GameEngine {
       this.revealState.currentChainIndex++;
       this.revealState.currentStep = 0;
     } else {
-      // All chains revealed — update lose streaks, show leaderboard then proceed
+      // All chains revealed — update lose streaks, update scores then proceed
       this.updateDrawingLoseStreaks(this.lastDrawingScores);
       this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
       const leaderboard = this.roomManager.getLeaderboard(this.room.code);
@@ -2854,7 +2838,7 @@ export class GameEngine {
 
       setTimeout(() => {
         this.nextRound();
-      }, 8000);
+      }, 2000);
       return;
     }
 

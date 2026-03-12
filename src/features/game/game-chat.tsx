@@ -118,6 +118,13 @@ export function GameChat() {
 
             {/* Input */}
             <div className="border-t border-surface-700 p-2 flex gap-2">
+              <button
+                onClick={() => sendChatMessage("😂")}
+                className="w-8 h-8 rounded-lg bg-surface-800 border border-surface-700 flex items-center justify-center hover:bg-surface-700 transition-colors shrink-0 text-base"
+                title="Réaction rire"
+              >
+                😂
+              </button>
               <input
                 ref={inputRef}
                 type="text"
