@@ -1217,30 +1217,35 @@ export class GameEngine {
     let winner: Player | undefined;
     let closestDeviation = Infinity;
 
+    // First pass: find the closest player (winner)
+    let winnerId: string | undefined;
     for (const [playerId, answer] of this.answers) {
       const measured = parseInt(answer.answer, 10);
+      if (isNaN(measured)) continue;
+
+      const deviation = Math.abs(measured - target);
+      if (deviation < closestDeviation) {
+        closestDeviation = deviation;
+        winnerId = playerId;
+      }
+    }
+
+    if (winnerId) {
+      winner = this.room.players.find((p) => p.id === winnerId);
+    }
+
+    // Second pass: winner takes all — only the closest player scores
+    for (const [playerId, answer] of this.answers) {
+      const measured = parseInt(answer.answer, 10);
+      const isWinner = playerId === winnerId;
+      const points = isWinner ? q.points : 0;
+
+      answer.isCorrect = isWinner;
+      answer.points = points;
 
       if (isNaN(measured)) {
         answer.isCorrect = false;
         answer.points = 0;
-        const updatedPlayer = this.roomManager.updatePlayerScore(playerId, 0);
-        if (updatedPlayer) {
-          scores.push({ playerId, points: 0, total: updatedPlayer.score });
-        }
-        continue;
-      }
-
-      const deviation = Math.abs(measured - target);
-      const maxDeviation = target; // 100% off = 0 points
-      const proximityScore = Math.max(0, 1 - deviation / maxDeviation);
-      const points = Math.round(q.points * proximityScore);
-
-      answer.isCorrect = deviation <= target * 0.05; // within 5%
-      answer.points = points;
-
-      if (deviation < closestDeviation) {
-        closestDeviation = deviation;
-        winner = this.room.players.find((p) => p.id === playerId);
       }
 
       const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);

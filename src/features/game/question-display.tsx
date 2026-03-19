@@ -119,14 +119,16 @@ export function QuestionDisplay() {
       exit={{ opacity: 0, y: -20 }}
       className="flex flex-col h-full px-5 pb-4"
     >
-      {/* Timer */}
-      <div className="mb-6">
-        <TimerProgress
-          timeRemaining={timeRemaining}
-          totalTime={totalTime}
-          showTime
-        />
-      </div>
+      {/* Timer — hidden during Chrono rounds (players must estimate time) */}
+      {currentQuestion.type !== "chrono" && (
+        <div className="mb-6">
+          <TimerProgress
+            timeRemaining={timeRemaining}
+            totalTime={totalTime}
+            showTime
+          />
+        </div>
+      )}
 
       {/* Question */}
       <div className="flex-1 flex flex-col">
@@ -1588,6 +1590,47 @@ const FUT_CARD_COLORS: Record<string, { bg: string; accent: string }> = {
   otw: { bg: "from-gray-800 via-slate-700 to-gray-600", accent: "text-orange-300" },
 };
 
+/** Maps club names from question data to logo filenames in /images/clubs/ */
+const CLUB_LOGO_SLUGS: Record<string, string> = {
+  "AC Milan": "ac-milan",
+  "AS Monaco": "as-monaco",
+  "Al Ittihad": "al-ittihad",
+  "Al Nassr": "al-nassr",
+  "Arsenal": "arsenal",
+  "Aston Villa": "aston-villa",
+  "Bayern Munich": "bayern-munich",
+  "Burnley": "burnley",
+  "Chelsea": "chelsea",
+  "D.C. United": "dc-united",
+  "Everton": "everton",
+  "FC Barcelona": "fc-barcelona",
+  "Inter Milan": "inter-milan",
+  "Juventus": "juventus",
+  "LA Galaxy": "la-galaxy",
+  "Leeds United": "leeds-united",
+  "Leicester City": "leicester-city",
+  "Lille": "lille",
+  "Liverpool": "liverpool",
+  "Los Angeles FC": "los-angeles-fc",
+  "Manchester City": "manchester-city",
+  "Manchester United": "manchester-united",
+  "Napoli": "napoli",
+  "Newcastle": "newcastle",
+  "OGC Nice": "ogc-nice",
+  "Olympique Lyonnais": "olympique-lyonnais",
+  "PSV": "psv",
+  "Paris Saint-Germain": "paris-saint-germain",
+  "Piemonte Calcio": "piemonte-calcio",
+  "Rangers": "rangers",
+  "Real Madrid": "real-madrid",
+  "Sevilla FC": "sevilla-fc",
+  "Stoke City": "stoke-city",
+  "Tottenham Hotspur": "tottenham-hotspur",
+  "Villarreal": "villarreal",
+  "West Ham United": "west-ham-united",
+  "Wolverhampton": "wolverhampton",
+};
+
 const FUT_CARD_TYPE_LABELS: Record<string, string> = {
   gold_rare: "Gold Rare",
   icon: "Icon",
@@ -1704,15 +1747,19 @@ function FutCardQuestionView({
               </div>
             </div>
 
-            {/* Nation + Club */}
-            <div className="flex items-center justify-center gap-3 mb-3">
-              <span className={cn("text-xs font-semibold", colors.accent)}>
-                {question.nationality}
-              </span>
-              <span className="text-white/30">|</span>
-              <span className={cn("text-xs font-semibold", colors.accent)}>
-                {question.club}
-              </span>
+            {/* Club logo */}
+            <div className="flex items-center justify-center mb-3">
+              {CLUB_LOGO_SLUGS[question.club] ? (
+                <img
+                  src={`/images/clubs/${CLUB_LOGO_SLUGS[question.club]}.png`}
+                  alt=""
+                  className="w-8 h-8 object-contain drop-shadow-lg"
+                />
+              ) : (
+                <span className={cn("text-xs font-semibold", colors.accent)}>
+                  {question.club}
+                </span>
+              )}
             </div>
 
             {/* Player name hidden */}

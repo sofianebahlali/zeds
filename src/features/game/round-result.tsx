@@ -705,7 +705,7 @@ function ChronoRoundResult({
                 {roundResult.winner.name}
               </span>
               <Badge variant="warning" size="sm">
-                Le plus précis !
+                Gagnant !
               </Badge>
             </div>
           </Card>
