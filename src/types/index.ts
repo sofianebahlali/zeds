@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -449,6 +449,20 @@ export interface FutCardQuestion extends BaseQuestion {
   difficulty: "easy" | "medium" | "hard";
 }
 
+export interface ChronoQuestion extends BaseQuestion {
+  type: "chrono";
+  targetDuration: number; // in milliseconds (e.g., 5000)
+  label: string; // e.g., "5 secondes"
+  difficulty: "easy" | "medium" | "hard";
+}
+
+export interface ConsensusQuestion extends BaseQuestion {
+  type: "consensus";
+  prompt: string; // e.g., "Citez un fruit rouge"
+  category: string; // e.g., "Nourriture"
+  difficulty: "easy" | "medium" | "hard";
+}
+
 export interface LineupPlayer {
   pos: string;
   name: string;
@@ -487,7 +501,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -883,5 +897,19 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Devine le joueur à partir de sa carte FUT",
     icon: "🃏",
     color: "from-yellow-500 to-amber-700",
+  },
+  {
+    id: "chrono",
+    name: "Chronomètre",
+    description: "Mesure le temps sans regarder !",
+    icon: "⏱️",
+    color: "from-orange-500 to-red-700",
+  },
+  {
+    id: "consensus",
+    name: "Consensus",
+    description: "Pense comme les autres !",
+    icon: "🤝",
+    color: "from-pink-500 to-fuchsia-700",
   },
 ];

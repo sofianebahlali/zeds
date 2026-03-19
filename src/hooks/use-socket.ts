@@ -54,6 +54,14 @@ function setupSocketListeners() {
     console.log("Socket connected");
     useUIStore.getState().setConnected(true);
     useUIStore.getState().setReconnecting(false);
+
+    // Re-join room on reconnection (handles mobile tab-switch race condition
+    // where Socket.IO auto-reconnects before the visibility handler runs)
+    const room = useRoomStore.getState().room;
+    const playerId = usePlayerStore.getState().playerId;
+    if (room && playerId) {
+      socket.emit("connection:reconnect", room.code, playerId);
+    }
   });
 
   socket.on("disconnect", (reason) => {

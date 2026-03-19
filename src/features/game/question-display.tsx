@@ -9,7 +9,7 @@ import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { getSocket } from "@/lib/socket";
 import { cn } from "@/lib/utils";
-import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion, FutCardQuestion } from "@/types";
+import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion, FutCardQuestion, ChronoQuestion, ConsensusQuestion } from "@/types";
 
 export function QuestionDisplay() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
@@ -31,6 +31,9 @@ export function QuestionDisplay() {
   const [guessGameAnswer, setGuessGameAnswer] = useState("");
   const [jerseyGuess, setJerseyGuess] = useState("");
   const [futCardAnswer, setFutCardAnswer] = useState("");
+  const [chronoStartTime, setChronoStartTime] = useState<number | null>(null);
+  const [chronoStopped, setChronoStopped] = useState(false);
+  const [consensusAnswer, setConsensusAnswer] = useState("");
 
   // Ref to access latest petitBac answers in the auto-submit effect
   const petitBacAnswersRef = useRef(petitBacAnswers);
@@ -49,6 +52,25 @@ export function QuestionDisplay() {
       useGameStore.getState().submitAnswer(answers);
     }
   }, [timeRemaining, currentQuestion?.type, hasAnswered]);
+
+  // Reset state between rounds
+  useEffect(() => {
+    setSelectedOption(null);
+    setTextAnswer("");
+    setPriceGuess("");
+    setDictationAnswer("");
+    setParcoursAnswer("");
+    setPetitBacAnswers({});
+    setGeoQuizAnswer("");
+    setLangueLanguage("");
+    setLangueMeaning("");
+    setGuessGameAnswer("");
+    setJerseyGuess("");
+    setFutCardAnswer("");
+    setChronoStartTime(null);
+    setChronoStopped(false);
+    setConsensusAnswer("");
+  }, [currentQuestion?.id]);
 
   if (!currentQuestion) return null;
 
@@ -77,6 +99,8 @@ export function QuestionDisplay() {
       submitAnswer(jerseyGuess.trim());
     } else if (currentQuestion.type === "futcard" && futCardAnswer.trim()) {
       submitAnswer(futCardAnswer.trim());
+    } else if (currentQuestion.type === "consensus" && consensusAnswer.trim()) {
+      submitAnswer(consensusAnswer.trim());
     } else if (textAnswer.trim()) {
       submitAnswer(textAnswer.trim());
     }
@@ -203,6 +227,33 @@ export function QuestionDisplay() {
             answer={futCardAnswer}
             hasAnswered={hasAnswered}
             onChange={setFutCardAnswer}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "chrono" && (
+          <ChronoQuestionView
+            question={currentQuestion as ChronoQuestion}
+            hasAnswered={hasAnswered}
+            chronoStartTime={chronoStartTime}
+            chronoStopped={chronoStopped}
+            onStart={() => setChronoStartTime(Date.now())}
+            onStop={() => {
+              if (chronoStartTime && !chronoStopped) {
+                const elapsed = Date.now() - chronoStartTime;
+                setChronoStopped(true);
+                submitAnswer(String(elapsed));
+              }
+            }}
+          />
+        )}
+
+        {currentQuestion.type === "consensus" && (
+          <ConsensusQuestionView
+            question={currentQuestion as ConsensusQuestion}
+            answer={consensusAnswer}
+            hasAnswered={hasAnswered}
+            onChange={setConsensusAnswer}
             onSubmit={handleSubmit}
           />
         )}
@@ -1725,6 +1776,245 @@ function FutCardQuestionView({
               onChange={(e) => onChange(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Nom du joueur..."
+              autoFocus
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+            />
+
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onSubmit}
+              disabled={!answer.trim()}
+              rightIcon={<Send className="w-5 h-5" />}
+            >
+              Valider
+            </Button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ==========================================
+// CHRONO QUESTION VIEW
+// ==========================================
+
+interface ChronoQuestionViewProps {
+  question: ChronoQuestion;
+  hasAnswered: boolean;
+  chronoStartTime: number | null;
+  chronoStopped: boolean;
+  onStart: () => void;
+  onStop: () => void;
+}
+
+function ChronoQuestionView({
+  question,
+  hasAnswered,
+  chronoStartTime,
+  chronoStopped,
+  onStart,
+  onStop,
+}: ChronoQuestionViewProps) {
+  const [displayElapsed, setDisplayElapsed] = useState<number | null>(null);
+  useEffect(() => {
+    if (chronoStartTime && chronoStopped) {
+      setDisplayElapsed(Date.now() - chronoStartTime);
+    } else {
+      setDisplayElapsed(null);
+    }
+  }, [chronoStartTime, chronoStopped]);
+
+  return (
+    <>
+      {/* Header */}
+      <div className="mb-4 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-800 border border-surface-700 mb-3">
+          <span className="text-lg">⏱️</span>
+          <span className="text-xs font-medium text-surface-300">Chronomètre</span>
+        </div>
+        <h2 className="text-xl sm:text-2xl font-display font-bold text-surface-100 mb-2">
+          Mesure exactement
+        </h2>
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-orange-500/20 to-red-700/20 border border-orange-500/30"
+        >
+          <span className="text-4xl sm:text-5xl font-display font-black text-orange-400">
+            {question.label}
+          </span>
+        </motion.div>
+      </div>
+
+      {/* Action area */}
+      <div className="flex-1 flex flex-col items-center justify-center gap-6">
+        {!chronoStartTime && !hasAnswered && (
+          <motion.div
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            className="w-full"
+          >
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onStart}
+              className="py-8 text-2xl font-display font-bold"
+            >
+              START
+            </Button>
+            <p className="text-sm text-surface-500 text-center mt-3">
+              Appuie sur START puis STOP quand tu penses que le temps est écoulé
+            </p>
+          </motion.div>
+        )}
+
+        {chronoStartTime && !chronoStopped && !hasAnswered && (
+          <motion.div
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            className="w-full"
+          >
+            <div className="text-center mb-6">
+              <motion.div
+                animate={{ opacity: [0.3, 1, 0.3] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="text-6xl mb-2"
+              >
+                ⏱️
+              </motion.div>
+              <p className="text-lg text-surface-400">
+                Le chrono tourne...
+              </p>
+            </div>
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onStop}
+              className="py-8 text-2xl font-display font-bold bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800"
+            >
+              STOP
+            </Button>
+          </motion.div>
+        )}
+
+        {(chronoStopped || hasAnswered) && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center"
+          >
+            <Card className="inline-block">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-success-400" />
+                <div className="text-left">
+                  <p className="text-sm text-surface-400">Tu as mesuré :</p>
+                  <p className="text-2xl font-display font-bold text-surface-100">
+                    {displayElapsed !== null
+                      ? `${(displayElapsed / 1000).toFixed(3)}s`
+                      : "..."}
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ==========================================
+// CONSENSUS QUESTION VIEW
+// ==========================================
+
+interface ConsensusQuestionViewProps {
+  question: ConsensusQuestion;
+  answer: string;
+  hasAnswered: boolean;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+}
+
+function ConsensusQuestionView({
+  question,
+  answer,
+  hasAnswered,
+  onChange,
+  onSubmit,
+}: ConsensusQuestionViewProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSubmit();
+    }
+  };
+
+  return (
+    <>
+      {/* Header */}
+      <div className="mb-4 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-800 border border-surface-700 mb-2">
+          <span className="text-lg">🤝</span>
+          <span className="text-xs font-medium text-surface-300">Consensus</span>
+        </div>
+        <Badge variant="default" size="sm" className="ml-2">
+          {question.category}
+        </Badge>
+      </div>
+
+      {/* Prompt */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-6"
+      >
+        <Card variant="gradient" className="text-center">
+          <h2 className="text-xl sm:text-2xl font-display font-bold text-surface-100 text-balance">
+            {question.prompt}
+          </h2>
+          <p className="text-sm text-surface-500 mt-2">
+            Pense comme les autres joueurs !
+          </p>
+        </Card>
+      </motion.div>
+
+      {/* Answer input */}
+      <div className="flex-1 flex flex-col justify-end">
+        {hasAnswered ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center"
+          >
+            <Card className="inline-block">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-success-400" />
+                <div className="text-left">
+                  <p className="text-sm text-surface-400">Ta réponse :</p>
+                  <p className="text-lg font-medium text-surface-100">{answer}</p>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        ) : (
+          <div className="space-y-3">
+            <Input
+              ref={inputRef}
+              value={answer}
+              onChange={(e) => onChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Ta réponse..."
               autoFocus
               autoComplete="off"
               autoCorrect="off"

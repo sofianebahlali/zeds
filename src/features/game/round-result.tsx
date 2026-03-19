@@ -8,7 +8,7 @@ import { useGameStore, useRoomStore } from "@/stores";
 import { useChatStore } from "@/stores/chat-store";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
-import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion } from "@/types";
+import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion } from "@/types";
 
 const PETITBAC_CATEGORY_ICONS: Record<string, string> = {
   "Prénom": "👤",
@@ -81,6 +81,32 @@ export function RoundResult() {
   const isPetitBac = roundResult.question.type === "petitbac";
   const isGeoQuiz = roundResult.question.type === "geoquiz";
   const isJerseyNumber = roundResult.question.type === "jerseynumber";
+  const isChrono = roundResult.question.type === "chrono";
+  const isConsensus = roundResult.question.type === "consensus";
+
+  if (isChrono) {
+    return (
+      <ChronoRoundResult
+        roundResult={roundResult}
+        players={players}
+        myPlayerId={myPlayerId}
+        myResult={myResult}
+        isCorrect={!!isCorrect}
+      />
+    );
+  }
+
+  if (isConsensus) {
+    return (
+      <ConsensusRoundResult
+        roundResult={roundResult}
+        players={players}
+        myPlayerId={myPlayerId}
+        myResult={myResult}
+        isCorrect={!!isCorrect}
+      />
+    );
+  }
 
   if (isPetitBac) {
     return (
@@ -154,6 +180,10 @@ export function RoundResult() {
             ? isCorrect
               ? "Bien deviné !"
               : "Perdu !"
+            : isConsensus
+            ? isCorrect
+              ? "Dans le consensus !"
+              : "Pas dans la majorité !"
             : isCorrect
             ? "Bonne réponse !"
             : "Raté !"}
@@ -199,6 +229,8 @@ export function RoundResult() {
                 ? "La ville était :"
                 : isJerseyNumber
                 ? "Le vrai numéro :"
+                : isConsensus
+                ? "Réponse la plus populaire :"
                 : "La bonne réponse était :"}
             </p>
             <p
@@ -241,6 +273,10 @@ export function RoundResult() {
                   ? "Le plus précis !"
                   : isGeoQuiz
                   ? "Globe-trotteur !"
+                  : isChrono
+                  ? "Le plus précis !"
+                  : isConsensus
+                  ? "Le plus rapide !"
                   : "Le plus rapide !"}
               </Badge>
             </div>
@@ -298,7 +334,16 @@ export function RoundResult() {
                           answer.isCorrect ? "text-success-400" : "text-surface-500"
                         )}
                       >
-                        {isEstimation
+                        {isChrono
+                          ? (() => {
+                              const measured = parseInt(answer.answer, 10);
+                              const target = (roundResult.question as ChronoQuestion).targetDuration;
+                              if (isNaN(measured)) return "Pas de réponse";
+                              const diff = measured - target;
+                              const sign = diff >= 0 ? "+" : "";
+                              return `${(measured / 1000).toFixed(3)}s (${sign}${diff}ms)`;
+                            })()
+                          : isEstimation
                           ? (() => {
                               const guess = parseFloat(answer.answer.replace(",", "."));
                               const real = (roundResult.question as EstimationQuestion).correctValue;
@@ -571,6 +616,368 @@ function PetitBacRoundResult({
             );
           })}
         </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ==========================================
+// CHRONO ROUND RESULT
+// ==========================================
+
+interface ChronoRoundResultProps {
+  roundResult: NonNullable<ReturnType<typeof useGameStore.getState>["roundResult"]>;
+  players: ReturnType<typeof useRoomStore.getState>["players"];
+  myPlayerId: string;
+  myResult: { playerId: string; points: number; total: number } | undefined;
+  isCorrect: boolean;
+}
+
+function ChronoRoundResult({
+  roundResult,
+  players,
+  myPlayerId,
+  myResult,
+  isCorrect,
+}: ChronoRoundResultProps) {
+  const q = roundResult.question as ChronoQuestion;
+  const sortedScores = [...roundResult.scores].sort((a, b) => b.points - a.points);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex flex-col h-full px-5 pb-4"
+    >
+      {/* Header */}
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        className="text-center mb-6 pt-6"
+      >
+        <div className="flex items-center justify-center gap-3 mb-3">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-red-700 flex items-center justify-center">
+            <span className="text-2xl">⏱️</span>
+          </div>
+          <div className="text-left">
+            <h2
+              className={cn(
+                "text-lg font-display font-bold",
+                isCorrect ? "text-success-400" : "text-danger-400"
+              )}
+            >
+              {isCorrect ? "Bien chronométré !" : "Pas facile !"}
+            </h2>
+            {myResult && (
+              <div className="flex items-center gap-1">
+                <Zap className="w-4 h-4 text-accent-400" />
+                <span className="text-base font-display font-bold text-surface-100">
+                  +{myResult.points} pts
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <Card className="inline-block">
+          <p className="text-sm text-surface-400">Cible</p>
+          <p className="text-2xl font-display font-bold text-orange-400">
+            {(q.targetDuration / 1000).toFixed(3)}s
+          </p>
+        </Card>
+      </motion.div>
+
+      {/* Winner */}
+      {roundResult.winner && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mb-4"
+        >
+          <Card variant="gradient">
+            <div className="flex items-center justify-center gap-3">
+              <Trophy className="w-5 h-5 text-accent-400" />
+              <Avatar emoji={roundResult.winner.avatar} size="sm" />
+              <span className="font-medium text-surface-100">
+                {roundResult.winner.name}
+              </span>
+              <Badge variant="warning" size="sm">
+                Le plus précis !
+              </Badge>
+            </div>
+          </Card>
+        </motion.div>
+      )}
+
+      {/* Player results */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+        className="flex-1 space-y-2"
+      >
+        {sortedScores.map((score, index) => {
+          const player = players.find((p) => p.id === score.playerId);
+          if (!player) return null;
+
+          const answer = roundResult.answers.find((a) => a.playerId === score.playerId);
+          const measured = answer ? parseInt(answer.answer, 10) : NaN;
+          const diff = !isNaN(measured) ? measured - q.targetDuration : null;
+
+          return (
+            <motion.div
+              key={score.playerId}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5 + index * 0.1 }}
+              className={cn(
+                "flex items-center gap-3 p-3 rounded-xl",
+                "bg-surface-900 border border-surface-800",
+                score.playerId === myPlayerId && "border-brand-500/40"
+              )}
+            >
+              {index === 0 && score.points > 0 && (
+                <span className="text-lg">🏆</span>
+              )}
+              <Avatar emoji={player.avatar} size="sm" />
+              <div className="flex-1 min-w-0">
+                <span className="font-medium text-surface-100 truncate block">
+                  {player.name}
+                </span>
+                {!isNaN(measured) ? (
+                  <span className={cn(
+                    "text-sm",
+                    answer?.isCorrect ? "text-success-400" : "text-surface-500"
+                  )}>
+                    {(measured / 1000).toFixed(3)}s
+                    {diff !== null && (
+                      <span className="ml-1 text-xs">
+                        ({diff >= 0 ? "+" : ""}{diff}ms)
+                      </span>
+                    )}
+                  </span>
+                ) : (
+                  <span className="text-sm text-surface-600">Pas de réponse</span>
+                )}
+              </div>
+              <span
+                className={cn(
+                  "font-display font-bold",
+                  score.points > 0 ? "text-success-400" : "text-surface-500"
+                )}
+              >
+                +{score.points}
+              </span>
+            </motion.div>
+          );
+        })}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ==========================================
+// CONSENSUS ROUND RESULT
+// ==========================================
+
+interface ConsensusRoundResultProps {
+  roundResult: NonNullable<ReturnType<typeof useGameStore.getState>["roundResult"]>;
+  players: ReturnType<typeof useRoomStore.getState>["players"];
+  myPlayerId: string;
+  myResult: { playerId: string; points: number; total: number } | undefined;
+  isCorrect: boolean;
+}
+
+function ConsensusRoundResult({
+  roundResult,
+  players,
+  myPlayerId,
+  myResult,
+  isCorrect,
+}: ConsensusRoundResultProps) {
+  // Group answers
+  const answerGroups = useMemo(() => {
+    const groups = new Map<string, { rawAnswer: string; playerIds: string[]; isWinning: boolean }>();
+
+    for (const answer of roundResult.answers) {
+      const normalized = answer.answer
+        .toLowerCase()
+        .trim()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+      if (!normalized) continue;
+
+      if (!groups.has(normalized)) {
+        groups.set(normalized, { rawAnswer: answer.answer.trim(), playerIds: [], isWinning: false });
+      }
+      groups.get(normalized)!.playerIds.push(answer.playerId);
+    }
+
+    // Find max group size
+    let maxSize = 0;
+    for (const [, group] of groups) {
+      if (group.playerIds.length > maxSize) maxSize = group.playerIds.length;
+    }
+
+    // Mark winners
+    for (const [, group] of groups) {
+      if (group.playerIds.length === maxSize && maxSize > 0) {
+        group.isWinning = true;
+      }
+    }
+
+    // Sort: winning first, then by size desc
+    return Array.from(groups.values()).sort((a, b) => {
+      if (a.isWinning !== b.isWinning) return a.isWinning ? -1 : 1;
+      return b.playerIds.length - a.playerIds.length;
+    });
+  }, [roundResult.answers]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex flex-col h-full px-5 pb-4"
+    >
+      {/* Header */}
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        className="text-center mb-6 pt-6"
+      >
+        <div className={cn(
+          "w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-3",
+          isCorrect ? "bg-success-500" : "bg-danger-500"
+        )}>
+          {isCorrect ? (
+            <CheckCircle className="w-8 h-8 text-white" />
+          ) : (
+            <XCircle className="w-8 h-8 text-white" />
+          )}
+        </div>
+        <h2
+          className={cn(
+            "text-xl font-display font-bold",
+            isCorrect ? "text-success-400" : "text-danger-400"
+          )}
+        >
+          {isCorrect ? "Dans le consensus !" : "Pas dans la majorité !"}
+        </h2>
+        {myResult && (
+          <div className="flex items-center justify-center gap-1 mt-1">
+            <Zap className="w-4 h-4 text-accent-400" />
+            <span className="text-base font-display font-bold text-surface-100">
+              +{myResult.points} pts
+            </span>
+          </div>
+        )}
+      </motion.div>
+
+      {/* Answer groups */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="flex-1 overflow-y-auto space-y-3"
+      >
+        {answerGroups.map((group, groupIdx) => (
+          <motion.div
+            key={groupIdx}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 + groupIdx * 0.1 }}
+            className={cn(
+              "rounded-xl overflow-hidden border",
+              group.isWinning
+                ? "bg-success-500/10 border-success-500/30"
+                : "bg-surface-900 border-surface-800"
+            )}
+          >
+            {/* Group header */}
+            <div className={cn(
+              "flex items-center gap-2 px-4 py-2.5",
+              group.isWinning ? "bg-success-500/10" : "bg-surface-800/50"
+            )}>
+              {group.isWinning && <span className="text-lg">🏆</span>}
+              <span className={cn(
+                "font-display font-bold text-lg",
+                group.isWinning ? "text-success-400" : "text-surface-300"
+              )}>
+                &ldquo;{group.rawAnswer}&rdquo;
+              </span>
+              <span className="text-xs text-surface-500 ml-auto">
+                {group.playerIds.length} joueur{group.playerIds.length > 1 ? "s" : ""}
+              </span>
+              {group.isWinning && (
+                <Badge variant="success" size="sm">
+                  Gagnant !
+                </Badge>
+              )}
+            </div>
+
+            {/* Players in this group */}
+            <div className="divide-y divide-surface-800/50">
+              {group.playerIds.map((pid) => {
+                const player = players.find((p) => p.id === pid);
+                const score = roundResult.scores.find((s) => s.playerId === pid);
+                if (!player) return null;
+
+                return (
+                  <div
+                    key={pid}
+                    className={cn(
+                      "flex items-center gap-2 px-4 py-2",
+                      pid === myPlayerId && "bg-brand-500/5"
+                    )}
+                  >
+                    <Avatar emoji={player.avatar} size="sm" />
+                    <span className="text-sm text-surface-300 flex-1">
+                      {player.name}
+                    </span>
+                    <span
+                      className={cn(
+                        "text-sm font-display font-bold",
+                        (score?.points ?? 0) > 0 ? "text-success-400" : "text-surface-500"
+                      )}
+                    >
+                      +{score?.points ?? 0}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+        ))}
+
+        {/* Players who didn't answer */}
+        {(() => {
+          const answeredIds = new Set(roundResult.answers.map((a) => a.playerId));
+          const noAnswer = players.filter((p) => !answeredIds.has(p.id));
+          if (noAnswer.length === 0) return null;
+
+          return (
+            <div className="rounded-xl bg-surface-900 border border-surface-800 overflow-hidden">
+              <div className="px-4 py-2 bg-surface-800/50">
+                <span className="text-xs text-surface-500">Pas de réponse</span>
+              </div>
+              <div className="divide-y divide-surface-800/50">
+                {noAnswer.map((player) => (
+                  <div key={player.id} className="flex items-center gap-2 px-4 py-2">
+                    <Avatar emoji={player.avatar} size="sm" />
+                    <span className="text-sm text-surface-500">{player.name}</span>
+                    <span className="text-sm font-display font-bold text-surface-500 ml-auto">+0</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
       </motion.div>
     </motion.div>
   );

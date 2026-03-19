@@ -31,6 +31,8 @@ import type {
   LineupGuessResult,
   JerseyNumberQuestion,
   FutCardQuestion,
+  ChronoQuestion,
+  ConsensusQuestion,
   Answer,
   RoundResult,
   ClientToServerEvents,
@@ -363,6 +365,28 @@ export class GameEngine {
     }
   }
 
+  private static loadChronoQuestions(): Question[] {
+    const filePath = path.resolve(__dirname, "../data/questions/chrono.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw) as ChronoQuestion[];
+    } catch {
+      console.warn("No chrono questions found at", filePath);
+      return [];
+    }
+  }
+
+  private static loadConsensusQuestions(): Question[] {
+    const filePath = path.resolve(__dirname, "../data/questions/consensus.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw) as ConsensusQuestion[];
+    } catch {
+      console.warn("No consensus questions found at", filePath);
+      return [];
+    }
+  }
+
   /**
    * Normalize text for accent-insensitive comparison
    */
@@ -560,6 +584,14 @@ export class GameEngine {
         break;
       case "futcard":
         pool = GameEngine.loadFutCardQuestions();
+        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
+        break;
+      case "chrono":
+        pool = GameEngine.loadChronoQuestions();
+        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
+        break;
+      case "consensus":
+        pool = GameEngine.loadConsensusQuestions();
         if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
         break;
       default:
@@ -997,6 +1029,14 @@ export class GameEngine {
       return this.calculateDictationScores(correctAnswer, scores);
     }
 
+    if (this.currentQuestion.type === "chrono") {
+      return this.calculateChronoScores(correctAnswer, scores);
+    }
+
+    if (this.currentQuestion.type === "consensus") {
+      return this.calculateConsensusScores(correctAnswer, scores);
+    }
+
     let fastestCorrectTime = Infinity;
 
     // Process each answer
@@ -1166,6 +1206,145 @@ export class GameEngine {
   }
 
   /**
+   * Calculate proportional scores for chrono questions
+   */
+  private calculateChronoScores(
+    correctAnswer: string,
+    scores: { playerId: string; points: number; total: number }[]
+  ): RoundResult {
+    const q = this.currentQuestion as ChronoQuestion;
+    const target = q.targetDuration;
+    let winner: Player | undefined;
+    let closestDeviation = Infinity;
+
+    for (const [playerId, answer] of this.answers) {
+      const measured = parseInt(answer.answer, 10);
+
+      if (isNaN(measured)) {
+        answer.isCorrect = false;
+        answer.points = 0;
+        const updatedPlayer = this.roomManager.updatePlayerScore(playerId, 0);
+        if (updatedPlayer) {
+          scores.push({ playerId, points: 0, total: updatedPlayer.score });
+        }
+        continue;
+      }
+
+      const deviation = Math.abs(measured - target);
+      const maxDeviation = target; // 100% off = 0 points
+      const proximityScore = Math.max(0, 1 - deviation / maxDeviation);
+      const points = Math.round(q.points * proximityScore);
+
+      answer.isCorrect = deviation <= target * 0.05; // within 5%
+      answer.points = points;
+
+      if (deviation < closestDeviation) {
+        closestDeviation = deviation;
+        winner = this.room.players.find((p) => p.id === playerId);
+      }
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);
+      if (updatedPlayer) {
+        scores.push({ playerId, points, total: updatedPlayer.score });
+      }
+    }
+
+    for (const player of this.room.players) {
+      if (!this.answers.has(player.id)) {
+        scores.push({ playerId: player.id, points: 0, total: player.score });
+      }
+    }
+
+    return {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion!,
+      answers: Array.from(this.answers.values()),
+      correctAnswer,
+      winner,
+      scores,
+    };
+  }
+
+  /**
+   * Calculate consensus scores — winner-takes-all for the largest answer group
+   */
+  private calculateConsensusScores(
+    _correctAnswer: string,
+    scores: { playerId: string; points: number; total: number }[]
+  ): RoundResult {
+    const q = this.currentQuestion as ConsensusQuestion;
+    let winner: Player | undefined;
+
+    // Normalize and group answers
+    const groups = new Map<string, { playerIds: string[]; rawAnswer: string }>();
+    for (const [playerId, answer] of this.answers) {
+      const normalized = GameEngine.normalizeForComparison(answer.answer);
+      if (!normalized) continue;
+
+      if (!groups.has(normalized)) {
+        groups.set(normalized, { playerIds: [], rawAnswer: answer.answer.trim() });
+      }
+      groups.get(normalized)!.playerIds.push(playerId);
+    }
+
+    // Find largest group(s)
+    let maxGroupSize = 0;
+    for (const [, group] of groups) {
+      if (group.playerIds.length > maxGroupSize) {
+        maxGroupSize = group.playerIds.length;
+      }
+    }
+
+    // All groups with max size win (handles ties)
+    const winningPlayerIds = new Set<string>();
+    let winningAnswer = "";
+    let earliestWinnerTime = Infinity;
+
+    for (const [, group] of groups) {
+      if (group.playerIds.length === maxGroupSize && maxGroupSize > 0) {
+        for (const pid of group.playerIds) {
+          winningPlayerIds.add(pid);
+        }
+        if (!winningAnswer) winningAnswer = group.rawAnswer;
+      }
+    }
+
+    // Score players
+    for (const [playerId, answer] of this.answers) {
+      const isWinner = winningPlayerIds.has(playerId);
+      const points = isWinner ? q.points : 0;
+      answer.isCorrect = isWinner;
+      answer.points = points;
+
+      // Track fastest winner
+      if (isWinner && (answer.responseTime || Infinity) < earliestWinnerTime) {
+        earliestWinnerTime = answer.responseTime || Infinity;
+        winner = this.room.players.find((p) => p.id === playerId);
+      }
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);
+      if (updatedPlayer) {
+        scores.push({ playerId, points, total: updatedPlayer.score });
+      }
+    }
+
+    for (const player of this.room.players) {
+      if (!this.answers.has(player.id)) {
+        scores.push({ playerId: player.id, points: 0, total: player.score });
+      }
+    }
+
+    return {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion!,
+      answers: Array.from(this.answers.values()),
+      correctAnswer: winningAnswer || q.prompt,
+      winner,
+      scores,
+    };
+  }
+
+  /**
    * Get the correct answer for the current question
    */
   private getCorrectAnswer(): string {
@@ -1212,6 +1391,10 @@ export class GameEngine {
       }
       case "futcard":
         return (this.currentQuestion as FutCardQuestion).playerName;
+      case "chrono":
+        return (this.currentQuestion as ChronoQuestion).label;
+      case "consensus":
+        return (this.currentQuestion as ConsensusQuestion).prompt;
       default:
         return "";
     }
@@ -1301,6 +1484,10 @@ export class GameEngine {
           (accepted) => GameEngine.normalizeForComparison(accepted) === normalizedInput
         );
       }
+      case "chrono":
+        return false; // Handled in calculateChronoScores
+      case "consensus":
+        return false; // Handled in calculateConsensusScores
       default:
         return false;
     }

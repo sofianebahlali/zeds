@@ -1,0 +1,17 @@
+[
+  { "id": "chrono-001", "type": "chrono", "targetDuration": 3000, "label": "3 secondes", "difficulty": "easy", "timeLimit": 15, "points": 100 },
+  { "id": "chrono-002", "type": "chrono", "targetDuration": 3000, "label": "3 secondes", "difficulty": "easy", "timeLimit": 15, "points": 100 },
+  { "id": "chrono-003", "type": "chrono", "targetDuration": 3000, "label": "3 secondes", "difficulty": "easy", "timeLimit": 15, "points": 100 },
+  { "id": "chrono-004", "type": "chrono", "targetDuration": 5000, "label": "5 secondes", "difficulty": "easy", "timeLimit": 20, "points": 100 },
+  { "id": "chrono-005", "type": "chrono", "targetDuration": 5000, "label": "5 secondes", "difficulty": "easy", "timeLimit": 20, "points": 100 },
+  { "id": "chrono-006", "type": "chrono", "targetDuration": 5000, "label": "5 secondes", "difficulty": "easy", "timeLimit": 20, "points": 100 },
+  { "id": "chrono-007", "type": "chrono", "targetDuration": 7000, "label": "7 secondes", "difficulty": "medium", "timeLimit": 20, "points": 100 },
+  { "id": "chrono-008", "type": "chrono", "targetDuration": 7000, "label": "7 secondes", "difficulty": "medium", "timeLimit": 20, "points": 100 },
+  { "id": "chrono-009", "type": "chrono", "targetDuration": 7000, "label": "7 secondes", "difficulty": "medium", "timeLimit": 20, "points": 100 },
+  { "id": "chrono-010", "type": "chrono", "targetDuration": 10000, "label": "10 secondes", "difficulty": "medium", "timeLimit": 25, "points": 100 },
+  { "id": "chrono-011", "type": "chrono", "targetDuration": 10000, "label": "10 secondes", "difficulty": "medium", "timeLimit": 25, "points": 100 },
+  { "id": "chrono-012", "type": "chrono", "targetDuration": 10000, "label": "10 secondes", "difficulty": "medium", "timeLimit": 25, "points": 100 },
+  { "id": "chrono-013", "type": "chrono", "targetDuration": 15000, "label": "15 secondes", "difficulty": "hard", "timeLimit": 30, "points": 100 },
+  { "id": "chrono-014", "type": "chrono", "targetDuration": 15000, "label": "15 secondes", "difficulty": "hard", "timeLimit": 30, "points": 100 },
+  { "id": "chrono-015", "type": "chrono", "targetDuration": 15000, "label": "15 secondes", "difficulty": "hard", "timeLimit": 30, "points": 100 }
+]
