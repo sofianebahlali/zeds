@@ -9,7 +9,7 @@ import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { getSocket } from "@/lib/socket";
 import { cn } from "@/lib/utils";
-import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion } from "@/types";
+import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion, FutCardQuestion } from "@/types";
 
 export function QuestionDisplay() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
@@ -30,6 +30,7 @@ export function QuestionDisplay() {
   const [langueMeaning, setLangueMeaning] = useState("");
   const [guessGameAnswer, setGuessGameAnswer] = useState("");
   const [jerseyGuess, setJerseyGuess] = useState("");
+  const [futCardAnswer, setFutCardAnswer] = useState("");
 
   // Ref to access latest petitBac answers in the auto-submit effect
   const petitBacAnswersRef = useRef(petitBacAnswers);
@@ -74,6 +75,8 @@ export function QuestionDisplay() {
       submitAnswer(guessGameAnswer.trim());
     } else if (currentQuestion.type === "jerseynumber" && jerseyGuess.trim()) {
       submitAnswer(jerseyGuess.trim());
+    } else if (currentQuestion.type === "futcard" && futCardAnswer.trim()) {
+      submitAnswer(futCardAnswer.trim());
     } else if (textAnswer.trim()) {
       submitAnswer(textAnswer.trim());
     }
@@ -190,6 +193,16 @@ export function QuestionDisplay() {
             guess={jerseyGuess}
             hasAnswered={hasAnswered}
             onChange={setJerseyGuess}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "futcard" && (
+          <FutCardQuestionView
+            question={currentQuestion as FutCardQuestion}
+            answer={futCardAnswer}
+            hasAnswered={hasAnswered}
+            onChange={setFutCardAnswer}
             onSubmit={handleSubmit}
           />
         )}
@@ -1486,6 +1499,245 @@ function JerseyNumberQuestionView({
               fullWidth
               onClick={onSubmit}
               disabled={!guess.trim()}
+              rightIcon={<Send className="w-5 h-5" />}
+            >
+              Valider
+            </Button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ==========================================
+// FUT CARD QUESTION VIEW
+// ==========================================
+
+const FUT_CARD_COLORS: Record<string, { bg: string; accent: string }> = {
+  gold_rare: { bg: "from-yellow-700 via-yellow-600 to-amber-500", accent: "text-yellow-200" },
+  icon: { bg: "from-yellow-900 via-amber-800 to-yellow-700", accent: "text-yellow-300" },
+  toty: { bg: "from-blue-900 via-blue-800 to-indigo-700", accent: "text-blue-200" },
+  tots: { bg: "from-indigo-800 via-blue-700 to-cyan-600", accent: "text-cyan-200" },
+  totw: { bg: "from-gray-900 via-gray-800 to-gray-700", accent: "text-amber-300" },
+  headliners: { bg: "from-red-900 via-red-800 to-rose-700", accent: "text-red-200" },
+  future_stars: { bg: "from-purple-900 via-purple-800 to-fuchsia-700", accent: "text-purple-200" },
+  sbc: { bg: "from-indigo-900 via-purple-800 to-violet-700", accent: "text-violet-200" },
+  flashback: { bg: "from-cyan-900 via-teal-800 to-emerald-700", accent: "text-teal-200" },
+  eoae: { bg: "from-emerald-900 via-green-800 to-lime-700", accent: "text-emerald-200" },
+  potm: { bg: "from-amber-800 via-orange-700 to-amber-600", accent: "text-amber-200" },
+  fut_birthday: { bg: "from-pink-800 via-fuchsia-700 to-purple-600", accent: "text-pink-200" },
+  futties: { bg: "from-pink-700 via-rose-600 to-pink-500", accent: "text-pink-100" },
+  rulebreakers: { bg: "from-orange-900 via-red-800 to-orange-700", accent: "text-orange-200" },
+  record_breaker: { bg: "from-blue-900 via-indigo-800 to-blue-700", accent: "text-blue-200" },
+  hero: { bg: "from-teal-900 via-cyan-800 to-teal-700", accent: "text-teal-200" },
+  winter_wildcards: { bg: "from-sky-900 via-blue-800 to-sky-700", accent: "text-sky-200" },
+  showdown: { bg: "from-red-800 via-orange-700 to-red-600", accent: "text-red-200" },
+  objetivos: { bg: "from-green-800 via-emerald-700 to-green-600", accent: "text-green-200" },
+  otw: { bg: "from-gray-800 via-slate-700 to-gray-600", accent: "text-orange-300" },
+};
+
+const FUT_CARD_TYPE_LABELS: Record<string, string> = {
+  gold_rare: "Gold Rare",
+  icon: "Icon",
+  toty: "TOTY",
+  tots: "TOTS",
+  totw: "TOTW",
+  headliners: "Headliners",
+  future_stars: "Future Stars",
+  sbc: "SBC",
+  flashback: "Flashback",
+  eoae: "End of an Era",
+  potm: "POTM",
+  fut_birthday: "FUT Birthday",
+  futties: "FUTTIES",
+  rulebreakers: "Rulebreakers",
+  record_breaker: "Record Breaker",
+  hero: "Hero",
+  winter_wildcards: "Winter Wildcards",
+  showdown: "Showdown",
+  objetivos: "Objetivos",
+  otw: "OTW",
+};
+
+interface FutCardQuestionViewProps {
+  question: FutCardQuestion;
+  answer: string;
+  hasAnswered: boolean;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+}
+
+function FutCardQuestionView({
+  question,
+  answer,
+  hasAnswered,
+  onChange,
+  onSubmit,
+}: FutCardQuestionViewProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const colors = FUT_CARD_COLORS[question.cardType] || FUT_CARD_COLORS.gold_rare;
+  const cardTypeLabel = FUT_CARD_TYPE_LABELS[question.cardType] || question.cardType;
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSubmit();
+    }
+  };
+
+  const stats = question.stats;
+
+  return (
+    <>
+      {/* Header */}
+      <div className="mb-3 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-800 border border-surface-700 mb-2">
+          <span className="text-lg">🃏</span>
+          <span className="text-xs font-medium text-surface-300">Devine la Carte FUT</span>
+        </div>
+        <h2 className="text-lg sm:text-xl font-display font-bold text-surface-100 text-balance">
+          Quel joueur se cache derrière cette carte ?
+        </h2>
+      </div>
+
+      {/* FUT Card */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, rotateY: -10 }}
+        animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="flex justify-center mb-4"
+      >
+        <div className={cn(
+          "relative w-56 sm:w-64 rounded-2xl overflow-hidden shadow-2xl border border-white/10",
+          "bg-gradient-to-br",
+          colors.bg
+        )}>
+          {/* Card type badge */}
+          <div className="absolute top-2 right-2 z-10">
+            <span className={cn(
+              "text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-black/30 backdrop-blur-sm",
+              colors.accent
+            )}>
+              {cardTypeLabel}
+            </span>
+          </div>
+
+          {/* FIFA edition */}
+          <div className="absolute top-2 left-2 z-10">
+            <span className="text-[10px] font-medium text-white/50 px-2 py-0.5 rounded-full bg-black/20">
+              {question.fifaEdition}
+            </span>
+          </div>
+
+          <div className="p-4 pt-8">
+            {/* Rating + Position */}
+            <div className="flex items-start gap-2 mb-3">
+              <div className="text-left">
+                <div className={cn("text-4xl font-display font-black leading-none", colors.accent)}>
+                  {question.rating}
+                </div>
+                <div className={cn("text-sm font-bold mt-0.5", colors.accent)}>
+                  {question.position}
+                </div>
+              </div>
+
+              {/* Player silhouette */}
+              <div className="flex-1 flex justify-center">
+                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl bg-black/20 border border-white/10 flex items-center justify-center">
+                  <svg viewBox="0 0 64 64" className="w-16 h-16 sm:w-20 sm:h-20 opacity-30" fill="currentColor">
+                    <circle cx="32" cy="20" r="12" className="text-white/60" />
+                    <ellipse cx="32" cy="52" rx="20" ry="14" className="text-white/60" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Nation + Club */}
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <span className={cn("text-xs font-semibold", colors.accent)}>
+                {question.nationality}
+              </span>
+              <span className="text-white/30">|</span>
+              <span className={cn("text-xs font-semibold", colors.accent)}>
+                {question.club}
+              </span>
+            </div>
+
+            {/* Player name hidden */}
+            <div className="text-center mb-3">
+              <div className="inline-flex items-center gap-1 px-4 py-1 rounded-lg bg-black/30 border border-white/10">
+                <span className="text-lg font-display font-bold text-white/40 tracking-widest">? ? ?</span>
+              </div>
+            </div>
+
+            {/* Stats grid */}
+            <div className="grid grid-cols-3 gap-x-4 gap-y-1.5 px-2">
+              {[
+                { label: "PAC", value: stats.pac },
+                { label: "SHO", value: stats.sho },
+                { label: "PAS", value: stats.pas },
+                { label: "DRI", value: stats.dri },
+                { label: "DEF", value: stats.def },
+                { label: "PHY", value: stats.phy },
+              ].map(({ label, value }) => (
+                <div key={label} className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold text-white/50">{label}</span>
+                  <span className={cn(
+                    "text-sm font-display font-black",
+                    value >= 90 ? "text-green-300" :
+                    value >= 80 ? "text-lime-300" :
+                    value >= 70 ? colors.accent :
+                    "text-white/60"
+                  )}>
+                    {value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Answer input */}
+      <div className="flex-1 flex flex-col justify-end">
+        {hasAnswered ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center"
+          >
+            <Card className="inline-block">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-success-400" />
+                <div className="text-left">
+                  <p className="text-sm text-surface-400">Ta réponse :</p>
+                  <p className="text-lg font-medium text-surface-100">{answer}</p>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        ) : (
+          <div className="space-y-3">
+            <Input
+              ref={inputRef}
+              value={answer}
+              onChange={(e) => onChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Nom du joueur..."
+              autoFocus
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+            />
+
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onSubmit}
+              disabled={!answer.trim()}
               rightIcon={<Send className="w-5 h-5" />}
             >
               Valider

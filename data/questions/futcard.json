@@ -1,0 +1,3589 @@
+[
+  {
+    "id": "fut-001",
+    "type": "futcard",
+    "playerName": "Anthony Martial",
+    "acceptedAnswers": [
+      "Anthony Martial",
+      "Martial"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 17",
+    "rating": 82,
+    "position": "LF",
+    "nationality": "France",
+    "club": "Manchester United",
+    "stats": {
+      "pac": 92,
+      "sho": 78,
+      "pas": 73,
+      "dri": 84,
+      "def": 33,
+      "phy": 72
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-002",
+    "type": "futcard",
+    "playerName": "Ahmed Musa",
+    "acceptedAnswers": [
+      "Ahmed Musa",
+      "Musa"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 17",
+    "rating": 75,
+    "position": "ST",
+    "nationality": "Nigeria",
+    "club": "Leicester City",
+    "stats": {
+      "pac": 96,
+      "sho": 70,
+      "pas": 56,
+      "dri": 79,
+      "def": 22,
+      "phy": 63
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-003",
+    "type": "futcard",
+    "playerName": "Jack Butland",
+    "acceptedAnswers": [
+      "Butland",
+      "Jack Butland"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 17",
+    "rating": 82,
+    "position": "GK",
+    "nationality": "England",
+    "club": "Stoke City",
+    "stats": {
+      "pac": 42,
+      "sho": 0,
+      "pas": 55,
+      "dri": 14,
+      "def": 18,
+      "phy": 80
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-004",
+    "type": "futcard",
+    "playerName": "Chris Smalling",
+    "acceptedAnswers": [
+      "Chris Smalling",
+      "Smalling"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 17",
+    "rating": 84,
+    "position": "CB",
+    "nationality": "England",
+    "club": "Manchester United",
+    "stats": {
+      "pac": 72,
+      "sho": 42,
+      "pas": 53,
+      "dri": 53,
+      "def": 83,
+      "phy": 85
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-005",
+    "type": "futcard",
+    "playerName": "Renato Sanches",
+    "acceptedAnswers": [
+      "Sanches",
+      "Renato Sanches"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 17",
+    "rating": 78,
+    "position": "CM",
+    "nationality": "Portugal",
+    "club": "Bayern Munich",
+    "stats": {
+      "pac": 86,
+      "sho": 69,
+      "pas": 68,
+      "dri": 78,
+      "def": 68,
+      "phy": 80
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-006",
+    "type": "futcard",
+    "playerName": "N'Golo Kanté",
+    "acceptedAnswers": [
+      "N'Golo Kante",
+      "Kanté",
+      "Kante",
+      "Ngolo Kante",
+      "N'Golo Kanté"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 17",
+    "rating": 83,
+    "position": "CDM",
+    "nationality": "France",
+    "club": "Chelsea",
+    "stats": {
+      "pac": 82,
+      "sho": 55,
+      "pas": 72,
+      "dri": 78,
+      "def": 82,
+      "phy": 76
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-007",
+    "type": "futcard",
+    "playerName": "Alexandre Lacazette",
+    "acceptedAnswers": [
+      "Alexandre Lacazette",
+      "Lacazette"
+    ],
+    "cardType": "sbc",
+    "fifaEdition": "FIFA 17",
+    "rating": 90,
+    "position": "ST",
+    "nationality": "France",
+    "club": "Olympique Lyonnais",
+    "stats": {
+      "pac": 88,
+      "sho": 89,
+      "pas": 75,
+      "dri": 88,
+      "def": 39,
+      "phy": 73
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-008",
+    "type": "futcard",
+    "playerName": "Son Heung-min",
+    "acceptedAnswers": [
+      "Son Heung-min",
+      "Heung-min",
+      "Son Heung Min",
+      "Son"
+    ],
+    "cardType": "potm",
+    "fifaEdition": "FIFA 17",
+    "rating": 84,
+    "position": "LM",
+    "nationality": "South Korea",
+    "club": "Tottenham Hotspur",
+    "stats": {
+      "pac": 89,
+      "sho": 85,
+      "pas": 77,
+      "dri": 85,
+      "def": 42,
+      "phy": 68
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-009",
+    "type": "futcard",
+    "playerName": "Kyle Walker",
+    "acceptedAnswers": [
+      "Kyle Walker",
+      "Walker"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 17",
+    "rating": 82,
+    "position": "RB",
+    "nationality": "England",
+    "club": "Tottenham Hotspur",
+    "stats": {
+      "pac": 94,
+      "sho": 50,
+      "pas": 66,
+      "dri": 72,
+      "def": 76,
+      "phy": 77
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-010",
+    "type": "futcard",
+    "playerName": "Eric Bailly",
+    "acceptedAnswers": [
+      "Eric Bailly",
+      "Bailly"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 17",
+    "rating": 80,
+    "position": "CB",
+    "nationality": "Ivory Coast",
+    "club": "Manchester United",
+    "stats": {
+      "pac": 80,
+      "sho": 36,
+      "pas": 46,
+      "dri": 51,
+      "def": 80,
+      "phy": 82
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-011",
+    "type": "futcard",
+    "playerName": "Moussa Dembélé",
+    "acceptedAnswers": [
+      "Dembele",
+      "Dembélé",
+      "Moussa Dembélé",
+      "Moussa Dembele"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 17",
+    "rating": 82,
+    "position": "CM",
+    "nationality": "Belgium",
+    "club": "Tottenham Hotspur",
+    "stats": {
+      "pac": 72,
+      "sho": 64,
+      "pas": 76,
+      "dri": 86,
+      "def": 68,
+      "phy": 83
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-012",
+    "type": "futcard",
+    "playerName": "Antonio Valencia",
+    "acceptedAnswers": [
+      "Valencia",
+      "Antonio Valencia"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 17",
+    "rating": 82,
+    "position": "RB",
+    "nationality": "Ecuador",
+    "club": "Manchester United",
+    "stats": {
+      "pac": 90,
+      "sho": 62,
+      "pas": 68,
+      "dri": 74,
+      "def": 74,
+      "phy": 82
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-013",
+    "type": "futcard",
+    "playerName": "Tiémoué Bakayoko",
+    "acceptedAnswers": [
+      "Tiemoue Bakayoko",
+      "Tiémoué Bakayoko",
+      "Bakayoko"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 18",
+    "rating": 78,
+    "position": "CDM",
+    "nationality": "France",
+    "club": "Chelsea",
+    "stats": {
+      "pac": 72,
+      "sho": 53,
+      "pas": 66,
+      "dri": 70,
+      "def": 74,
+      "phy": 82
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-014",
+    "type": "futcard",
+    "playerName": "Gabriel Jesus",
+    "acceptedAnswers": [
+      "Gabriel Jesus",
+      "Jesus"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 18",
+    "rating": 83,
+    "position": "ST",
+    "nationality": "Brazil",
+    "club": "Manchester City",
+    "stats": {
+      "pac": 90,
+      "sho": 79,
+      "pas": 68,
+      "dri": 86,
+      "def": 36,
+      "phy": 64
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-015",
+    "type": "futcard",
+    "playerName": "Hirving Lozano",
+    "acceptedAnswers": [
+      "Lozano",
+      "Hirving Lozano"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 18",
+    "rating": 79,
+    "position": "RW",
+    "nationality": "Mexico",
+    "club": "PSV",
+    "stats": {
+      "pac": 93,
+      "sho": 72,
+      "pas": 68,
+      "dri": 82,
+      "def": 28,
+      "phy": 60
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-016",
+    "type": "futcard",
+    "playerName": "Romain Alessandrini",
+    "acceptedAnswers": [
+      "Romain Alessandrini",
+      "Alessandrini"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 18",
+    "rating": 80,
+    "position": "RM",
+    "nationality": "France",
+    "club": "LA Galaxy",
+    "stats": {
+      "pac": 86,
+      "sho": 80,
+      "pas": 77,
+      "dri": 85,
+      "def": 33,
+      "phy": 64
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-017",
+    "type": "futcard",
+    "playerName": "Ronaldo",
+    "acceptedAnswers": [
+      "Ronaldo",
+      "Ronaldo Nazario",
+      "Ronaldo Nazário",
+      "R9"
+    ],
+    "cardType": "icon",
+    "fifaEdition": "FIFA 18",
+    "rating": 97,
+    "position": "ST",
+    "nationality": "Brazil",
+    "club": "Icons",
+    "stats": {
+      "pac": 95,
+      "sho": 97,
+      "pas": 72,
+      "dri": 96,
+      "def": 37,
+      "phy": 82
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-018",
+    "type": "futcard",
+    "playerName": "Patrick Vieira",
+    "acceptedAnswers": [
+      "Vieira",
+      "Patrick Vieira"
+    ],
+    "cardType": "icon",
+    "fifaEdition": "FIFA 18",
+    "rating": 91,
+    "position": "CDM",
+    "nationality": "France",
+    "club": "Icons",
+    "stats": {
+      "pac": 75,
+      "sho": 76,
+      "pas": 82,
+      "dri": 78,
+      "def": 86,
+      "phy": 88
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-019",
+    "type": "futcard",
+    "playerName": "Ruud Gullit",
+    "acceptedAnswers": [
+      "Gullit",
+      "Ruud Gullit"
+    ],
+    "cardType": "icon",
+    "fifaEdition": "FIFA 18",
+    "rating": 93,
+    "position": "CAM",
+    "nationality": "Netherlands",
+    "club": "Icons",
+    "stats": {
+      "pac": 80,
+      "sho": 89,
+      "pas": 85,
+      "dri": 90,
+      "def": 76,
+      "phy": 89
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-020",
+    "type": "futcard",
+    "playerName": "Sandro",
+    "acceptedAnswers": [
+      "Sandro"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 18",
+    "rating": 83,
+    "position": "LB",
+    "nationality": "Brazil",
+    "club": "Juventus",
+    "stats": {
+      "pac": 87,
+      "sho": 56,
+      "pas": 72,
+      "dri": 75,
+      "def": 81,
+      "phy": 84
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-021",
+    "type": "futcard",
+    "playerName": "Ederson",
+    "acceptedAnswers": [
+      "Ederson"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 18",
+    "rating": 82,
+    "position": "GK",
+    "nationality": "Brazil",
+    "club": "Manchester City",
+    "stats": {
+      "pac": 55,
+      "sho": 0,
+      "pas": 63,
+      "dri": 15,
+      "def": 16,
+      "phy": 78
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-022",
+    "type": "futcard",
+    "playerName": "Hirving Lozano",
+    "acceptedAnswers": [
+      "Lozano",
+      "Hirving Lozano"
+    ],
+    "cardType": "tots",
+    "fifaEdition": "FIFA 18",
+    "rating": 94,
+    "position": "RW",
+    "nationality": "Mexico",
+    "club": "PSV",
+    "stats": {
+      "pac": 99,
+      "sho": 90,
+      "pas": 85,
+      "dri": 95,
+      "def": 47,
+      "phy": 72
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-023",
+    "type": "futcard",
+    "playerName": "Marcos Alonso",
+    "acceptedAnswers": [
+      "Alonso",
+      "Marcos Alonso"
+    ],
+    "cardType": "totw",
+    "fifaEdition": "FIFA 18",
+    "rating": 84,
+    "position": "LB",
+    "nationality": "Spain",
+    "club": "Chelsea",
+    "stats": {
+      "pac": 72,
+      "sho": 76,
+      "pas": 74,
+      "dri": 74,
+      "def": 78,
+      "phy": 82
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-024",
+    "type": "futcard",
+    "playerName": "Wissam Ben Yedder",
+    "acceptedAnswers": [
+      "Wissam Ben Yedder",
+      "Yedder"
+    ],
+    "cardType": "totw",
+    "fifaEdition": "FIFA 19",
+    "rating": 84,
+    "position": "ST",
+    "nationality": "France",
+    "club": "Sevilla FC",
+    "stats": {
+      "pac": 82,
+      "sho": 85,
+      "pas": 80,
+      "dri": 87,
+      "def": 38,
+      "phy": 60
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-025",
+    "type": "futcard",
+    "playerName": "Fabinho",
+    "acceptedAnswers": [
+      "Fabinho"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 19",
+    "rating": 85,
+    "position": "CDM",
+    "nationality": "Brazil",
+    "club": "Liverpool",
+    "stats": {
+      "pac": 62,
+      "sho": 62,
+      "pas": 71,
+      "dri": 74,
+      "def": 84,
+      "phy": 84
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-026",
+    "type": "futcard",
+    "playerName": "Arjen Robben",
+    "acceptedAnswers": [
+      "Robben",
+      "Arjen Robben"
+    ],
+    "cardType": "eoae",
+    "fifaEdition": "FIFA 19",
+    "rating": 95,
+    "position": "RW",
+    "nationality": "Netherlands",
+    "club": "Bayern Munich",
+    "stats": {
+      "pac": 92,
+      "sho": 93,
+      "pas": 89,
+      "dri": 96,
+      "def": 42,
+      "phy": 68
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-027",
+    "type": "futcard",
+    "playerName": "Virgil van Dijk",
+    "acceptedAnswers": [
+      "Virgil van Dijk",
+      "Dijk"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 19",
+    "rating": 85,
+    "position": "CB",
+    "nationality": "Netherlands",
+    "club": "Liverpool",
+    "stats": {
+      "pac": 72,
+      "sho": 59,
+      "pas": 63,
+      "dri": 67,
+      "def": 87,
+      "phy": 86
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-028",
+    "type": "futcard",
+    "playerName": "Paul Pogba",
+    "acceptedAnswers": [
+      "Pogba",
+      "Paul Pogba"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 19",
+    "rating": 88,
+    "position": "CM",
+    "nationality": "France",
+    "club": "Manchester United",
+    "stats": {
+      "pac": 72,
+      "sho": 80,
+      "pas": 86,
+      "dri": 86,
+      "def": 64,
+      "phy": 83
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-029",
+    "type": "futcard",
+    "playerName": "Neymar Jr",
+    "acceptedAnswers": [
+      "Jr",
+      "Neymar",
+      "Neymar Jr"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 19",
+    "rating": 92,
+    "position": "LW",
+    "nationality": "Brazil",
+    "club": "Paris Saint-Germain",
+    "stats": {
+      "pac": 90,
+      "sho": 84,
+      "pas": 87,
+      "dri": 95,
+      "def": 30,
+      "phy": 60
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-030",
+    "type": "futcard",
+    "playerName": "Felipe Anderson",
+    "acceptedAnswers": [
+      "Anderson",
+      "Felipe Anderson"
+    ],
+    "cardType": "totw",
+    "fifaEdition": "FIFA 19",
+    "rating": 86,
+    "position": "LW",
+    "nationality": "Brazil",
+    "club": "West Ham United",
+    "stats": {
+      "pac": 92,
+      "sho": 80,
+      "pas": 78,
+      "dri": 89,
+      "def": 40,
+      "phy": 60
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-031",
+    "type": "futcard",
+    "playerName": "Douglas Costa",
+    "acceptedAnswers": [
+      "Douglas Costa",
+      "Costa"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 19",
+    "rating": 85,
+    "position": "LW",
+    "nationality": "Brazil",
+    "club": "Juventus",
+    "stats": {
+      "pac": 95,
+      "sho": 72,
+      "pas": 80,
+      "dri": 91,
+      "def": 26,
+      "phy": 57
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-032",
+    "type": "futcard",
+    "playerName": "Davinson Sánchez",
+    "acceptedAnswers": [
+      "Davinson Sanchez",
+      "Davinson Sánchez",
+      "Sanchez",
+      "Sánchez"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 19",
+    "rating": 84,
+    "position": "CB",
+    "nationality": "Colombia",
+    "club": "Tottenham Hotspur",
+    "stats": {
+      "pac": 80,
+      "sho": 35,
+      "pas": 50,
+      "dri": 57,
+      "def": 84,
+      "phy": 86
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-033",
+    "type": "futcard",
+    "playerName": "Alexandre Lacazette",
+    "acceptedAnswers": [
+      "Alexandre Lacazette",
+      "Lacazette"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 19",
+    "rating": 85,
+    "position": "ST",
+    "nationality": "France",
+    "club": "Arsenal",
+    "stats": {
+      "pac": 79,
+      "sho": 83,
+      "pas": 74,
+      "dri": 85,
+      "def": 37,
+      "phy": 70
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-034",
+    "type": "futcard",
+    "playerName": "Wissam Ben Yedder",
+    "acceptedAnswers": [
+      "Wissam Ben Yedder",
+      "Yedder"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 20",
+    "rating": 83,
+    "position": "ST",
+    "nationality": "France",
+    "club": "AS Monaco",
+    "stats": {
+      "pac": 81,
+      "sho": 83,
+      "pas": 78,
+      "dri": 86,
+      "def": 36,
+      "phy": 61
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-035",
+    "type": "futcard",
+    "playerName": "Moussa Sissoko",
+    "acceptedAnswers": [
+      "Moussa Sissoko",
+      "Sissoko"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 20",
+    "rating": 80,
+    "position": "CDM",
+    "nationality": "France",
+    "club": "Tottenham Hotspur",
+    "stats": {
+      "pac": 79,
+      "sho": 55,
+      "pas": 67,
+      "dri": 72,
+      "def": 72,
+      "phy": 85
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-036",
+    "type": "futcard",
+    "playerName": "Ryan Kent",
+    "acceptedAnswers": [
+      "Kent",
+      "Ryan Kent"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 20",
+    "rating": 73,
+    "position": "LM",
+    "nationality": "England",
+    "club": "Rangers",
+    "stats": {
+      "pac": 90,
+      "sho": 62,
+      "pas": 62,
+      "dri": 79,
+      "def": 30,
+      "phy": 58
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-037",
+    "type": "futcard",
+    "playerName": "Ousmane Dembélé",
+    "acceptedAnswers": [
+      "Dembele",
+      "Dembélé",
+      "Ousmane Dembélé",
+      "Ousmane Dembele"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 20",
+    "rating": 83,
+    "position": "RW",
+    "nationality": "France",
+    "club": "FC Barcelona",
+    "stats": {
+      "pac": 93,
+      "sho": 74,
+      "pas": 80,
+      "dri": 88,
+      "def": 29,
+      "phy": 49
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-038",
+    "type": "futcard",
+    "playerName": "Adama Traoré",
+    "acceptedAnswers": [
+      "Adama Traore",
+      "Traore",
+      "Adama Traoré",
+      "Traoré"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 20",
+    "rating": 77,
+    "position": "RM",
+    "nationality": "Spain",
+    "club": "Wolverhampton",
+    "stats": {
+      "pac": 96,
+      "sho": 53,
+      "pas": 55,
+      "dri": 84,
+      "def": 29,
+      "phy": 79
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-039",
+    "type": "futcard",
+    "playerName": "Youcef Atal",
+    "acceptedAnswers": [
+      "Atal",
+      "Youcef Atal"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 20",
+    "rating": 77,
+    "position": "RB",
+    "nationality": "Algeria",
+    "club": "OGC Nice",
+    "stats": {
+      "pac": 93,
+      "sho": 68,
+      "pas": 72,
+      "dri": 83,
+      "def": 64,
+      "phy": 67
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-040",
+    "type": "futcard",
+    "playerName": "Neymar Jr",
+    "acceptedAnswers": [
+      "Jr",
+      "Neymar",
+      "Neymar Jr"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 20",
+    "rating": 92,
+    "position": "LW",
+    "nationality": "Brazil",
+    "club": "Paris Saint-Germain",
+    "stats": {
+      "pac": 91,
+      "sho": 85,
+      "pas": 86,
+      "dri": 94,
+      "def": 36,
+      "phy": 59
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-041",
+    "type": "futcard",
+    "playerName": "Lucas Hernández",
+    "acceptedAnswers": [
+      "Hernandez",
+      "Lucas Hernandez",
+      "Lucas Hernández",
+      "Hernández"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 20",
+    "rating": 83,
+    "position": "CB",
+    "nationality": "France",
+    "club": "Bayern Munich",
+    "stats": {
+      "pac": 80,
+      "sho": 38,
+      "pas": 60,
+      "dri": 63,
+      "def": 82,
+      "phy": 84
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-042",
+    "type": "futcard",
+    "playerName": "Kylian Mbappé",
+    "acceptedAnswers": [
+      "Mbappé",
+      "Kylian Mbappe",
+      "Kylian Mbappé",
+      "Mbappe"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 20",
+    "rating": 89,
+    "position": "ST",
+    "nationality": "France",
+    "club": "Paris Saint-Germain",
+    "stats": {
+      "pac": 96,
+      "sho": 86,
+      "pas": 78,
+      "dri": 91,
+      "def": 39,
+      "phy": 73
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-043",
+    "type": "futcard",
+    "playerName": "Nélson Semedo",
+    "acceptedAnswers": [
+      "Nelson Semedo",
+      "Semedo",
+      "Nélson Semedo"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 20",
+    "rating": 82,
+    "position": "RB",
+    "nationality": "Portugal",
+    "club": "FC Barcelona",
+    "stats": {
+      "pac": 92,
+      "sho": 52,
+      "pas": 73,
+      "dri": 81,
+      "def": 76,
+      "phy": 72
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-044",
+    "type": "futcard",
+    "playerName": "Lenglet",
+    "acceptedAnswers": [
+      "Lenglet"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 20",
+    "rating": 83,
+    "position": "CB",
+    "nationality": "France",
+    "club": "FC Barcelona",
+    "stats": {
+      "pac": 66,
+      "sho": 35,
+      "pas": 63,
+      "dri": 67,
+      "def": 84,
+      "phy": 77
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-045",
+    "type": "futcard",
+    "playerName": "Allan",
+    "acceptedAnswers": [
+      "Allan"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 20",
+    "rating": 84,
+    "position": "CDM",
+    "nationality": "Brazil",
+    "club": "Napoli",
+    "stats": {
+      "pac": 72,
+      "sho": 60,
+      "pas": 76,
+      "dri": 82,
+      "def": 82,
+      "phy": 80
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-046",
+    "type": "futcard",
+    "playerName": "Raphaël Varane",
+    "acceptedAnswers": [
+      "Raphael Varane",
+      "Varane",
+      "Raphaël Varane"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 86,
+    "position": "CB",
+    "nationality": "France",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 82,
+      "sho": 49,
+      "pas": 64,
+      "dri": 65,
+      "def": 87,
+      "phy": 82
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-047",
+    "type": "futcard",
+    "playerName": "Ferland Mendy",
+    "acceptedAnswers": [
+      "Mendy",
+      "Ferland Mendy"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 83,
+    "position": "LB",
+    "nationality": "France",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 92,
+      "sho": 64,
+      "pas": 76,
+      "dri": 79,
+      "def": 78,
+      "phy": 82
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-048",
+    "type": "futcard",
+    "playerName": "Joe Gomez",
+    "acceptedAnswers": [
+      "Joe Gomez",
+      "Gomez"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 83,
+    "position": "CB",
+    "nationality": "England",
+    "club": "Liverpool",
+    "stats": {
+      "pac": 82,
+      "sho": 30,
+      "pas": 66,
+      "dri": 70,
+      "def": 83,
+      "phy": 80
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-049",
+    "type": "futcard",
+    "playerName": "Kyle Walker",
+    "acceptedAnswers": [
+      "Kyle Walker",
+      "Walker"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 85,
+    "position": "RB",
+    "nationality": "England",
+    "club": "Manchester City",
+    "stats": {
+      "pac": 92,
+      "sho": 63,
+      "pas": 76,
+      "dri": 77,
+      "def": 80,
+      "phy": 82
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-050",
+    "type": "futcard",
+    "playerName": "Nick Pope",
+    "acceptedAnswers": [
+      "Nick Pope",
+      "Pope"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 82,
+    "position": "GK",
+    "nationality": "England",
+    "club": "Burnley",
+    "stats": {
+      "pac": 79,
+      "sho": 81,
+      "pas": 75,
+      "dri": 84,
+      "def": 49,
+      "phy": 83
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-051",
+    "type": "futcard",
+    "playerName": "Kylian Mbappé",
+    "acceptedAnswers": [
+      "Mbappé",
+      "Kylian Mbappe",
+      "Kylian Mbappé",
+      "Mbappe"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 90,
+    "position": "ST",
+    "nationality": "France",
+    "club": "Paris Saint-Germain",
+    "stats": {
+      "pac": 96,
+      "sho": 86,
+      "pas": 78,
+      "dri": 91,
+      "def": 39,
+      "phy": 76
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-052",
+    "type": "futcard",
+    "playerName": "Neymar Jr",
+    "acceptedAnswers": [
+      "Jr",
+      "Neymar",
+      "Neymar Jr"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 91,
+    "position": "LW",
+    "nationality": "Brazil",
+    "club": "Paris Saint-Germain",
+    "stats": {
+      "pac": 91,
+      "sho": 85,
+      "pas": 86,
+      "dri": 94,
+      "def": 36,
+      "phy": 59
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-053",
+    "type": "futcard",
+    "playerName": "Marcus Rashford",
+    "acceptedAnswers": [
+      "Rashford",
+      "Marcus Rashford"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 85,
+    "position": "LM",
+    "nationality": "England",
+    "club": "Manchester United",
+    "stats": {
+      "pac": 91,
+      "sho": 83,
+      "pas": 78,
+      "dri": 85,
+      "def": 45,
+      "phy": 78
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-054",
+    "type": "futcard",
+    "playerName": "Cristiano Ronaldo",
+    "acceptedAnswers": [
+      "Ronaldo",
+      "Cristiano Ronaldo"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 92,
+    "position": "ST",
+    "nationality": "Portugal",
+    "club": "Piemonte Calcio",
+    "stats": {
+      "pac": 89,
+      "sho": 93,
+      "pas": 81,
+      "dri": 89,
+      "def": 35,
+      "phy": 77
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-055",
+    "type": "futcard",
+    "playerName": "N'Golo Kanté",
+    "acceptedAnswers": [
+      "N'Golo Kante",
+      "Kanté",
+      "Kante",
+      "Ngolo Kante",
+      "N'Golo Kanté"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 88,
+    "position": "CDM",
+    "nationality": "France",
+    "club": "Chelsea",
+    "stats": {
+      "pac": 77,
+      "sho": 66,
+      "pas": 76,
+      "dri": 81,
+      "def": 86,
+      "phy": 82
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-056",
+    "type": "futcard",
+    "playerName": "Renato Sanches",
+    "acceptedAnswers": [
+      "Sanches",
+      "Renato Sanches"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 78,
+    "position": "CM",
+    "nationality": "Portugal",
+    "club": "Lille",
+    "stats": {
+      "pac": 79,
+      "sho": 72,
+      "pas": 76,
+      "dri": 81,
+      "def": 71,
+      "phy": 81
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-057",
+    "type": "futcard",
+    "playerName": "Moussa Sissoko",
+    "acceptedAnswers": [
+      "Moussa Sissoko",
+      "Sissoko"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 79,
+    "position": "CM",
+    "nationality": "France",
+    "club": "Tottenham Hotspur",
+    "stats": {
+      "pac": 78,
+      "sho": 63,
+      "pas": 77,
+      "dri": 78,
+      "def": 77,
+      "phy": 89
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-058",
+    "type": "futcard",
+    "playerName": "Allan",
+    "acceptedAnswers": [
+      "Allan"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 85,
+    "position": "ST",
+    "nationality": "Brazil",
+    "club": "Everton",
+    "stats": {
+      "pac": 80,
+      "sho": 80,
+      "pas": 75,
+      "dri": 80,
+      "def": 50,
+      "phy": 70
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-059",
+    "type": "futcard",
+    "playerName": "Adama Traoré",
+    "acceptedAnswers": [
+      "Adama Traore",
+      "Traore",
+      "Adama Traoré",
+      "Traoré"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 71,
+    "position": "RW",
+    "nationality": "Spain",
+    "club": "Wolverhampton",
+    "stats": {
+      "pac": 76,
+      "sho": 62,
+      "pas": 73,
+      "dri": 73,
+      "def": 60,
+      "phy": 68
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-060",
+    "type": "futcard",
+    "playerName": "Ousmane Dembélé",
+    "acceptedAnswers": [
+      "Dembele",
+      "Dembélé",
+      "Ousmane Dembélé",
+      "Ousmane Dembele"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 83,
+    "position": "LW",
+    "nationality": "France",
+    "club": "FC Barcelona",
+    "stats": {
+      "pac": 92,
+      "sho": 77,
+      "pas": 77,
+      "dri": 86,
+      "def": 36,
+      "phy": 56
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-061",
+    "type": "futcard",
+    "playerName": "Wissam Ben Yedder",
+    "acceptedAnswers": [
+      "Wissam Ben Yedder",
+      "Yedder"
+    ],
+    "cardType": "sbc",
+    "fifaEdition": "FIFA 21",
+    "rating": 95,
+    "position": "ST",
+    "nationality": "France",
+    "club": "AS Monaco",
+    "stats": {
+      "pac": 97,
+      "sho": 96,
+      "pas": 92,
+      "dri": 99,
+      "def": 50,
+      "phy": 81
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-062",
+    "type": "futcard",
+    "playerName": "Heung Min Son",
+    "acceptedAnswers": [
+      "Heung Min Son",
+      "Son Heung Min",
+      "Son",
+      "Son Heung-min"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 87,
+    "position": "LM",
+    "nationality": "South Korea",
+    "club": "Tottenham Hotspur",
+    "stats": {
+      "pac": 88,
+      "sho": 86,
+      "pas": 80,
+      "dri": 87,
+      "def": 43,
+      "phy": 69
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-063",
+    "type": "futcard",
+    "playerName": "Sadio Mané",
+    "acceptedAnswers": [
+      "Mané",
+      "Mane",
+      "Sadio Mane",
+      "Sadio Mané"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 90,
+    "position": "LW",
+    "nationality": "Senegal",
+    "club": "Liverpool",
+    "stats": {
+      "pac": 94,
+      "sho": 85,
+      "pas": 80,
+      "dri": 90,
+      "def": 44,
+      "phy": 76
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-064",
+    "type": "futcard",
+    "playerName": "Samuel Eto'o",
+    "acceptedAnswers": [
+      "Samuel Eto'o",
+      "Eto'o"
+    ],
+    "cardType": "icon",
+    "fifaEdition": "FIFA 21",
+    "rating": 93,
+    "position": "ST",
+    "nationality": "Cameroon",
+    "club": "Icons",
+    "stats": {
+      "pac": 98,
+      "sho": 95,
+      "pas": 83,
+      "dri": 93,
+      "def": 48,
+      "phy": 84
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-065",
+    "type": "futcard",
+    "playerName": "Patrick Vieira",
+    "acceptedAnswers": [
+      "Vieira",
+      "Patrick Vieira"
+    ],
+    "cardType": "icon",
+    "fifaEdition": "FIFA 21",
+    "rating": 92,
+    "position": "CM",
+    "nationality": "France",
+    "club": "Icons",
+    "stats": {
+      "pac": 89,
+      "sho": 86,
+      "pas": 84,
+      "dri": 87,
+      "def": 92,
+      "phy": 93
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-066",
+    "type": "futcard",
+    "playerName": "Pelé",
+    "acceptedAnswers": [
+      "Pele",
+      "Pelé"
+    ],
+    "cardType": "icon",
+    "fifaEdition": "FIFA 21",
+    "rating": 99,
+    "position": "CF",
+    "nationality": "Brazil",
+    "club": "Icons",
+    "stats": {
+      "pac": 97,
+      "sho": 98,
+      "pas": 95,
+      "dri": 98,
+      "def": 61,
+      "phy": 78
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-067",
+    "type": "futcard",
+    "playerName": "Eusébio",
+    "acceptedAnswers": [
+      "Eusebio",
+      "Eusébio"
+    ],
+    "cardType": "icon",
+    "fifaEdition": "FIFA 21",
+    "rating": 94,
+    "position": "CF",
+    "nationality": "Portugal",
+    "club": "Icons",
+    "stats": {
+      "pac": 95,
+      "sho": 97,
+      "pas": 88,
+      "dri": 95,
+      "def": 47,
+      "phy": 81
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-068",
+    "type": "futcard",
+    "playerName": "Ruud Gullit",
+    "acceptedAnswers": [
+      "Gullit",
+      "Ruud Gullit"
+    ],
+    "cardType": "icon",
+    "fifaEdition": "FIFA 21",
+    "rating": 94,
+    "position": "CF",
+    "nationality": "Netherlands",
+    "club": "Icons",
+    "stats": {
+      "pac": 88,
+      "sho": 95,
+      "pas": 92,
+      "dri": 91,
+      "def": 83,
+      "phy": 92
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-069",
+    "type": "futcard",
+    "playerName": "Rodrigo",
+    "acceptedAnswers": [
+      "Rodrigo"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 74,
+    "position": "RB",
+    "nationality": "Spain",
+    "club": "Leeds United",
+    "stats": {
+      "pac": 74,
+      "sho": 61,
+      "pas": 74,
+      "dri": 74,
+      "def": 69,
+      "phy": 71
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-070",
+    "type": "futcard",
+    "playerName": "Lucas Moura",
+    "acceptedAnswers": [
+      "Lucas Moura",
+      "Moura"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 85,
+    "position": "ST",
+    "nationality": "Brazil",
+    "club": "Tottenham Hotspur",
+    "stats": {
+      "pac": 80,
+      "sho": 80,
+      "pas": 75,
+      "dri": 80,
+      "def": 50,
+      "phy": 70
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-071",
+    "type": "futcard",
+    "playerName": "Eder Militão",
+    "acceptedAnswers": [
+      "Eder Militao",
+      "Militão",
+      "Eder Militão",
+      "Militao"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 21",
+    "rating": 85,
+    "position": "ST",
+    "nationality": "Brazil",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 80,
+      "sho": 80,
+      "pas": 75,
+      "dri": 80,
+      "def": 50,
+      "phy": 70
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-072",
+    "type": "futcard",
+    "playerName": "Jesse Lingard",
+    "acceptedAnswers": [
+      "Lingard",
+      "Jesse Lingard"
+    ],
+    "cardType": "sbc",
+    "fifaEdition": "FIFA 21",
+    "rating": 95,
+    "position": "CAM",
+    "nationality": "England",
+    "club": "West Ham United",
+    "stats": {
+      "pac": 96,
+      "sho": 96,
+      "pas": 95,
+      "dri": 97,
+      "def": 80,
+      "phy": 89
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-073",
+    "type": "futcard",
+    "playerName": "Wayne Rooney",
+    "acceptedAnswers": [
+      "Rooney",
+      "Wayne Rooney"
+    ],
+    "cardType": "sbc",
+    "fifaEdition": "FIFA 21",
+    "rating": 93,
+    "position": "ST",
+    "nationality": "England",
+    "club": "D.C. United",
+    "stats": {
+      "pac": 87,
+      "sho": 95,
+      "pas": 88,
+      "dri": 91,
+      "def": 71,
+      "phy": 90
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-074",
+    "type": "futcard",
+    "playerName": "Paulo Dybala",
+    "acceptedAnswers": [
+      "Dybala",
+      "Paulo Dybala"
+    ],
+    "cardType": "sbc",
+    "fifaEdition": "FIFA 21",
+    "rating": 97,
+    "position": "CF",
+    "nationality": "Argentina",
+    "club": "Piemonte Calcio",
+    "stats": {
+      "pac": 97,
+      "sho": 97,
+      "pas": 98,
+      "dri": 99,
+      "def": 50,
+      "phy": 90
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-075",
+    "type": "futcard",
+    "playerName": "David Beckham",
+    "acceptedAnswers": [
+      "Beckham",
+      "David Beckham"
+    ],
+    "cardType": "icon",
+    "fifaEdition": "FIFA 21",
+    "rating": 93,
+    "position": "RM",
+    "nationality": "England",
+    "club": "Icons",
+    "stats": {
+      "pac": 84,
+      "sho": 91,
+      "pas": 97,
+      "dri": 90,
+      "def": 70,
+      "phy": 84
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-076",
+    "type": "futcard",
+    "playerName": "Kylian Mbappé",
+    "acceptedAnswers": [
+      "Mbappé",
+      "Kylian Mbappe",
+      "Kylian Mbappé",
+      "Mbappe"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 88,
+    "position": "ST",
+    "nationality": "France",
+    "club": "Paris Saint-Germain",
+    "stats": {
+      "pac": 94,
+      "sho": 86,
+      "pas": 76,
+      "dri": 89,
+      "def": 33,
+      "phy": 72
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-077",
+    "type": "futcard",
+    "playerName": "Erling Haaland",
+    "acceptedAnswers": [
+      "Haaland",
+      "Erling Haaland"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 88,
+    "position": "ST",
+    "nationality": "Norway",
+    "club": "Manchester City",
+    "stats": {
+      "pac": 89,
+      "sho": 91,
+      "pas": 65,
+      "dri": 80,
+      "def": 49,
+      "phy": 87
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-078",
+    "type": "futcard",
+    "playerName": "Neymar Jr",
+    "acceptedAnswers": [
+      "Jr",
+      "Neymar",
+      "Neymar Jr"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 89,
+    "position": "LW",
+    "nationality": "Brazil",
+    "club": "Paris Saint-Germain",
+    "stats": {
+      "pac": 87,
+      "sho": 83,
+      "pas": 85,
+      "dri": 93,
+      "def": 37,
+      "phy": 61
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-079",
+    "type": "futcard",
+    "playerName": "Ousmane Dembélé",
+    "acceptedAnswers": [
+      "Dembele",
+      "Dembélé",
+      "Ousmane Dembélé",
+      "Ousmane Dembele"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 83,
+    "position": "RW",
+    "nationality": "France",
+    "club": "FC Barcelona",
+    "stats": {
+      "pac": 93,
+      "sho": 77,
+      "pas": 79,
+      "dri": 87,
+      "def": 36,
+      "phy": 56
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-080",
+    "type": "futcard",
+    "playerName": "Vinícius Jr.",
+    "acceptedAnswers": [
+      "Vinícius Jr.",
+      "Vinicius Jr.",
+      "Jr."
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 85,
+    "position": "ST",
+    "nationality": "Brazil",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 80,
+      "sho": 80,
+      "pas": 75,
+      "dri": 80,
+      "def": 50,
+      "phy": 70
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-081",
+    "type": "futcard",
+    "playerName": "Arnaut Danjuma",
+    "acceptedAnswers": [
+      "Danjuma",
+      "Arnaut Danjuma"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 82,
+    "position": "LM",
+    "nationality": "Netherlands",
+    "club": "Villarreal",
+    "stats": {
+      "pac": 88,
+      "sho": 81,
+      "pas": 75,
+      "dri": 82,
+      "def": 42,
+      "phy": 68
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-082",
+    "type": "futcard",
+    "playerName": "Rafael Leão",
+    "acceptedAnswers": [
+      "Rafael Leao",
+      "Rafael Leão",
+      "Leao",
+      "Leão"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 84,
+    "position": "LW",
+    "nationality": "Portugal",
+    "club": "AC Milan",
+    "stats": {
+      "pac": 91,
+      "sho": 77,
+      "pas": 73,
+      "dri": 86,
+      "def": 27,
+      "phy": 74
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-083",
+    "type": "futcard",
+    "playerName": "Allan Saint-Maximin",
+    "acceptedAnswers": [
+      "Saint-Maximin",
+      "Allan Saint-Maximin"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 81,
+    "position": "LM",
+    "nationality": "France",
+    "club": "Newcastle",
+    "stats": {
+      "pac": 90,
+      "sho": 73,
+      "pas": 73,
+      "dri": 88,
+      "def": 27,
+      "phy": 68
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-084",
+    "type": "futcard",
+    "playerName": "Kingsley Coman",
+    "acceptedAnswers": [
+      "Kingsley Coman",
+      "Coman"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 86,
+    "position": "LM",
+    "nationality": "France",
+    "club": "Bayern Munich",
+    "stats": {
+      "pac": 92,
+      "sho": 77,
+      "pas": 79,
+      "dri": 87,
+      "def": 30,
+      "phy": 62
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-085",
+    "type": "futcard",
+    "playerName": "Wissam Ben Yedder",
+    "acceptedAnswers": [
+      "Wissam Ben Yedder",
+      "Yedder"
+    ],
+    "cardType": "tots",
+    "fifaEdition": "FIFA 23",
+    "rating": 94,
+    "position": "ST",
+    "nationality": "France",
+    "club": "AS Monaco",
+    "stats": {
+      "pac": 92,
+      "sho": 94,
+      "pas": 90,
+      "dri": 98,
+      "def": 50,
+      "phy": 80
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-086",
+    "type": "futcard",
+    "playerName": "Éder Militão",
+    "acceptedAnswers": [
+      "Eder Militao",
+      "Militão",
+      "Militao",
+      "Éder Militão"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 84,
+    "position": "CB",
+    "nationality": "Brazil",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 86,
+      "sho": 50,
+      "pas": 70,
+      "dri": 72,
+      "def": 85,
+      "phy": 82
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-087",
+    "type": "futcard",
+    "playerName": "Jules Koundé",
+    "acceptedAnswers": [
+      "Jules Koundé",
+      "Jules Kounde",
+      "Kounde",
+      "Koundé"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 84,
+    "position": "CB",
+    "nationality": "France",
+    "club": "FC Barcelona",
+    "stats": {
+      "pac": 84,
+      "sho": 45,
+      "pas": 64,
+      "dri": 74,
+      "def": 85,
+      "phy": 78
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-088",
+    "type": "futcard",
+    "playerName": "Marquinhos",
+    "acceptedAnswers": [
+      "Marquinhos"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 88,
+    "position": "CB",
+    "nationality": "Brazil",
+    "club": "Paris Saint-Germain",
+    "stats": {
+      "pac": 79,
+      "sho": 56,
+      "pas": 75,
+      "dri": 74,
+      "def": 89,
+      "phy": 80
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-089",
+    "type": "futcard",
+    "playerName": "Theo Hernández",
+    "acceptedAnswers": [
+      "Hernandez",
+      "Hernández",
+      "Theo Hernandez",
+      "Theo Hernández"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 85,
+    "position": "LB",
+    "nationality": "France",
+    "club": "AC Milan",
+    "stats": {
+      "pac": 93,
+      "sho": 72,
+      "pas": 76,
+      "dri": 81,
+      "def": 78,
+      "phy": 83
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-090",
+    "type": "futcard",
+    "playerName": "Ferland Mendy",
+    "acceptedAnswers": [
+      "Mendy",
+      "Ferland Mendy"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 83,
+    "position": "LB",
+    "nationality": "France",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 92,
+      "sho": 64,
+      "pas": 77,
+      "dri": 78,
+      "def": 78,
+      "phy": 84
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-091",
+    "type": "futcard",
+    "playerName": "N'Golo Kanté",
+    "acceptedAnswers": [
+      "N'Golo Kante",
+      "Kanté",
+      "Kante",
+      "Ngolo Kante",
+      "N'Golo Kanté"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 89,
+    "position": "CDM",
+    "nationality": "France",
+    "club": "Chelsea",
+    "stats": {
+      "pac": 72,
+      "sho": 66,
+      "pas": 74,
+      "dri": 81,
+      "def": 87,
+      "phy": 82
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-092",
+    "type": "futcard",
+    "playerName": "Luka Modric",
+    "acceptedAnswers": [
+      "Luka Modric",
+      "Modric"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 88,
+    "position": "CM",
+    "nationality": "Croatia",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 73,
+      "sho": 76,
+      "pas": 89,
+      "dri": 88,
+      "def": 72,
+      "phy": 66
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-093",
+    "type": "futcard",
+    "playerName": "Franck Kessié",
+    "acceptedAnswers": [
+      "Franck Kessié",
+      "Kessié",
+      "Franck Kessie",
+      "Kessie"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 85,
+    "position": "ST",
+    "nationality": "Ivory Coast",
+    "club": "FC Barcelona",
+    "stats": {
+      "pac": 80,
+      "sho": 80,
+      "pas": 75,
+      "dri": 80,
+      "def": 50,
+      "phy": 70
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-094",
+    "type": "futcard",
+    "playerName": "Aurélien Tchouaméni",
+    "acceptedAnswers": [
+      "Tchouaméni",
+      "Aurélien Tchouaméni",
+      "Aurelien Tchouameni",
+      "Tchouameni"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 82,
+    "position": "CM",
+    "nationality": "France",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 70,
+      "sho": 70,
+      "pas": 79,
+      "dri": 78,
+      "def": 81,
+      "phy": 82
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-095",
+    "type": "futcard",
+    "playerName": "Ruud Gullit",
+    "acceptedAnswers": [
+      "Gullit",
+      "Ruud Gullit"
+    ],
+    "cardType": "toty",
+    "fifaEdition": "FIFA 23",
+    "rating": 94,
+    "position": "CF",
+    "nationality": "Netherlands",
+    "club": "Icons",
+    "stats": {
+      "pac": 87,
+      "sho": 93,
+      "pas": 93,
+      "dri": 90,
+      "def": 84,
+      "phy": 91
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-096",
+    "type": "futcard",
+    "playerName": "Ronaldo",
+    "acceptedAnswers": [
+      "Ronaldo",
+      "Ronaldo Nazario",
+      "Ronaldo Nazário",
+      "R9"
+    ],
+    "cardType": "icon",
+    "fifaEdition": "FIFA 23",
+    "rating": 97,
+    "position": "ST",
+    "nationality": "Brazil",
+    "club": "Icons",
+    "stats": {
+      "pac": 97,
+      "sho": 96,
+      "pas": 82,
+      "dri": 96,
+      "def": 45,
+      "phy": 82
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-097",
+    "type": "futcard",
+    "playerName": "Zinedine Zidane",
+    "acceptedAnswers": [
+      "Zidane",
+      "Zinedine Zidane"
+    ],
+    "cardType": "icon",
+    "fifaEdition": "FIFA 23",
+    "rating": 99,
+    "position": "CAM",
+    "nationality": "France",
+    "club": "Icons",
+    "stats": {
+      "pac": 92,
+      "sho": 96,
+      "pas": 99,
+      "dri": 97,
+      "def": 87,
+      "phy": 90
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-098",
+    "type": "futcard",
+    "playerName": "Thierry Henry",
+    "acceptedAnswers": [
+      "Thierry Henry",
+      "Henry"
+    ],
+    "cardType": "icon",
+    "fifaEdition": "FIFA 23",
+    "rating": 99,
+    "position": "ST",
+    "nationality": "France",
+    "club": "Icons",
+    "stats": {
+      "pac": 99,
+      "sho": 99,
+      "pas": 92,
+      "dri": 99,
+      "def": 62,
+      "phy": 90
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-099",
+    "type": "futcard",
+    "playerName": "Al-Owairan",
+    "acceptedAnswers": [
+      "Al-Owairan"
+    ],
+    "cardType": "hero",
+    "fifaEdition": "FIFA 23",
+    "rating": 97,
+    "position": "RW",
+    "nationality": "Saudi Arabia",
+    "club": "Heroes",
+    "stats": {
+      "pac": 99,
+      "sho": 94,
+      "pas": 93,
+      "dri": 97,
+      "def": 52,
+      "phy": 88
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-100",
+    "type": "futcard",
+    "playerName": "Gareth Bale",
+    "acceptedAnswers": [
+      "Gareth Bale",
+      "Bale"
+    ],
+    "cardType": "sbc",
+    "fifaEdition": "FIFA 23",
+    "rating": 93,
+    "position": "RW",
+    "nationality": "Wales",
+    "club": "Los Angeles FC",
+    "stats": {
+      "pac": 91,
+      "sho": 93,
+      "pas": 92,
+      "dri": 90,
+      "def": 72,
+      "phy": 86
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-101",
+    "type": "futcard",
+    "playerName": "Ángel Di María",
+    "acceptedAnswers": [
+      "Maria",
+      "Angel Di Maria",
+      "Ángel Di María",
+      "María"
+    ],
+    "cardType": "futties",
+    "fifaEdition": "FIFA 23",
+    "rating": 97,
+    "position": "RW",
+    "nationality": "Argentina",
+    "club": "Juventus",
+    "stats": {
+      "pac": 97,
+      "sho": 94,
+      "pas": 95,
+      "dri": 98,
+      "def": 61,
+      "phy": 84
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-102",
+    "type": "futcard",
+    "playerName": "Cristiano Ronaldo",
+    "acceptedAnswers": [
+      "Ronaldo",
+      "Cristiano Ronaldo"
+    ],
+    "cardType": "futties",
+    "fifaEdition": "FIFA 23",
+    "rating": 99,
+    "position": "ST",
+    "nationality": "Portugal",
+    "club": "Al Nassr",
+    "stats": {
+      "pac": 97,
+      "sho": 99,
+      "pas": 93,
+      "dri": 97,
+      "def": 41,
+      "phy": 88
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-103",
+    "type": "futcard",
+    "playerName": "Lionel Messi",
+    "acceptedAnswers": [
+      "Lionel Messi",
+      "Messi"
+    ],
+    "cardType": "futties",
+    "fifaEdition": "FIFA 23",
+    "rating": 99,
+    "position": "ST",
+    "nationality": "Argentina",
+    "club": "Paris Saint-Germain",
+    "stats": {
+      "pac": 95,
+      "sho": 98,
+      "pas": 99,
+      "dri": 99,
+      "def": 41,
+      "phy": 81
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-104",
+    "type": "futcard",
+    "playerName": "Mohamed Salah",
+    "acceptedAnswers": [
+      "Salah",
+      "Mohamed Salah"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 90,
+    "position": "RW",
+    "nationality": "Egypt",
+    "club": "Liverpool",
+    "stats": {
+      "pac": 90,
+      "sho": 89,
+      "pas": 82,
+      "dri": 90,
+      "def": 45,
+      "phy": 75
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-105",
+    "type": "futcard",
+    "playerName": "Sadio Mané",
+    "acceptedAnswers": [
+      "Mané",
+      "Mane",
+      "Sadio Mane",
+      "Sadio Mané"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FIFA 23",
+    "rating": 89,
+    "position": "LM",
+    "nationality": "Senegal",
+    "club": "Bayern Munich",
+    "stats": {
+      "pac": 90,
+      "sho": 83,
+      "pas": 80,
+      "dri": 88,
+      "def": 44,
+      "phy": 77
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-106",
+    "type": "futcard",
+    "playerName": "Kylian Mbappé",
+    "acceptedAnswers": [
+      "Mbappé",
+      "Kylian Mbappe",
+      "Kylian Mbappé",
+      "Mbappe"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 91,
+    "position": "ST",
+    "nationality": "France",
+    "club": "Paris Saint-Germain",
+    "stats": {
+      "pac": 97,
+      "sho": 90,
+      "pas": 80,
+      "dri": 92,
+      "def": 36,
+      "phy": 78
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-107",
+    "type": "futcard",
+    "playerName": "Erling Haaland",
+    "acceptedAnswers": [
+      "Haaland",
+      "Erling Haaland"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 87,
+    "position": "ST",
+    "nationality": "Norway",
+    "club": "Manchester City",
+    "stats": {
+      "pac": 94,
+      "sho": 84,
+      "pas": 65,
+      "dri": 84,
+      "def": 41,
+      "phy": 81
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-108",
+    "type": "futcard",
+    "playerName": "Vinícius Jr.",
+    "acceptedAnswers": [
+      "Vinícius Jr.",
+      "Vinicius Jr.",
+      "Jr."
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 85,
+    "position": "ST",
+    "nationality": "Brazil",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 80,
+      "sho": 80,
+      "pas": 75,
+      "dri": 80,
+      "def": 50,
+      "phy": 70
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-109",
+    "type": "futcard",
+    "playerName": "Mohamed Salah",
+    "acceptedAnswers": [
+      "Salah",
+      "Mohamed Salah"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 89,
+    "position": "RW",
+    "nationality": "Egypt",
+    "club": "Liverpool",
+    "stats": {
+      "pac": 89,
+      "sho": 87,
+      "pas": 81,
+      "dri": 88,
+      "def": 45,
+      "phy": 76
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-110",
+    "type": "futcard",
+    "playerName": "Heung Min Son",
+    "acceptedAnswers": [
+      "Heung Min Son",
+      "Son Heung Min",
+      "Son",
+      "Son Heung-min"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 87,
+    "position": "LW",
+    "nationality": "South Korea",
+    "club": "Tottenham Hotspur",
+    "stats": {
+      "pac": 87,
+      "sho": 88,
+      "pas": 80,
+      "dri": 84,
+      "def": 42,
+      "phy": 70
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-111",
+    "type": "futcard",
+    "playerName": "Ousmane Dembélé",
+    "acceptedAnswers": [
+      "Dembele",
+      "Dembélé",
+      "Ousmane Dembélé",
+      "Ousmane Dembele"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 86,
+    "position": "RW",
+    "nationality": "France",
+    "club": "Paris Saint-Germain",
+    "stats": {
+      "pac": 93,
+      "sho": 77,
+      "pas": 81,
+      "dri": 87,
+      "def": 36,
+      "phy": 57
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-112",
+    "type": "futcard",
+    "playerName": "Moussa Diaby",
+    "acceptedAnswers": [
+      "Moussa Diaby",
+      "Diaby"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 84,
+    "position": "RM",
+    "nationality": "France",
+    "club": "Aston Villa",
+    "stats": {
+      "pac": 95,
+      "sho": 73,
+      "pas": 75,
+      "dri": 86,
+      "def": 42,
+      "phy": 59
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-113",
+    "type": "futcard",
+    "playerName": "Marcus Rashford",
+    "acceptedAnswers": [
+      "Rashford",
+      "Marcus Rashford"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 85,
+    "position": "LW",
+    "nationality": "England",
+    "club": "Manchester United",
+    "stats": {
+      "pac": 90,
+      "sho": 86,
+      "pas": 78,
+      "dri": 84,
+      "def": 42,
+      "phy": 74
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-114",
+    "type": "futcard",
+    "playerName": "Lautaro Martínez",
+    "acceptedAnswers": [
+      "Lautaro Martinez",
+      "Martinez",
+      "Martínez",
+      "Lautaro Martínez"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 87,
+    "position": "ST",
+    "nationality": "Argentina",
+    "club": "Inter Milan",
+    "stats": {
+      "pac": 80,
+      "sho": 86,
+      "pas": 71,
+      "dri": 85,
+      "def": 48,
+      "phy": 85
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-115",
+    "type": "futcard",
+    "playerName": "Jude Bellingham",
+    "acceptedAnswers": [
+      "Jude Bellingham",
+      "Bellingham"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 86,
+    "position": "CM",
+    "nationality": "England",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 76,
+      "sho": 75,
+      "pas": 79,
+      "dri": 85,
+      "def": 78,
+      "phy": 82
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-116",
+    "type": "futcard",
+    "playerName": "Kevin De Bruyne",
+    "acceptedAnswers": [
+      "Kevin De Bruyne",
+      "Bruyne"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 87,
+    "position": "CM",
+    "nationality": "Belgium",
+    "club": "Manchester City",
+    "stats": {
+      "pac": 80,
+      "sho": 84,
+      "pas": 91,
+      "dri": 83,
+      "def": 70,
+      "phy": 74
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-117",
+    "type": "futcard",
+    "playerName": "Luka Modric",
+    "acceptedAnswers": [
+      "Luka Modric",
+      "Modric"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 87,
+    "position": "CM",
+    "nationality": "Croatia",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 72,
+      "sho": 76,
+      "pas": 89,
+      "dri": 87,
+      "def": 72,
+      "phy": 66
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-118",
+    "type": "futcard",
+    "playerName": "N'Golo Kanté",
+    "acceptedAnswers": [
+      "N'Golo Kante",
+      "Kanté",
+      "Kante",
+      "Ngolo Kante",
+      "N'Golo Kanté"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 86,
+    "position": "CDM",
+    "nationality": "France",
+    "club": "Al Ittihad",
+    "stats": {
+      "pac": 69,
+      "sho": 65,
+      "pas": 73,
+      "dri": 80,
+      "def": 85,
+      "phy": 77
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-119",
+    "type": "futcard",
+    "playerName": "Federico Valverde",
+    "acceptedAnswers": [
+      "Federico Valverde",
+      "Valverde"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 88,
+    "position": "CM",
+    "nationality": "Uruguay",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 88,
+      "sho": 82,
+      "pas": 84,
+      "dri": 84,
+      "def": 80,
+      "phy": 82
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-120",
+    "type": "futcard",
+    "playerName": "Aurélien Tchouaméni",
+    "acceptedAnswers": [
+      "Tchouaméni",
+      "Aurélien Tchouaméni",
+      "Aurelien Tchouameni",
+      "Tchouameni"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 84,
+    "position": "CDM",
+    "nationality": "France",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 73,
+      "sho": 69,
+      "pas": 79,
+      "dri": 78,
+      "def": 81,
+      "phy": 81
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-121",
+    "type": "futcard",
+    "playerName": "Virgil van Dijk",
+    "acceptedAnswers": [
+      "Virgil van Dijk",
+      "Dijk"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 89,
+    "position": "CB",
+    "nationality": "Netherlands",
+    "club": "Liverpool",
+    "stats": {
+      "pac": 78,
+      "sho": 60,
+      "pas": 71,
+      "dri": 72,
+      "def": 89,
+      "phy": 86
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-122",
+    "type": "futcard",
+    "playerName": "Rúben Dias",
+    "acceptedAnswers": [
+      "Dias",
+      "Rúben Dias",
+      "Ruben Dias"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 89,
+    "position": "CB",
+    "nationality": "Portugal",
+    "club": "Manchester City",
+    "stats": {
+      "pac": 62,
+      "sho": 39,
+      "pas": 66,
+      "dri": 69,
+      "def": 89,
+      "phy": 87
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-123",
+    "type": "futcard",
+    "playerName": "Antonio Rüdiger",
+    "acceptedAnswers": [
+      "Antonio Rudiger",
+      "Rüdiger",
+      "Antonio Rüdiger",
+      "Rudiger"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 85,
+    "position": "CB",
+    "nationality": "Germany",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 82,
+      "sho": 54,
+      "pas": 71,
+      "dri": 66,
+      "def": 84,
+      "phy": 86
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-124",
+    "type": "futcard",
+    "playerName": "Theo Hernández",
+    "acceptedAnswers": [
+      "Hernandez",
+      "Hernández",
+      "Theo Hernandez",
+      "Theo Hernández"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 85,
+    "position": "LB",
+    "nationality": "France",
+    "club": "AC Milan",
+    "stats": {
+      "pac": 93,
+      "sho": 71,
+      "pas": 76,
+      "dri": 81,
+      "def": 78,
+      "phy": 84
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-125",
+    "type": "futcard",
+    "playerName": "Ferland Mendy",
+    "acceptedAnswers": [
+      "Mendy",
+      "Ferland Mendy"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 82,
+    "position": "LB",
+    "nationality": "France",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 92,
+      "sho": 64,
+      "pas": 76,
+      "dri": 77,
+      "def": 77,
+      "phy": 86
+    },
+    "difficulty": "hard",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-126",
+    "type": "futcard",
+    "playerName": "Thibaut Courtois",
+    "acceptedAnswers": [
+      "Thibaut Courtois",
+      "Courtois"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 90,
+    "position": "GK",
+    "nationality": "Belgium",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 85,
+      "sho": 89,
+      "pas": 76,
+      "dri": 93,
+      "def": 46,
+      "phy": 90
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-127",
+    "type": "futcard",
+    "playerName": "Gianluigi Donnarumma",
+    "acceptedAnswers": [
+      "Gianluigi Donnarumma",
+      "Donnarumma"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 87,
+    "position": "GK",
+    "nationality": "Italy",
+    "club": "Paris Saint-Germain",
+    "stats": {
+      "pac": 90,
+      "sho": 82,
+      "pas": 79,
+      "dri": 89,
+      "def": 52,
+      "phy": 83
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-128",
+    "type": "futcard",
+    "playerName": "Zinedine Zidane",
+    "acceptedAnswers": [
+      "Zidane",
+      "Zinedine Zidane"
+    ],
+    "cardType": "icon",
+    "fifaEdition": "FC 24",
+    "rating": 95,
+    "position": "CAM",
+    "nationality": "France",
+    "club": "Icons",
+    "stats": {
+      "pac": 84,
+      "sho": 91,
+      "pas": 95,
+      "dri": 95,
+      "def": 76,
+      "phy": 85
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-129",
+    "type": "futcard",
+    "playerName": "Ronaldo",
+    "acceptedAnswers": [
+      "Ronaldo",
+      "Ronaldo Nazario",
+      "Ronaldo Nazário",
+      "R9"
+    ],
+    "cardType": "toty",
+    "fifaEdition": "FC 24",
+    "rating": 95,
+    "position": "ST",
+    "nationality": "Brazil",
+    "club": "Icons",
+    "stats": {
+      "pac": 95,
+      "sho": 95,
+      "pas": 81,
+      "dri": 95,
+      "def": 44,
+      "phy": 77
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-130",
+    "type": "futcard",
+    "playerName": "Ronaldinho",
+    "acceptedAnswers": [
+      "Ronaldinho"
+    ],
+    "cardType": "icon",
+    "fifaEdition": "FC 24",
+    "rating": 94,
+    "position": "LW",
+    "nationality": "Brazil",
+    "club": "Icons",
+    "stats": {
+      "pac": 92,
+      "sho": 90,
+      "pas": 92,
+      "dri": 96,
+      "def": 39,
+      "phy": 82
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-131",
+    "type": "futcard",
+    "playerName": "Thierry Henry",
+    "acceptedAnswers": [
+      "Thierry Henry",
+      "Henry"
+    ],
+    "cardType": "icon",
+    "fifaEdition": "FC 24",
+    "rating": 93,
+    "position": "ST",
+    "nationality": "France",
+    "club": "Icons",
+    "stats": {
+      "pac": 95,
+      "sho": 92,
+      "pas": 85,
+      "dri": 91,
+      "def": 54,
+      "phy": 82
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-132",
+    "type": "futcard",
+    "playerName": "George Best",
+    "acceptedAnswers": [
+      "George Best",
+      "Best"
+    ],
+    "cardType": "toty",
+    "fifaEdition": "FC 24",
+    "rating": 93,
+    "position": "RW",
+    "nationality": "Northern Ireland",
+    "club": "Icons",
+    "stats": {
+      "pac": 93,
+      "sho": 91,
+      "pas": 86,
+      "dri": 94,
+      "def": 61,
+      "phy": 73
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-133",
+    "type": "futcard",
+    "playerName": "Rodrygo",
+    "acceptedAnswers": [
+      "Rodrygo"
+    ],
+    "cardType": "gold_rare",
+    "fifaEdition": "FC 24",
+    "rating": 88,
+    "position": "ST",
+    "nationality": "Brazil",
+    "club": "Real Madrid",
+    "stats": {
+      "pac": 91,
+      "sho": 86,
+      "pas": 84,
+      "dri": 91,
+      "def": 34,
+      "phy": 67
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-134",
+    "type": "futcard",
+    "playerName": "Thiago Silva",
+    "acceptedAnswers": [
+      "Thiago Silva",
+      "Silva"
+    ],
+    "cardType": "sbc",
+    "fifaEdition": "FC 24",
+    "rating": 87,
+    "position": "CB",
+    "nationality": "Brazil",
+    "club": "Chelsea",
+    "stats": {
+      "pac": 80,
+      "sho": 57,
+      "pas": 77,
+      "dri": 75,
+      "def": 90,
+      "phy": 82
+    },
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "points": 100
+  },
+  {
+    "id": "fut-135",
+    "type": "futcard",
+    "playerName": "Cristiano Ronaldo",
+    "acceptedAnswers": [
+      "Ronaldo",
+      "Cristiano Ronaldo"
+    ],
+    "cardType": "toty",
+    "fifaEdition": "FC 24",
+    "rating": 95,
+    "position": "ST",
+    "nationality": "Portugal",
+    "club": "Al Nassr",
+    "stats": {
+      "pac": 92,
+      "sho": 97,
+      "pas": 85,
+      "dri": 93,
+      "def": 45,
+      "phy": 83
+    },
+    "difficulty": "easy",
+    "timeLimit": 20,
+    "points": 100
+  }
+]

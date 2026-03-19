@@ -30,6 +30,7 @@ import type {
   LineupMatch,
   LineupGuessResult,
   JerseyNumberQuestion,
+  FutCardQuestion,
   Answer,
   RoundResult,
   ClientToServerEvents,
@@ -351,6 +352,17 @@ export class GameEngine {
     }
   }
 
+  private static loadFutCardQuestions(): Question[] {
+    const filePath = path.resolve(__dirname, "../data/questions/futcard.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw) as FutCardQuestion[];
+    } catch {
+      console.warn("No futcard questions found at", filePath);
+      return [];
+    }
+  }
+
   /**
    * Normalize text for accent-insensitive comparison
    */
@@ -544,6 +556,10 @@ export class GameEngine {
       }
       case "jerseynumber":
         pool = GameEngine.loadJerseyNumberQuestions();
+        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
+        break;
+      case "futcard":
+        pool = GameEngine.loadFutCardQuestions();
         if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
         break;
       default:
@@ -1057,9 +1073,13 @@ export class GameEngine {
         continue;
       }
 
-      // Proportional scoring: score = points * max(0, 1 - |guess - real| / real)
+      // Adaptive tolerance: lenient for cheap items, strict for expensive ones.
+      // MAX_DEVIATION = 0.5 × (80 / price)^0.35, clamped between 0.20 and 0.65.
+      // Examples: 15€ → 65% tolerance, 200€ → 35%, 500€ → 26%, 1500€ → 20%.
+      const rawTolerance = 0.5 * Math.pow(80 / Math.max(realPrice, 1), 0.35);
+      const MAX_DEVIATION = Math.min(0.65, Math.max(0.20, rawTolerance));
       const deviation = Math.abs(guess - realPrice) / realPrice;
-      const proximityScore = Math.max(0, 1 - deviation);
+      const proximityScore = deviation >= MAX_DEVIATION ? 0 : 1 - deviation / MAX_DEVIATION;
       const points = Math.round(q.points * proximityScore);
 
       // Consider "correct" if within 15% of real price
@@ -1190,6 +1210,8 @@ export class GameEngine {
         const q = this.currentQuestion as JerseyNumberQuestion;
         return `N°${q.correctNumber}`;
       }
+      case "futcard":
+        return (this.currentQuestion as FutCardQuestion).playerName;
       default:
         return "";
     }
@@ -1271,6 +1293,13 @@ export class GameEngine {
         const q = this.currentQuestion as JerseyNumberQuestion;
         const guess = parseInt(answer.trim(), 10);
         return !isNaN(guess) && guess === q.correctNumber;
+      }
+      case "futcard": {
+        const q = this.currentQuestion as FutCardQuestion;
+        const normalizedInput = GameEngine.normalizeForComparison(answer);
+        return q.acceptedAnswers.some(
+          (accepted) => GameEngine.normalizeForComparison(accepted) === normalizedInput
+        );
       }
       default:
         return false;

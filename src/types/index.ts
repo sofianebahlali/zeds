@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -404,6 +404,51 @@ export interface JerseyNumberQuestion extends BaseQuestion {
   difficulty: "easy" | "medium" | "hard";
 }
 
+export type FutCardType =
+  | "gold_rare"
+  | "icon"
+  | "toty"
+  | "tots"
+  | "totw"
+  | "headliners"
+  | "future_stars"
+  | "sbc"
+  | "flashback"
+  | "eoae"
+  | "potm"
+  | "fut_birthday"
+  | "futties"
+  | "rulebreakers"
+  | "record_breaker"
+  | "hero"
+  | "winter_wildcards"
+  | "showdown"
+  | "objetivos"
+  | "otw";
+
+export interface FutCardStats {
+  pac: number;
+  sho: number;
+  pas: number;
+  dri: number;
+  def: number;
+  phy: number;
+}
+
+export interface FutCardQuestion extends BaseQuestion {
+  type: "futcard";
+  playerName: string;
+  acceptedAnswers: string[];
+  cardType: FutCardType;
+  fifaEdition: string;
+  rating: number;
+  position: string;
+  nationality: string;
+  club: string;
+  stats: FutCardStats;
+  difficulty: "easy" | "medium" | "hard";
+}
+
 export interface LineupPlayer {
   pos: string;
   name: string;
@@ -442,7 +487,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -831,5 +876,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Quel est le numéro de maillot de ce joueur ?",
     icon: "👕",
     color: "from-teal-500 to-teal-700",
+  },
+  {
+    id: "futcard",
+    name: "Devine la Carte FUT",
+    description: "Devine le joueur à partir de sa carte FUT",
+    icon: "🃏",
+    color: "from-yellow-500 to-amber-700",
   },
 ];
