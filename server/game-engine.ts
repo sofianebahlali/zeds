@@ -2813,7 +2813,13 @@ export class GameEngine {
     if (this.drawingPhase === "suggesting") {
       this.startDrawingPhase();
     } else if (this.drawingPhase === "drawing") {
-      this.startGuessingPhase();
+      // Grace period: let clients auto-submit their drawings before transitioning.
+      // Clients auto-submit at timeRemaining<=1, so 1.5s is enough for the round-trip.
+      setTimeout(() => {
+        if (this.drawingPhase === "drawing") {
+          this.startGuessingPhase();
+        }
+      }, 1500);
     } else if (this.drawingPhase === "guessing") {
       this.startRevealPhase();
     }

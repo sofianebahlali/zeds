@@ -17,9 +17,10 @@ export function DrawingPhaseScreen() {
   const canvasRef = useRef<DrawingCanvasHandle>(null);
   const autoSubmittedRef = useRef(false);
 
-  // Auto-submit drawing when timer expires
+  // Auto-submit drawing shortly before timer expires to avoid race condition
+  // with server phase transition (server moves to guessing at timeRemaining=0)
   useEffect(() => {
-    if (timeRemaining <= 0 && !hasAnswered && !autoSubmittedRef.current) {
+    if (timeRemaining <= 1 && !hasAnswered && !autoSubmittedRef.current) {
       autoSubmittedRef.current = true;
       const base64 = canvasRef.current?.exportAsBase64();
       if (base64) {
