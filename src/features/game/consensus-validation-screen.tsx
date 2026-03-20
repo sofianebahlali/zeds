@@ -8,6 +8,12 @@ import { useGameStore, usePlayerStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
 
+interface AnswerFrequency {
+  answer: string;
+  count: number;
+  playerNames: string[];
+}
+
 export function ConsensusValidationScreen() {
   const validationData = useGameStore((s) => s.consensusValidationData);
   const answerResults = useGameStore((s) => s.consensusAnswerResults);
@@ -21,6 +27,28 @@ export function ConsensusValidationScreen() {
       (pa) => (pa.answer || "").trim().length > 0
     );
   }, [validationData]);
+
+  // Calculate answer frequency distribution
+  const answerFrequency = useMemo(() => {
+    if (!validationData) return [];
+
+    const frequencyMap = new Map<string, { names: string[]; originalAnswer: string }>();
+    for (const pa of reviewQueue) {
+      const answer = pa.answer.trim();
+      if (!frequencyMap.has(answer)) {
+        frequencyMap.set(answer, { names: [], originalAnswer: answer });
+      }
+      frequencyMap.get(answer)!.names.push(pa.playerName);
+    }
+
+    return Array.from(frequencyMap.entries())
+      .map(([answer, { names, originalAnswer }]) => ({
+        answer: originalAnswer,
+        count: names.length,
+        playerNames: names,
+      }))
+      .sort((a, b) => b.count - a.count); // Sort by frequency (desc)
+  }, [validationData, reviewQueue]);
 
   const currentIndex = answerResults.length;
   const currentPlayer = currentIndex < reviewQueue.length ? reviewQueue[currentIndex] : null;
@@ -74,6 +102,57 @@ export function ConsensusValidationScreen() {
             />
           ))}
         </div>
+
+        {/* Answer frequency summary */}
+        {answerFrequency.length > 0 && !allReviewed && (
+          <div className="mb-4 p-3 rounded-xl bg-surface-800/50 border border-surface-700">
+            <p className="text-xs font-medium text-surface-400 mb-2">Réponses reçues</p>
+            <div className="space-y-1.5">
+              {answerFrequency.map((freq) => {
+                const isCurrentAnswer = currentPlayer?.answer === freq.answer;
+                return (
+                  <motion.div
+                    key={freq.answer}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className={cn(
+                      "flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors",
+                      isCurrentAnswer
+                        ? "bg-brand-500/20 border border-brand-500/40"
+                        : freq.count >= (answerFrequency[0]?.count || 1)
+                        ? "bg-success-500/10 border border-success-500/20"
+                        : "bg-surface-700/50 border border-surface-600"
+                    )}
+                  >
+                    <div className="flex-1 min-w-0">
+                      <p className={cn(
+                        "text-sm truncate",
+                        isCurrentAnswer ? "text-brand-300 font-medium" : "text-surface-300"
+                      )}>
+                        {freq.answer}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 ml-2">
+                      {freq.count >= (answerFrequency[0]?.count || 1) && !isCurrentAnswer && (
+                        <span className="text-xs px-2 py-0.5 rounded bg-success-500/20 text-success-300 font-medium">
+                          Populaire
+                        </span>
+                      )}
+                      <span className={cn(
+                        "text-xs font-bold px-2 py-0.5 rounded",
+                        isCurrentAnswer
+                          ? "bg-brand-500/30 text-brand-200"
+                          : "bg-surface-700 text-surface-400"
+                      )}>
+                        {freq.count}
+                      </span>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Current answer being reviewed */}
         <div className="flex-1 flex flex-col">

@@ -1261,12 +1261,16 @@ export class GameEngine {
     let winner: Player | undefined;
     let closestDeviation = Infinity;
 
-    // First pass: find the closest player (winner)
+    // First pass: find the closest player who stayed under/equal target (winner)
     let winnerId: string | undefined;
     for (const [playerId, answer] of this.answers) {
       const measured = parseInt(answer.answer, 10);
       if (isNaN(measured)) continue;
 
+      // If exceeded target, skip this player (automatic 0 points)
+      if (measured > target) continue;
+
+      // Among valid answers, find the closest to target
       const deviation = Math.abs(measured - target);
       if (deviation < closestDeviation) {
         closestDeviation = deviation;
@@ -1278,18 +1282,27 @@ export class GameEngine {
       winner = this.room.players.find((p) => p.id === winnerId);
     }
 
-    // Second pass: winner takes all — only the closest player scores
+    // Second pass: only players under/equal to target can win; exceeding target = 0 points
     for (const [playerId, answer] of this.answers) {
       const measured = parseInt(answer.answer, 10);
-      const isWinner = playerId === winnerId;
-      const points = isWinner ? q.points : 0;
 
-      answer.isCorrect = isWinner;
-      answer.points = points;
+      let isWinner = false;
+      let points = 0;
 
       if (isNaN(measured)) {
+        // Invalid answer
         answer.isCorrect = false;
         answer.points = 0;
+      } else if (measured > target) {
+        // Exceeded target: automatic 0 points
+        answer.isCorrect = false;
+        answer.points = 0;
+      } else {
+        // Valid answer (under/equal target): check if winner
+        isWinner = playerId === winnerId;
+        points = isWinner ? q.points : 0;
+        answer.isCorrect = isWinner;
+        answer.points = points;
       }
 
       const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);
@@ -3396,13 +3409,16 @@ export class GameEngine {
     const shuffled = [...activePlayers].sort(() => Math.random() - 0.5);
     const isOdd = shuffled.length % 2 !== 0;
 
+    // Map to store personalized data for each player
+    const playerDataMap = new Map<string, SplitStealStartData>();
+
     if (isOdd) {
       // Cycle mode: A→B→C→...→A
       this.splitStealPairingType = "cycle";
       this.splitStealCycle = shuffled.map((p) => p.id);
       this.splitStealPairs = [];
 
-      // Send each player their target and who's targeting them
+      // Create data for each player in cycle
       for (let i = 0; i < shuffled.length; i++) {
         const player = shuffled[i];
         const target = shuffled[(i + 1) % shuffled.length];
@@ -3419,10 +3435,7 @@ export class GameEngine {
           timeLimit: 20,
         };
 
-        const socketId = this.roomManager.getSocketIdFromPlayerId(player.id);
-        if (socketId) {
-          this.io.to(socketId).emit("splitsteal:phase_start", data);
-        }
+        playerDataMap.set(player.id, data);
       }
     } else {
       // Pair mode: (A,B), (C,D), ...
@@ -3434,7 +3447,7 @@ export class GameEngine {
         this.splitStealPairs.push([shuffled[i].id, shuffled[i + 1].id]);
       }
 
-      // Send each player their partner
+      // Create data for each player in pairs
       for (const [aId, bId] of this.splitStealPairs) {
         const playerA = shuffled.find((p) => p.id === aId)!;
         const playerB = shuffled.find((p) => p.id === bId)!;
@@ -3454,10 +3467,22 @@ export class GameEngine {
           timeLimit: 20,
         };
 
-        const socketA = this.roomManager.getSocketIdFromPlayerId(aId);
-        const socketB = this.roomManager.getSocketIdFromPlayerId(bId);
-        if (socketA) this.io.to(socketA).emit("splitsteal:phase_start", dataA);
-        if (socketB) this.io.to(socketB).emit("splitsteal:phase_start", dataB);
+        playerDataMap.set(aId, dataA);
+        playerDataMap.set(bId, dataB);
+      }
+    }
+
+    // Send each player their personalized data
+    // Use direct socket targeting, but guarantee delivery via room broadcast as fallback
+    for (const [playerId, data] of playerDataMap) {
+      const socketId = this.roomManager.getSocketIdFromPlayerId(playerId);
+      if (socketId) {
+        // Send directly to player's socket
+        this.io.to(socketId).emit("splitsteal:phase_start", data);
+      } else {
+        // Fallback: broadcast to room (less efficient but guarantees host and AFK players get data)
+        console.warn(`Socket ID not found for player ${playerId}, broadcasting to room`);
+        this.io.to(this.room.code).emit("splitsteal:phase_start", data);
       }
     }
 
