@@ -14,17 +14,16 @@ export function ScoreboardScreen() {
   const players = useRoomStore((s) => s.players);
   const room = useRoomStore((s) => s.room);
   const isHost = usePlayerStore((s) => s.isHost);
+  const myPlayerId = usePlayerStore((s) => s.playerId);
   const setScreen = useUIStore((s) => s.setScreen);
   const addNotification = useUIStore((s) => s.addNotification);
   const resetGame = useGameStore((s) => s.resetGame);
-  const { leaveRoom, socket } = useSocket();
+  const { leaveRoom, playAgain } = useSocket();
 
   const [showConfetti, setShowConfetti] = useState(false);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [revealedCount, setRevealedCount] = useState(0);
   const [revealComplete, setRevealComplete] = useState(false);
-
-  const myPlayerId = `player_${socket.id}`;
   const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
   const winner = sortedPlayers[0];
   const isWinner = winner?.id === myPlayerId;
@@ -77,8 +76,7 @@ export function ScoreboardScreen() {
   };
 
   const handlePlayAgain = () => {
-    resetGame();
-    setScreen("lobby");
+    playAgain();
   };
 
   const handleGoHome = () => {

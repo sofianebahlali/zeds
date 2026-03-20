@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Check, X, Trophy } from "lucide-react";
 import { Button, Input, TimerProgress } from "@/components/ui";
-import { useGameStore, useRoomStore } from "@/stores";
+import { useGameStore, useRoomStore, usePlayerStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
 import type { LineupQuestion, LineupPlayer } from "@/types";
@@ -202,8 +202,7 @@ export function LineupGameScreen() {
   const lineupLastGuessCorrect = useGameStore((s) => s.lineupLastGuessCorrect);
   const players = useRoomStore((s) => s.players);
   const { submitLineupGuess } = useSocket();
-  const { socket } = useSocket();
-  const myPlayerId = `player_${socket.id}`;
+  const myPlayerId = usePlayerStore((s) => s.playerId);
 
   const [guess, setGuess] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);

@@ -121,7 +121,7 @@ function setupSocketListeners() {
   socket.on("room:host_changed", (newHostId: string) => {
     const currentPlayerId = usePlayerStore.getState().playerId;
     useRoomStore.getState().setHost(newHostId);
-    if (`player_${socket.id}` === newHostId || currentPlayerId === newHostId) {
+    if (currentPlayerId === newHostId) {
       usePlayerStore.getState().setIsHost(true);
       useUIStore.getState().addNotification({
         type: "info",
@@ -302,7 +302,7 @@ function setupSocketListeners() {
   // Lineup events
   socket.on("lineup:guess_result", (result: LineupGuessResult) => {
     const store = useGameStore.getState();
-    const myPlayerId = `player_${socket.id}`;
+    const myPlayerId = usePlayerStore.getState().playerId;
     if (result.correct) {
       // Find the guesser's name for notifications
       const room = useRoomStore.getState().room;
@@ -377,6 +377,18 @@ function setupSocketListeners() {
       });
     }
   });
+
+  // Play again event
+  socket.on("room:play_again", (room: Room) => {
+    useRoomStore.getState().setRoom(room);
+    useGameStore.getState().resetGame();
+    usePlayerStore.getState().setIsReady(false);
+    useUIStore.getState().setScreen("lobby");
+    useUIStore.getState().addNotification({
+      type: "info",
+      message: "Nouvelle partie !",
+    });
+  });
 }
 
 export function useSocket() {
@@ -398,12 +410,13 @@ export function useSocket() {
 
   const createRoom = useCallback((playerName: string, avatar: string) => {
     useUIStore.getState().setLoading(true, "Création de la room...");
+    const playerId = usePlayerStore.getState().playerId;
 
     if (socket.connected) {
-      socket.emit("room:create", playerName, avatar);
+      socket.emit("room:create", playerName, avatar, playerId);
     } else {
       socket.once("connect", () => {
-        socket.emit("room:create", playerName, avatar);
+        socket.emit("room:create", playerName, avatar, playerId);
       });
       connectSocket();
     }
@@ -411,12 +424,13 @@ export function useSocket() {
 
   const joinRoom = useCallback((roomCode: string, playerName: string, avatar: string) => {
     useUIStore.getState().setLoading(true, "Connexion à la room...");
+    const playerId = usePlayerStore.getState().playerId;
 
     if (socket.connected) {
-      socket.emit("room:join", roomCode, playerName, avatar);
+      socket.emit("room:join", roomCode, playerName, avatar, playerId);
     } else {
       socket.once("connect", () => {
-        socket.emit("room:join", roomCode, playerName, avatar);
+        socket.emit("room:join", roomCode, playerName, avatar, playerId);
       });
       connectSocket();
     }
@@ -557,6 +571,10 @@ export function useSocket() {
     socket.emit("reaction:laugh", targetPlayerId, roundNumber);
   }, [socket]);
 
+  const playAgain = useCallback(() => {
+    socket.emit("room:play_again");
+  }, [socket]);
+
   return {
     socket,
     connect,
@@ -592,5 +610,6 @@ export function useSocket() {
     submitSplitStealChoice,
     sendChatMessage,
     sendLaughReaction,
+    playAgain,
   };
 }

@@ -3,8 +3,7 @@
 import { motion } from "framer-motion";
 import { Trophy, Medal, Award } from "lucide-react";
 import { Card, Avatar, Progress } from "@/components/ui";
-import { useRoomStore, useGameStore } from "@/stores";
-import { useSocket } from "@/hooks";
+import { useRoomStore, useGameStore, usePlayerStore } from "@/stores";
 import { cn } from "@/lib/utils";
 
 export function LeaderboardDisplay() {
@@ -14,10 +13,8 @@ export function LeaderboardDisplay() {
   const totalRounds = useGameStore((s) => s.totalRounds);
   const teamRoundResult = useGameStore((s) => s.teamRoundResult);
   const teamData = useGameStore((s) => s.teamData);
-  const { socket } = useSocket();
+  const myPlayerId = usePlayerStore((s) => s.playerId);
   const hideScores = room?.settings.hideScoresBetweenRounds ?? false;
-
-  const myPlayerId = `player_${socket.id}`;
   const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
   const maxScore = sortedPlayers[0]?.score || 1;
 

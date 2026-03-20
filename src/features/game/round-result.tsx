@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, XCircle, Trophy, Zap } from "lucide-react";
 import { Card, Avatar, Badge } from "@/components/ui";
-import { useGameStore, useRoomStore } from "@/stores";
+import { useGameStore, useRoomStore, usePlayerStore } from "@/stores";
 import { useChatStore } from "@/stores/chat-store";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
@@ -68,11 +68,9 @@ export function RoundResult() {
   const players = useRoomStore((s) => s.players);
   const petitBacValidationData = useGameStore((s) => s.petitBacValidationData);
   const petitBacValidatedAnswers = useGameStore((s) => s.petitBacValidatedAnswers);
-  const { socket } = useSocket();
+  const myPlayerId = usePlayerStore((s) => s.playerId);
 
   if (!roundResult) return null;
-
-  const myPlayerId = `player_${socket.id}`;
   const myResult = roundResult.scores.find((s) => s.playerId === myPlayerId);
   const isCorrect = myResult && myResult.points > 0;
   const isEstimation = roundResult.question.type === "estimation";

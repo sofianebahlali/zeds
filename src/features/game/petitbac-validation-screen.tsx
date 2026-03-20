@@ -22,8 +22,8 @@ const CATEGORY_ICONS: Record<string, string> = {
 export function PetitBacValidationScreen() {
   const validationData = useGameStore((s) => s.petitBacValidationData);
   const isHost = usePlayerStore((s) => s.isHost);
-  const { submitPetitBacValidation, socket } = useSocket();
-  const myPlayerId = `player_${socket.id}`;
+  const { submitPetitBacValidation } = useSocket();
+  const myPlayerId = usePlayerStore((s) => s.playerId);
 
   // Track validated answers: category -> Set of playerIds
   const [validatedMap, setValidatedMap] = useState<Record<string, Set<string>>>(() => {

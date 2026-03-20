@@ -26,10 +26,10 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     // ROOM EVENTS
     // ==========================================
 
-    socket.on("room:create", (playerName: string, avatar: string) => {
+    socket.on("room:create", (playerName: string, avatar: string, playerId: string) => {
       try {
         const player: Player = {
-          id: `player_${socket.id}`,
+          id: playerId,
           name: playerName.trim(),
           avatar,
           isHost: true,
@@ -53,7 +53,7 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
       }
     });
 
-    socket.on("room:join", (roomCode: string, playerName: string, avatar: string) => {
+    socket.on("room:join", (roomCode: string, playerName: string, avatar: string, playerId: string) => {
       try {
         const code = roomCode.toUpperCase().trim();
         const existingRoom = roomManager.getRoom(code);
@@ -64,7 +64,7 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
         }
 
         const player: Player = {
-          id: `player_${socket.id}`,
+          id: playerId,
           name: playerName.trim(),
           avatar,
           isHost: false,
@@ -148,6 +148,33 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
       if (kicked) {
         io.to(room.code).emit("room:player_left", targetPlayerId);
       }
+    });
+
+    socket.on("room:play_again", () => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      // Clean up old game engine
+      const oldEngine = gameEngines.get(room.code);
+      if (oldEngine) {
+        oldEngine.destroy();
+        gameEngines.delete(room.code);
+      }
+
+      // Reset room state
+      roomManager.updateRoomStatus(room.code, "waiting");
+      roomManager.resetAllScores(room.code);
+
+      // Reset all player ready states
+      room.players.forEach((p) => {
+        p.isReady = false;
+      });
+
+      // Notify all players with updated room
+      io.to(room.code).emit("room:play_again", room);
     });
 
     // ==========================================
@@ -529,6 +556,13 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
 
       const { room, player } = result;
       socket.join(room.code);
+
+      // Notify game engine so it removes the player from disconnectedPlayers set
+      const gameEngine = gameEngines.get(room.code);
+      if (gameEngine) {
+        gameEngine.handlePlayerReconnect(player.id);
+      }
+
       socket.emit("connection:reconnected", room, player);
       socket.to(room.code).emit("connection:player_reconnected", player.id);
     });

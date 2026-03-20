@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, Send, X } from "lucide-react";
 import { useChatStore } from "@/stores/chat-store";
+import { usePlayerStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
 
@@ -12,12 +13,12 @@ export function GameChat() {
   const isOpen = useChatStore((s) => s.isOpen);
   const unreadCount = useChatStore((s) => s.unreadCount);
   const setOpen = useChatStore((s) => s.setOpen);
-  const { sendChatMessage, socket } = useSocket();
+  const { sendChatMessage } = useSocket();
+  const myPlayerId = usePlayerStore((s) => s.playerId);
 
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const myPlayerId = `player_${socket.id}`;
 
   useEffect(() => {
     if (isOpen) {

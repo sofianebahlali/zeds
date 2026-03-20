@@ -721,6 +721,9 @@ export interface ServerToClientEvents {
   "game:team_round_start": (data: TeamRoundData) => void;
   "game:team_round_end": (result: TeamRoundResult) => void;
 
+  // Room play again
+  "room:play_again": (room: Room) => void;
+
   // Connection events
   "connection:reconnected": (room: Room, player: Player) => void;
   "connection:player_disconnected": (playerId: string) => void;
@@ -735,8 +738,9 @@ export interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
   // Room events
-  "room:create": (playerName: string, avatar: string) => void;
-  "room:join": (roomCode: string, playerName: string, avatar: string) => void;
+  "room:create": (playerName: string, avatar: string, playerId: string) => void;
+  "room:join": (roomCode: string, playerName: string, avatar: string, playerId: string) => void;
+  "room:play_again": () => void;
   "room:leave": () => void;
   "room:ready": (isReady: boolean) => void;
   "room:update_settings": (settings: Partial<GameSettings>) => void;

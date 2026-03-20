@@ -23,7 +23,6 @@ import { SplitStealRevealScreen } from "./splitsteal-reveal-screen";
 import { GameChat } from "./game-chat";
 import { ScreenContainer } from "@/components/layout";
 import { GAME_MODES } from "@/types";
-import { useSocket } from "@/hooks";
 
 export function GameScreen() {
   const status = useGameStore((s) => s.status);
@@ -32,8 +31,7 @@ export function GameScreen() {
   const teamData = useGameStore((s) => s.teamData);
   const modeTransition = useGameStore((s) => s.modeTransition);
   const room = useRoomStore((s) => s.room);
-  const { socket } = useSocket();
-  const myPlayerId = `player_${socket.id}`;
+  const myPlayerId = usePlayerStore((s) => s.playerId);
   const currentGameMode = room?.gameMode;
   const isDrawingMode = currentGameMode === "drawing";
   const isPetitBac = currentGameMode === "petitbac";

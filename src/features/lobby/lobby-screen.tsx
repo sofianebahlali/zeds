@@ -32,10 +32,10 @@ export function LobbyScreen() {
 
   const addNotification = useUIStore((s) => s.addNotification);
 
-  const { leaveRoom, setReady, startGame, updateRoomSettings, socket } = useSocket();
+  const { leaveRoom, setReady, startGame, updateRoomSettings } = useSocket();
 
   const [copied, setCopied] = useState(false);
-  const myPlayerId = `player_${socket.id}`;
+  const myPlayerId = playerId;
   const [showSettings, setShowSettings] = useState(false);
 
   if (!room) return null;

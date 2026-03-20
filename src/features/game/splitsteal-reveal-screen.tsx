@@ -1,13 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useGameStore } from "@/stores";
-import { useSocket } from "@/hooks";
+import { useGameStore, usePlayerStore } from "@/stores";
 
 export function SplitStealRevealScreen() {
   const splitStealReveal = useGameStore((s) => s.splitStealReveal);
-  const { socket } = useSocket();
-  const myPlayerId = `player_${socket.id}`;
+  const myPlayerId = usePlayerStore((s) => s.playerId);
 
   if (!splitStealReveal) return null;
 
