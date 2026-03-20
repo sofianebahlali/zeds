@@ -350,6 +350,23 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     });
 
     // ==========================================
+    // SPLIT OR STEAL EVENTS
+    // ==========================================
+
+    socket.on("splitsteal:submit_choice", (choice: "split" | "steal") => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.submitSplitStealChoice(playerId, choice);
+    });
+
+    // ==========================================
     // DRAWING EVENTS
     // ==========================================
 

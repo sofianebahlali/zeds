@@ -17,6 +17,8 @@ import { ParcoursValidationScreen } from "./parcours-validation-screen";
 import { GuessGameValidationScreen } from "./guessgame-validation-screen";
 import { LineupGameScreen } from "./lineup-game-screen";
 import { LineupRevealScreen } from "./lineup-reveal-screen";
+import { SplitStealChoiceScreen } from "./splitsteal-choice-screen";
+import { SplitStealRevealScreen } from "./splitsteal-reveal-screen";
 import { GameChat } from "./game-chat";
 import { ScreenContainer } from "@/components/layout";
 import { GAME_MODES } from "@/types";
@@ -46,6 +48,8 @@ export function GameScreen() {
     if (isLangue && status === "langue_validating") return "Validation";
     if (status === "parcours_validating") return "Validation";
     if (status === "guessgame_validating") return "Validation";
+    if (status === "splitsteal_choosing") return "Split or Steal";
+    if (status === "splitsteal_revealing") return "Resultats";
     if (!isDrawingMode) return null;
     switch (status) {
       case "suggesting": return "Suggère !";
@@ -186,6 +190,8 @@ export function GameScreen() {
           {status === "parcours_validating" && <ParcoursValidationScreen key="parcours-validation" />}
           {status === "guessgame_validating" && <GuessGameValidationScreen key="guessgame-validation" />}
           {status === "lineup_revealing" && <LineupRevealScreen key="lineup-reveal" />}
+          {status === "splitsteal_choosing" && <SplitStealChoiceScreen key="splitsteal-choice" />}
+          {status === "splitsteal_revealing" && <SplitStealRevealScreen key="splitsteal-reveal" />}
         </AnimatePresence>
       </div>
 

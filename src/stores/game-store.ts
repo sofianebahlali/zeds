@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
@@ -8,7 +8,9 @@ type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" 
   | "langue_validating"
   | "parcours_validating"
   | "guessgame_validating"
-  | "lineup_revealing";
+  | "lineup_revealing"
+  | "splitsteal_choosing"
+  | "splitsteal_revealing";
 
 interface GameStoreState {
   // Game state
@@ -68,6 +70,10 @@ interface GameStoreState {
   lineupRevealMatch: LineupMatch | null;
   lineupAlsoFoundNotifications: { displayName: string; playerName: string }[];
 
+  // Split or Steal mode
+  splitStealData: SplitStealStartData | null;
+  splitStealReveal: SplitStealRevealData | null;
+
   // Mode transition
   modeTransition: GameMode | null;
 
@@ -121,6 +127,10 @@ interface GameStoreState {
   setLineupLastGuessCorrect: (correct: boolean | null) => void;
   setLineupReveal: (match: LineupMatch, scores: { playerId: string; foundCount: number }[]) => void;
   addLineupAlsoFoundNotification: (displayName: string, playerName: string) => void;
+
+  // Split or Steal actions
+  setSplitStealPhase: (data: SplitStealStartData) => void;
+  setSplitStealReveal: (data: SplitStealRevealData) => void;
 
   // Mode transition
   setModeTransition: (mode: GameMode | null) => void;
@@ -185,6 +195,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   lineupRevealScores: null,
   lineupRevealMatch: null,
   lineupAlsoFoundNotifications: [],
+
+  // Split or Steal initial state
+  splitStealData: null,
+  splitStealReveal: null,
 
   // Mode transition initial state
   modeTransition: null,
@@ -294,6 +308,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       lineupLastGuessCorrect: null,
       lineupRevealScores: null,
       lineupRevealMatch: null,
+      splitStealData: null,
+      splitStealReveal: null,
       modeTransition: null,
       teamData: null,
       teamRoundResult: null,
@@ -336,6 +352,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       lineupMyFoundCount: 0,
       lineupLastGuessCorrect: null,
       lineupRevealMatch: null,
+      splitStealData: null,
+      splitStealReveal: null,
       modeTransition: null,
       teamData: null,
       teamRoundResult: null,
@@ -477,6 +495,21 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   addLineupAlsoFoundNotification: (displayName, playerName) => set((state) => ({
     lineupAlsoFoundNotifications: [...state.lineupAlsoFoundNotifications, { displayName, playerName }],
   })),
+
+  // Split or Steal actions
+  setSplitStealPhase: (data) => set({
+    splitStealData: data,
+    splitStealReveal: null,
+    hasAnswered: false,
+    answeredPlayers: [],
+    timeRemaining: data.timeLimit,
+    status: "splitsteal_choosing",
+  }),
+
+  setSplitStealReveal: (data) => set({
+    splitStealReveal: data,
+    status: "splitsteal_revealing",
+  }),
 
   // Mode transition
   setModeTransition: (mode) => set({ modeTransition: mode }),

@@ -33,6 +33,10 @@ import type {
   FutCardQuestion,
   ChronoQuestion,
   ConsensusQuestion,
+  SplitStealQuestion,
+  SplitStealStartData,
+  SplitStealChoiceEntry,
+  SplitStealRevealData,
   Answer,
   RoundResult,
   ClientToServerEvents,
@@ -212,6 +216,12 @@ export class GameEngine {
   private lineupFoundPlayers: Map<string, Set<number>> = new Map(); // playerId -> set of found player global indices (0-21)
   private lineupGlobalFound: Map<number, Set<string>> = new Map(); // global player index -> set of playerIds who found them
   private lineupRevealTimer: NodeJS.Timeout | null = null;
+
+  // Split or Steal state
+  private splitStealChoices: Map<string, "split" | "steal"> = new Map();
+  private splitStealPairingType: "pair" | "cycle" = "pair";
+  private splitStealPairs: [string, string][] = []; // For pairs: [A, B] means A↔B
+  private splitStealCycle: string[] = []; // For cycle: [A, B, C] means A→B→C→A
 
   // Team rounds state
   private teamRoundsEnabled: boolean = false;
@@ -594,6 +604,18 @@ export class GameEngine {
         pool = GameEngine.loadConsensusQuestions();
         if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
         break;
+      case "splitsteal": {
+        const questions: Question[] = [];
+        for (let i = 0; i < count; i++) {
+          questions.push({
+            id: `splitsteal_${i + 1}`,
+            type: "splitsteal" as const,
+            timeLimit: 15,
+            points: 250,
+          });
+        }
+        return questions;
+      }
       default:
         pool = [...SAMPLE_QUESTIONS];
         break;
@@ -722,6 +744,13 @@ export class GameEngine {
       }
     }
 
+    // Split or Steal mode has its own phase flow
+    if (nextMode === "splitsteal") {
+      this.currentQuestion = nextQuestion;
+      this.startSplitStealPhase();
+      return;
+    }
+
     // Drawing mode has its own multi-phase flow (suggest → draw → guess → reveal)
     if (nextMode === "drawing") {
       this.currentQuestion = nextQuestion;
@@ -835,6 +864,8 @@ export class GameEngine {
       if (this.timeRemaining <= 0) {
         if (this.currentQuestion?.type === "drawing") {
           this.onDrawingTimerExpired();
+        } else if (this.currentQuestion?.type === "splitsteal") {
+          this.resolveSplitSteal();
         } else {
           this.endRound();
         }
@@ -3094,6 +3125,260 @@ export class GameEngine {
     );
   }
 
+  // ==========================================
+  // SPLIT OR STEAL METHODS
+  // ==========================================
+
+  private startSplitStealPhase(): void {
+    this.splitStealChoices.clear();
+
+    const activePlayers = this.getActivePlayers();
+
+    if (activePlayers.length < 2) {
+      this.nextRound();
+      return;
+    }
+
+    const shuffled = [...activePlayers].sort(() => Math.random() - 0.5);
+    const isOdd = shuffled.length % 2 !== 0;
+
+    if (isOdd) {
+      // Cycle mode: A→B→C→...→A
+      this.splitStealPairingType = "cycle";
+      this.splitStealCycle = shuffled.map((p) => p.id);
+      this.splitStealPairs = [];
+
+      // Send each player their target and who's targeting them
+      for (let i = 0; i < shuffled.length; i++) {
+        const player = shuffled[i];
+        const target = shuffled[(i + 1) % shuffled.length];
+        const incoming = shuffled[(i - 1 + shuffled.length) % shuffled.length];
+
+        const data: SplitStealStartData = {
+          pairingType: "cycle",
+          targetId: target.id,
+          targetName: target.name,
+          targetAvatar: target.avatar,
+          incomingId: incoming.id,
+          incomingName: incoming.name,
+          incomingAvatar: incoming.avatar,
+          timeLimit: 15,
+        };
+
+        const socketId = this.roomManager.getSocketIdFromPlayerId(player.id);
+        if (socketId) {
+          this.io.to(socketId).emit("splitsteal:phase_start", data);
+        }
+      }
+    } else {
+      // Pair mode: (A,B), (C,D), ...
+      this.splitStealPairingType = "pair";
+      this.splitStealPairs = [];
+      this.splitStealCycle = [];
+
+      for (let i = 0; i < shuffled.length; i += 2) {
+        this.splitStealPairs.push([shuffled[i].id, shuffled[i + 1].id]);
+      }
+
+      // Send each player their partner
+      for (const [aId, bId] of this.splitStealPairs) {
+        const playerA = shuffled.find((p) => p.id === aId)!;
+        const playerB = shuffled.find((p) => p.id === bId)!;
+
+        const dataA: SplitStealStartData = {
+          pairingType: "pair",
+          targetId: playerB.id,
+          targetName: playerB.name,
+          targetAvatar: playerB.avatar,
+          timeLimit: 15,
+        };
+        const dataB: SplitStealStartData = {
+          pairingType: "pair",
+          targetId: playerA.id,
+          targetName: playerA.name,
+          targetAvatar: playerA.avatar,
+          timeLimit: 15,
+        };
+
+        const socketA = this.roomManager.getSocketIdFromPlayerId(aId);
+        const socketB = this.roomManager.getSocketIdFromPlayerId(bId);
+        if (socketA) this.io.to(socketA).emit("splitsteal:phase_start", dataA);
+        if (socketB) this.io.to(socketB).emit("splitsteal:phase_start", dataB);
+      }
+    }
+
+    // Start 15s timer
+    this.timeRemaining = 15;
+    this.startTimer();
+  }
+
+  submitSplitStealChoice(playerId: string, choice: "split" | "steal"): void {
+    if (this.splitStealChoices.has(playerId)) return;
+
+    this.splitStealChoices.set(playerId, choice);
+    this.io.to(this.room.code).emit("splitsteal:player_chose", playerId);
+
+    // Check if all active players have chosen
+    const activePlayers = this.getActivePlayers();
+    if (this.splitStealChoices.size >= activePlayers.length) {
+      this.resolveSplitSteal();
+    }
+  }
+
+  private resolveSplitSteal(): void {
+    this.stopTimer();
+
+    const activePlayers = this.getActivePlayers();
+
+    // Auto-Steal for players who didn't choose (timeout/AFK)
+    for (const player of activePlayers) {
+      if (!this.splitStealChoices.has(player.id)) {
+        this.splitStealChoices.set(player.id, "steal");
+      }
+    }
+
+    // Build choices array for reveal
+    const choices: SplitStealChoiceEntry[] = [];
+    const playerScores: Map<string, number> = new Map();
+    const centerOfSteals: Set<string> = new Set();
+
+    // Initialize scores to 0
+    for (const player of activePlayers) {
+      playerScores.set(player.id, 0);
+    }
+
+    if (this.splitStealPairingType === "pair") {
+      // Pair mode: mutual choices
+      for (const [aId, bId] of this.splitStealPairs) {
+        const aChoice = this.splitStealChoices.get(aId) || "steal";
+        const bChoice = this.splitStealChoices.get(bId) || "steal";
+        const playerA = activePlayers.find((p) => p.id === aId);
+        const playerB = activePlayers.find((p) => p.id === bId);
+        if (!playerA || !playerB) continue;
+
+        choices.push({
+          playerId: aId,
+          playerName: playerA.name,
+          playerAvatar: playerA.avatar,
+          choice: aChoice,
+          targetPlayerId: bId,
+        });
+        choices.push({
+          playerId: bId,
+          playerName: playerB.name,
+          playerAvatar: playerB.avatar,
+          choice: bChoice,
+          targetPlayerId: aId,
+        });
+
+        if (aChoice === "split" && bChoice === "split") {
+          playerScores.set(aId, (playerScores.get(aId) || 0) + 100);
+          playerScores.set(bId, (playerScores.get(bId) || 0) + 100);
+        } else if (aChoice === "split" && bChoice === "steal") {
+          playerScores.set(bId, (playerScores.get(bId) || 0) + 250);
+        } else if (aChoice === "steal" && bChoice === "split") {
+          playerScores.set(aId, (playerScores.get(aId) || 0) + 250);
+        } else {
+          // Both steal: malus -200
+          playerScores.set(aId, (playerScores.get(aId) || 0) - 200);
+          playerScores.set(bId, (playerScores.get(bId) || 0) - 200);
+        }
+      }
+    } else {
+      // Cycle mode: directed choices A→B→C→...→A
+      const cycle = this.splitStealCycle;
+
+      for (let i = 0; i < cycle.length; i++) {
+        const playerId = cycle[i];
+        const targetId = cycle[(i + 1) % cycle.length];
+        const choice = this.splitStealChoices.get(playerId) || "steal";
+        const player = activePlayers.find((p) => p.id === playerId);
+        const target = activePlayers.find((p) => p.id === targetId);
+        if (!player || !target) continue;
+
+        choices.push({
+          playerId,
+          playerName: player.name,
+          playerAvatar: player.avatar,
+          choice,
+          targetPlayerId: targetId,
+        });
+
+        if (choice === "split") {
+          playerScores.set(playerId, (playerScores.get(playerId) || 0) + 100);
+          playerScores.set(targetId, (playerScores.get(targetId) || 0) + 100);
+        } else {
+          // Steal: decider gets 250, target gets 0
+          playerScores.set(playerId, (playerScores.get(playerId) || 0) + 250);
+        }
+      }
+
+      // Check for "center of 2 steals" malus
+      for (let i = 0; i < cycle.length; i++) {
+        const playerId = cycle[i];
+        const prevId = cycle[(i - 1 + cycle.length) % cycle.length];
+        const didSteal = this.splitStealChoices.get(playerId) === "steal";
+        const wasStolen = this.splitStealChoices.get(prevId) === "steal";
+
+        if (didSteal && wasStolen) {
+          centerOfSteals.add(playerId);
+          playerScores.set(playerId, (playerScores.get(playerId) || 0) - 200);
+        }
+      }
+    }
+
+    // Apply scores to room
+    const scores: { playerId: string; points: number; total: number }[] = [];
+    for (const player of this.room.players) {
+      const pts = playerScores.get(player.id) || 0;
+      this.roomManager.updatePlayerScore(player.id, pts);
+      const updatedPlayer = this.room.players.find((p) => p.id === player.id);
+      scores.push({
+        playerId: player.id,
+        points: pts,
+        total: updatedPlayer?.score || 0,
+      });
+    }
+
+    // Build reveal data
+    const revealData: SplitStealRevealData = {
+      pairingType: this.splitStealPairingType,
+      choices,
+      playerScores: scores.map((s) => ({
+        playerId: s.playerId,
+        points: s.points,
+        isCenterOfSteals: centerOfSteals.has(s.playerId),
+      })),
+    };
+
+    // Build round result for standard flow
+    const roundResult: RoundResult = {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion!,
+      answers: [],
+      correctAnswer: "",
+      scores,
+    };
+
+    // Emit reveal
+    this.io.to(this.room.code).emit("splitsteal:reveal", revealData);
+
+    // Update lose streaks
+    this.updateLoseStreaks(roundResult);
+
+    // After reveal delay, proceed
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+    this.io.to(this.room.code).emit("game:round_end", roundResult);
+
+    setTimeout(() => {
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+      setTimeout(() => {
+        this.nextRound();
+      }, 2000);
+    }, 6000);
+  }
+
   /**
    * Proceed to the next round
    */
@@ -3188,6 +3473,15 @@ export class GameEngine {
     const activePlayers = this.room.players.filter(
       (p) => p.isConnected && !this.disconnectedPlayers.has(p.id)
     );
+
+    // Split or Steal: auto-steal for disconnected, check if all chose
+    if (this.currentQuestion?.type === "splitsteal") {
+      this.splitStealChoices.set(playerId, "steal");
+      if (this.splitStealChoices.size >= activePlayers.length + 1 && activePlayers.length > 0) {
+        this.resolveSplitSteal();
+      }
+      return;
+    }
 
     if (this.answers.size >= activePlayers.length && activePlayers.length > 0) {
       this.endRound();

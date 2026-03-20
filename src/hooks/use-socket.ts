@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction, SplitStealStartData, SplitStealRevealData } from "@/types";
 import { useChatStore } from "@/stores/chat-store";
 
 // Module-level flag: listeners are attached ONCE across all component instances
@@ -273,6 +273,19 @@ function setupSocketListeners() {
     useGameStore.getState().addGuessGameAnswerResult(data);
   });
 
+  // Split or Steal events
+  socket.on("splitsteal:phase_start", (data: SplitStealStartData) => {
+    useGameStore.getState().setSplitStealPhase(data);
+  });
+
+  socket.on("splitsteal:player_chose", (playerId: string) => {
+    useGameStore.getState().markPlayerAnswered(playerId);
+  });
+
+  socket.on("splitsteal:reveal", (data: SplitStealRevealData) => {
+    useGameStore.getState().setSplitStealReveal(data);
+  });
+
   // Lineup events
   socket.on("lineup:guess_result", (result: LineupGuessResult) => {
     const store = useGameStore.getState();
@@ -510,6 +523,11 @@ export function useSocket() {
     socket.emit("lineup:skip_reveal");
   }, [socket]);
 
+  const submitSplitStealChoice = useCallback((choice: "split" | "steal") => {
+    socket.emit("splitsteal:submit_choice", choice);
+    useGameStore.setState({ hasAnswered: true, myAnswer: choice });
+  }, [socket]);
+
   const sendChatMessage = useCallback((message: string) => {
     socket.emit("chat:send_message", message);
   }, [socket]);
@@ -548,6 +566,7 @@ export function useSocket() {
     validateGuessGameAnswer,
     submitLineupGuess,
     skipLineupReveal,
+    submitSplitStealChoice,
     sendChatMessage,
     sendLaughReaction,
   };

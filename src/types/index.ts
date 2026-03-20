@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -463,6 +463,10 @@ export interface ConsensusQuestion extends BaseQuestion {
   difficulty: "easy" | "medium" | "hard";
 }
 
+export interface SplitStealQuestion extends BaseQuestion {
+  type: "splitsteal";
+}
+
 export interface LineupPlayer {
   pos: string;
   name: string;
@@ -501,7 +505,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -574,6 +578,35 @@ export interface DrawingRoundResult {
   roundNumber: number;
   chains: DrawingChain[];
   scores: { playerId: string; points: number; total: number; breakdown: DrawingScoreBreakdown }[];
+}
+
+// ==========================================
+// SPLIT OR STEAL TYPES
+// ==========================================
+
+export interface SplitStealStartData {
+  pairingType: "pair" | "cycle";
+  targetId: string;
+  targetName: string;
+  targetAvatar: string;
+  incomingId?: string;
+  incomingName?: string;
+  incomingAvatar?: string;
+  timeLimit: number;
+}
+
+export interface SplitStealChoiceEntry {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  choice: "split" | "steal";
+  targetPlayerId: string;
+}
+
+export interface SplitStealRevealData {
+  pairingType: "pair" | "cycle";
+  choices: SplitStealChoiceEntry[];
+  playerScores: { playerId: string; points: number; isCenterOfSteals: boolean }[];
 }
 
 // ==========================================
@@ -650,6 +683,11 @@ export interface ServerToClientEvents {
   "lineup:guess_result": (result: LineupGuessResult) => void;
   "lineup:reveal": (match: LineupMatch, scores: { playerId: string; foundCount: number }[]) => void;
 
+  // Split or Steal events
+  "splitsteal:phase_start": (data: SplitStealStartData) => void;
+  "splitsteal:player_chose": (playerId: string) => void;
+  "splitsteal:reveal": (data: SplitStealRevealData) => void;
+
   // Team events
   "game:team_round_start": (data: TeamRoundData) => void;
   "game:team_round_end": (result: TeamRoundResult) => void;
@@ -709,6 +747,9 @@ export interface ClientToServerEvents {
 
   // Lineup events
   "lineup:skip_reveal": () => void;
+
+  // Split or Steal events
+  "splitsteal:submit_choice": (choice: "split" | "steal") => void;
 
   // Connection events
   "connection:reconnect": (roomCode: string, playerId: string) => void;
@@ -911,5 +952,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Pense comme les autres !",
     icon: "🤝",
     color: "from-pink-500 to-fuchsia-700",
+  },
+  {
+    id: "splitsteal",
+    name: "Split or Steal",
+    description: "Partage ou vole les points !",
+    icon: "💎",
+    color: "from-amber-500 to-red-700",
   },
 ];
