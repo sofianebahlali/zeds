@@ -37,7 +37,7 @@ export function ConsensusValidationScreen() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
-        className="flex flex-col h-full px-5 pb-4"
+        className="flex flex-col min-h-full px-5 pb-4"
       >
         {/* Header */}
         <div className="text-center mb-4 pt-2">

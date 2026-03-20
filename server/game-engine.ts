@@ -3416,7 +3416,7 @@ export class GameEngine {
           incomingId: incoming.id,
           incomingName: incoming.name,
           incomingAvatar: incoming.avatar,
-          timeLimit: 15,
+          timeLimit: 20,
         };
 
         const socketId = this.roomManager.getSocketIdFromPlayerId(player.id);
@@ -3444,14 +3444,14 @@ export class GameEngine {
           targetId: playerB.id,
           targetName: playerB.name,
           targetAvatar: playerB.avatar,
-          timeLimit: 15,
+          timeLimit: 20,
         };
         const dataB: SplitStealStartData = {
           pairingType: "pair",
           targetId: playerA.id,
           targetName: playerA.name,
           targetAvatar: playerA.avatar,
-          timeLimit: 15,
+          timeLimit: 20,
         };
 
         const socketA = this.roomManager.getSocketIdFromPlayerId(aId);
@@ -3461,8 +3461,8 @@ export class GameEngine {
       }
     }
 
-    // Start 15s timer
-    this.timeRemaining = 15;
+    // Start 20s timer
+    this.timeRemaining = 20;
     this.startTimer();
   }
 

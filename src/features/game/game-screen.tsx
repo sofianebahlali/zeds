@@ -172,7 +172,7 @@ export function GameScreen() {
       </AnimatePresence>
 
       {/* Main content */}
-      <div className={`w-full h-screen-safe ${teamData ? "pt-24" : "pt-16"} pb-safe-bottom`}>
+      <div className={`w-full h-screen-safe ${teamData ? "pt-24" : "pt-16"} overflow-y-auto`} style={{ paddingBottom: "calc(5rem + env(safe-area-inset-bottom, 0px))" }}>
         <AnimatePresence mode="wait">
           {status === "countdown" && <CountdownOverlay key="countdown" />}
           {(status === "question" || status === "answering") && (
