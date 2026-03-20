@@ -333,6 +333,23 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     });
 
     // ==========================================
+    // CONSENSUS EVENTS
+    // ==========================================
+
+    socket.on("consensus:validate_answer", (targetPlayerId: string, accepted: boolean) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.validateSingleConsensusAnswer(targetPlayerId, accepted);
+    });
+
+    // ==========================================
     // LINEUP EVENTS
     // ==========================================
 
@@ -433,6 +450,19 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
       if (!gameEngine) return;
 
       gameEngine.retreatReveal();
+    });
+
+    socket.on("drawing:validate_chain", (chainIndex: number, accepted: boolean) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.validateDrawingChain(chainIndex, accepted);
     });
 
     // ==========================================

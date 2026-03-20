@@ -463,6 +463,31 @@ export interface ConsensusQuestion extends BaseQuestion {
   difficulty: "easy" | "medium" | "hard";
 }
 
+export interface ConsensusPlayerAnswerData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  answer: string;
+}
+
+export interface ConsensusValidationData {
+  prompt: string;
+  category: string;
+  playerAnswers: ConsensusPlayerAnswerData[];
+}
+
+export interface ConsensusValidationSubmission {
+  validatedPlayerIds: string[];
+}
+
+export interface ConsensusAnswerResultData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  answer: string;
+  accepted: boolean;
+}
+
 export interface SplitStealQuestion extends BaseQuestion {
   type: "splitsteal";
 }
@@ -654,6 +679,10 @@ export interface ServerToClientEvents {
   "drawing:round_scores": (result: DrawingRoundResult) => void;
   "drawing:chain_validated": (chainIndex: number, accepted: boolean) => void;
 
+  // Consensus events
+  "consensus:validation_start": (data: ConsensusValidationData) => void;
+  "consensus:answer_result": (data: ConsensusAnswerResultData) => void;
+
   // Petit Bac events
   "petitbac:validation_start": (data: PetitBacValidationData) => void;
   "petitbac:validation_result": (validation: PetitBacValidationSubmission) => void;
@@ -726,6 +755,9 @@ export interface ClientToServerEvents {
   "drawing:reveal_next": () => void;
   "drawing:reveal_prev": () => void;
   "drawing:validate_chain": (chainIndex: number, accepted: boolean) => void;
+
+  // Consensus events
+  "consensus:validate_answer": (playerId: string, accepted: boolean) => void;
 
   // Petit Bac events
   "petitbac:submit_validation": (validation: PetitBacValidationSubmission) => void;

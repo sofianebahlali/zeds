@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
@@ -8,6 +8,7 @@ type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" 
   | "langue_validating"
   | "parcours_validating"
   | "guessgame_validating"
+  | "consensus_validating"
   | "lineup_revealing"
   | "splitsteal_choosing"
   | "splitsteal_revealing";
@@ -62,6 +63,10 @@ interface GameStoreState {
   guessGameValidationData: GuessGameValidationData | null;
   guessGameAnswerResults: GuessGameAnswerResultData[];
 
+  // Consensus mode
+  consensusValidationData: ConsensusValidationData | null;
+  consensusAnswerResults: ConsensusAnswerResultData[];
+
   // Lineup mode
   lineupFoundPlayers: { teamSide: 1 | 2; playerIndex: number; displayName: string; foundByPlayerIds: string[] }[];
   lineupMyFoundCount: number;
@@ -99,6 +104,7 @@ interface GameStoreState {
   setDrawingRevealState: (state: DrawingRevealState) => void;
   updateDrawingRevealStep: (chainIndex: number, step: number) => void;
   setDrawingScores: (result: DrawingRoundResult) => void;
+  validateDrawingChain: (chainIndex: number, accepted: boolean) => void;
 
   // Petit Bac actions
   setPetitBacValidation: (data: PetitBacValidationData) => void;
@@ -121,6 +127,10 @@ interface GameStoreState {
   // GuessGame actions
   setGuessGameValidation: (data: GuessGameValidationData) => void;
   addGuessGameAnswerResult: (result: GuessGameAnswerResultData) => void;
+
+  // Consensus actions
+  setConsensusValidation: (data: ConsensusValidationData) => void;
+  addConsensusAnswerResult: (result: ConsensusAnswerResultData) => void;
 
   // Lineup actions
   addLineupFoundPlayer: (result: LineupGuessResult, myPlayerId: string, playerName?: string) => void;
@@ -187,6 +197,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   // GuessGame initial state
   guessGameValidationData: null,
   guessGameAnswerResults: [],
+
+  // Consensus initial state
+  consensusValidationData: null,
+  consensusAnswerResults: [],
 
   // Lineup initial state
   lineupFoundPlayers: [],
@@ -303,6 +317,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       parcoursAnswerResults: [],
       guessGameValidationData: null,
       guessGameAnswerResults: [],
+      consensusValidationData: null,
+      consensusAnswerResults: [],
       lineupFoundPlayers: [],
       lineupMyFoundCount: 0,
       lineupLastGuessCorrect: null,
@@ -348,6 +364,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       parcoursAnswerResults: [],
       guessGameValidationData: null,
       guessGameAnswerResults: [],
+      consensusValidationData: null,
+      consensusAnswerResults: [],
       lineupFoundPlayers: [],
       lineupMyFoundCount: 0,
       lineupLastGuessCorrect: null,
@@ -388,6 +406,15 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   })),
 
   setDrawingScores: (result) => set({ drawingScores: result }),
+
+  validateDrawingChain: (chainIndex, accepted) => set((state) => {
+    if (!state.drawingRevealState) return {};
+    const chains = [...state.drawingRevealState.chains];
+    chains[chainIndex] = { ...chains[chainIndex], isGuessCorrect: accepted };
+    return {
+      drawingRevealState: { ...state.drawingRevealState, chains },
+    };
+  }),
 
   // Petit Bac actions
   setPetitBacValidation: (data) => set({
@@ -450,6 +477,17 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   addGuessGameAnswerResult: (result) => set((state) => ({
     guessGameAnswerResults: [...state.guessGameAnswerResults, result],
+  })),
+
+  // Consensus actions
+  setConsensusValidation: (data) => set({
+    consensusValidationData: data,
+    consensusAnswerResults: [],
+    status: "consensus_validating",
+  }),
+
+  addConsensusAnswerResult: (result) => set((state) => ({
+    consensusAnswerResults: [...state.consensusAnswerResults, result],
   })),
 
   // Lineup actions

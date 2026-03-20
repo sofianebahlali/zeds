@@ -15,6 +15,7 @@ import { GeoQuizValidationScreen } from "./geoquiz-validation-screen";
 import { LangueValidationScreen } from "./langue-validation-screen";
 import { ParcoursValidationScreen } from "./parcours-validation-screen";
 import { GuessGameValidationScreen } from "./guessgame-validation-screen";
+import { ConsensusValidationScreen } from "./consensus-validation-screen";
 import { LineupGameScreen } from "./lineup-game-screen";
 import { LineupRevealScreen } from "./lineup-reveal-screen";
 import { SplitStealChoiceScreen } from "./splitsteal-choice-screen";
@@ -48,6 +49,7 @@ export function GameScreen() {
     if (isLangue && status === "langue_validating") return "Validation";
     if (status === "parcours_validating") return "Validation";
     if (status === "guessgame_validating") return "Validation";
+    if (status === "consensus_validating") return "Validation";
     if (status === "splitsteal_choosing") return "Split or Steal";
     if (status === "splitsteal_revealing") return "Resultats";
     if (!isDrawingMode) return null;
@@ -189,6 +191,7 @@ export function GameScreen() {
           {status === "langue_validating" && <LangueValidationScreen key="langue-validation" />}
           {status === "parcours_validating" && <ParcoursValidationScreen key="parcours-validation" />}
           {status === "guessgame_validating" && <GuessGameValidationScreen key="guessgame-validation" />}
+          {status === "consensus_validating" && <ConsensusValidationScreen key="consensus-validation" />}
           {status === "lineup_revealing" && <LineupRevealScreen key="lineup-reveal" />}
           {status === "splitsteal_choosing" && <SplitStealChoiceScreen key="splitsteal-choice" />}
           {status === "splitsteal_revealing" && <SplitStealRevealScreen key="splitsteal-reveal" />}

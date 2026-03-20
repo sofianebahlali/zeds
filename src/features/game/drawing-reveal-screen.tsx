@@ -11,7 +11,7 @@ export function DrawingRevealScreen() {
   const isHost = usePlayerStore((s) => s.isHost);
   const revealState = useGameStore((s) => s.drawingRevealState);
   const drawingScores = useGameStore((s) => s.drawingScores);
-  const { advanceDrawingReveal, retreatDrawingReveal } = useSocket();
+  const { advanceDrawingReveal, retreatDrawingReveal, validateDrawingChain } = useSocket();
 
   if (!revealState || revealState.chains.length === 0) {
     return (
@@ -200,28 +200,62 @@ export function DrawingRevealScreen() {
 
       {/* Host navigation */}
       {isHost ? (
-        <div className="flex gap-3">
-          <Button
-            variant="secondary"
-            className="flex-shrink-0"
-            onClick={retreatDrawingReveal}
-            disabled={isFirst}
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </Button>
-          <Button
-            variant="primary"
-            className="flex-1"
-            onClick={advanceDrawingReveal}
-          >
-            {isLastChain && isLastStep ? "Terminer" : "Suivant"}
-            {!(isLastChain && isLastStep) && <ChevronRight className="w-5 h-5" />}
-          </Button>
-        </div>
+        step === 2 && currentChain.isGuessCorrect === null ? (
+          /* Validation buttons — host must validate before advancing */
+          <div className="flex gap-3">
+            <Button
+              variant="secondary"
+              className="flex-shrink-0"
+              onClick={retreatDrawingReveal}
+              disabled={isFirst}
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </Button>
+            <Button
+              variant="secondary"
+              className="flex-1 !bg-danger-500/20 !text-danger-400 !border-danger-500/30"
+              onClick={() => validateDrawingChain(revealState.currentChainIndex, false)}
+            >
+              <XCircle className="w-5 h-5 mr-1" /> Raté
+            </Button>
+            <Button
+              variant="secondary"
+              className="flex-1 !bg-success-500/20 !text-success-400 !border-success-500/30"
+              onClick={() => validateDrawingChain(revealState.currentChainIndex, true)}
+            >
+              <CheckCircle className="w-5 h-5 mr-1" /> Correct
+            </Button>
+          </div>
+        ) : (
+          <div className="flex gap-3">
+            <Button
+              variant="secondary"
+              className="flex-shrink-0"
+              onClick={retreatDrawingReveal}
+              disabled={isFirst}
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </Button>
+            <Button
+              variant="primary"
+              className="flex-1"
+              onClick={advanceDrawingReveal}
+            >
+              {isLastChain && isLastStep ? "Terminer" : "Suivant"}
+              {!(isLastChain && isLastStep) && <ChevronRight className="w-5 h-5" />}
+            </Button>
+          </div>
+        )
       ) : (
-        <p className="text-center text-surface-500 text-sm py-2">
-          L&apos;hôte contrôle la présentation...
-        </p>
+        step === 2 && currentChain.isGuessCorrect === null ? (
+          <p className="text-center text-surface-500 text-sm py-2">
+            L&apos;hôte valide la réponse...
+          </p>
+        ) : (
+          <p className="text-center text-surface-500 text-sm py-2">
+            L&apos;hôte contrôle la présentation...
+          </p>
+        )
       )}
     </motion.div>
   );

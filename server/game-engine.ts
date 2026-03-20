@@ -33,6 +33,7 @@ import type {
   FutCardQuestion,
   ChronoQuestion,
   ConsensusQuestion,
+  ConsensusValidationSubmission,
   SplitStealQuestion,
   SplitStealStartData,
   SplitStealChoiceEntry,
@@ -196,6 +197,12 @@ export class GameEngine {
   private guessGameAutoValidationTimer: NodeJS.Timeout | null = null;
   private guessGameDecisions: Map<string, boolean> = new Map();
   private guessGamePlayerAnswers: { playerId: string; playerName: string; playerAvatar: string; answer: string }[] = [];
+
+  // Consensus validation state
+  private consensusValidating: boolean = false;
+  private consensusAutoValidationTimer: NodeJS.Timeout | null = null;
+  private consensusDecisions: Map<string, boolean> = new Map();
+  private consensusPlayerAnswers: { playerId: string; playerName: string; playerAvatar: string; answer: string }[] = [];
 
   // Drawing mode state
   private drawingPhase: DrawingPhase = "drawing";
@@ -962,6 +969,12 @@ export class GameEngine {
     // GuessGame: enter host validation phase instead of auto-scoring
     if (this.currentQuestion.type === "guessgame") {
       this.startGuessGameValidation();
+      return;
+    }
+
+    // Consensus: enter host validation phase instead of auto-scoring
+    if (this.currentQuestion.type === "consensus") {
+      this.startConsensusValidation();
       return;
     }
 
@@ -2714,6 +2727,212 @@ export class GameEngine {
   }
 
   // ==========================================
+  // CONSENSUS VALIDATION METHODS
+  // ==========================================
+
+  private startConsensusValidation(): void {
+    this.consensusValidating = true;
+    this.consensusDecisions.clear();
+    const q = this.currentQuestion as ConsensusQuestion;
+    const activePlayers = this.getActivePlayers();
+
+    // Ensure all players have an answer entry
+    for (const player of activePlayers) {
+      if (!this.answers.has(player.id)) {
+        this.answers.set(player.id, {
+          playerId: player.id,
+          questionId: q.id,
+          answer: "",
+          timestamp: Date.now(),
+        });
+      }
+    }
+
+    this.consensusPlayerAnswers = activePlayers.map((player) => {
+      const answer = this.answers.get(player.id);
+      return {
+        playerId: player.id,
+        playerName: player.name,
+        playerAvatar: player.avatar,
+        answer: answer?.answer || "",
+      };
+    });
+
+    this.io.to(this.room.code).emit("consensus:validation_start", {
+      prompt: q.prompt,
+      category: q.category,
+      playerAnswers: this.consensusPlayerAnswers,
+    });
+
+    // Auto-validation timeout: 60 seconds
+    this.consensusAutoValidationTimer = setTimeout(() => {
+      if (this.consensusValidating) {
+        // Auto-accept all non-empty answers
+        for (const pa of this.consensusPlayerAnswers) {
+          if (this.consensusDecisions.has(pa.playerId)) continue;
+          const accepted = pa.answer.trim().length > 0;
+          this.consensusDecisions.set(pa.playerId, accepted);
+          this.io.to(this.room.code).emit("consensus:answer_result", {
+            playerId: pa.playerId,
+            playerName: pa.playerName,
+            playerAvatar: pa.playerAvatar,
+            answer: pa.answer,
+            accepted,
+          });
+        }
+        setTimeout(() => {
+          this.finalizeConsensusFromDecisions();
+        }, 1500);
+      }
+    }, 60000);
+  }
+
+  validateSingleConsensusAnswer(playerId: string, accepted: boolean): void {
+    if (!this.consensusValidating || !this.currentQuestion) return;
+    if (this.consensusDecisions.has(playerId)) return;
+
+    this.consensusDecisions.set(playerId, accepted);
+
+    const pa = this.consensusPlayerAnswers.find((p) => p.playerId === playerId);
+    if (!pa) return;
+
+    this.io.to(this.room.code).emit("consensus:answer_result", {
+      playerId: pa.playerId,
+      playerName: pa.playerName,
+      playerAvatar: pa.playerAvatar,
+      answer: pa.answer,
+      accepted,
+    });
+
+    // Check if all players with answers have been reviewed
+    const playersToReview = this.consensusPlayerAnswers.filter(
+      (p) => p.answer.trim().length > 0
+    );
+    const allReviewed = playersToReview.every((p) =>
+      this.consensusDecisions.has(p.playerId)
+    );
+
+    if (allReviewed) {
+      // Mark empty-answer players as rejected
+      for (const p of this.consensusPlayerAnswers) {
+        if (!this.consensusDecisions.has(p.playerId)) {
+          this.consensusDecisions.set(p.playerId, false);
+        }
+      }
+      setTimeout(() => {
+        this.finalizeConsensusFromDecisions();
+      }, 2000);
+    }
+  }
+
+  private finalizeConsensusFromDecisions(): void {
+    if (!this.consensusValidating) return;
+
+    const validatedPlayerIds = Array.from(this.consensusDecisions.entries())
+      .filter(([, accepted]) => accepted)
+      .map(([id]) => id);
+
+    this.submitConsensusValidation({ validatedPlayerIds });
+  }
+
+  private submitConsensusValidation(validation: ConsensusValidationSubmission): void {
+    if (!this.currentQuestion || !this.consensusValidating) return;
+    this.consensusValidating = false;
+
+    if (this.consensusAutoValidationTimer) {
+      clearTimeout(this.consensusAutoValidationTimer);
+      this.consensusAutoValidationTimer = null;
+    }
+
+    const q = this.currentQuestion as ConsensusQuestion;
+    const scores: { playerId: string; points: number; total: number }[] = [];
+    let winner: Player | undefined;
+
+    // Group only validated answers
+    const groups = new Map<string, { playerIds: string[]; rawAnswer: string }>();
+    for (const [playerId, answer] of this.answers) {
+      if (!validation.validatedPlayerIds.includes(playerId)) continue;
+      const normalized = GameEngine.normalizeForComparison(answer.answer);
+      if (!normalized) continue;
+
+      if (!groups.has(normalized)) {
+        groups.set(normalized, { playerIds: [], rawAnswer: answer.answer.trim() });
+      }
+      groups.get(normalized)!.playerIds.push(playerId);
+    }
+
+    // Find largest group(s)
+    let maxGroupSize = 0;
+    for (const [, group] of groups) {
+      if (group.playerIds.length > maxGroupSize) {
+        maxGroupSize = group.playerIds.length;
+      }
+    }
+
+    const winningPlayerIds = new Set<string>();
+    let winningAnswer = "";
+    let earliestWinnerTime = Infinity;
+
+    for (const [, group] of groups) {
+      if (group.playerIds.length === maxGroupSize && maxGroupSize > 0) {
+        for (const pid of group.playerIds) {
+          winningPlayerIds.add(pid);
+        }
+        if (!winningAnswer) winningAnswer = group.rawAnswer;
+      }
+    }
+
+    // Score players
+    for (const [playerId, answer] of this.answers) {
+      const isWinner = winningPlayerIds.has(playerId);
+      const points = isWinner ? q.points : 0;
+      answer.isCorrect = isWinner;
+      answer.points = points;
+
+      if (isWinner && (answer.responseTime || Infinity) < earliestWinnerTime) {
+        earliestWinnerTime = answer.responseTime || Infinity;
+        winner = this.room.players.find((p) => p.id === playerId);
+      }
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);
+      if (updatedPlayer) {
+        scores.push({ playerId, points, total: updatedPlayer.score });
+      }
+    }
+
+    for (const player of this.room.players) {
+      if (!this.answers.has(player.id)) {
+        scores.push({ playerId: player.id, points: 0, total: player.score });
+      }
+    }
+
+    const results: RoundResult = {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion,
+      answers: Array.from(this.answers.values()),
+      correctAnswer: winningAnswer || q.prompt,
+      winner,
+      scores,
+    };
+
+    this.updateLoseStreaks(results);
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+    this.io.to(this.room.code).emit("game:round_end", results);
+
+    if (this.currentTeams) {
+      this.processTeamRoundEnd(results.scores);
+    }
+
+    setTimeout(() => {
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+      setTimeout(() => {
+        this.nextRound();
+      }, 2000);
+    }, 6000);
+  }
+
+  // ==========================================
   // DRAWING MODE METHODS
   // ==========================================
 
@@ -2848,6 +3067,14 @@ export class GameEngine {
       // Clients auto-submit at timeRemaining<=1, so 1.5s is enough for the round-trip.
       setTimeout(() => {
         if (this.drawingPhase === "drawing") {
+          // Auto-submit empty drawings for players who didn't submit
+          const activePlayers = this.getActivePlayers();
+          for (const player of activePlayers) {
+            if (!this.drawings.has(player.id)) {
+              this.drawings.set(player.id, "NO_DRAWING");
+              this.io.to(this.room.code).emit("game:player_answered", player.id);
+            }
+          }
           this.startGuessingPhase();
         }
       }, 1500);
@@ -2950,7 +3177,6 @@ export class GameEngine {
 
       const guesser = this.room.players.find((p) => p.id === guesserId);
       const guess = this.guesses.get(guesserId) || "";
-      const isCorrect = this.fuzzyMatchDrawingGuess(phraseData.phrase, guess);
 
       this.drawingChains.push({
         suggesterId,
@@ -2965,15 +3191,11 @@ export class GameEngine {
         guesserName: guesser?.name || "???",
         guesserAvatar: guesser?.avatar || "🦊",
         guess,
-        isGuessCorrect: isCorrect,
+        isGuessCorrect: null, // Pending host validation
       });
     }
 
-    // Calculate scores
-    const scores = this.calculateDrawingScores();
-    this.lastDrawingScores = scores;
-
-    // Initialize reveal navigation
+    // Initialize reveal navigation (scores calculated after host validates all chains)
     this.revealState = {
       chains: this.drawingChains,
       currentChainIndex: 0,
@@ -2981,11 +3203,6 @@ export class GameEngine {
     };
 
     this.io.to(this.room.code).emit("drawing:reveal_state", this.revealState);
-    this.io.to(this.room.code).emit("drawing:round_scores", {
-      roundNumber: this.currentRound,
-      chains: this.drawingChains,
-      scores,
-    });
   }
 
   /**
@@ -3081,6 +3298,12 @@ export class GameEngine {
 
     const totalSteps = 4;
     const totalChains = this.revealState.chains.length;
+    const currentChain = this.revealState.chains[this.revealState.currentChainIndex];
+
+    // Block advancing past step 2 if chain not yet validated by host
+    if (this.revealState.currentStep === 2 && currentChain.isGuessCorrect === null) {
+      return;
+    }
 
     if (this.revealState.currentStep < totalSteps - 1) {
       this.revealState.currentStep++;
@@ -3088,8 +3311,17 @@ export class GameEngine {
       this.revealState.currentChainIndex++;
       this.revealState.currentStep = 0;
     } else {
-      // All chains revealed — update lose streaks, update scores then proceed
-      this.updateDrawingLoseStreaks(this.lastDrawingScores);
+      // All chains revealed — calculate scores, update lose streaks, then proceed
+      const scores = this.calculateDrawingScores();
+      this.lastDrawingScores = scores;
+
+      this.io.to(this.room.code).emit("drawing:round_scores", {
+        roundNumber: this.currentRound,
+        chains: this.drawingChains,
+        scores,
+      });
+
+      this.updateDrawingLoseStreaks(scores);
       this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
       const leaderboard = this.roomManager.getLeaderboard(this.room.code);
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
@@ -3104,6 +3336,28 @@ export class GameEngine {
       this.revealState.currentChainIndex,
       this.revealState.currentStep
     );
+  }
+
+  /**
+   * Host validates a drawing chain guess as correct or incorrect
+   */
+  validateDrawingChain(chainIndex: number, accepted: boolean): void {
+    if (!this.revealState) return;
+    if (chainIndex < 0 || chainIndex >= this.drawingChains.length) return;
+
+    this.drawingChains[chainIndex].isGuessCorrect = accepted;
+    this.revealState.chains[chainIndex].isGuessCorrect = accepted;
+
+    this.io.to(this.room.code).emit("drawing:chain_validated", chainIndex, accepted);
+
+    // Auto-advance to step 3 (verdict) after validation
+    if (this.revealState.currentChainIndex === chainIndex && this.revealState.currentStep === 2) {
+      this.revealState.currentStep = 3;
+      this.io.to(this.room.code).emit("drawing:reveal_step",
+        this.revealState.currentChainIndex,
+        this.revealState.currentStep
+      );
+    }
   }
 
   /**
