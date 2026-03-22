@@ -1,0 +1,14 @@
+{
+  "id": "liga-champions-2000",
+  "title": "Champions de La Liga depuis 2000",
+  "category": "football",
+  "subcategory": "liga",
+  "difficulty": "medium",
+  "items": [
+    { "answer": "Deportivo La Coruña", "aliases": ["Deportivo", "Depor", "La Corogne", "Deportivo La Corogne"], "hint": "1999-2000" },
+    { "answer": "Real Madrid", "aliases": ["Madrid", "Real"], "hint": "2000-01, 2002-03, 2006-07, 2007-08, 2011-12, 2016-17, 2019-20, 2021-22, 2023-24" },
+    { "answer": "Valencia CF", "aliases": ["Valencia", "Valence"], "hint": "2001-02, 2003-04" },
+    { "answer": "FC Barcelona", "aliases": ["Barcelona", "Barça", "Barca"], "hint": "2004-05, 2005-06, 2008-09, 2009-10, 2010-11, 2012-13, 2014-15, 2015-16, 2017-18, 2018-19, 2022-23, 2024-25" },
+    { "answer": "Atlético Madrid", "aliases": ["Atletico Madrid", "Atleti", "Atletico", "Atlético"], "hint": "2013-14, 2020-21" }
+  ]
+}

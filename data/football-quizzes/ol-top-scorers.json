@@ -1,0 +1,84 @@
+{
+  "id": "ol-top-scorers",
+  "title": "Meilleurs buteurs de l'histoire de l'OL (Top 15)",
+  "category": "football",
+  "subcategory": "ligue-1",
+  "difficulty": "hard",
+  "items": [
+    {
+      "answer": "Fleury Di Nallo",
+      "aliases": ["Di Nallo"],
+      "hint": "222 buts, 1960-1974, recordman absolu"
+    },
+    {
+      "answer": "Bernard Lacombe",
+      "aliases": ["Lacombe"],
+      "hint": "149 buts, 1969-1978, international fran\u00e7ais"
+    },
+    {
+      "answer": "Serge Chiesa",
+      "aliases": ["Chiesa"],
+      "hint": "137 buts, 1959-1972"
+    },
+    {
+      "answer": "Alexandre Lacazette",
+      "aliases": ["Lacazette"],
+      "hint": "136+ buts, form\u00e9 au club, revenu en 2022"
+    },
+    {
+      "answer": "Juninho Pernambucano",
+      "aliases": ["Juninho", "Juni"],
+      "hint": "100 buts, 2001-2009, coups francs l\u00e9gendaires"
+    },
+    {
+      "answer": "Andr\u00e9 Guy",
+      "aliases": ["Guy"],
+      "hint": "98 buts, 1963-1969"
+    },
+    {
+      "answer": "Karim Benzema",
+      "aliases": ["Benzema"],
+      "hint": "66 buts, 2005-2009, form\u00e9 au club"
+    },
+    {
+      "answer": "Nabil Fekir",
+      "aliases": ["Fekir"],
+      "hint": "61 buts, 2013-2019, form\u00e9 au club"
+    },
+    {
+      "answer": "Sidney Govou",
+      "aliases": ["Govou"],
+      "hint": "60 buts, 2000-2010"
+    },
+    {
+      "answer": "Lisandro L\u00f3pez",
+      "aliases": ["Lisandro", "Lisandro Lopez"],
+      "hint": "58 buts, 2009-2014, Argentin"
+    },
+    {
+      "answer": "Sonny Anderson",
+      "aliases": ["Anderson"],
+      "hint": "56 buts, 1999-2003, Br\u00e9silien"
+    },
+    {
+      "answer": "Michel Mignot",
+      "aliases": ["Mignot"],
+      "hint": "55 buts, ann\u00e9es 1960"
+    },
+    {
+      "answer": "Michael Essien",
+      "aliases": ["Essien"],
+      "hint": "17 buts, 2003-2005, Ghan\u00e9en"
+    },
+    {
+      "answer": "Moussa Demb\u00e9l\u00e9",
+      "aliases": ["Demb\u00e9l\u00e9", "M. Demb\u00e9l\u00e9"],
+      "hint": "47 buts, 2018-2022"
+    },
+    {
+      "answer": "Memphis Depay",
+      "aliases": ["Memphis", "Depay"],
+      "hint": "46 buts, 2017-2021, N\u00e9erlandais"
+    }
+  ]
+}

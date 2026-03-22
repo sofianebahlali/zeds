@@ -1,0 +1,15 @@
+{
+  "id": "bundesliga-champions-2000",
+  "title": "Champions de Bundesliga depuis 2000",
+  "category": "football",
+  "subcategory": "bundesliga",
+  "difficulty": "medium",
+  "items": [
+    { "answer": "Bayern Munich", "aliases": ["Bayern", "FC Bayern", "Bayern München"], "hint": "1999-00, 2000-01, 2002-03, 2004-05, 2005-06, 2007-08, 2009-10, 2012-13, 2013-14, 2014-15, 2015-16, 2016-17, 2017-18, 2018-19, 2019-20, 2020-21, 2021-22, 2022-23" },
+    { "answer": "Borussia Dortmund", "aliases": ["Dortmund", "BVB"], "hint": "2001-02, 2010-11, 2011-12" },
+    { "answer": "Werder Bremen", "aliases": ["Werder Brême", "Bremen", "Brême"], "hint": "2003-04" },
+    { "answer": "VfB Stuttgart", "aliases": ["Stuttgart", "VfB"], "hint": "2006-07" },
+    { "answer": "VfL Wolfsburg", "aliases": ["Wolfsburg", "Wolfsbourg"], "hint": "2008-09" },
+    { "answer": "Bayer Leverkusen", "aliases": ["Leverkusen", "Bayer 04", "Bayer 04 Leverkusen"], "hint": "2023-24" }
+  ]
+}

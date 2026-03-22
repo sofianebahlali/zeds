@@ -1,0 +1,29 @@
+{
+  "id": "pl-top-assists-alltime",
+  "title": "Top 20 passeurs all-time de Premier League",
+  "category": "football",
+  "subcategory": "premier-league",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Ryan Giggs", "aliases": ["Giggs", "R. Giggs"], "hint": "162 passes - Manchester United" },
+    { "answer": "Kevin De Bruyne", "aliases": ["De Bruyne", "KDB", "K. De Bruyne"], "hint": "110+ passes - Manchester City" },
+    { "answer": "Cesc Fabregas", "aliases": ["Fabregas", "C. Fabregas", "Cesc"], "hint": "111 passes - Arsenal & Chelsea" },
+    { "answer": "Wayne Rooney", "aliases": ["Rooney", "W. Rooney", "Wazza"], "hint": "103 passes - Manchester United & Everton" },
+    { "answer": "Frank Lampard", "aliases": ["Lampard", "F. Lampard", "Super Frank"], "hint": "102 passes - Chelsea, West Ham, Man City" },
+    { "answer": "Dennis Bergkamp", "aliases": ["Bergkamp", "D. Bergkamp"], "hint": "94 passes - Arsenal" },
+    { "answer": "David Silva", "aliases": ["Silva", "D. Silva"], "hint": "93 passes - Manchester City" },
+    { "answer": "Steven Gerrard", "aliases": ["Gerrard", "S. Gerrard", "Stevie G"], "hint": "92 passes - Liverpool" },
+    { "answer": "James Milner", "aliases": ["Milner", "J. Milner"], "hint": "90+ passes - Leeds, Newcastle, Aston Villa, Man City, Liverpool" },
+    { "answer": "David Beckham", "aliases": ["Beckham", "D. Beckham", "Becks"], "hint": "80 passes - Manchester United" },
+    { "answer": "Andrew Cole", "aliases": ["Andy Cole", "Cole", "A. Cole"], "hint": "73 passes - Newcastle, Man Utd..." },
+    { "answer": "Teddy Sheringham", "aliases": ["Sheringham", "T. Sheringham"], "hint": "76 passes - Tottenham, Man Utd, West Ham" },
+    { "answer": "Alan Shearer", "aliases": ["Shearer", "A. Shearer"], "hint": "64 passes - Newcastle & Blackburn" },
+    { "answer": "Thierry Henry", "aliases": ["Henry", "T. Henry", "Titi"], "hint": "74 passes - Arsenal" },
+    { "answer": "Mohamed Salah", "aliases": ["Salah", "Mo Salah", "M. Salah"], "hint": "75+ passes - Liverpool" },
+    { "answer": "Dwight Yorke", "aliases": ["Yorke", "D. Yorke"], "hint": "64 passes - Aston Villa, Man Utd" },
+    { "answer": "Leighton Baines", "aliases": ["Baines", "L. Baines"], "hint": "53 passes - Everton" },
+    { "answer": "Robert Pires", "aliases": ["Pires", "R. Pires"], "hint": "62 passes - Arsenal" },
+    { "answer": "Matt Le Tissier", "aliases": ["Le Tissier", "M. Le Tissier", "Le God"], "hint": "64 passes - Southampton" },
+    { "answer": "Robin van Persie", "aliases": ["Van Persie", "RVP", "R. van Persie"], "hint": "54 passes - Arsenal & Man Utd" }
+  ]
+}

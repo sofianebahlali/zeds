@@ -1,0 +1,25 @@
+{
+  "id": "europa-league-winners-2000",
+  "title": "Vainqueurs de la Ligue Europa / Coupe UEFA depuis 2000",
+  "category": "football",
+  "subcategory": "euro",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Galatasaray", "aliases": ["Galatasaray SK"], "hint": "2000" },
+    { "answer": "Liverpool", "aliases": ["Liverpool FC"], "hint": "2001" },
+    { "answer": "Feyenoord", "aliases": ["Feyenoord Rotterdam"], "hint": "2002" },
+    { "answer": "Porto", "aliases": ["FC Porto"], "hint": "2003, 2011" },
+    { "answer": "Valence", "aliases": ["Valencia", "Valencia CF", "FC Valence"], "hint": "2004" },
+    { "answer": "CSKA Moscou", "aliases": ["CSKA Moscow", "CSKA"], "hint": "2005" },
+    { "answer": "Séville", "aliases": ["Sevilla", "Sevilla FC", "FC Séville"], "hint": "2006, 2007, 2014, 2015, 2016, 2020, 2023" },
+    { "answer": "Zénith Saint-Pétersbourg", "aliases": ["Zenit", "Zénith", "Zenit St Petersburg"], "hint": "2008" },
+    { "answer": "Shakhtar Donetsk", "aliases": ["Shakhtar", "Chakhtior Donetsk"], "hint": "2009" },
+    { "answer": "Atlético Madrid", "aliases": ["Atletico Madrid", "Atlético", "Atletico"], "hint": "2010, 2012, 2018" },
+    { "answer": "Chelsea", "aliases": ["Chelsea FC"], "hint": "2013, 2019" },
+    { "answer": "Manchester United", "aliases": ["Man United", "Man Utd"], "hint": "2017" },
+    { "answer": "Villarreal", "aliases": ["Villarreal CF"], "hint": "2021" },
+    { "answer": "Eintracht Francfort", "aliases": ["Eintracht Frankfurt", "Francfort", "Frankfurt"], "hint": "2022" },
+    { "answer": "Atalanta", "aliases": ["Atalanta Bergame", "Atalanta BC"], "hint": "2024" },
+    { "answer": "Manchester United", "aliases": ["Man United", "Man Utd"], "hint": "2025" }
+  ]
+}

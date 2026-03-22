@@ -1,0 +1,14 @@
+{
+  "id": "copa-america-winners-1990",
+  "title": "Vainqueurs de la Copa América depuis 1990",
+  "category": "football",
+  "subcategory": "euro",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Argentine", "aliases": ["Argentina"], "hint": "1991, 1993, 2021, 2024" },
+    { "answer": "Uruguay", "aliases": [], "hint": "1995, 2011" },
+    { "answer": "Brésil", "aliases": ["Brazil", "Brasil"], "hint": "1997, 1999, 2004, 2007, 2019" },
+    { "answer": "Colombie", "aliases": ["Colombia"], "hint": "2001" },
+    { "answer": "Chili", "aliases": ["Chile"], "hint": "2015, 2016" }
+  ]
+}

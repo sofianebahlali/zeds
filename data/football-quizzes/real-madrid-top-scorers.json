@@ -1,0 +1,29 @@
+{
+  "id": "real-madrid-top-scorers",
+  "title": "Top 20 buteurs de l'histoire du Real Madrid",
+  "category": "football",
+  "subcategory": "liga",
+  "difficulty": "medium",
+  "items": [
+    { "answer": "Cristiano Ronaldo", "aliases": ["Ronaldo", "CR7", "Cristiano"], "hint": "450 buts — 2009-2018" },
+    { "answer": "Karim Benzema", "aliases": ["Benzema", "KB9", "Le Chat"], "hint": "354 buts — 2009-2023" },
+    { "answer": "Raúl", "aliases": ["Raul", "Raúl González", "Raul Gonzalez"], "hint": "323 buts — 1994-2010" },
+    { "answer": "Alfredo Di Stéfano", "aliases": ["Di Stéfano", "Di Stefano", "La Saeta Rubia"], "hint": "308 buts — 1953-1964" },
+    { "answer": "Santillana", "aliases": ["Carlos Alonso González", "Carlos Santillana"], "hint": "290 buts — 1971-1988" },
+    { "answer": "Ferenc Puskás", "aliases": ["Puskás", "Puskas", "Ferenc Puskas"], "hint": "242 buts — 1958-1966" },
+    { "answer": "Hugo Sánchez", "aliases": ["Hugo Sanchez"], "hint": "208 buts — 1985-1992" },
+    { "answer": "Paco Gento", "aliases": ["Francisco Gento", "Gento", "La Galerna del Cantábrico"], "hint": "182 buts — 1953-1971, 6 Coupes d'Europe" },
+    { "answer": "Pirri", "aliases": ["José Martínez Sánchez", "Jose Martinez Sanchez"], "hint": "172 buts — 1964-1980" },
+    { "answer": "Emilio Butragueño", "aliases": ["Butragueño", "Butragueno", "El Buitre"], "hint": "171 buts — 1984-1995" },
+    { "answer": "Amancio Amaro", "aliases": ["Amancio"], "hint": "155 buts — 1962-1976" },
+    { "answer": "Ronaldo Nazário", "aliases": ["R9", "Ronaldo Nazario", "Il Fenomeno"], "hint": "104 buts — 2002-2007" },
+    { "answer": "Vinicius Junior", "aliases": ["Vinicius Jr", "Vini Jr", "Vinicius", "Vini"], "hint": "100+ buts — 2018-présent" },
+    { "answer": "Gareth Bale", "aliases": ["Bale"], "hint": "106 buts — 2013-2022" },
+    { "answer": "Sergio Ramos", "aliases": ["Ramos"], "hint": "101 buts — 2005-2021, défenseur buteur" },
+    { "answer": "Fernando Hierro", "aliases": ["Hierro"], "hint": "127 buts — 1989-2003, défenseur" },
+    { "answer": "Michel", "aliases": ["Míchel", "Miguel González", "Míchel González"], "hint": "96 buts — 1984-1996" },
+    { "answer": "Juanito", "aliases": ["Juan Gómez González", "Juanito Maravilla"], "hint": "121 buts — 1977-1987" },
+    { "answer": "Pahiño", "aliases": ["Rafael Pahiño", "Pahino"], "hint": "83 buts — 1948-1953" },
+    { "answer": "Gonzalo Higuaín", "aliases": ["Higuaín", "Higuain", "Pipita"], "hint": "121 buts — 2007-2013" }
+  ]
+}

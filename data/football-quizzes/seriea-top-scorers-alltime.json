@@ -1,0 +1,29 @@
+{
+  "id": "seriea-top-scorers-alltime",
+  "title": "Top 20 buteurs all-time de Serie A",
+  "category": "football",
+  "subcategory": "serie-a",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Silvio Piola", "aliases": ["Piola"], "hint": "274 buts — Pro Vercelli, Lazio, Juventus, Novara" },
+    { "answer": "Francesco Totti", "aliases": ["Totti", "Il Capitano", "Er Pupone"], "hint": "250 buts — AS Roma" },
+    { "answer": "Gunnar Nordahl", "aliases": ["Nordahl"], "hint": "225 buts — AC Milan, Roma" },
+    { "answer": "Giuseppe Meazza", "aliases": ["Meazza", "Il Balilla", "Peppino Meazza"], "hint": "216 buts — Inter, AC Milan" },
+    { "answer": "José Altafini", "aliases": ["Altafini", "Mazzola"], "hint": "216 buts — AC Milan, Napoli, Juventus" },
+    { "answer": "Antonio Di Natale", "aliases": ["Di Natale", "Totò Di Natale"], "hint": "209 buts — Udinese, Empoli" },
+    { "answer": "Roberto Baggio", "aliases": ["Baggio", "Il Divin Codino"], "hint": "205 buts — Fiorentina, Juventus, AC Milan, Bologna, Inter" },
+    { "answer": "Kurt Hamrin", "aliases": ["Hamrin"], "hint": "190 buts — Juventus, Padova, Fiorentina, AC Milan, Napoli" },
+    { "answer": "Alessandro Del Piero", "aliases": ["Del Piero", "Alex Del Piero", "Pinturicchio"], "hint": "188 buts — Juventus" },
+    { "answer": "Alberto Gilardino", "aliases": ["Gilardino", "Gila"], "hint": "188 buts — Parma, AC Milan, Fiorentina, Genoa, Bologna" },
+    { "answer": "Giampiero Boniperti", "aliases": ["Boniperti"], "hint": "178 buts — Juventus" },
+    { "answer": "Amedeo Amadei", "aliases": ["Amadei"], "hint": "174 buts — Roma, Inter, Napoli" },
+    { "answer": "Giuseppe Signori", "aliases": ["Signori", "Beppe Signori"], "hint": "188 buts — Lazio, Foggia, Sampdoria, Bologna" },
+    { "answer": "Luca Toni", "aliases": ["Toni"], "hint": "157 buts — Brescia, Palermo, Fiorentina, Genoa, Hellas Verona" },
+    { "answer": "Gabriel Batistuta", "aliases": ["Batistuta", "Batigol"], "hint": "168 buts — Fiorentina, Roma, Inter" },
+    { "answer": "Gonzalo Higuaín", "aliases": ["Higuaín", "Higuain", "Pipita"], "hint": "149 buts — Napoli, Juventus, AC Milan" },
+    { "answer": "Hernán Crespo", "aliases": ["Crespo", "Hernan Crespo", "Valdanito"], "hint": "153 buts — Parma, Lazio, Inter, AC Milan, Genoa" },
+    { "answer": "Filippo Inzaghi", "aliases": ["Inzaghi", "Pippo Inzaghi", "SuperPippo"], "hint": "156 buts — Parma, Atalanta, Juventus, AC Milan" },
+    { "answer": "Ciro Immobile", "aliases": ["Immobile"], "hint": "155+ buts — Lazio, Torino, Genoa" },
+    { "answer": "Gianluca Vialli", "aliases": ["Vialli"], "hint": "123 buts — Cremonese, Sampdoria, Juventus" }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "all-time-top-scorers",
+  "title": "Top 20 buteurs de l'histoire du football (toutes compétitions)",
+  "category": "football",
+  "subcategory": "records",
+  "difficulty": "medium",
+  "items": [
+    { "answer": "Cristiano Ronaldo", "aliases": ["CR7", "C. Ronaldo"], "hint": "900+ buts (Sporting, Man Utd, Real, Juve, Al-Nassr)" },
+    { "answer": "Lionel Messi", "aliases": ["Messi", "Leo Messi"], "hint": "850+ buts (Barça, PSG, Inter Miami)" },
+    { "answer": "Josef Bican", "aliases": ["Bican"], "hint": "805 buts (années 1930-1950)" },
+    { "answer": "Pelé", "aliases": ["Pele", "Edson Arantes do Nascimento"], "hint": "767 buts officiels (Santos, NY Cosmos)" },
+    { "answer": "Romário", "aliases": ["Romario"], "hint": "772 buts (record disputé)" },
+    { "answer": "Ferenc Puskás", "aliases": ["Puskás", "Puskas"], "hint": "706 buts (Honved, Real Madrid)" },
+    { "answer": "Gerd Müller", "aliases": ["Müller", "Muller", "Gerd Muller"], "hint": "735 buts (Bayern Munich)" },
+    { "answer": "Robert Lewandowski", "aliases": ["Lewandowski", "Lewy"], "hint": "650+ buts (Dortmund, Bayern, Barça)" },
+    { "answer": "Luis Suárez", "aliases": ["Suárez", "Suarez"], "hint": "550+ buts (Ajax, Liverpool, Barça, etc.)" },
+    { "answer": "Zlatan Ibrahimović", "aliases": ["Ibrahimović", "Ibrahimovic", "Zlatan"], "hint": "570+ buts (Ajax, Inter, Barça, Milan, PSG, etc.)" },
+    { "answer": "Eusébio", "aliases": ["Eusebio", "Pantera Negra"], "hint": "620+ buts (Benfica)" },
+    { "answer": "Jimmy Jones", "aliases": ["Jones"], "hint": "646 buts (Glenavon, années 1950-60)" },
+    { "answer": "Erling Haaland", "aliases": ["Haaland"], "hint": "300+ buts (Salzbourg, Dortmund, Man City)" },
+    { "answer": "Neymar", "aliases": ["Neymar Jr"], "hint": "440+ buts (Santos, Barça, PSG)" },
+    { "answer": "Karim Benzema", "aliases": ["Benzema", "KB9"], "hint": "435+ buts (Lyon, Real Madrid, Al-Ittihad)" },
+    { "answer": "Thierry Henry", "aliases": ["Henry", "Titi"], "hint": "411 buts (Monaco, Arsenal, Barça, NY RB)" },
+    { "answer": "Alfredo Di Stéfano", "aliases": ["Di Stéfano", "Di Stefano"], "hint": "510+ buts (River, Real Madrid)" },
+    { "answer": "Harry Kane", "aliases": ["Kane"], "hint": "350+ buts (Tottenham, Bayern)" },
+    { "answer": "David Villa", "aliases": ["Villa", "El Guaje"], "hint": "391 buts (Valence, Barça, Atlético)" },
+    { "answer": "Kylian Mbappé", "aliases": ["Mbappé", "Mbappe"], "hint": "300+ buts (Monaco, PSG, Real Madrid)" }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "wc-hosts",
+  "title": "Pays hôtes de la Coupe du Monde",
+  "category": "football",
+  "subcategory": "world-cup",
+  "difficulty": "medium",
+  "items": [
+    { "answer": "Uruguay", "aliases": [], "hint": "1930 (Montevideo)" },
+    { "answer": "Italie", "aliases": ["Italy", "Italia"], "hint": "1934 et 1990" },
+    { "answer": "France", "aliases": [], "hint": "1938 et 1998" },
+    { "answer": "Brésil", "aliases": ["Brazil", "Brasil"], "hint": "1950 et 2014" },
+    { "answer": "Suisse", "aliases": ["Switzerland", "Schweiz"], "hint": "1954" },
+    { "answer": "Suède", "aliases": ["Sweden", "Sverige"], "hint": "1958" },
+    { "answer": "Chili", "aliases": ["Chile"], "hint": "1962" },
+    { "answer": "Angleterre", "aliases": ["England"], "hint": "1966" },
+    { "answer": "Mexique", "aliases": ["Mexico", "México"], "hint": "1970 et 1986 (et co-hôte 2026)" },
+    { "answer": "Allemagne", "aliases": ["Germany", "Deutschland", "RFA", "Allemagne de l'Ouest"], "hint": "1974 (RFA) et 2006" },
+    { "answer": "Argentine", "aliases": ["Argentina"], "hint": "1978" },
+    { "answer": "Espagne", "aliases": ["Spain", "España"], "hint": "1982" },
+    { "answer": "États-Unis", "aliases": ["USA", "United States", "Etats-Unis"], "hint": "1994 (et co-hôte 2026)" },
+    { "answer": "Corée du Sud", "aliases": ["South Korea", "Korea Republic"], "hint": "2002 (co-hôte avec le Japon)" },
+    { "answer": "Japon", "aliases": ["Japan"], "hint": "2002 (co-hôte avec la Corée du Sud)" },
+    { "answer": "Afrique du Sud", "aliases": ["South Africa"], "hint": "2010, 1er pays africain hôte" },
+    { "answer": "Russie", "aliases": ["Russia"], "hint": "2018" },
+    { "answer": "Qatar", "aliases": [], "hint": "2022, 1re Coupe du Monde au Moyen-Orient, en hiver" },
+    { "answer": "Canada", "aliases": [], "hint": "Co-hôte 2026 (avec USA et Mexique)" }
+  ]
+}

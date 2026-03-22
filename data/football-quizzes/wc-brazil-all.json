@@ -1,0 +1,49 @@
+{
+  "id": "wc-brazil-all",
+  "title": "Pays ayant participé à 15+ Coupes du Monde",
+  "category": "football",
+  "subcategory": "world-cup",
+  "difficulty": "easy",
+  "items": [
+    {
+      "answer": "Brésil",
+      "aliases": ["Brazil", "Brasil"],
+      "hint": "22 participations (1930-2022), seul pays à avoir participé à TOUTES les éditions"
+    },
+    {
+      "answer": "Allemagne",
+      "aliases": ["Germany", "Deutschland", "RFA", "Allemagne de l'Ouest", "West Germany"],
+      "hint": "20 participations (absent en 1930 et 1950)"
+    },
+    {
+      "answer": "Argentine",
+      "aliases": ["Argentina"],
+      "hint": "18 participations (absent en 1938, 1950, 1954, 1970)"
+    },
+    {
+      "answer": "Italie",
+      "aliases": ["Italy", "Italia"],
+      "hint": "18 participations (absent en 1930, 1958, 2018, 2022)"
+    },
+    {
+      "answer": "Mexique",
+      "aliases": ["Mexico", "México"],
+      "hint": "17 participations (absent en 1934, 1938, 1974, 1982 suspendu, 1990)"
+    },
+    {
+      "answer": "France",
+      "aliases": [],
+      "hint": "16 participations (absent en 1950, 1962, 1970, 1974, 1990, 1994)"
+    },
+    {
+      "answer": "Espagne",
+      "aliases": ["Spain", "España"],
+      "hint": "16 participations"
+    },
+    {
+      "answer": "Angleterre",
+      "aliases": ["England"],
+      "hint": "16 participations (absent en 1930, 1934, 1938, 1974, 1978, 1994)"
+    }
+  ]
+}

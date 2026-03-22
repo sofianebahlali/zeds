@@ -1,0 +1,29 @@
+{
+  "id": "edf-selectioneurs",
+  "title": "Sélectionneurs de l'Équipe de France",
+  "category": "football",
+  "subcategory": "equipe-de-france",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Gaston Barreau", "aliases": ["Barreau"], "hint": "1945-1949" },
+    { "answer": "Gabriel Hanot", "aliases": ["Hanot"], "hint": "1945-1949 (co-sélectionneur)" },
+    { "answer": "Paul Baron", "aliases": ["Baron"], "hint": "1949-1953" },
+    { "answer": "Pierre Pibarot", "aliases": ["Pibarot"], "hint": "1953-1954" },
+    { "answer": "Albert Batteux", "aliases": ["Batteux"], "hint": "1955-1962" },
+    { "answer": "Henri Guérin", "aliases": ["Guérin", "Guerin"], "hint": "1962-1966" },
+    { "answer": "Just Fontaine", "aliases": ["Fontaine"], "hint": "1967 (2 matchs)" },
+    { "answer": "Louis Dugauguez", "aliases": ["Dugauguez"], "hint": "1967-1968" },
+    { "answer": "Georges Boulogne", "aliases": ["Boulogne"], "hint": "1969-1973" },
+    { "answer": "Ștefan Kovács", "aliases": ["Kovács", "Kovacs", "Stefan Kovacs"], "hint": "1973-1975" },
+    { "answer": "Michel Hidalgo", "aliases": ["Hidalgo"], "hint": "1976-1984" },
+    { "answer": "Henri Michel", "aliases": ["H. Michel"], "hint": "1984-1988" },
+    { "answer": "Michel Platini", "aliases": ["Platini"], "hint": "1988-1992" },
+    { "answer": "Gérard Houllier", "aliases": ["Houllier", "Gerard Houllier"], "hint": "1992-1993" },
+    { "answer": "Aimé Jacquet", "aliases": ["Jacquet"], "hint": "1993-1998" },
+    { "answer": "Roger Lemerre", "aliases": ["Lemerre"], "hint": "1998-2002" },
+    { "answer": "Jacques Santini", "aliases": ["Santini"], "hint": "2002-2004" },
+    { "answer": "Raymond Domenech", "aliases": ["Domenech"], "hint": "2004-2010" },
+    { "answer": "Laurent Blanc", "aliases": ["Blanc"], "hint": "2010-2012" },
+    { "answer": "Didier Deschamps", "aliases": ["Deschamps", "DD"], "hint": "2012-2025" }
+  ]
+}

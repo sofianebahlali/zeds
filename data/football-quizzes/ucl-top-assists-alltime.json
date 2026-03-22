@@ -1,0 +1,19 @@
+{
+  "id": "ucl-top-assists-alltime",
+  "title": "Top 10 passeurs all-time de Ligue des Champions",
+  "category": "football",
+  "subcategory": "champions-league",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Cristiano Ronaldo", "aliases": ["Ronaldo", "CR7", "Cristiano"], "hint": "42 passes décisives" },
+    { "answer": "Lionel Messi", "aliases": ["Messi", "Leo Messi", "La Pulga"], "hint": "40 passes décisives" },
+    { "answer": "Ángel Di María", "aliases": ["Di María", "Di Maria", "Angel Di Maria", "A. Di María", "Fideo"], "hint": "36 passes décisives" },
+    { "answer": "Thomas Müller", "aliases": ["Müller", "Muller", "Thomas Muller", "T. Müller"], "hint": "34 passes décisives" },
+    { "answer": "Neymar", "aliases": ["Neymar Jr", "Neymar Junior", "Ney"], "hint": "31 passes décisives" },
+    { "answer": "Karim Benzema", "aliases": ["Benzema", "KB9", "Benz"], "hint": "30 passes décisives" },
+    { "answer": "Ryan Giggs", "aliases": ["Giggs", "R. Giggs"], "hint": "30 passes décisives" },
+    { "answer": "Xavi", "aliases": ["Xavi Hernández", "Xavi Hernandez", "Xavier Hernández"], "hint": "28 passes décisives" },
+    { "answer": "Kevin De Bruyne", "aliases": ["De Bruyne", "KDB", "K. De Bruyne"], "hint": "28 passes décisives" },
+    { "answer": "Mesut Özil", "aliases": ["Özil", "Ozil", "Mesut Ozil", "M. Özil"], "hint": "24 passes décisives" }
+  ]
+}

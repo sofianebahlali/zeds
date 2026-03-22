@@ -1,0 +1,139 @@
+{
+  "id": "l1-champions-2000",
+  "title": "Champions de Ligue 1 depuis 2000",
+  "category": "football",
+  "subcategory": "ligue-1",
+  "difficulty": "medium",
+  "items": [
+    {
+      "answer": "AS Monaco",
+      "aliases": ["Monaco", "ASM"],
+      "hint": "1999-2000"
+    },
+    {
+      "answer": "FC Nantes",
+      "aliases": ["Nantes", "FCN", "Les Canaris"],
+      "hint": "2000-01"
+    },
+    {
+      "answer": "Olympique Lyonnais",
+      "aliases": ["Lyon", "OL", "Olympique Lyon"],
+      "hint": "2001-02"
+    },
+    {
+      "answer": "Olympique Lyonnais",
+      "aliases": ["Lyon", "OL", "Olympique Lyon"],
+      "hint": "2002-03"
+    },
+    {
+      "answer": "Olympique Lyonnais",
+      "aliases": ["Lyon", "OL", "Olympique Lyon"],
+      "hint": "2003-04"
+    },
+    {
+      "answer": "Olympique Lyonnais",
+      "aliases": ["Lyon", "OL", "Olympique Lyon"],
+      "hint": "2004-05"
+    },
+    {
+      "answer": "Olympique Lyonnais",
+      "aliases": ["Lyon", "OL", "Olympique Lyon"],
+      "hint": "2005-06"
+    },
+    {
+      "answer": "Olympique Lyonnais",
+      "aliases": ["Lyon", "OL", "Olympique Lyon"],
+      "hint": "2006-07"
+    },
+    {
+      "answer": "Olympique Lyonnais",
+      "aliases": ["Lyon", "OL", "Olympique Lyon"],
+      "hint": "2007-08"
+    },
+    {
+      "answer": "Girondins de Bordeaux",
+      "aliases": ["Bordeaux", "FCGB", "Girondins"],
+      "hint": "2008-09"
+    },
+    {
+      "answer": "Olympique de Marseille",
+      "aliases": ["Marseille", "OM", "Olympique Marseille"],
+      "hint": "2009-10"
+    },
+    {
+      "answer": "LOSC Lille",
+      "aliases": ["Lille", "LOSC", "Lille OSC"],
+      "hint": "2010-11"
+    },
+    {
+      "answer": "Montpellier HSC",
+      "aliases": ["Montpellier", "MHSC", "Montpellier H\u00e9rault"],
+      "hint": "2011-12"
+    },
+    {
+      "answer": "Paris Saint-Germain",
+      "aliases": ["PSG", "Paris", "Paris SG"],
+      "hint": "2012-13"
+    },
+    {
+      "answer": "Paris Saint-Germain",
+      "aliases": ["PSG", "Paris", "Paris SG"],
+      "hint": "2013-14"
+    },
+    {
+      "answer": "Paris Saint-Germain",
+      "aliases": ["PSG", "Paris", "Paris SG"],
+      "hint": "2014-15"
+    },
+    {
+      "answer": "Paris Saint-Germain",
+      "aliases": ["PSG", "Paris", "Paris SG"],
+      "hint": "2015-16"
+    },
+    {
+      "answer": "AS Monaco",
+      "aliases": ["Monaco", "ASM"],
+      "hint": "2016-17"
+    },
+    {
+      "answer": "Paris Saint-Germain",
+      "aliases": ["PSG", "Paris", "Paris SG"],
+      "hint": "2017-18"
+    },
+    {
+      "answer": "Paris Saint-Germain",
+      "aliases": ["PSG", "Paris", "Paris SG"],
+      "hint": "2018-19"
+    },
+    {
+      "answer": "Paris Saint-Germain",
+      "aliases": ["PSG", "Paris", "Paris SG"],
+      "hint": "2019-20"
+    },
+    {
+      "answer": "LOSC Lille",
+      "aliases": ["Lille", "LOSC", "Lille OSC"],
+      "hint": "2020-21"
+    },
+    {
+      "answer": "Paris Saint-Germain",
+      "aliases": ["PSG", "Paris", "Paris SG"],
+      "hint": "2021-22"
+    },
+    {
+      "answer": "Paris Saint-Germain",
+      "aliases": ["PSG", "Paris", "Paris SG"],
+      "hint": "2022-23"
+    },
+    {
+      "answer": "Paris Saint-Germain",
+      "aliases": ["PSG", "Paris", "Paris SG"],
+      "hint": "2023-24"
+    },
+    {
+      "answer": "Paris Saint-Germain",
+      "aliases": ["PSG", "Paris", "Paris SG"],
+      "hint": "2024-25"
+    }
+  ]
+}

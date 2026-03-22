@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction, SplitStealStartData, SplitStealRevealData } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction, SplitStealStartData, SplitStealRevealData, ListeRoundResult, ListeProgressData } from "@/types";
 import { useChatStore } from "@/stores/chat-store";
 
 // Module-level flag: listeners are attached ONCE across all component instances
@@ -217,6 +217,10 @@ function setupSocketListeners() {
     useGameStore.getState().setPetitBacValidation(data);
   });
 
+  socket.on("petitbac:stop_triggered", (data: { playerId: string; playerName: string; countdown: number }) => {
+    useGameStore.setState({ petitBacStopTriggered: { playerName: data.playerName, countdown: data.countdown } });
+  });
+
   socket.on("petitbac:validation_result", (validation: PetitBacValidationSubmission) => {
     useGameStore.getState().setPetitBacValidatedAnswers(validation);
   });
@@ -320,6 +324,24 @@ function setupSocketListeners() {
 
   socket.on("lineup:reveal", (match: LineupMatch, scores: { playerId: string; foundCount: number }[]) => {
     useGameStore.getState().setLineupReveal(match, scores);
+  });
+
+  // Liste events
+  socket.on("liste:item_found", (data: { playerId: string; itemIndex: number; answer: string }) => {
+    const store = useGameStore.getState();
+    const myPlayerId = usePlayerStore.getState().playerId;
+    store.addListeFoundItem(data.itemIndex, data.answer, data.playerId);
+    if (data.playerId === myPlayerId) {
+      useGameStore.setState({ listeMyFoundCount: store.listeMyFoundCount + 1 });
+    }
+  });
+
+  socket.on("liste:player_finished", (data: { playerId: string; finishedCount: number; totalPlayers: number }) => {
+    useGameStore.getState().addListeFinishedPlayer(data.playerId);
+  });
+
+  socket.on("liste:round_end", (result: ListeRoundResult) => {
+    useGameStore.getState().setListeRoundResult(result);
   });
 
   // Team events
@@ -563,6 +585,16 @@ export function useSocket() {
     useGameStore.setState({ hasAnswered: true, myAnswer: choice });
   }, [socket]);
 
+  const submitListeAnswer = useCallback((answer: string) => {
+    if (useGameStore.getState().timeRemaining > 0) {
+      socket.emit("liste:submit_answer", answer);
+    }
+  }, [socket]);
+
+  const submitListeFinish = useCallback(() => {
+    socket.emit("liste:finish");
+  }, [socket]);
+
   const sendChatMessage = useCallback((message: string) => {
     socket.emit("chat:send_message", message);
   }, [socket]);
@@ -608,6 +640,8 @@ export function useSocket() {
     submitLineupGuess,
     skipLineupReveal,
     submitSplitStealChoice,
+    submitListeAnswer,
+    submitListeFinish,
     sendChatMessage,
     sendLaughReaction,
     playAgain,

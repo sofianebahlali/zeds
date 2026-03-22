@@ -1,0 +1,28 @@
+{
+  "id": "ucl-finalists-2000",
+  "title": "Finalistes de la Ligue des Champions depuis 2000",
+  "category": "football",
+  "subcategory": "champions-league",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Real Madrid", "aliases": ["Real", "Real Madrid CF", "Madrid", "Los Blancos"], "hint": "2000 (W), 2002 (W), 2014 (W), 2016 (W), 2017 (W), 2018 (W), 2022 (W), 2024 (W)" },
+    { "answer": "Valence", "aliases": ["Valencia", "Valencia CF", "Los Che", "VCF"], "hint": "2000, 2001" },
+    { "answer": "Bayern Munich", "aliases": ["Bayern", "Bayern München", "Bayern de Munich", "FC Bayern"], "hint": "2001 (W), 2010, 2012, 2013 (W), 2020 (W)" },
+    { "answer": "Bayer Leverkusen", "aliases": ["Leverkusen", "Bayer 04", "Bayer"], "hint": "2002" },
+    { "answer": "Juventus", "aliases": ["Juve", "Juventus FC", "Bianconeri", "La Vieille Dame"], "hint": "2003, 2015, 2017" },
+    { "answer": "AC Milan", "aliases": ["Milan", "Milan AC", "Rossoneri"], "hint": "2003 (W), 2005, 2007 (W)" },
+    { "answer": "AS Monaco", "aliases": ["Monaco", "ASM"], "hint": "2004" },
+    { "answer": "FC Porto", "aliases": ["Porto", "FCP"], "hint": "2004 (W)" },
+    { "answer": "Liverpool", "aliases": ["Liverpool FC", "LFC", "Reds", "The Reds"], "hint": "2005 (W), 2007, 2018, 2019 (W), 2025" },
+    { "answer": "FC Barcelone", "aliases": ["Barcelona", "Barcelone", "Barça", "Barca", "FC Barcelona"], "hint": "2006 (W), 2009 (W), 2011 (W), 2015 (W)" },
+    { "answer": "Arsenal", "aliases": ["Arsenal FC", "Gunners", "The Gunners"], "hint": "2006" },
+    { "answer": "Manchester United", "aliases": ["Man United", "Man Utd", "MUFC", "Red Devils", "United"], "hint": "2008 (W), 2009, 2011" },
+    { "answer": "Chelsea", "aliases": ["Chelsea FC", "Blues", "The Blues", "CFC"], "hint": "2008, 2012 (W), 2021 (W)" },
+    { "answer": "Inter Milan", "aliases": ["Inter", "Internazionale", "Inter de Milan", "Nerazzurri"], "hint": "2010 (W), 2023" },
+    { "answer": "Borussia Dortmund", "aliases": ["Dortmund", "BVB", "BVB 09"], "hint": "2013, 2024" },
+    { "answer": "Atlético Madrid", "aliases": ["Atletico Madrid", "Atlético", "Atletico", "Atleti", "Colchoneros"], "hint": "2014, 2016" },
+    { "answer": "Tottenham Hotspur", "aliases": ["Tottenham", "Spurs", "THFC", "Tottenham Hotspur FC"], "hint": "2019" },
+    { "answer": "Paris Saint-Germain", "aliases": ["PSG", "Paris SG", "Paris"], "hint": "2020, 2025" },
+    { "answer": "Manchester City", "aliases": ["Man City", "City", "Citizens", "MCFC"], "hint": "2021, 2023 (W)" }
+  ]
+}

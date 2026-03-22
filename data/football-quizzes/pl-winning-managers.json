@@ -1,0 +1,20 @@
+{
+  "id": "pl-winning-managers",
+  "title": "Entraineurs champions de Premier League",
+  "category": "football",
+  "subcategory": "premier-league",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Alex Ferguson", "aliases": ["Ferguson", "Sir Alex Ferguson", "Sir Alex", "A. Ferguson", "SAF"], "hint": "13 titres (1993, 1994, 1996, 1997, 1999, 2000, 2001, 2003, 2007, 2008, 2009, 2011, 2013) - Man Utd" },
+    { "answer": "Pep Guardiola", "aliases": ["Guardiola", "P. Guardiola", "Pep"], "hint": "6 titres (2018, 2019, 2021, 2022, 2023, 2024) - Man City" },
+    { "answer": "Arsene Wenger", "aliases": ["Wenger", "A. Wenger", "Arsene Wenger", "Le Professeur"], "hint": "3 titres (1998, 2002, 2004) - Arsenal" },
+    { "answer": "Jose Mourinho", "aliases": ["Mourinho", "J. Mourinho", "The Special One", "Jose Mourinho"], "hint": "3 titres (2005, 2006, 2015) - Chelsea" },
+    { "answer": "Kenny Dalglish", "aliases": ["Dalglish", "K. Dalglish", "King Kenny"], "hint": "1 titre (1995) - Blackburn Rovers" },
+    { "answer": "Roberto Mancini", "aliases": ["Mancini", "R. Mancini"], "hint": "1 titre (2012) - Man City" },
+    { "answer": "Manuel Pellegrini", "aliases": ["Pellegrini", "M. Pellegrini", "The Engineer"], "hint": "1 titre (2014) - Man City" },
+    { "answer": "Claudio Ranieri", "aliases": ["Ranieri", "C. Ranieri"], "hint": "1 titre (2016) - Leicester City" },
+    { "answer": "Antonio Conte", "aliases": ["Conte", "A. Conte"], "hint": "1 titre (2017) - Chelsea" },
+    { "answer": "Jurgen Klopp", "aliases": ["Klopp", "J. Klopp", "Juergen Klopp", "Jurgen Klopp"], "hint": "1 titre (2020) - Liverpool" },
+    { "answer": "Arne Slot", "aliases": ["Slot", "A. Slot"], "hint": "1 titre (2025) - Liverpool" }
+  ]
+}

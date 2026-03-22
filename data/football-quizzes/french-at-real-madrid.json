@@ -1,0 +1,22 @@
+{
+  "id": "french-at-real-madrid",
+  "title": "Français ayant joué au Real Madrid",
+  "category": "football",
+  "subcategory": "equipe-de-france",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Raymond Kopa", "aliases": ["Kopa"], "hint": "1956-1959, 3 C1" },
+    { "answer": "Zinédine Zidane", "aliases": ["Zidane", "Zizou"], "hint": "2001-2006" },
+    { "answer": "Claude Makélélé", "aliases": ["Makélélé", "Makelele"], "hint": "2000-2003" },
+    { "answer": "Karim Benzema", "aliases": ["Benzema", "KB9"], "hint": "2009-2023" },
+    { "answer": "Raphaël Varane", "aliases": ["Varane"], "hint": "2011-2021" },
+    { "answer": "Lassana Diarra", "aliases": ["L. Diarra", "Lass Diarra"], "hint": "2009-2012" },
+    { "answer": "Ferland Mendy", "aliases": ["Mendy", "F. Mendy"], "hint": "2019-présent" },
+    { "answer": "Eduardo Camavinga", "aliases": ["Camavinga"], "hint": "2021-présent" },
+    { "answer": "Aurélien Tchouaméni", "aliases": ["Tchouaméni", "Tchouameni"], "hint": "2022-présent" },
+    { "answer": "Kylian Mbappé", "aliases": ["Mbappé", "Mbappe"], "hint": "2024-présent" },
+    { "answer": "Christian Karembeu", "aliases": ["Karembeu"], "hint": "1997-2000" },
+    { "answer": "Lucien Muller", "aliases": ["Muller"], "hint": "1962-1965" },
+    { "answer": "Diarra", "aliases": ["Jean-Michel Diarra"], "hint": "Années 2000" }
+  ]
+}

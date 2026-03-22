@@ -20,6 +20,7 @@ import { LineupGameScreen } from "./lineup-game-screen";
 import { LineupRevealScreen } from "./lineup-reveal-screen";
 import { SplitStealChoiceScreen } from "./splitsteal-choice-screen";
 import { SplitStealRevealScreen } from "./splitsteal-reveal-screen";
+import { ListeGameScreen } from "./liste-game-screen";
 import { GameChat } from "./game-chat";
 import { ScreenContainer } from "@/components/layout";
 import { GAME_MODES } from "@/types";
@@ -38,6 +39,7 @@ export function GameScreen() {
   const isGeoQuiz = currentGameMode === "geoquiz";
   const isLangue = currentGameMode === "langue";
   const isLineup = currentGameMode === "lineup";
+  const isListe = currentGameMode === "liste";
   const currentModeInfo = GAME_MODES.find((m) => m.id === currentGameMode);
   const transitionModeInfo = modeTransition ? GAME_MODES.find((m) => m.id === modeTransition) : null;
 
@@ -176,6 +178,7 @@ export function GameScreen() {
         <AnimatePresence mode="wait">
           {status === "countdown" && <CountdownOverlay key="countdown" />}
           {(status === "question" || status === "answering") && (
+            isListe ? <ListeGameScreen key="liste" /> :
             isLineup ? <LineupGameScreen key="lineup" /> : <QuestionDisplay key="question" />
           )}
           {status === "revealing" && <RoundResult key="result" />}

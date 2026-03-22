@@ -1,0 +1,29 @@
+{
+  "id": "bundesliga-top-scorers-alltime",
+  "title": "Top 20 buteurs all-time de Bundesliga",
+  "category": "football",
+  "subcategory": "bundesliga",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Gerd Müller", "aliases": ["Gerd Muller", "Der Bomber"], "hint": "365 buts — Bayern Munich" },
+    { "answer": "Robert Lewandowski", "aliases": ["Lewandowski", "Lewy"], "hint": "312 buts — Borussia Dortmund, Bayern Munich" },
+    { "answer": "Klaus Fischer", "aliases": ["Fischer"], "hint": "268 buts — Schalke 04, Cologne, Bochum" },
+    { "answer": "Jupp Heynckes", "aliases": ["Heynckes", "Josef Heynckes"], "hint": "220 buts — Borussia Mönchengladbach, Hanovre" },
+    { "answer": "Manfred Burgsmüller", "aliases": ["Burgsmüller", "Burgsmüller", "Manfred Burgsmuller"], "hint": "213 buts — Borussia Dortmund, Werder Bremen" },
+    { "answer": "Claudio Pizarro", "aliases": ["Pizarro", "Pizza"], "hint": "197 buts — Werder Bremen, Bayern Munich, Cologne" },
+    { "answer": "Thomas Müller", "aliases": ["Thomas Muller", "Müller"], "hint": "176+ buts — Bayern Munich" },
+    { "answer": "Klaus Allofs", "aliases": ["Allofs"], "hint": "177 buts — Fortuna Düsseldorf, Cologne, Marseille, Werder Bremen" },
+    { "answer": "Ulf Kirsten", "aliases": ["Kirsten"], "hint": "181 buts — Bayer Leverkusen" },
+    { "answer": "Stefan Kuntz", "aliases": ["Kuntz"], "hint": "179 buts — Bochum, Kaiserslautern, Arminia Bielefeld" },
+    { "answer": "Dieter Müller", "aliases": ["Dieter Muller"], "hint": "177 buts — Cologne, Stuttgart, Bordeaux" },
+    { "answer": "Hannes Löhr", "aliases": ["Löhr", "Hannes Lohr"], "hint": "166 buts — 1. FC Cologne" },
+    { "answer": "Karl-Heinz Rummenigge", "aliases": ["Rummenigge"], "hint": "162 buts — Bayern Munich" },
+    { "answer": "Mario Gómez", "aliases": ["Mario Gomez", "Gómez", "Gomez"], "hint": "170 buts — Stuttgart, Bayern Munich, Wolfsburg" },
+    { "answer": "Giovane Élber", "aliases": ["Giovane Elber", "Élber", "Elber"], "hint": "133 buts — Stuttgart, Bayern Munich, Mönchengladbach, Lyon" },
+    { "answer": "Rudi Völler", "aliases": ["Rudi Voller", "Völler", "Voller", "Tante Käthe"], "hint": "132 buts — Werder Bremen, Bayer Leverkusen" },
+    { "answer": "Herbert Laumen", "aliases": ["Laumen"], "hint": "131 buts — Borussia Mönchengladbach" },
+    { "answer": "Fritz Walter", "aliases": ["Walter"], "hint": "Non confondu avec l'ancien — 130+ buts, plusieurs clubs" },
+    { "answer": "Ailton", "aliases": ["Ailton Gonçalves", "Ailton Goncalves", "Kugelblitz"], "hint": "106 buts — Werder Bremen" },
+    { "answer": "Bernd Hölzenbein", "aliases": ["Hölzenbein", "Holzenbein"], "hint": "160 buts — Eintracht Frankfurt" }
+  ]
+}

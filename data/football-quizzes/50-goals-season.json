@@ -1,0 +1,21 @@
+{
+  "id": "50-goals-season",
+  "title": "Joueurs ayant marqué 50+ buts en une année civile",
+  "category": "football",
+  "subcategory": "records",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Lionel Messi", "aliases": ["Messi", "Leo Messi"], "hint": "91 buts en 2012 (record absolu)" },
+    { "answer": "Gerd Müller", "aliases": ["Müller", "Muller", "Gerd Muller"], "hint": "85 buts en 1972" },
+    { "answer": "Cristiano Ronaldo", "aliases": ["CR7", "C. Ronaldo"], "hint": "69 buts en 2013" },
+    { "answer": "Robert Lewandowski", "aliases": ["Lewandowski", "Lewy"], "hint": "69 buts en 2021" },
+    { "answer": "Pelé", "aliases": ["Pele", "Edson Arantes"], "hint": "75+ buts en 1958, 1961" },
+    { "answer": "Ferenc Puskás", "aliases": ["Puskás", "Puskas", "Ferenc Puskas"], "hint": "Multiples saisons 50+ dans les années 1950" },
+    { "answer": "Vivian Woodward", "aliases": ["Woodward"], "hint": "Prolifique buteur anglais début 1900" },
+    { "answer": "Erling Haaland", "aliases": ["Haaland"], "hint": "52+ buts en 2023" },
+    { "answer": "Neymar", "aliases": ["Neymar Jr"], "hint": "50+ buts en 2017" },
+    { "answer": "Luis Suárez", "aliases": ["Suárez", "Suarez", "Luis Suarez"], "hint": "59 buts en 2016" },
+    { "answer": "Zlatan Ibrahimović", "aliases": ["Ibrahimović", "Ibrahimovic", "Zlatan"], "hint": "50+ buts en 2012" },
+    { "answer": "Harry Kane", "aliases": ["Kane"], "hint": "52 buts en 2017" }
+  ]
+}

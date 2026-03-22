@@ -1,0 +1,31 @@
+{
+  "id": "france-1998",
+  "title": "Équipe de France 1998 - Coupe du Monde (22 joueurs)",
+  "category": "football",
+  "subcategory": "world-cup",
+  "difficulty": "medium",
+  "items": [
+    { "answer": "Fabien Barthez", "aliases": ["Barthez"], "hint": "Gardien titulaire, n°16" },
+    { "answer": "Bernard Lama", "aliases": ["Lama"], "hint": "Gardien, n°22" },
+    { "answer": "Lionel Charbonnier", "aliases": ["Charbonnier"], "hint": "3e gardien, n°1" },
+    { "answer": "Lilian Thuram", "aliases": ["Thuram"], "hint": "Défenseur, auteur d'un doublé en demi-finale contre la Croatie" },
+    { "answer": "Marcel Desailly", "aliases": ["Desailly"], "hint": "Défenseur central, expulsé en finale" },
+    { "answer": "Laurent Blanc", "aliases": ["Blanc"], "hint": "Défenseur central, suspendu pour la finale (main de Bilic)" },
+    { "answer": "Bixente Lizarazu", "aliases": ["Lizarazu"], "hint": "Arrière gauche" },
+    { "answer": "Frank Leboeuf", "aliases": ["Leboeuf", "Lebœuf"], "hint": "Défenseur central, a remplacé Blanc en finale" },
+    { "answer": "Vincent Candela", "aliases": ["Candela"], "hint": "Défenseur polyvalent" },
+    { "answer": "Christian Karembeu", "aliases": ["Karembeu"], "hint": "Milieu de terrain, originaire de Nouvelle-Calédonie" },
+    { "answer": "Didier Deschamps", "aliases": ["Deschamps"], "hint": "Capitaine, milieu défensif" },
+    { "answer": "Emmanuel Petit", "aliases": ["Petit"], "hint": "Milieu, buteur en finale (3-0)" },
+    { "answer": "Patrick Vieira", "aliases": ["Vieira"], "hint": "Milieu de terrain, jouait à Arsenal" },
+    { "answer": "Zinédine Zidane", "aliases": ["Zidane", "Zizou"], "hint": "Milieu offensif, auteur d'un doublé en finale" },
+    { "answer": "Youri Djorkaeff", "aliases": ["Djorkaeff"], "hint": "Milieu offensif, jouait à l'Inter Milan" },
+    { "answer": "Alain Boghossian", "aliases": ["Boghossian"], "hint": "Milieu de terrain" },
+    { "answer": "Robert Pirès", "aliases": ["Pirès", "Pires", "Robert Pires"], "hint": "Milieu offensif, jouait à Metz" },
+    { "answer": "Bernard Diomède", "aliases": ["Diomède", "Diomede"], "hint": "Milieu/ailier, a joué la finale" },
+    { "answer": "Thierry Henry", "aliases": ["Henry"], "hint": "Attaquant, 3 buts dans le tournoi" },
+    { "answer": "David Trezeguet", "aliases": ["Trezeguet"], "hint": "Attaquant, jouait à Monaco" },
+    { "answer": "Stéphane Guivarc'h", "aliases": ["Guivarc'h", "Guivarch"], "hint": "Attaquant titulaire en finale, 0 but dans le tournoi" },
+    { "answer": "Christophe Dugarry", "aliases": ["Dugarry"], "hint": "Attaquant, ami d'enfance de Zidane" }
+  ]
+}

@@ -891,6 +891,27 @@ function PetitBacQuestionView({
   onChange,
   onSubmit,
 }: PetitBacQuestionViewProps) {
+  const petitBacStop = useGameStore((s) => s.petitBacStopTriggered);
+  const [stopCountdown, setStopCountdown] = useState<number | null>(null);
+
+  // When stop is triggered, start visual countdown and auto-submit
+  useEffect(() => {
+    if (!petitBacStop || hasAnswered) return;
+    setStopCountdown(petitBacStop.countdown);
+    const interval = setInterval(() => {
+      setStopCountdown((prev) => {
+        if (prev === null || prev <= 1) {
+          clearInterval(interval);
+          // Auto-submit when countdown reaches 0
+          onSubmit();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [petitBacStop, hasAnswered, onSubmit]);
+
   const handleCategoryChange = (category: string, value: string) => {
     onChange({ ...answers, [category]: value });
   };
@@ -901,6 +922,25 @@ function PetitBacQuestionView({
 
   return (
     <>
+      {/* STOP banner */}
+      <AnimatePresence>
+        {petitBacStop && !hasAnswered && stopCountdown !== null && stopCountdown > 0 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: -20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="fixed top-20 left-4 right-4 z-50 flex justify-center"
+          >
+            <div className="bg-red-500/90 backdrop-blur-sm text-white px-6 py-3 rounded-xl shadow-lg text-center">
+              <div className="text-2xl font-display font-black">STOP !</div>
+              <div className="text-sm opacity-90">
+                {petitBacStop.playerName} a soumis — <span className="font-bold">{stopCountdown}s</span> restantes
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Header with letter */}
       <div className="mb-4 text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-800 border border-surface-700 mb-3">

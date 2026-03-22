@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -492,6 +492,63 @@ export interface SplitStealQuestion extends BaseQuestion {
   type: "splitsteal";
 }
 
+// ==========================================
+// LISTE MODE TYPES
+// ==========================================
+
+export interface ListeItem {
+  answer: string;
+  aliases: string[];
+  hint?: string;
+}
+
+export interface ListeQuestion extends BaseQuestion {
+  type: "liste";
+  title: string;
+  quizId: string;
+  category: string;
+  subcategory: string;
+  difficulty: "easy" | "medium" | "hard" | "very-hard";
+  items: ListeItem[];
+}
+
+export interface ListeFoundItem {
+  index: number;
+  answer: string;
+  foundBy: string;
+  foundAt: number; // timestamp
+}
+
+export interface ListePlayerState {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  foundItems: number[];
+  hasFinished: boolean;
+}
+
+export interface ListeProgressData {
+  foundItems: ListeFoundItem[];
+  playerStates: ListePlayerState[];
+  totalItems: number;
+}
+
+export interface ListeRoundResult {
+  roundNumber: number;
+  quizTitle: string;
+  items: ListeItem[];
+  playerResults: {
+    playerId: string;
+    playerName: string;
+    playerAvatar: string;
+    foundCount: number;
+    points: number;
+    total: number;
+    foundItems: number[];
+    completionBonus: boolean;
+  }[];
+}
+
 export interface LineupPlayer {
   pos: string;
   name: string;
@@ -530,7 +587,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -686,6 +743,7 @@ export interface ServerToClientEvents {
   // Petit Bac events
   "petitbac:validation_start": (data: PetitBacValidationData) => void;
   "petitbac:validation_result": (validation: PetitBacValidationSubmission) => void;
+  "petitbac:stop_triggered": (data: { playerId: string; playerName: string; countdown: number }) => void;
 
   // GeoQuiz events
   "geoquiz:validation_start": (data: GeoQuizValidationData) => void;
@@ -716,6 +774,12 @@ export interface ServerToClientEvents {
   "splitsteal:phase_start": (data: SplitStealStartData) => void;
   "splitsteal:player_chose": (playerId: string) => void;
   "splitsteal:reveal": (data: SplitStealRevealData) => void;
+
+  // Liste events
+  "liste:item_found": (data: { playerId: string; itemIndex: number; answer: string }) => void;
+  "liste:player_finished": (data: { playerId: string; finishedCount: number; totalPlayers: number }) => void;
+  "liste:progress": (data: ListeProgressData) => void;
+  "liste:round_end": (result: ListeRoundResult) => void;
 
   // Team events
   "game:team_round_start": (data: TeamRoundData) => void;
@@ -786,6 +850,10 @@ export interface ClientToServerEvents {
 
   // Split or Steal events
   "splitsteal:submit_choice": (choice: "split" | "steal") => void;
+
+  // Liste events
+  "liste:submit_answer": (answer: string) => void;
+  "liste:finish": () => void;
 
   // Connection events
   "connection:reconnect": (roomCode: string, playerId: string) => void;
@@ -995,5 +1063,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Partage ou vole les points !",
     icon: "💎",
     color: "from-amber-500 to-red-700",
+  },
+  {
+    id: "liste",
+    name: "Liste Football",
+    description: "Nomme un max d'éléments de la liste !",
+    icon: "⚽",
+    color: "from-green-500 to-emerald-700",
   },
 ];

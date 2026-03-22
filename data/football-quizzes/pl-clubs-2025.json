@@ -1,0 +1,29 @@
+{
+  "id": "pl-clubs-2025",
+  "title": "Clubs de Premier League 2025-26",
+  "category": "football",
+  "subcategory": "premier-league",
+  "difficulty": "easy",
+  "items": [
+    { "answer": "Arsenal", "aliases": ["Arsenal FC", "The Gunners", "Gunners"], "hint": "Nord de Londres, maillot rouge et blanc" },
+    { "answer": "Aston Villa", "aliases": ["Villa", "Aston Villa FC", "The Villans"], "hint": "Club de Birmingham" },
+    { "answer": "Bournemouth", "aliases": ["AFC Bournemouth", "The Cherries", "Cherries"], "hint": "Club de la cote sud" },
+    { "answer": "Brentford", "aliases": ["Brentford FC", "The Bees", "Bees"], "hint": "Ouest de Londres" },
+    { "answer": "Brighton", "aliases": ["Brighton & Hove Albion", "Brighton and Hove Albion", "Brighton FC", "The Seagulls", "Seagulls", "BHAFC"], "hint": "Ville cotiere du sud de l'Angleterre" },
+    { "answer": "Chelsea", "aliases": ["Chelsea FC", "The Blues", "Blues"], "hint": "Ouest de Londres, Stamford Bridge" },
+    { "answer": "Crystal Palace", "aliases": ["Palace", "Crystal Palace FC", "The Eagles", "Eagles", "CP"], "hint": "Sud de Londres, Selhurst Park" },
+    { "answer": "Everton", "aliases": ["Everton FC", "The Toffees", "Toffees"], "hint": "Liverpool, maillot bleu" },
+    { "answer": "Fulham", "aliases": ["Fulham FC", "The Cottagers", "Cottagers"], "hint": "Craven Cottage, ouest de Londres" },
+    { "answer": "Ipswich Town", "aliases": ["Ipswich", "Ipswich Town FC", "The Tractor Boys", "Tractor Boys"], "hint": "Club du Suffolk promu recemment" },
+    { "answer": "Leicester City", "aliases": ["Leicester", "Leicester City FC", "The Foxes", "Foxes", "LCFC"], "hint": "Champions surprise en 2016" },
+    { "answer": "Liverpool", "aliases": ["Liverpool FC", "The Reds", "Reds", "LFC"], "hint": "Anfield, You'll Never Walk Alone" },
+    { "answer": "Manchester City", "aliases": ["Man City", "Man. City", "Manchester City FC", "City", "The Citizens", "Citizens", "MCFC"], "hint": "Etihad Stadium, maillot bleu ciel" },
+    { "answer": "Manchester United", "aliases": ["Man United", "Man Utd", "Man. United", "Manchester United FC", "United", "The Red Devils", "Red Devils", "MUFC"], "hint": "Old Trafford, le plus titre en PL" },
+    { "answer": "Newcastle United", "aliases": ["Newcastle", "Newcastle Utd", "The Magpies", "Magpies", "NUFC", "Toon"], "hint": "St James' Park, maillot noir et blanc" },
+    { "answer": "Nottingham Forest", "aliases": ["Nott. Forest", "Nottm Forest", "Forest", "Nottingham Forest FC", "NFFC"], "hint": "Club du East Midlands, City Ground" },
+    { "answer": "Southampton", "aliases": ["Southampton FC", "The Saints", "Saints", "Soton"], "hint": "Club de la cote sud, St Mary's" },
+    { "answer": "Tottenham Hotspur", "aliases": ["Tottenham", "Spurs", "Tottenham Hotspur FC", "THFC"], "hint": "Nord de Londres, rival d'Arsenal" },
+    { "answer": "West Ham United", "aliases": ["West Ham", "West Ham Utd", "The Hammers", "Hammers", "WHUFC"], "hint": "London Stadium, est de Londres" },
+    { "answer": "Wolverhampton Wanderers", "aliases": ["Wolves", "Wolverhampton", "Wolverhampton Wanderers FC", "Wolfsburg"], "hint": "Molineux, maillot orange et noir" }
+  ]
+}

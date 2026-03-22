@@ -1,0 +1,109 @@
+{
+  "id": "l1-top-scorers-alltime",
+  "title": "Top 20 buteurs all-time de Ligue 1",
+  "category": "football",
+  "subcategory": "ligue-1",
+  "difficulty": "hard",
+  "items": [
+    {
+      "answer": "Delio Onnis",
+      "aliases": ["Onnis"],
+      "hint": "299 buts - Franco-argentin, record absolu"
+    },
+    {
+      "answer": "Bernard Lacombe",
+      "aliases": ["Lacombe"],
+      "hint": "255 buts - Lyon et Bordeaux"
+    },
+    {
+      "answer": "Fleury Di Nallo",
+      "aliases": ["Di Nallo"],
+      "hint": "222 buts - L\u00e9gende de l'OL"
+    },
+    {
+      "answer": "Herv\u00e9 Revelli",
+      "aliases": ["Revelli"],
+      "hint": "216 buts - Saint-\u00c9tienne"
+    },
+    {
+      "answer": "Roger Courtois",
+      "aliases": ["Courtois"],
+      "hint": "210 buts - Sochaux, ann\u00e9es 1930-40"
+    },
+    {
+      "answer": "Thadée Cisowski",
+      "aliases": ["Cisowski"],
+      "hint": "210 buts - Racing Club de Paris"
+    },
+    {
+      "answer": "Joseph Ujlaki",
+      "aliases": ["Ujlaki"],
+      "hint": "190 buts - Nice et Rennes"
+    },
+    {
+      "answer": "Kylian Mbapp\u00e9",
+      "aliases": ["Mbapp\u00e9", "Mbappe", "Kylian"],
+      "hint": "188 buts - Monaco et PSG"
+    },
+    {
+      "answer": "Carlos Bianchi",
+      "aliases": ["Bianchi"],
+      "hint": "179 buts - Reims et PSG"
+    },
+    {
+      "answer": "Gunnar Andersson",
+      "aliases": ["Andersson"],
+      "hint": "173 buts - Marseille, Su\u00e9dois"
+    },
+    {
+      "answer": "Roger Piantoni",
+      "aliases": ["Piantoni"],
+      "hint": "163 buts - Nancy et Reims"
+    },
+    {
+      "answer": "Edmond Delfour",
+      "aliases": ["Delfour"],
+      "hint": "161 buts - Ann\u00e9es 1930"
+    },
+    {
+      "answer": "Jean-Pierre Papin",
+      "aliases": ["Papin", "JPP"],
+      "hint": "156 buts - Marseille, Ballon d'Or 1991"
+    },
+    {
+      "answer": "Mustapha Zitouni",
+      "aliases": ["Zitouni"],
+      "hint": "152 buts - Monaco"
+    },
+    {
+      "answer": "Josip Skoblar",
+      "aliases": ["Skoblar"],
+      "hint": "151 buts - Marseille, Yougoslave"
+    },
+    {
+      "answer": "Edinson Cavani",
+      "aliases": ["Cavani", "El Matador"],
+      "hint": "138 buts - PSG, Uruguayen"
+    },
+    {
+      "answer": "Alexandre Lacazette",
+      "aliases": ["Lacazette"],
+      "hint": "136 buts - Lyon"
+    },
+    {
+      "answer": "Andr\u00e9 Strappe",
+      "aliases": ["Strappe"],
+      "hint": "134 buts - Lens"
+    },
+    {
+      "answer": "Zlatan Ibrahimovi\u0107",
+      "aliases": ["Ibrahimovic", "Zlatan", "Ibra"],
+      "hint": "113 buts - PSG, Su\u00e9dois"
+    },
+    {
+      "answer": "Pedro Miguel Pauleta",
+      "aliases": ["Pauleta", "Pedro Pauleta"],
+      "hint": "109 buts - Bordeaux et PSG, Portugais"
+    }
+  ]
+}

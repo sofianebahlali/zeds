@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ListeRoundResult } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
@@ -39,6 +39,7 @@ interface GameStoreState {
   // Petit Bac mode
   petitBacValidationData: PetitBacValidationData | null;
   petitBacValidatedAnswers: Record<string, string[]> | null;
+  petitBacStopTriggered: { playerName: string; countdown: number } | null;
 
   // GeoQuiz mode
   geoQuizValidationData: GeoQuizValidationData | null;
@@ -78,6 +79,12 @@ interface GameStoreState {
   // Split or Steal mode
   splitStealData: SplitStealStartData | null;
   splitStealReveal: SplitStealRevealData | null;
+
+  // Liste mode
+  listeFoundItems: { itemIndex: number; answer: string; foundByPlayerId: string }[];
+  listeMyFoundCount: number;
+  listeFinishedPlayers: string[];
+  listeRoundResult: ListeRoundResult | null;
 
   // Mode transition
   modeTransition: GameMode | null;
@@ -142,6 +149,11 @@ interface GameStoreState {
   setSplitStealPhase: (data: SplitStealStartData) => void;
   setSplitStealReveal: (data: SplitStealRevealData) => void;
 
+  // Liste actions
+  addListeFoundItem: (itemIndex: number, answer: string, foundByPlayerId: string) => void;
+  addListeFinishedPlayer: (playerId: string) => void;
+  setListeRoundResult: (result: ListeRoundResult) => void;
+
   // Mode transition
   setModeTransition: (mode: GameMode | null) => void;
 
@@ -178,6 +190,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   // Petit Bac initial state
   petitBacValidationData: null,
   petitBacValidatedAnswers: null,
+  petitBacStopTriggered: null,
 
   // GeoQuiz initial state
   geoQuizValidationData: null,
@@ -214,6 +227,12 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   splitStealData: null,
   splitStealReveal: null,
 
+  // Liste initial state
+  listeFoundItems: [],
+  listeMyFoundCount: 0,
+  listeFinishedPlayers: [],
+  listeRoundResult: null,
+
   // Mode transition initial state
   modeTransition: null,
 
@@ -238,6 +257,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       lineupMyFoundCount: 0,
       lineupLastGuessCorrect: null,
       lineupAlsoFoundNotifications: [],
+      listeFoundItems: [],
+      listeMyFoundCount: 0,
+      listeFinishedPlayers: [],
+      listeRoundResult: null,
     })),
 
   setTimeRemaining: (time) => set({ timeRemaining: time }),
@@ -306,6 +329,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       drawingPhase: null,
       petitBacValidationData: null,
       petitBacValidatedAnswers: null,
+      petitBacStopTriggered: null,
       geoQuizValidationData: null,
       geoQuizValidatedPlayerIds: null,
       geoQuizHint: null,
@@ -326,6 +350,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       lineupRevealMatch: null,
       splitStealData: null,
       splitStealReveal: null,
+      listeFoundItems: [],
+      listeMyFoundCount: 0,
+      listeFinishedPlayers: [],
+      listeRoundResult: null,
       modeTransition: null,
       teamData: null,
       teamRoundResult: null,
@@ -353,6 +381,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       drawingPhase: null,
       petitBacValidationData: null,
       petitBacValidatedAnswers: null,
+      petitBacStopTriggered: null,
       geoQuizValidationData: null,
       geoQuizValidatedPlayerIds: null,
       geoQuizHint: null,
@@ -372,6 +401,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       lineupRevealMatch: null,
       splitStealData: null,
       splitStealReveal: null,
+      listeFoundItems: [],
+      listeMyFoundCount: 0,
+      listeFinishedPlayers: [],
+      listeRoundResult: null,
       modeTransition: null,
       teamData: null,
       teamRoundResult: null,
@@ -548,6 +581,19 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     splitStealReveal: data,
     status: "splitsteal_revealing",
   }),
+
+  // Liste actions
+  addListeFoundItem: (itemIndex, answer, foundByPlayerId) =>
+    set((state) => ({
+      listeFoundItems: [...state.listeFoundItems, { itemIndex, answer, foundByPlayerId }],
+    })),
+  addListeFinishedPlayer: (playerId) =>
+    set((state) => ({
+      listeFinishedPlayers: state.listeFinishedPlayers.includes(playerId)
+        ? state.listeFinishedPlayers
+        : [...state.listeFinishedPlayers, playerId],
+    })),
+  setListeRoundResult: (result) => set({ listeRoundResult: result }),
 
   // Mode transition
   setModeTransition: (mode) => set({ modeTransition: mode }),

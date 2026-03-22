@@ -1,0 +1,23 @@
+{
+  "id": "barca-real-players",
+  "title": "Joueurs ayant joué pour le Barça ET le Real Madrid",
+  "category": "football",
+  "subcategory": "liga",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Luís Figo", "aliases": ["Figo", "Luis Figo"], "hint": "Barça 1995-2000 → Real Madrid 2000-2005" },
+    { "answer": "Michael Laudrup", "aliases": ["Laudrup"], "hint": "Barça 1989-1994 → Real Madrid 1994-1996" },
+    { "answer": "Bernd Schuster", "aliases": ["Schuster"], "hint": "Barça 1980-1988 → Real Madrid 1988-1990" },
+    { "answer": "Luis Enrique", "aliases": ["Luis Enrique Martínez", "Luis Enrique Martinez", "Lucho"], "hint": "Real Madrid 1991-1996 → Barça 1996-2004" },
+    { "answer": "Ronaldo Nazário", "aliases": ["Ronaldo", "R9", "Ronaldo Nazario", "Il Fenomeno"], "hint": "Barça 1996-1997, Real Madrid 2002-2007" },
+    { "answer": "Samuel Eto'o", "aliases": ["Eto'o", "Etoo", "Samuel Etoo"], "hint": "Real Madrid (jeune, prêts 1997-2000), Barça 2004-2009" },
+    { "answer": "Javier Saviola", "aliases": ["Saviola", "El Conejo"], "hint": "Barça 2001-2007, Real Madrid 2007-2009" },
+    { "answer": "Gheorghe Hagi", "aliases": ["Hagi", "Le Maradona des Carpates"], "hint": "Real Madrid 1990-1992, Barça 1994-1996" },
+    { "answer": "Ricardo Zamora", "aliases": ["Zamora", "El Divino"], "hint": "Barça 1919-1922, Espanyol, Real Madrid 1930-1936" },
+    { "answer": "Josep Samitier", "aliases": ["Samitier", "El Mago"], "hint": "Barça 1919-1932, Real Madrid 1932-1934" },
+    { "answer": "Lucien Muller", "aliases": ["Muller"], "hint": "Barça 1961-1964, Real Madrid 1964-1968, international français" },
+    { "answer": "Justo Tejada", "aliases": ["Tejada"], "hint": "Barça 1948-1953, Real Madrid 1953-1961" },
+    { "answer": "Enrique Fernández", "aliases": ["Enrique Fernández Viola"], "hint": "Joueur et entraîneur pour les deux clubs, années 1930-40" },
+    { "answer": "Marquitos", "aliases": ["Marcos Alonso Imaz"], "hint": "Barça (formation) → Real Madrid 1954-1962, champion d'Europe" }
+  ]
+}

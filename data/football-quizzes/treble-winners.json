@@ -1,0 +1,17 @@
+{
+  "id": "treble-winners",
+  "title": "Équipes ayant remporté le triplé (championnat + coupe + C1)",
+  "category": "football",
+  "subcategory": "euro",
+  "difficulty": "very-hard",
+  "items": [
+    { "answer": "Celtic Glasgow", "aliases": ["Celtic", "Celtic FC"], "hint": "1967 (Écosse)" },
+    { "answer": "Ajax Amsterdam", "aliases": ["Ajax", "AFC Ajax"], "hint": "1972 (Pays-Bas)" },
+    { "answer": "PSV Eindhoven", "aliases": ["PSV"], "hint": "1988 (Pays-Bas)" },
+    { "answer": "Manchester United", "aliases": ["Man United", "Man Utd"], "hint": "1999 (Angleterre)" },
+    { "answer": "FC Barcelone", "aliases": ["Barcelone", "Barça", "Barca", "Barcelona"], "hint": "2009, 2015 (Espagne)" },
+    { "answer": "Inter Milan", "aliases": ["Inter", "Internazionale", "FC Internazionale Milano"], "hint": "2010 (Italie)" },
+    { "answer": "Bayern Munich", "aliases": ["Bayern", "Bayern München", "FC Bayern"], "hint": "2013, 2020 (Allemagne)" },
+    { "answer": "Manchester City", "aliases": ["Man City", "City", "MCFC"], "hint": "2023 (Angleterre)" }
+  ]
+}

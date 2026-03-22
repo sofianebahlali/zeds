@@ -1,0 +1,209 @@
+{
+  "id": "l1-all-clubs-2000",
+  "title": "Clubs ayant jou\u00e9 en Ligue 1 depuis 2000",
+  "category": "football",
+  "subcategory": "ligue-1",
+  "difficulty": "hard",
+  "items": [
+    {
+      "answer": "Paris Saint-Germain",
+      "aliases": ["PSG", "Paris", "Paris SG"],
+      "hint": "Toujours en L1"
+    },
+    {
+      "answer": "Olympique de Marseille",
+      "aliases": ["OM", "Marseille"],
+      "hint": "Toujours en L1"
+    },
+    {
+      "answer": "Olympique Lyonnais",
+      "aliases": ["OL", "Lyon"],
+      "hint": "Toujours en L1"
+    },
+    {
+      "answer": "AS Monaco",
+      "aliases": ["Monaco", "ASM"],
+      "hint": "Bri\u00e8vement en L2 en 2011-13"
+    },
+    {
+      "answer": "LOSC Lille",
+      "aliases": ["Lille", "LOSC"],
+      "hint": "Champion 2011 et 2021"
+    },
+    {
+      "answer": "Stade Rennais",
+      "aliases": ["Rennes", "SRFC"],
+      "hint": "Bretagne"
+    },
+    {
+      "answer": "OGC Nice",
+      "aliases": ["Nice", "OGCN"],
+      "hint": "C\u00f4te d'Azur"
+    },
+    {
+      "answer": "RC Lens",
+      "aliases": ["Lens", "RCL", "Racing Club de Lens"],
+      "hint": "Sang et Or"
+    },
+    {
+      "answer": "RC Strasbourg",
+      "aliases": ["Strasbourg", "RCSA", "Racing"],
+      "hint": "Alsace"
+    },
+    {
+      "answer": "FC Nantes",
+      "aliases": ["Nantes", "FCN"],
+      "hint": "Champion 2001"
+    },
+    {
+      "answer": "Montpellier HSC",
+      "aliases": ["Montpellier", "MHSC"],
+      "hint": "Champion 2012"
+    },
+    {
+      "answer": "Toulouse FC",
+      "aliases": ["Toulouse", "TFC"],
+      "hint": "Ville rose"
+    },
+    {
+      "answer": "Stade de Reims",
+      "aliases": ["Reims", "SDR"],
+      "hint": "Champagne"
+    },
+    {
+      "answer": "Stade Brestois",
+      "aliases": ["Brest", "SB29"],
+      "hint": "Finist\u00e8re"
+    },
+    {
+      "answer": "Le Havre AC",
+      "aliases": ["Le Havre", "HAC"],
+      "hint": "Doyen du football fran\u00e7ais"
+    },
+    {
+      "answer": "AJ Auxerre",
+      "aliases": ["Auxerre", "AJA"],
+      "hint": "Guy Roux"
+    },
+    {
+      "answer": "Angers SCO",
+      "aliases": ["Angers", "SCO"],
+      "hint": "Maine-et-Loire"
+    },
+    {
+      "answer": "AS Saint-\u00c9tienne",
+      "aliases": ["Saint-\u00c9tienne", "ASSE", "Saint-Etienne", "Les Verts"],
+      "hint": "Le Chaudi\u00e8re"
+    },
+    {
+      "answer": "Girondins de Bordeaux",
+      "aliases": ["Bordeaux", "FCGB", "Girondins"],
+      "hint": "R\u00e9trogradation en National en 2022"
+    },
+    {
+      "answer": "FC Sochaux-Montb\u00e9liard",
+      "aliases": ["Sochaux", "FCSM"],
+      "hint": "Doubs, relegu\u00e9 en 2014"
+    },
+    {
+      "answer": "ESTAC Troyes",
+      "aliases": ["Troyes", "ESTAC"],
+      "hint": "Aube, ascenseur L1/L2"
+    },
+    {
+      "answer": "CS Sedan Ardennes",
+      "aliases": ["Sedan", "CSSA"],
+      "hint": "Ardennes, dernier passage en 2006-07"
+    },
+    {
+      "answer": "SC Bastia",
+      "aliases": ["Bastia", "SCB"],
+      "hint": "Corse, relegu\u00e9 en 2017"
+    },
+    {
+      "answer": "EA Guingamp",
+      "aliases": ["Guingamp", "EAG", "En Avant Guingamp"],
+      "hint": "C\u00f4tes-d'Armor, vainqueur Coupe de France"
+    },
+    {
+      "answer": "SM Caen",
+      "aliases": ["Caen", "SMC", "Stade Malherbe"],
+      "hint": "Normandie"
+    },
+    {
+      "answer": "FC Lorient",
+      "aliases": ["Lorient", "FCL"],
+      "hint": "Morbihan, Les Merlus"
+    },
+    {
+      "answer": "FC Metz",
+      "aliases": ["Metz", "FCM"],
+      "hint": "Lorraine, Les Grenats"
+    },
+    {
+      "answer": "AC Ajaccio",
+      "aliases": ["Ajaccio", "ACA"],
+      "hint": "Corse"
+    },
+    {
+      "answer": "AS Nancy-Lorraine",
+      "aliases": ["Nancy", "ASNL"],
+      "hint": "Lorraine"
+    },
+    {
+      "answer": "Valenciennes FC",
+      "aliases": ["Valenciennes", "VAFC"],
+      "hint": "Nord, en L1 de 2006 \u00e0 2014"
+    },
+    {
+      "answer": "FC Istres",
+      "aliases": ["Istres"],
+      "hint": "Bouches-du-Rh\u00f4ne, une seule saison 2004-05"
+    },
+    {
+      "answer": "Le Mans FC",
+      "aliases": ["Le Mans", "MUC 72"],
+      "hint": "Sarthe, en L1 de 2003 \u00e0 2010"
+    },
+    {
+      "answer": "Grenoble Foot 38",
+      "aliases": ["Grenoble", "GF38"],
+      "hint": "Is\u00e8re, en L1 de 2008 \u00e0 2010"
+    },
+    {
+      "answer": "AC Arles-Avignon",
+      "aliases": ["Arles-Avignon", "ACA Arles"],
+      "hint": "Une seule saison 2010-11, 20 points"
+    },
+    {
+      "answer": "Dijon FCO",
+      "aliases": ["Dijon", "DFCO"],
+      "hint": "Bourgogne, en L1 de 2016 \u00e0 2021"
+    },
+    {
+      "answer": "Amiens SC",
+      "aliases": ["Amiens", "ASC"],
+      "hint": "Picardie, en L1 de 2017 \u00e0 2020"
+    },
+    {
+      "answer": "N\u00eemes Olympique",
+      "aliases": ["N\u00eemes", "NO", "Nimes"],
+      "hint": "Gard, en L1 de 2018 \u00e0 2021"
+    },
+    {
+      "answer": "Clermont Foot 63",
+      "aliases": ["Clermont", "CF63"],
+      "hint": "Auvergne, en L1 de 2021 \u00e0 2024"
+    },
+    {
+      "answer": "Gazélec Ajaccio",
+      "aliases": ["GFC Ajaccio", "Gaz\u00e9lec"],
+      "hint": "Corse, une seule saison 2015-16"
+    },
+    {
+      "answer": "Évian Thonon Gaillard",
+      "aliases": ["\u00c9vian TG", "Evian", "ETG"],
+      "hint": "Haute-Savoie, en L1 de 2011 \u00e0 2015"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "euro-hosts",
+  "title": "Pays hôtes du Championnat d'Europe",
+  "category": "football",
+  "subcategory": "euro",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "France", "aliases": [], "hint": "1960, 1984, 2016" },
+    { "answer": "Espagne", "aliases": ["Spain"], "hint": "1964" },
+    { "answer": "Italie", "aliases": ["Italy"], "hint": "1968, 2020 (Rome)" },
+    { "answer": "Belgique", "aliases": ["Belgium"], "hint": "1972" },
+    { "answer": "Yougoslavie", "aliases": ["Yugoslavia"], "hint": "1976" },
+    { "answer": "Allemagne", "aliases": ["Germany", "RFA", "Allemagne de l'Ouest"], "hint": "1988, 2024" },
+    { "answer": "Suède", "aliases": ["Sweden"], "hint": "1992" },
+    { "answer": "Angleterre", "aliases": ["England"], "hint": "1996, 2020 (Londres)" },
+    { "answer": "Pays-Bas", "aliases": ["Hollande", "Netherlands"], "hint": "2000 (co-hôte)" },
+    { "answer": "Portugal", "aliases": [], "hint": "2004" },
+    { "answer": "Autriche", "aliases": ["Austria"], "hint": "2008 (co-hôte)" },
+    { "answer": "Suisse", "aliases": ["Switzerland"], "hint": "2008 (co-hôte)" },
+    { "answer": "Pologne", "aliases": ["Poland", "Polska"], "hint": "2012 (co-hôte)" },
+    { "answer": "Ukraine", "aliases": [], "hint": "2012 (co-hôte)" },
+    { "answer": "Danemark", "aliases": ["Denmark"], "hint": "2020 (Copenhague)" },
+    { "answer": "Russie", "aliases": ["Russia"], "hint": "2020 (Saint-Pétersbourg)" },
+    { "answer": "Azerbaïdjan", "aliases": ["Azerbaijan"], "hint": "2020 (Bakou)" },
+    { "answer": "Roumanie", "aliases": ["Romania"], "hint": "2020 (Bucarest)" },
+    { "answer": "Hongrie", "aliases": ["Hungary"], "hint": "2020 (Budapest)" },
+    { "answer": "Écosse", "aliases": ["Scotland"], "hint": "2020 (Glasgow)" }
+  ]
+}

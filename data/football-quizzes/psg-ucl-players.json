@@ -1,0 +1,229 @@
+{
+  "id": "psg-ucl-players",
+  "title": "Joueurs du PSG en Ligue des Champions depuis 2012",
+  "category": "football",
+  "subcategory": "ligue-1",
+  "difficulty": "very-hard",
+  "items": [
+    {
+      "answer": "Zlatan Ibrahimovi\u0107",
+      "aliases": ["Ibrahimovic", "Zlatan", "Ibra"],
+      "hint": "Attaquant su\u00e9dois, 2012-2016"
+    },
+    {
+      "answer": "Thiago Silva",
+      "aliases": ["T. Silva"],
+      "hint": "D\u00e9fenseur br\u00e9silien, capitaine 2012-2020"
+    },
+    {
+      "answer": "Maxwell",
+      "aliases": ["Maxwell Scherrer"],
+      "hint": "Lat\u00e9ral gauche br\u00e9silien, 2012-2017"
+    },
+    {
+      "answer": "Marco Verratti",
+      "aliases": ["Verratti"],
+      "hint": "Milieu italien, 2012-2023"
+    },
+    {
+      "answer": "Edinson Cavani",
+      "aliases": ["Cavani", "El Matador"],
+      "hint": "Attaquant uruguayen, 2013-2020"
+    },
+    {
+      "answer": "Marquinhos",
+      "aliases": ["Marcos Aoas Corr\u00eaa"],
+      "hint": "D\u00e9fenseur br\u00e9silien, capitaine depuis 2020"
+    },
+    {
+      "answer": "Blaise Matuidi",
+      "aliases": ["Matuidi"],
+      "hint": "Milieu fran\u00e7ais, 2011-2017"
+    },
+    {
+      "answer": "Lucas Moura",
+      "aliases": ["Lucas"],
+      "hint": "Ailier br\u00e9silien, 2013-2018"
+    },
+    {
+      "answer": "Javier Pastore",
+      "aliases": ["Pastore", "El Flaco"],
+      "hint": "Milieu argentin, 2011-2018"
+    },
+    {
+      "answer": "Salvatore Sirigu",
+      "aliases": ["Sirigu"],
+      "hint": "Gardien italien, 2011-2015"
+    },
+    {
+      "answer": "Ezequiel Lavezzi",
+      "aliases": ["Lavezzi", "El Pocho"],
+      "hint": "Attaquant argentin, 2012-2016"
+    },
+    {
+      "answer": "David Luiz",
+      "aliases": ["D. Luiz"],
+      "hint": "D\u00e9fenseur br\u00e9silien, 2014-2016"
+    },
+    {
+      "answer": "Angel Di Mar\u00eda",
+      "aliases": ["Di Maria", "Di Mar\u00eda", "El Fideo"],
+      "hint": "Ailier argentin, 2015-2022"
+    },
+    {
+      "answer": "Neymar Jr",
+      "aliases": ["Neymar", "Ney"],
+      "hint": "Attaquant br\u00e9silien, 2017-2023"
+    },
+    {
+      "answer": "Kylian Mbapp\u00e9",
+      "aliases": ["Mbapp\u00e9", "Mbappe"],
+      "hint": "Attaquant fran\u00e7ais, 2017-2024"
+    },
+    {
+      "answer": "Dani Alves",
+      "aliases": ["Daniel Alves"],
+      "hint": "Lat\u00e9ral droit br\u00e9silien, 2017-2019"
+    },
+    {
+      "answer": "Gianluigi Buffon",
+      "aliases": ["Buffon"],
+      "hint": "Gardien italien l\u00e9gendaire, 2018-2019"
+    },
+    {
+      "answer": "Keylor Navas",
+      "aliases": ["Navas"],
+      "hint": "Gardien costaricien, 2019-2024"
+    },
+    {
+      "answer": "Mauro Icardi",
+      "aliases": ["Icardi"],
+      "hint": "Attaquant argentin, 2019-2023"
+    },
+    {
+      "answer": "Leandro Paredes",
+      "aliases": ["Paredes"],
+      "hint": "Milieu argentin, 2019-2022"
+    },
+    {
+      "answer": "Presnel Kimpembe",
+      "aliases": ["Kimpembe"],
+      "hint": "D\u00e9fenseur fran\u00e7ais, form\u00e9 au club"
+    },
+    {
+      "answer": "Juan Bernat",
+      "aliases": ["Bernat"],
+      "hint": "Lat\u00e9ral espagnol, finaliste UCL 2020"
+    },
+    {
+      "answer": "Idrissa Gueye",
+      "aliases": ["Gana Gueye", "Gueye"],
+      "hint": "Milieu s\u00e9n\u00e9galais, 2019-2022"
+    },
+    {
+      "answer": "Ander Herrera",
+      "aliases": ["Herrera"],
+      "hint": "Milieu espagnol, 2019-2023"
+    },
+    {
+      "answer": "Lionel Messi",
+      "aliases": ["Messi", "Leo Messi"],
+      "hint": "Attaquant argentin, 2021-2023"
+    },
+    {
+      "answer": "Sergio Ramos",
+      "aliases": ["Ramos"],
+      "hint": "D\u00e9fenseur espagnol, 2021-2023"
+    },
+    {
+      "answer": "Gianluigi Donnarumma",
+      "aliases": ["Donnarumma"],
+      "hint": "Gardien italien, depuis 2021"
+    },
+    {
+      "answer": "Achraf Hakimi",
+      "aliases": ["Hakimi"],
+      "hint": "Lat\u00e9ral marocain, depuis 2021"
+    },
+    {
+      "answer": "Nuno Mendes",
+      "aliases": ["N. Mendes"],
+      "hint": "Lat\u00e9ral gauche portugais, depuis 2021"
+    },
+    {
+      "answer": "Vitinha",
+      "aliases": ["Vitinha Ferreira"],
+      "hint": "Milieu portugais, depuis 2022"
+    },
+    {
+      "answer": "Ousmane Demb\u00e9l\u00e9",
+      "aliases": ["Demb\u00e9l\u00e9", "Dembele"],
+      "hint": "Ailier fran\u00e7ais, depuis 2023"
+    },
+    {
+      "answer": "Randal Kolo Muani",
+      "aliases": ["Kolo Muani", "RKM"],
+      "hint": "Attaquant fran\u00e7ais, depuis 2023"
+    },
+    {
+      "answer": "Fabian Ruiz",
+      "aliases": ["Fabi\u00e1n Ruiz", "Fabian"],
+      "hint": "Milieu espagnol, depuis 2022"
+    },
+    {
+      "answer": "Milan \u0160kriniar",
+      "aliases": ["Skriniar", "\u0160kriniar"],
+      "hint": "D\u00e9fenseur slovaque, depuis 2023"
+    },
+    {
+      "answer": "Danilo Pereira",
+      "aliases": ["Danilo"],
+      "hint": "D\u00e9fenseur/milieu portugais, 2020-2024"
+    },
+    {
+      "answer": "Nordi Mukiele",
+      "aliases": ["Mukiele"],
+      "hint": "D\u00e9fenseur fran\u00e7ais, 2022-2024"
+    },
+    {
+      "answer": "Carlos Soler",
+      "aliases": ["Soler"],
+      "hint": "Milieu espagnol, 2022-2024"
+    },
+    {
+      "answer": "Hugo Ekitike",
+      "aliases": ["Ekitike"],
+      "hint": "Attaquant fran\u00e7ais, 2022-2024"
+    },
+    {
+      "answer": "Warren Za\u00efre-Emery",
+      "aliases": ["Za\u00efre-Emery", "Zaire-Emery", "WZE"],
+      "hint": "Milieu fran\u00e7ais, plus jeune joueur en LdC"
+    },
+    {
+      "answer": "Bradley Barcola",
+      "aliases": ["Barcola"],
+      "hint": "Ailier fran\u00e7ais, 2023-2024 au PSG"
+    },
+    {
+      "answer": "Sergio Rico",
+      "aliases": ["Rico"],
+      "hint": "Gardien espagnol, 2019-2023"
+    },
+    {
+      "answer": "Abdou Diallo",
+      "aliases": ["Diallo"],
+      "hint": "D\u00e9fenseur fran\u00e7ais, 2019-2023"
+    },
+    {
+      "answer": "Pablo Sarabia",
+      "aliases": ["Sarabia"],
+      "hint": "Milieu/ailier espagnol, 2019-2023"
+    },
+    {
+      "answer": "Thilo Kehrer",
+      "aliases": ["Kehrer"],
+      "hint": "D\u00e9fenseur allemand, 2018-2022"
+    }
+  ]
+}

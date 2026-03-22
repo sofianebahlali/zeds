@@ -1,0 +1,49 @@
+{
+  "id": "wc-winners",
+  "title": "Pays vainqueurs de la Coupe du Monde",
+  "category": "football",
+  "subcategory": "world-cup",
+  "difficulty": "easy",
+  "items": [
+    {
+      "answer": "Brésil",
+      "aliases": ["Brazil", "Brasil"],
+      "hint": "5 titres (1958, 1962, 1970, 1994, 2002)"
+    },
+    {
+      "answer": "Allemagne",
+      "aliases": ["Germany", "Deutschland", "RFA", "Allemagne de l'Ouest", "West Germany"],
+      "hint": "4 titres (1954, 1974, 1990, 2014)"
+    },
+    {
+      "answer": "Italie",
+      "aliases": ["Italy", "Italia"],
+      "hint": "4 titres (1934, 1938, 1982, 2006)"
+    },
+    {
+      "answer": "Argentine",
+      "aliases": ["Argentina"],
+      "hint": "3 titres (1978, 1986, 2022)"
+    },
+    {
+      "answer": "France",
+      "aliases": [],
+      "hint": "2 titres (1998, 2018)"
+    },
+    {
+      "answer": "Uruguay",
+      "aliases": [],
+      "hint": "2 titres (1930, 1950)"
+    },
+    {
+      "answer": "Angleterre",
+      "aliases": ["England"],
+      "hint": "1 titre (1966)"
+    },
+    {
+      "answer": "Espagne",
+      "aliases": ["Spain", "España"],
+      "hint": "1 titre (2010)"
+    }
+  ]
+}

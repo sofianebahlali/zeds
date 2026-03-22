@@ -1,0 +1,19 @@
+{
+  "id": "euro-winners",
+  "title": "Pays vainqueurs du Championnat d'Europe",
+  "category": "football",
+  "subcategory": "euro",
+  "difficulty": "medium",
+  "items": [
+    { "answer": "Union soviétique", "aliases": ["URSS", "Soviet Union", "USSR"], "hint": "1960" },
+    { "answer": "Espagne", "aliases": ["Spain", "España"], "hint": "1964, 2008, 2012, 2024" },
+    { "answer": "Italie", "aliases": ["Italy", "Italia"], "hint": "1968, 2020" },
+    { "answer": "Allemagne", "aliases": ["Germany", "Deutschland", "RFA", "Allemagne de l'Ouest"], "hint": "1972, 1980, 1996" },
+    { "answer": "Tchécoslovaquie", "aliases": ["Czechoslovakia"], "hint": "1976" },
+    { "answer": "France", "aliases": [], "hint": "1984, 2000" },
+    { "answer": "Pays-Bas", "aliases": ["Hollande", "Netherlands", "Holland"], "hint": "1988" },
+    { "answer": "Danemark", "aliases": ["Denmark", "Danmark"], "hint": "1992" },
+    { "answer": "Grèce", "aliases": ["Greece", "Hellas"], "hint": "2004" },
+    { "answer": "Portugal", "aliases": [], "hint": "2016" }
+  ]
+}

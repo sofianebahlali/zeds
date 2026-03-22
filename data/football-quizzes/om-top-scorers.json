@@ -1,0 +1,84 @@
+{
+  "id": "om-top-scorers",
+  "title": "Meilleurs buteurs de l'histoire de l'OM (Top 15)",
+  "category": "football",
+  "subcategory": "ligue-1",
+  "difficulty": "hard",
+  "items": [
+    {
+      "answer": "Gunnar Andersson",
+      "aliases": ["Andersson"],
+      "hint": "194 buts, 1950-1958, Su\u00e9dois"
+    },
+    {
+      "answer": "Jean-Pierre Papin",
+      "aliases": ["Papin", "JPP"],
+      "hint": "181 buts, 1986-1992, Ballon d'Or 1991"
+    },
+    {
+      "answer": "Josip Skoblar",
+      "aliases": ["Skoblar"],
+      "hint": "151 buts, 1966-1975, Yougoslave"
+    },
+    {
+      "answer": "Emmanuel Aznar",
+      "aliases": ["Aznar"],
+      "hint": "119 buts, 1940-1950, attaquant historique"
+    },
+    {
+      "answer": "Mamadou Niang",
+      "aliases": ["Niang"],
+      "hint": "63 buts, 2005-2012, S\u00e9n\u00e9galais"
+    },
+    {
+      "answer": "Andr\u00e9 Diouf",
+      "aliases": ["Diouf"],
+      "hint": "57 buts, 1950-1958"
+    },
+    {
+      "answer": "Roger Magnusson",
+      "aliases": ["Magnusson"],
+      "hint": "74 buts, 1966-1973, Su\u00e9dois"
+    },
+    {
+      "answer": "Didier Drogba",
+      "aliases": ["Drogba"],
+      "hint": "32 buts, 2003-2004, Ivoirien, un seul passage"
+    },
+    {
+      "answer": "Mathieu Valbuena",
+      "aliases": ["Valbuena"],
+      "hint": "34 buts, 2006-2014, form\u00e9 au club"
+    },
+    {
+      "answer": "Andr\u00e9-Pierre Gignac",
+      "aliases": ["Gignac", "APG"],
+      "hint": "77 buts, 2010-2015, international fran\u00e7ais"
+    },
+    {
+      "answer": "Bla\u017e Slišković",
+      "aliases": ["Sliskovic", "Sli\u0161kovi\u0107"],
+      "hint": "44 buts, 1988-1991, Yougoslave"
+    },
+    {
+      "answer": "Loïc R\u00e9my",
+      "aliases": ["R\u00e9my", "Remy"],
+      "hint": "26 buts, 2010-2013"
+    },
+    {
+      "answer": "Franck Sauzée",
+      "aliases": ["Sauz\u00e9e", "Sauzee"],
+      "hint": "42 buts, 1990-1999, d\u00e9fenseur/milieu"
+    },
+    {
+      "answer": "Arkadiusz Milik",
+      "aliases": ["Milik"],
+      "hint": "30 buts, 2021-2024, Polonais"
+    },
+    {
+      "answer": "Dimitri Payet",
+      "aliases": ["Payet"],
+      "hint": "47 buts, 2013-2015 puis 2017-2023"
+    }
+  ]
+}

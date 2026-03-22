@@ -1,0 +1,29 @@
+{
+  "id": "edf-most-caps",
+  "title": "Top 20 joueurs les plus capés en Équipe de France",
+  "category": "football",
+  "subcategory": "equipe-de-france",
+  "difficulty": "medium",
+  "items": [
+    { "answer": "Hugo Lloris", "aliases": ["Lloris"], "hint": "145 sélections" },
+    { "answer": "Lilian Thuram", "aliases": ["Thuram"], "hint": "142 sélections" },
+    { "answer": "Antoine Griezmann", "aliases": ["Griezmann", "Grizou"], "hint": "137 sélections" },
+    { "answer": "Olivier Giroud", "aliases": ["Giroud"], "hint": "131 sélections" },
+    { "answer": "Thierry Henry", "aliases": ["Henry", "Titi"], "hint": "123 sélections" },
+    { "answer": "Marcel Desailly", "aliases": ["Desailly"], "hint": "116 sélections" },
+    { "answer": "Zinédine Zidane", "aliases": ["Zidane", "Zizou"], "hint": "108 sélections" },
+    { "answer": "Patrick Vieira", "aliases": ["Vieira"], "hint": "107 sélections" },
+    { "answer": "Didier Deschamps", "aliases": ["Deschamps", "DD"], "hint": "103 sélections" },
+    { "answer": "Laurent Blanc", "aliases": ["Blanc"], "hint": "97 sélections" },
+    { "answer": "Bixente Lizarazu", "aliases": ["Lizarazu"], "hint": "97 sélections" },
+    { "answer": "Kylian Mbappé", "aliases": ["Mbappé", "Mbappe"], "hint": "86 sélections" },
+    { "answer": "Raphaël Varane", "aliases": ["Varane", "Raphael Varane"], "hint": "93 sélections" },
+    { "answer": "Sylvain Wiltord", "aliases": ["Wiltord"], "hint": "92 sélections" },
+    { "answer": "N'Golo Kanté", "aliases": ["Kanté", "Kante"], "hint": "56 sélections" },
+    { "answer": "Youri Djorkaeff", "aliases": ["Djorkaeff"], "hint": "82 sélections" },
+    { "answer": "Michel Platini", "aliases": ["Platini"], "hint": "72 sélections" },
+    { "answer": "Robert Pirès", "aliases": ["Pirès", "Pires"], "hint": "79 sélections" },
+    { "answer": "Karim Benzema", "aliases": ["Benzema"], "hint": "97 sélections" },
+    { "answer": "Claude Makélélé", "aliases": ["Makélélé", "Makelele"], "hint": "71 sélections" }
+  ]
+}

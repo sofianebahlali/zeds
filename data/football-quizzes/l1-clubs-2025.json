@@ -1,0 +1,99 @@
+{
+  "id": "l1-clubs-2025",
+  "title": "Clubs de Ligue 1 2025-26",
+  "category": "football",
+  "subcategory": "ligue-1",
+  "difficulty": "easy",
+  "items": [
+    {
+      "answer": "Paris Saint-Germain",
+      "aliases": ["PSG", "Paris", "Paris SG"],
+      "hint": "Capitale de la France"
+    },
+    {
+      "answer": "Olympique de Marseille",
+      "aliases": ["OM", "Marseille", "Olympique Marseille"],
+      "hint": "Cit\u00e9 phoc\u00e9enne"
+    },
+    {
+      "answer": "Olympique Lyonnais",
+      "aliases": ["OL", "Lyon", "Olympique Lyon"],
+      "hint": "Capitale des Gaules"
+    },
+    {
+      "answer": "AS Monaco",
+      "aliases": ["Monaco", "ASM"],
+      "hint": "Principaut\u00e9"
+    },
+    {
+      "answer": "LOSC Lille",
+      "aliases": ["Lille", "LOSC", "Lille OSC"],
+      "hint": "Capitale des Flandres"
+    },
+    {
+      "answer": "Stade Rennais",
+      "aliases": ["Rennes", "SRFC", "Stade Rennais FC"],
+      "hint": "Capitale de la Bretagne"
+    },
+    {
+      "answer": "OGC Nice",
+      "aliases": ["Nice", "OGCN", "OGC"],
+      "hint": "C\u00f4te d'Azur"
+    },
+    {
+      "answer": "RC Lens",
+      "aliases": ["Lens", "RCL", "Racing Club de Lens"],
+      "hint": "Sang et Or"
+    },
+    {
+      "answer": "RC Strasbourg",
+      "aliases": ["Strasbourg", "RCSA", "Racing Club de Strasbourg", "Racing"],
+      "hint": "Alsace"
+    },
+    {
+      "answer": "FC Nantes",
+      "aliases": ["Nantes", "FCN", "Les Canaris"],
+      "hint": "Les Canaris"
+    },
+    {
+      "answer": "Montpellier HSC",
+      "aliases": ["Montpellier", "MHSC", "Montpellier H\u00e9rault"],
+      "hint": "H\u00e9rault"
+    },
+    {
+      "answer": "Toulouse FC",
+      "aliases": ["Toulouse", "TFC", "T\u00e9f\u00e9c\u00e9"],
+      "hint": "Ville rose"
+    },
+    {
+      "answer": "Stade de Reims",
+      "aliases": ["Reims", "SDR"],
+      "hint": "Champagne"
+    },
+    {
+      "answer": "Stade Brestois",
+      "aliases": ["Brest", "SB29", "Stade Brestois 29"],
+      "hint": "Finist\u00e8re"
+    },
+    {
+      "answer": "Le Havre AC",
+      "aliases": ["Le Havre", "HAC"],
+      "hint": "Doyen du football fran\u00e7ais"
+    },
+    {
+      "answer": "AJ Auxerre",
+      "aliases": ["Auxerre", "AJA"],
+      "hint": "Bourgogne"
+    },
+    {
+      "answer": "Angers SCO",
+      "aliases": ["Angers", "SCO"],
+      "hint": "Maine-et-Loire"
+    },
+    {
+      "answer": "AS Saint-\u00c9tienne",
+      "aliases": ["Saint-\u00c9tienne", "ASSE", "Saint-Etienne", "Sainté", "Les Verts"],
+      "hint": "Les Verts"
+    }
+  ]
+}

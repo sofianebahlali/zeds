@@ -1,0 +1,29 @@
+{
+  "id": "seriea-clubs-2025",
+  "title": "Clubs de Serie A 2025-26",
+  "category": "football",
+  "subcategory": "serie-a",
+  "difficulty": "easy",
+  "items": [
+    { "answer": "Inter Milan", "aliases": ["Inter", "Internazionale", "Inter de Milan", "FC Internazionale"], "hint": "Nerazzurri" },
+    { "answer": "AC Milan", "aliases": ["Milan", "Milan AC", "Rossoneri"], "hint": "San Siro (rouge et noir)" },
+    { "answer": "Juventus", "aliases": ["Juve", "Juventus FC", "Juventus Turin", "La Vieille Dame"], "hint": "Turin (noir et blanc)" },
+    { "answer": "SSC Napoli", "aliases": ["Napoli", "Naples"], "hint": "Stade Diego Armando Maradona" },
+    { "answer": "AS Roma", "aliases": ["Roma", "Rome", "AS Rome"], "hint": "Stadio Olimpico (rouge et jaune)" },
+    { "answer": "SS Lazio", "aliases": ["Lazio", "Lazio Rome", "Lazio Roma"], "hint": "Stadio Olimpico (bleu ciel et blanc)" },
+    { "answer": "Atalanta", "aliases": ["Atalanta BC", "Atalanta Bergame", "La Dea"], "hint": "Bergame" },
+    { "answer": "ACF Fiorentina", "aliases": ["Fiorentina", "La Viola", "Florence"], "hint": "Florence" },
+    { "answer": "Bologna FC", "aliases": ["Bologna", "Bologne"], "hint": "Qualifié en Ligue des Champions 2024-25" },
+    { "answer": "Torino FC", "aliases": ["Torino", "Turin", "Toro", "Il Toro"], "hint": "L'autre club de Turin" },
+    { "answer": "Udinese", "aliases": ["Udinese Calcio"], "hint": "Frioul-Vénétie Julienne" },
+    { "answer": "Empoli FC", "aliases": ["Empoli"], "hint": "Toscane" },
+    { "answer": "Hellas Verona", "aliases": ["Verona", "Vérone", "Hellas Vérone"], "hint": "La ville de Roméo et Juliette" },
+    { "answer": "US Lecce", "aliases": ["Lecce"], "hint": "Pouilles" },
+    { "answer": "Genoa CFC", "aliases": ["Genoa", "Gênes"], "hint": "Le plus ancien club italien" },
+    { "answer": "Parma Calcio", "aliases": ["Parma", "Parme"], "hint": "Promu en 2024" },
+    { "answer": "Como 1907", "aliases": ["Como", "Côme"], "hint": "Promu en 2024, lac de Côme" },
+    { "answer": "Venezia FC", "aliases": ["Venezia", "Venise"], "hint": "La Sérénissime" },
+    { "answer": "Cagliari Calcio", "aliases": ["Cagliari"], "hint": "Sardaigne" },
+    { "answer": "AC Monza", "aliases": ["Monza", "AC Monza-Brianza"], "hint": "Propriété de Silvio Berlusconi (anciennement)" }
+  ]
+}

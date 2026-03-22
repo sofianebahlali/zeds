@@ -1,0 +1,29 @@
+{
+  "id": "liga-top-scorers-alltime",
+  "title": "Top 20 buteurs all-time de La Liga",
+  "category": "football",
+  "subcategory": "liga",
+  "difficulty": "medium",
+  "items": [
+    { "answer": "Lionel Messi", "aliases": ["Messi", "Leo Messi"], "hint": "474 buts — FC Barcelona" },
+    { "answer": "Cristiano Ronaldo", "aliases": ["Ronaldo", "CR7", "Cristiano"], "hint": "311 buts — Real Madrid" },
+    { "answer": "Telmo Zarra", "aliases": ["Zarra", "Telmo Zarraonaindía"], "hint": "251 buts — Athletic Bilbao" },
+    { "answer": "Hugo Sánchez", "aliases": ["Hugo Sanchez"], "hint": "234 buts — Real Madrid, Atlético Madrid" },
+    { "answer": "Raúl", "aliases": ["Raul", "Raúl González", "Raul Gonzalez"], "hint": "228 buts — Real Madrid" },
+    { "answer": "Alfredo Di Stéfano", "aliases": ["Di Stéfano", "Di Stefano", "Alfredo Di Stefano"], "hint": "227 buts — Real Madrid" },
+    { "answer": "César Rodríguez", "aliases": ["César", "Cesar Rodriguez"], "hint": "223 buts — FC Barcelona" },
+    { "answer": "Quini", "aliases": ["Enrique Castro González", "Enrique Castro"], "hint": "219 buts — Sporting Gijón, FC Barcelona" },
+    { "answer": "Pahiño", "aliases": ["Rafael Pahiño", "Pahino"], "hint": "210 buts — Celta Vigo, Real Madrid" },
+    { "answer": "Edmundo Suárez", "aliases": ["Mundo", "Edmundo Suarez"], "hint": "195 buts — Valencia CF" },
+    { "answer": "Karim Benzema", "aliases": ["Benzema", "KB9"], "hint": "192 buts — Real Madrid" },
+    { "answer": "Carlos Alonso Santillana", "aliases": ["Santillana"], "hint": "186 buts — Real Madrid" },
+    { "answer": "Antoine Griezmann", "aliases": ["Griezmann", "Grizou"], "hint": "174 buts — Real Sociedad, Atlético Madrid" },
+    { "answer": "Paco Gento", "aliases": ["Francisco Gento", "Gento"], "hint": "182 buts — Real Madrid" },
+    { "answer": "Luis Aragonés", "aliases": ["Luis Aragones", "Aragonés"], "hint": "172 buts — Atlético Madrid" },
+    { "answer": "Guillermo Gorostiza", "aliases": ["Gorostiza", "Bala Roja"], "hint": "178 buts — Athletic Bilbao" },
+    { "answer": "Luis Suárez", "aliases": ["Suárez", "Suarez", "Luis Suarez", "El Pistolero"], "hint": "147 buts — FC Barcelona, Atlético Madrid" },
+    { "answer": "Samuel Eto'o", "aliases": ["Eto'o", "Etoo", "Samuel Etoo"], "hint": "130 buts — Mallorca, FC Barcelona" },
+    { "answer": "David Villa", "aliases": ["Villa", "El Guaje"], "hint": "166 buts — Sporting Gijón, Zaragoza, Valencia, Barça, Atlético" },
+    { "answer": "Fernando Morientes", "aliases": ["Morientes"], "hint": "131 buts — Real Madrid, Valencia" }
+  ]
+}

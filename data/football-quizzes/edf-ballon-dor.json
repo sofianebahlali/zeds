@@ -1,0 +1,14 @@
+{
+  "id": "edf-ballon-dor",
+  "title": "Français ayant remporté le Ballon d'Or",
+  "category": "football",
+  "subcategory": "equipe-de-france",
+  "difficulty": "easy",
+  "items": [
+    { "answer": "Raymond Kopa", "aliases": ["Kopa"], "hint": "1958" },
+    { "answer": "Michel Platini", "aliases": ["Platini"], "hint": "1983, 1984, 1985" },
+    { "answer": "Jean-Pierre Papin", "aliases": ["Papin", "JPP"], "hint": "1991" },
+    { "answer": "Zinédine Zidane", "aliases": ["Zidane", "Zizou", "Zinedine Zidane"], "hint": "1998" },
+    { "answer": "Karim Benzema", "aliases": ["Benzema", "KB9"], "hint": "2022" }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "france-2018",
+  "title": "Équipe de France 2018 - Coupe du Monde (23 joueurs)",
+  "category": "football",
+  "subcategory": "world-cup",
+  "difficulty": "easy",
+  "items": [
+    { "answer": "Hugo Lloris", "aliases": ["Lloris"], "hint": "Gardien et capitaine" },
+    { "answer": "Steve Mandanda", "aliases": ["Mandanda"], "hint": "Gardien remplaçant, OM" },
+    { "answer": "Alphonse Areola", "aliases": ["Areola"], "hint": "3e gardien, PSG" },
+    { "answer": "Benjamin Pavard", "aliases": ["Pavard"], "hint": "Défenseur, but somptueux contre l'Argentine en 8e" },
+    { "answer": "Raphaël Varane", "aliases": ["Varane", "Raphael Varane"], "hint": "Défenseur central, Real Madrid" },
+    { "answer": "Samuel Umtiti", "aliases": ["Umtiti"], "hint": "Défenseur central, buteur en demi-finale contre la Belgique" },
+    { "answer": "Presnel Kimpembe", "aliases": ["Kimpembe"], "hint": "Défenseur central, PSG" },
+    { "answer": "Lucas Hernandez", "aliases": ["L. Hernandez", "Lucas"], "hint": "Défenseur/latéral gauche, Atlético Madrid" },
+    { "answer": "Benjamin Mendy", "aliases": ["Mendy"], "hint": "Arrière gauche, Manchester City" },
+    { "answer": "Djibril Sidibé", "aliases": ["Sidibé", "Sidibe"], "hint": "Arrière droit, AS Monaco" },
+    { "answer": "Adil Rami", "aliases": ["Rami"], "hint": "Défenseur central, OM" },
+    { "answer": "N'Golo Kanté", "aliases": ["Kanté", "Kante", "N'Golo Kante"], "hint": "Milieu défensif, Chelsea" },
+    { "answer": "Paul Pogba", "aliases": ["Pogba"], "hint": "Milieu de terrain, buteur en finale, Manchester United" },
+    { "answer": "Blaise Matuidi", "aliases": ["Matuidi"], "hint": "Milieu de terrain, Juventus" },
+    { "answer": "Corentin Tolisso", "aliases": ["Tolisso"], "hint": "Milieu de terrain, Bayern Munich" },
+    { "answer": "Steven Nzonzi", "aliases": ["Nzonzi"], "hint": "Milieu défensif, Séville FC" },
+    { "answer": "Thomas Lemar", "aliases": ["Lemar"], "hint": "Milieu offensif, AS Monaco puis Atlético" },
+    { "answer": "Ousmane Dembélé", "aliases": ["Dembélé", "Dembele", "Ousmane Dembele"], "hint": "Ailier, FC Barcelone" },
+    { "answer": "Antoine Griezmann", "aliases": ["Griezmann", "Grizou"], "hint": "Attaquant, 4 buts dans le tournoi, Atlético Madrid" },
+    { "answer": "Kylian Mbappé", "aliases": ["Mbappé", "Mbappe"], "hint": "Attaquant, 4 buts dont un doublé en finale, 19 ans, PSG" },
+    { "answer": "Olivier Giroud", "aliases": ["Giroud"], "hint": "Attaquant titulaire, 0 but dans le tournoi, Chelsea" },
+    { "answer": "Florian Thauvin", "aliases": ["Thauvin"], "hint": "Ailier, OM" },
+    { "answer": "Nabil Fekir", "aliases": ["Fekir"], "hint": "Milieu offensif, Olympique Lyonnais" }
+  ]
+}

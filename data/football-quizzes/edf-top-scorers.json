@@ -1,0 +1,29 @@
+{
+  "id": "edf-top-scorers",
+  "title": "Top 20 buteurs de l'Équipe de France",
+  "category": "football",
+  "subcategory": "equipe-de-france",
+  "difficulty": "medium",
+  "items": [
+    { "answer": "Olivier Giroud", "aliases": ["Giroud"], "hint": "57 buts" },
+    { "answer": "Thierry Henry", "aliases": ["Henry", "Titi"], "hint": "51 buts" },
+    { "answer": "Kylian Mbappé", "aliases": ["Mbappé", "Mbappe", "Kylian Mbappe"], "hint": "48 buts" },
+    { "answer": "Antoine Griezmann", "aliases": ["Griezmann", "Grizou", "Grizi"], "hint": "44 buts" },
+    { "answer": "Michel Platini", "aliases": ["Platini"], "hint": "41 buts" },
+    { "answer": "Karim Benzema", "aliases": ["Benzema", "KB9", "Benz"], "hint": "37 buts" },
+    { "answer": "David Trezeguet", "aliases": ["Trezeguet", "Trézéguet"], "hint": "34 buts" },
+    { "answer": "Zinédine Zidane", "aliases": ["Zidane", "Zizou", "Zinedine Zidane"], "hint": "31 buts" },
+    { "answer": "Just Fontaine", "aliases": ["Fontaine"], "hint": "30 buts" },
+    { "answer": "Jean-Pierre Papin", "aliases": ["Papin", "JPP"], "hint": "30 buts" },
+    { "answer": "Youri Djorkaeff", "aliases": ["Djorkaeff"], "hint": "28 buts" },
+    { "answer": "Sylvain Wiltord", "aliases": ["Wiltord"], "hint": "26 buts" },
+    { "answer": "Eugène Maës", "aliases": ["Maës", "Maes", "Eugène Maes"], "hint": "20 buts (années 1910)" },
+    { "answer": "Thadée Cisowski", "aliases": ["Cisowski"], "hint": "21 buts" },
+    { "answer": "Paul Nicolas", "aliases": ["Nicolas"], "hint": "20 buts (années 1920)" },
+    { "answer": "Raymond Kopa", "aliases": ["Kopa"], "hint": "18 buts" },
+    { "answer": "Jean Vincent", "aliases": ["Vincent"], "hint": "22 buts" },
+    { "answer": "Dominique Rocheteau", "aliases": ["Rocheteau"], "hint": "15 buts" },
+    { "answer": "Franck Ribéry", "aliases": ["Ribéry", "Ribery"], "hint": "16 buts" },
+    { "answer": "Alain Giresse", "aliases": ["Giresse"], "hint": "14 buts" }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "id": "psg-managers-2000",
+  "title": "Entra\u00eeneurs du PSG depuis 2000",
+  "category": "football",
+  "subcategory": "ligue-1",
+  "difficulty": "medium",
+  "items": [
+    {
+      "answer": "Philippe Bergeroo",
+      "aliases": ["Bergeroo"],
+      "hint": "1999-2000, derni\u00e8re saison"
+    },
+    {
+      "answer": "Luis Fernandez",
+      "aliases": ["Fernandez"],
+      "hint": "2000-2003, deuxi\u00e8me passage"
+    },
+    {
+      "answer": "Vahid Halilhod\u017ei\u0107",
+      "aliases": ["Halilhodzic", "Halilhod\u017ei\u0107", "Vahid"],
+      "hint": "2003-2005"
+    },
+    {
+      "answer": "Laurent Fournier",
+      "aliases": ["Fournier"],
+      "hint": "2005-2006, int\u00e9rim puis titulaire"
+    },
+    {
+      "answer": "Guy Lacombe",
+      "aliases": ["Lacombe"],
+      "hint": "2006-2007"
+    },
+    {
+      "answer": "Paul Le Guen",
+      "aliases": ["Le Guen"],
+      "hint": "2007-2009"
+    },
+    {
+      "answer": "Antoine Kombouaré",
+      "aliases": ["Kombouare", "Kombouaré"],
+      "hint": "2009-2011, d\u00e9but du rachat QSI"
+    },
+    {
+      "answer": "Carlo Ancelotti",
+      "aliases": ["Ancelotti"],
+      "hint": "2011-2013, premier titre QSI"
+    },
+    {
+      "answer": "Laurent Blanc",
+      "aliases": ["Blanc"],
+      "hint": "2013-2016, 3 titres cons\u00e9cutifs"
+    },
+    {
+      "answer": "Unai Emery",
+      "aliases": ["Emery"],
+      "hint": "2016-2018, remontada"
+    },
+    {
+      "answer": "Thomas Tuchel",
+      "aliases": ["Tuchel"],
+      "hint": "2018-2020, finale LdC 2020"
+    },
+    {
+      "answer": "Mauricio Pochettino",
+      "aliases": ["Pochettino", "Poch"],
+      "hint": "2021-2022"
+    },
+    {
+      "answer": "Christophe Galtier",
+      "aliases": ["Galtier"],
+      "hint": "2022-2023"
+    },
+    {
+      "answer": "Luis Enrique",
+      "aliases": ["Luis Enrique Mart\u00ednez"],
+      "hint": "Depuis 2023, ancien s\u00e9lectionneur d'Espagne"
+    }
+  ]
+}

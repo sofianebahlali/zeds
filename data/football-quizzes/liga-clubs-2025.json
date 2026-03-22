@@ -1,0 +1,29 @@
+{
+  "id": "liga-clubs-2025",
+  "title": "Clubs de La Liga 2025-26",
+  "category": "football",
+  "subcategory": "liga",
+  "difficulty": "easy",
+  "items": [
+    { "answer": "Real Madrid", "aliases": ["Madrid", "Real"], "hint": "Le club le plus titré d'Europe" },
+    { "answer": "FC Barcelona", "aliases": ["Barcelona", "Barça", "Barca", "FCB"], "hint": "Camp Nou" },
+    { "answer": "Atlético Madrid", "aliases": ["Atletico Madrid", "Atleti", "Atletico", "Atlético"], "hint": "Wanda Metropolitano" },
+    { "answer": "Real Sociedad", "aliases": ["La Real", "Real Sociedad de Fútbol", "Sociedad"], "hint": "Saint-Sébastien" },
+    { "answer": "Athletic Bilbao", "aliases": ["Athletic Club", "Athletic", "Bilbao"], "hint": "San Mamés" },
+    { "answer": "Real Betis", "aliases": ["Betis", "Real Betis Balompié"], "hint": "Séville (vert et blanc)" },
+    { "answer": "Villarreal", "aliases": ["Villarreal CF", "Le Sous-marin Jaune", "El Submarino Amarillo"], "hint": "Le Sous-marin Jaune" },
+    { "answer": "Sevilla FC", "aliases": ["Séville", "Sevilla", "FC Séville"], "hint": "Ramón Sánchez-Pizjuán" },
+    { "answer": "Valencia CF", "aliases": ["Valencia", "Valence", "Los Che"], "hint": "Mestalla" },
+    { "answer": "Girona FC", "aliases": ["Girona", "Gérone"], "hint": "Surprise de la saison 2023-24" },
+    { "answer": "Getafe CF", "aliases": ["Getafe"], "hint": "Banlieue sud de Madrid" },
+    { "answer": "CA Osasuna", "aliases": ["Osasuna"], "hint": "Pampelune" },
+    { "answer": "Celta Vigo", "aliases": ["Celta de Vigo", "Celta", "RC Celta"], "hint": "Galice" },
+    { "answer": "RCD Mallorca", "aliases": ["Mallorca", "Majorque"], "hint": "Îles Baléares" },
+    { "answer": "Deportivo Alavés", "aliases": ["Alavés", "Alaves", "Deportivo Alaves"], "hint": "Vitoria-Gasteiz" },
+    { "answer": "UD Las Palmas", "aliases": ["Las Palmas"], "hint": "Îles Canaries" },
+    { "answer": "Rayo Vallecano", "aliases": ["Rayo", "Vallecano"], "hint": "Quartier de Vallecas, Madrid" },
+    { "answer": "CD Leganés", "aliases": ["Leganés", "Leganes"], "hint": "Promu en 2024" },
+    { "answer": "Real Valladolid", "aliases": ["Valladolid"], "hint": "Castille-et-León" },
+    { "answer": "RCD Espanyol", "aliases": ["Espanyol", "Espagnol de Barcelone"], "hint": "L'autre club de Barcelone" }
+  ]
+}

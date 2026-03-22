@@ -1,0 +1,27 @@
+{
+  "id": "bundesliga-clubs-2025",
+  "title": "Clubs de Bundesliga 2025-26",
+  "category": "football",
+  "subcategory": "bundesliga",
+  "difficulty": "easy",
+  "items": [
+    { "answer": "Bayern Munich", "aliases": ["Bayern", "FC Bayern", "Bayern München", "FC Bayern München", "FCB"], "hint": "Allianz Arena" },
+    { "answer": "Borussia Dortmund", "aliases": ["Dortmund", "BVB", "BVB 09"], "hint": "Signal Iduna Park (Mur Jaune)" },
+    { "answer": "Bayer Leverkusen", "aliases": ["Leverkusen", "Bayer 04", "Bayer 04 Leverkusen"], "hint": "Champion invaincu 2023-24" },
+    { "answer": "RB Leipzig", "aliases": ["Leipzig", "RB Leipzig", "RasenBallsport Leipzig"], "hint": "Fondé en 2009 par Red Bull" },
+    { "answer": "VfB Stuttgart", "aliases": ["Stuttgart", "VfB"], "hint": "Bade-Wurtemberg" },
+    { "answer": "Eintracht Frankfurt", "aliases": ["Frankfurt", "Francfort", "Eintracht Francfort", "SGE"], "hint": "Vainqueur Europa League 2022" },
+    { "answer": "VfL Wolfsburg", "aliases": ["Wolfsburg", "VfL Wolfsbourg", "Wolfsbourg"], "hint": "Club de Volkswagen" },
+    { "answer": "SC Freiburg", "aliases": ["Freiburg", "Fribourg"], "hint": "Forêt-Noire" },
+    { "answer": "Union Berlin", "aliases": ["1. FC Union Berlin", "FC Union Berlin"], "hint": "Berlin (Stadion An der Alten Försterei)" },
+    { "answer": "TSG Hoffenheim", "aliases": ["Hoffenheim", "TSG 1899 Hoffenheim"], "hint": "Village du Bade-Wurtemberg" },
+    { "answer": "1. FSV Mainz 05", "aliases": ["Mainz", "Mainz 05", "Mayence"], "hint": "Ancien club de Jürgen Klopp" },
+    { "answer": "Werder Bremen", "aliases": ["Werder Brême", "Bremen", "Brême", "SV Werder Bremen"], "hint": "Weser-Stadion" },
+    { "answer": "FC Augsburg", "aliases": ["Augsburg", "Augsbourg"], "hint": "Bavière (pas Munich)" },
+    { "answer": "VfL Bochum", "aliases": ["Bochum"], "hint": "Rhénanie-du-Nord-Westphalie" },
+    { "answer": "1. FC Heidenheim", "aliases": ["Heidenheim", "FCH"], "hint": "Promu en 2023, plus petite ville de Bundesliga" },
+    { "answer": "Borussia Mönchengladbach", "aliases": ["Mönchengladbach", "Gladbach", "Mönchengladbach", "BMG", "Borussia M'gladbach"], "hint": "Les Poulains (Die Fohlen)" },
+    { "answer": "FC St. Pauli", "aliases": ["St. Pauli", "Sankt Pauli", "FC Sankt Pauli"], "hint": "Quartier de Hambourg, tête de mort" },
+    { "answer": "Holstein Kiel", "aliases": ["Kiel", "Holstein", "KSV Holstein"], "hint": "Promu en 2024, Schleswig-Holstein" }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "fa-cup-winners-2000",
+  "title": "Vainqueurs de la FA Cup depuis 2000",
+  "category": "football",
+  "subcategory": "euro",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Chelsea", "aliases": ["Chelsea FC"], "hint": "2000, 2007, 2009, 2010, 2012, 2018" },
+    { "answer": "Liverpool", "aliases": ["Liverpool FC"], "hint": "2001, 2006, 2022" },
+    { "answer": "Arsenal", "aliases": ["Arsenal FC", "Gunners"], "hint": "2002, 2003, 2005, 2014, 2015, 2017, 2020" },
+    { "answer": "Manchester United", "aliases": ["Man United", "Man Utd", "MUFC"], "hint": "2004, 2016" },
+    { "answer": "Portsmouth", "aliases": ["Portsmouth FC", "Pompey"], "hint": "2008" },
+    { "answer": "Manchester City", "aliases": ["Man City", "MCFC", "City"], "hint": "2011, 2019, 2023" },
+    { "answer": "Wigan Athletic", "aliases": ["Wigan"], "hint": "2013" },
+    { "answer": "Leicester City", "aliases": ["Leicester"], "hint": "2021" }
+  ]
+}

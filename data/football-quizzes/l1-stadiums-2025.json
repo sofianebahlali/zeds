@@ -1,0 +1,99 @@
+{
+  "id": "l1-stadiums-2025",
+  "title": "Stades de Ligue 1 2025-26",
+  "category": "football",
+  "subcategory": "ligue-1",
+  "difficulty": "medium",
+  "items": [
+    {
+      "answer": "Parc des Princes",
+      "aliases": ["Parc", "PdP"],
+      "hint": "Paris Saint-Germain, 47 929 places"
+    },
+    {
+      "answer": "Stade V\u00e9lodrome",
+      "aliases": ["V\u00e9lodrome", "Orange V\u00e9lodrome", "Velodrome"],
+      "hint": "Olympique de Marseille, 67 394 places"
+    },
+    {
+      "answer": "Groupama Stadium",
+      "aliases": ["Parc OL", "OL Stadium", "D\u00e9cines"],
+      "hint": "Olympique Lyonnais, 59 186 places"
+    },
+    {
+      "answer": "Stade Louis-II",
+      "aliases": ["Louis II", "Louis 2"],
+      "hint": "AS Monaco, 18 523 places"
+    },
+    {
+      "answer": "Stade Pierre-Mauroy",
+      "aliases": ["Pierre Mauroy", "D\u00e9cathlon Arena"],
+      "hint": "LOSC Lille, 50 157 places"
+    },
+    {
+      "answer": "Roazhon Park",
+      "aliases": ["Route de Lorient", "Roazhon"],
+      "hint": "Stade Rennais, 29 778 places"
+    },
+    {
+      "answer": "Allianz Riviera",
+      "aliases": ["Riviera"],
+      "hint": "OGC Nice, 35 624 places"
+    },
+    {
+      "answer": "Stade Bollaert-Delelis",
+      "aliases": ["Bollaert", "Bollaert-Delelis"],
+      "hint": "RC Lens, 38 223 places"
+    },
+    {
+      "answer": "Stade de la Meinau",
+      "aliases": ["Meinau", "La Meinau"],
+      "hint": "RC Strasbourg, 26 109 places"
+    },
+    {
+      "answer": "Stade de la Beaujoire",
+      "aliases": ["Beaujoire", "La Beaujoire"],
+      "hint": "FC Nantes, 37 473 places"
+    },
+    {
+      "answer": "Stade de la Mosson",
+      "aliases": ["Mosson", "La Mosson"],
+      "hint": "Montpellier HSC, 32 900 places"
+    },
+    {
+      "answer": "Stadium de Toulouse",
+      "aliases": ["Stadium Municipal", "Stadium"],
+      "hint": "Toulouse FC, 33 150 places"
+    },
+    {
+      "answer": "Stade Auguste-Delaune",
+      "aliases": ["Auguste Delaune", "Delaune"],
+      "hint": "Stade de Reims, 21 684 places"
+    },
+    {
+      "answer": "Stade Francis-Le Bl\u00e9",
+      "aliases": ["Francis Le Bl\u00e9", "Le Bl\u00e9"],
+      "hint": "Stade Brestois, 15 220 places"
+    },
+    {
+      "answer": "Stade Oc\u00e9ane",
+      "aliases": ["Oc\u00e9ane", "Oceane"],
+      "hint": "Le Havre AC, 25 178 places"
+    },
+    {
+      "answer": "Stade de l'Abb\u00e9-Deschamps",
+      "aliases": ["Abb\u00e9 Deschamps", "Abb\u00e9-Deschamps"],
+      "hint": "AJ Auxerre, 21 269 places"
+    },
+    {
+      "answer": "Stade Raymond-Kopa",
+      "aliases": ["Raymond Kopa", "Jean-Bouin"],
+      "hint": "Angers SCO, 17 835 places"
+    },
+    {
+      "answer": "Stade Geoffroy-Guichard",
+      "aliases": ["Geoffroy Guichard", "Le Chaudron", "Guichard"],
+      "hint": "AS Saint-\u00c9tienne, 42 000 places"
+    }
+  ]
+}

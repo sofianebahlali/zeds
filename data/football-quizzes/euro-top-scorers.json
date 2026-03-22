@@ -1,0 +1,19 @@
+{
+  "id": "euro-top-scorers",
+  "title": "Top 10 buteurs all-time du Championnat d'Europe",
+  "category": "football",
+  "subcategory": "euro",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Cristiano Ronaldo", "aliases": ["CR7", "C. Ronaldo"], "hint": "14 buts (Portugal)" },
+    { "answer": "Michel Platini", "aliases": ["Platini"], "hint": "9 buts en un seul Euro (1984)" },
+    { "answer": "Antoine Griezmann", "aliases": ["Griezmann"], "hint": "7 buts (France)" },
+    { "answer": "Alan Shearer", "aliases": ["Shearer"], "hint": "7 buts (Angleterre)" },
+    { "answer": "Thierry Henry", "aliases": ["Henry", "Titi"], "hint": "6 buts (France)" },
+    { "answer": "Nuno Gomes", "aliases": ["Gomes"], "hint": "6 buts (Portugal)" },
+    { "answer": "Zlatan Ibrahimović", "aliases": ["Ibrahimović", "Ibrahimovic", "Zlatan"], "hint": "6 buts (Suède)" },
+    { "answer": "Patrick Kluivert", "aliases": ["Kluivert"], "hint": "6 buts (Pays-Bas)" },
+    { "answer": "Wayne Rooney", "aliases": ["Rooney"], "hint": "6 buts (Angleterre)" },
+    { "answer": "Ruud van Nistelrooy", "aliases": ["Van Nistelrooy", "van Nistelrooy"], "hint": "6 buts (Pays-Bas)" }
+  ]
+}

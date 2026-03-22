@@ -1,0 +1,109 @@
+{
+  "id": "wc-top-scorers-alltime",
+  "title": "Top 20 buteurs all-time en Coupe du Monde",
+  "category": "football",
+  "subcategory": "world-cup",
+  "difficulty": "medium",
+  "items": [
+    {
+      "answer": "Miroslav Klose",
+      "aliases": ["Klose"],
+      "hint": "16 buts (Allemagne, 2002-2014)"
+    },
+    {
+      "answer": "Ronaldo",
+      "aliases": ["Ronaldo Nazário", "Ronaldo R9", "R9", "Ronaldo Lima"],
+      "hint": "15 buts (Brésil, 1998-2006)"
+    },
+    {
+      "answer": "Gerd Müller",
+      "aliases": ["Müller", "Mueller", "Gerd Mueller"],
+      "hint": "14 buts (Allemagne, 1970-1974)"
+    },
+    {
+      "answer": "Just Fontaine",
+      "aliases": ["Fontaine"],
+      "hint": "13 buts (France, 1958 uniquement)"
+    },
+    {
+      "answer": "Lionel Messi",
+      "aliases": ["Messi", "Leo Messi"],
+      "hint": "13 buts (Argentine, 2006-2022)"
+    },
+    {
+      "answer": "Pelé",
+      "aliases": ["Pele", "Edson Arantes do Nascimento"],
+      "hint": "12 buts (Brésil, 1958-1970)"
+    },
+    {
+      "answer": "Kylian Mbappé",
+      "aliases": ["Mbappé", "Mbappe"],
+      "hint": "12 buts (France, 2018-2022)"
+    },
+    {
+      "answer": "Sándor Kocsis",
+      "aliases": ["Kocsis", "Sandor Kocsis"],
+      "hint": "11 buts (Hongrie, 1954)"
+    },
+    {
+      "answer": "Jürgen Klinsmann",
+      "aliases": ["Klinsmann", "Jurgen Klinsmann"],
+      "hint": "11 buts (Allemagne, 1990-1998)"
+    },
+    {
+      "answer": "Gabriel Batistuta",
+      "aliases": ["Batistuta", "Batigol"],
+      "hint": "10 buts (Argentine, 1994-2002)"
+    },
+    {
+      "answer": "Teófilo Cubillas",
+      "aliases": ["Cubillas", "Teofilo Cubillas"],
+      "hint": "10 buts (Pérou, 1970-1978)"
+    },
+    {
+      "answer": "Thomas Müller",
+      "aliases": ["Thomas Mueller", "T. Müller", "Muller"],
+      "hint": "10 buts (Allemagne, 2010-2018)"
+    },
+    {
+      "answer": "Grzegorz Lato",
+      "aliases": ["Lato"],
+      "hint": "10 buts (Pologne, 1974-1982)"
+    },
+    {
+      "answer": "Gary Lineker",
+      "aliases": ["Lineker"],
+      "hint": "10 buts (Angleterre, 1986-1990)"
+    },
+    {
+      "answer": "Helmut Rahn",
+      "aliases": ["Rahn"],
+      "hint": "10 buts (Allemagne, 1954-1958)"
+    },
+    {
+      "answer": "Guillermo Stábile",
+      "aliases": ["Stábile", "Stabile", "Guillermo Stabile"],
+      "hint": "8 buts (Argentine, 1930)"
+    },
+    {
+      "answer": "Leônidas",
+      "aliases": ["Leonidas", "Leônidas da Silva", "Leonidas da Silva"],
+      "hint": "8 buts (Brésil, 1938)"
+    },
+    {
+      "answer": "Ademir",
+      "aliases": ["Ademir de Menezes", "Ademir Marques de Menezes"],
+      "hint": "9 buts (Brésil, 1950)"
+    },
+    {
+      "answer": "Eusébio",
+      "aliases": ["Eusebio", "Eusébio da Silva Ferreira"],
+      "hint": "9 buts (Portugal, 1966)"
+    },
+    {
+      "answer": "Christian Vieri",
+      "aliases": ["Vieri", "Bobo Vieri"],
+      "hint": "9 buts (Italie, 1998-2002)"
+    }
+  ]
+}

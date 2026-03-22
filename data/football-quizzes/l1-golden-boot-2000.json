@@ -1,0 +1,134 @@
+{
+  "id": "l1-golden-boot-2000",
+  "title": "Meilleur buteur de Ligue 1 par saison depuis 2000",
+  "category": "football",
+  "subcategory": "ligue-1",
+  "difficulty": "hard",
+  "items": [
+    {
+      "answer": "Sonny Anderson",
+      "aliases": ["Anderson"],
+      "hint": "2000-01, 22 buts (Lyon)"
+    },
+    {
+      "answer": "Djibril Ciss\u00e9",
+      "aliases": ["Ciss\u00e9", "Cisse"],
+      "hint": "2001-02, 22 buts (Auxerre)"
+    },
+    {
+      "answer": "Shabani Nonda",
+      "aliases": ["Nonda"],
+      "hint": "2002-03, 26 buts (Monaco)"
+    },
+    {
+      "answer": "Alexander Frei",
+      "aliases": ["Frei"],
+      "hint": "2003-04, 20 buts (Rennes)"
+    },
+    {
+      "answer": "Alexander Frei",
+      "aliases": ["Frei"],
+      "hint": "2004-05, 20 buts (Rennes)"
+    },
+    {
+      "answer": "Pedro Miguel Pauleta",
+      "aliases": ["Pauleta", "Pedro Pauleta"],
+      "hint": "2005-06, 21 buts (PSG)"
+    },
+    {
+      "answer": "Pauleta",
+      "aliases": ["Pedro Pauleta", "Pedro Miguel Pauleta"],
+      "hint": "Nota: En 2004-05 c'\u00e9tait aussi Frei ex-aequo"
+    },
+    {
+      "answer": "Karim Benzema",
+      "aliases": ["Benzema"],
+      "hint": "2007-08, 20 buts (Lyon)"
+    },
+    {
+      "answer": "Andr\u00e9-Pierre Gignac",
+      "aliases": ["Gignac", "APG"],
+      "hint": "2008-09, 24 buts (Toulouse)"
+    },
+    {
+      "answer": "Mamadou Niang",
+      "aliases": ["Niang"],
+      "hint": "2009-10, 18 buts (Marseille)"
+    },
+    {
+      "answer": "Moussa Sow",
+      "aliases": ["Sow"],
+      "hint": "2010-11, 25 buts (Lille)"
+    },
+    {
+      "answer": "Olivier Giroud",
+      "aliases": ["Giroud"],
+      "hint": "2011-12, 21 buts (Montpellier)"
+    },
+    {
+      "answer": "Zlatan Ibrahimovi\u0107",
+      "aliases": ["Ibrahimovic", "Zlatan", "Ibra"],
+      "hint": "2012-13, 30 buts (PSG)"
+    },
+    {
+      "answer": "Zlatan Ibrahimovi\u0107",
+      "aliases": ["Ibrahimovic", "Zlatan", "Ibra"],
+      "hint": "2013-14, 26 buts (PSG)"
+    },
+    {
+      "answer": "Alexandre Lacazette",
+      "aliases": ["Lacazette"],
+      "hint": "2014-15, 27 buts (Lyon)"
+    },
+    {
+      "answer": "Zlatan Ibrahimovi\u0107",
+      "aliases": ["Ibrahimovic", "Zlatan", "Ibra"],
+      "hint": "2015-16, 38 buts (PSG)"
+    },
+    {
+      "answer": "Edinson Cavani",
+      "aliases": ["Cavani", "El Matador"],
+      "hint": "2016-17, 35 buts (PSG)"
+    },
+    {
+      "answer": "Edinson Cavani",
+      "aliases": ["Cavani", "El Matador"],
+      "hint": "2017-18, 28 buts (PSG)"
+    },
+    {
+      "answer": "Kylian Mbapp\u00e9",
+      "aliases": ["Mbapp\u00e9", "Mbappe", "Kylian"],
+      "hint": "2018-19, 33 buts (PSG)"
+    },
+    {
+      "answer": "Wissam Ben Yedder",
+      "aliases": ["Ben Yedder", "WBY"],
+      "hint": "2019-20, 18 buts (Monaco)"
+    },
+    {
+      "answer": "Kylian Mbapp\u00e9",
+      "aliases": ["Mbapp\u00e9", "Mbappe", "Kylian"],
+      "hint": "2020-21, 27 buts (PSG)"
+    },
+    {
+      "answer": "Kylian Mbapp\u00e9",
+      "aliases": ["Mbapp\u00e9", "Mbappe", "Kylian"],
+      "hint": "2021-22, 28 buts (PSG)"
+    },
+    {
+      "answer": "Kylian Mbapp\u00e9",
+      "aliases": ["Mbapp\u00e9", "Mbappe", "Kylian"],
+      "hint": "2022-23, 29 buts (PSG)"
+    },
+    {
+      "answer": "Jonathan David",
+      "aliases": ["David"],
+      "hint": "2023-24, 19 buts (Lille)"
+    },
+    {
+      "answer": "Mason Greenwood",
+      "aliases": ["Greenwood"],
+      "hint": "2024-25, 15+ buts (Marseille)"
+    }
+  ]
+}

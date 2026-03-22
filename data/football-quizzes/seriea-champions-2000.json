@@ -1,0 +1,15 @@
+{
+  "id": "seriea-champions-2000",
+  "title": "Champions de Serie A depuis 2000",
+  "category": "football",
+  "subcategory": "serie-a",
+  "difficulty": "medium",
+  "items": [
+    { "answer": "SS Lazio", "aliases": ["Lazio", "Lazio Rome", "Lazio Roma"], "hint": "1999-2000" },
+    { "answer": "AS Roma", "aliases": ["Roma", "Rome", "AS Rome"], "hint": "2000-01" },
+    { "answer": "Juventus", "aliases": ["Juve", "Juventus FC", "Juventus Turin"], "hint": "2001-02, 2002-03 (titres révoqués: 2004-05, 2005-06), 2011-12, 2012-13, 2013-14, 2014-15, 2015-16, 2016-17, 2017-18, 2018-19" },
+    { "answer": "AC Milan", "aliases": ["Milan", "Milan AC", "Rossoneri"], "hint": "2003-04, 2010-11, 2021-22" },
+    { "answer": "Inter Milan", "aliases": ["Inter", "Internazionale", "Inter de Milan"], "hint": "2005-06 (attribué après Calciopoli), 2006-07, 2007-08, 2008-09, 2009-10, 2020-21, 2023-24" },
+    { "answer": "SSC Napoli", "aliases": ["Napoli", "Naples"], "hint": "2022-23" }
+  ]
+}

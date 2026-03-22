@@ -1,0 +1,134 @@
+{
+  "id": "wc-top-4",
+  "title": "Top 4 de chaque Coupe du Monde",
+  "category": "football",
+  "subcategory": "world-cup",
+  "difficulty": "hard",
+  "items": [
+    {
+      "answer": "Brésil",
+      "aliases": ["Brazil", "Brasil"],
+      "hint": "1er: 1958, 1962, 1970, 1994, 2002 | 2e: 1950, 1998 | 3e: 1938, 1978 | 4e: 1974, 2014"
+    },
+    {
+      "answer": "Allemagne",
+      "aliases": ["Germany", "Deutschland", "RFA", "Allemagne de l'Ouest", "West Germany"],
+      "hint": "1er: 1954, 1974, 1990, 2014 | 2e: 1966, 1982, 1986, 2002 | 3e: 1934, 1970, 2006, 2010 | 4e: 1958"
+    },
+    {
+      "answer": "Italie",
+      "aliases": ["Italy", "Italia"],
+      "hint": "1er: 1934, 1938, 1982, 2006 | 2e: 1970, 1994 | 3e: 1990 | 4e: 1978"
+    },
+    {
+      "answer": "Argentine",
+      "aliases": ["Argentina"],
+      "hint": "1er: 1978, 1986, 2022 | 2e: 1930, 1990, 2014"
+    },
+    {
+      "answer": "France",
+      "aliases": [],
+      "hint": "1er: 1998, 2018 | 2e: 2006, 2022 | 3e: 1958, 1986 | 4e: 1982"
+    },
+    {
+      "answer": "Uruguay",
+      "aliases": [],
+      "hint": "1er: 1930, 1950 | 3e: 1954, 1970 | 4e: 2010"
+    },
+    {
+      "answer": "Pays-Bas",
+      "aliases": ["Netherlands", "Holland", "Hollande", "Nederland"],
+      "hint": "2e: 1974, 1978, 2010 | 3e: 2014, 2022 | 4e: 1998"
+    },
+    {
+      "answer": "Suède",
+      "aliases": ["Sweden", "Sverige"],
+      "hint": "2e: 1958 | 3e: 1950, 1994 | 4e: 1938"
+    },
+    {
+      "answer": "Croatie",
+      "aliases": ["Croatia", "Hrvatska"],
+      "hint": "2e: 2018, 2022 | 3e: 1998"
+    },
+    {
+      "answer": "Hongrie",
+      "aliases": ["Hungary", "Magyarország"],
+      "hint": "2e: 1938, 1954"
+    },
+    {
+      "answer": "Tchécoslovaquie",
+      "aliases": ["Czechoslovakia", "Tchéquie", "République tchèque"],
+      "hint": "2e: 1934, 1962"
+    },
+    {
+      "answer": "Pologne",
+      "aliases": ["Poland", "Polska"],
+      "hint": "3e: 1974, 1982"
+    },
+    {
+      "answer": "Autriche",
+      "aliases": ["Austria", "Österreich"],
+      "hint": "3e: 1954 | 4e: 1934"
+    },
+    {
+      "answer": "Portugal",
+      "aliases": [],
+      "hint": "3e: 1966 | 4e: 2006"
+    },
+    {
+      "answer": "États-Unis",
+      "aliases": ["USA", "United States", "Etats-Unis"],
+      "hint": "3e: 1930"
+    },
+    {
+      "answer": "Chili",
+      "aliases": ["Chile"],
+      "hint": "3e: 1962"
+    },
+    {
+      "answer": "Turquie",
+      "aliases": ["Turkey", "Türkiye"],
+      "hint": "3e: 2002"
+    },
+    {
+      "answer": "Maroc",
+      "aliases": ["Morocco", "Marruecos"],
+      "hint": "4e: 2022"
+    },
+    {
+      "answer": "Angleterre",
+      "aliases": ["England"],
+      "hint": "1er: 1966 | 4e: 1990"
+    },
+    {
+      "answer": "Espagne",
+      "aliases": ["Spain", "España"],
+      "hint": "1er: 2010 | 4e: 1950"
+    },
+    {
+      "answer": "Belgique",
+      "aliases": ["Belgium", "België"],
+      "hint": "3e: 2018 | 4e: 1986"
+    },
+    {
+      "answer": "Yougoslavie",
+      "aliases": ["Yugoslavia", "Jugoslavija"],
+      "hint": "4e: 1930, 1962"
+    },
+    {
+      "answer": "Union soviétique",
+      "aliases": ["URSS", "Soviet Union", "USSR", "Russie"],
+      "hint": "4e: 1966"
+    },
+    {
+      "answer": "Corée du Sud",
+      "aliases": ["South Korea", "Korea Republic"],
+      "hint": "4e: 2002"
+    },
+    {
+      "answer": "Bulgarie",
+      "aliases": ["Bulgaria"],
+      "hint": "4e: 1994"
+    }
+  ]
+}

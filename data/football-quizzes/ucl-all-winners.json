@@ -1,0 +1,32 @@
+{
+  "id": "ucl-all-winners",
+  "title": "Clubs ayant remporté la Ligue des Champions / C1",
+  "category": "football",
+  "subcategory": "champions-league",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Real Madrid", "aliases": ["Real", "Real Madrid CF", "Madrid", "Los Blancos"], "hint": "15 titres" },
+    { "answer": "AC Milan", "aliases": ["Milan", "Milan AC", "Rossoneri"], "hint": "7 titres" },
+    { "answer": "Bayern Munich", "aliases": ["Bayern", "Bayern München", "Bayern de Munich", "FC Bayern"], "hint": "6 titres" },
+    { "answer": "Liverpool", "aliases": ["Liverpool FC", "LFC", "Reds", "The Reds"], "hint": "6 titres" },
+    { "answer": "FC Barcelone", "aliases": ["Barcelona", "Barcelone", "Barça", "Barca", "FC Barcelona"], "hint": "5 titres" },
+    { "answer": "Ajax Amsterdam", "aliases": ["Ajax", "AFC Ajax", "Ajacides"], "hint": "4 titres" },
+    { "answer": "Inter Milan", "aliases": ["Inter", "Internazionale", "Inter de Milan", "Nerazzurri"], "hint": "3 titres" },
+    { "answer": "Manchester United", "aliases": ["Man United", "Man Utd", "MUFC", "Red Devils", "United"], "hint": "3 titres" },
+    { "answer": "Juventus", "aliases": ["Juve", "Juventus FC", "Bianconeri", "La Vieille Dame"], "hint": "2 titres" },
+    { "answer": "Benfica", "aliases": ["SL Benfica", "Benfica Lisbonne"], "hint": "2 titres" },
+    { "answer": "Nottingham Forest", "aliases": ["Forest", "Nottingham", "Nottm Forest"], "hint": "2 titres" },
+    { "answer": "FC Porto", "aliases": ["Porto", "FCP", "Dragões"], "hint": "2 titres" },
+    { "answer": "Chelsea", "aliases": ["Chelsea FC", "Blues", "The Blues", "CFC"], "hint": "2 titres" },
+    { "answer": "Celtic", "aliases": ["Celtic FC", "Celtic Glasgow", "Bhoys"], "hint": "1 titre" },
+    { "answer": "Feyenoord", "aliases": ["Feyenoord Rotterdam"], "hint": "1 titre" },
+    { "answer": "Aston Villa", "aliases": ["Villa", "AVFC"], "hint": "1 titre" },
+    { "answer": "Hambourg SV", "aliases": ["Hamburg", "Hambourg", "Hamburg SV", "HSV", "Hamburger SV"], "hint": "1 titre" },
+    { "answer": "Steaua Bucarest", "aliases": ["Steaua", "Steaua Bucharest", "FCSB"], "hint": "1 titre" },
+    { "answer": "PSV Eindhoven", "aliases": ["PSV", "Eindhoven"], "hint": "1 titre" },
+    { "answer": "Olympique de Marseille", "aliases": ["Marseille", "OM", "Olympique Marseille"], "hint": "1 titre" },
+    { "answer": "Étoile Rouge de Belgrade", "aliases": ["Red Star Belgrade", "Étoile Rouge", "Red Star", "Crvena Zvezda"], "hint": "1 titre" },
+    { "answer": "Borussia Dortmund", "aliases": ["Dortmund", "BVB", "BVB 09"], "hint": "1 titre" },
+    { "answer": "Manchester City", "aliases": ["Man City", "City", "Citizens", "MCFC"], "hint": "1 titre" }
+  ]
+}

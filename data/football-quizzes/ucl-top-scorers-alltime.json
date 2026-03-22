@@ -1,0 +1,29 @@
+{
+  "id": "ucl-top-scorers-alltime",
+  "title": "Top 20 buteurs all-time de Ligue des Champions",
+  "category": "football",
+  "subcategory": "champions-league",
+  "difficulty": "medium",
+  "items": [
+    { "answer": "Cristiano Ronaldo", "aliases": ["Ronaldo", "CR7", "Cristiano"], "hint": "140 buts" },
+    { "answer": "Lionel Messi", "aliases": ["Messi", "Leo Messi", "La Pulga"], "hint": "129 buts" },
+    { "answer": "Robert Lewandowski", "aliases": ["Lewandowski", "Lewy"], "hint": "101 buts" },
+    { "answer": "Karim Benzema", "aliases": ["Benzema", "KB9", "Benz"], "hint": "90 buts" },
+    { "answer": "Raúl", "aliases": ["Raul", "Raúl González", "Raul Gonzalez"], "hint": "71 buts" },
+    { "answer": "Ruud van Nistelrooy", "aliases": ["Van Nistelrooy", "Nistelrooy", "RVN", "Ruud van Nistelrooij"], "hint": "56 buts" },
+    { "answer": "Thomas Müller", "aliases": ["Müller", "Muller", "Thomas Muller", "T. Müller"], "hint": "54 buts" },
+    { "answer": "Kylian Mbappé", "aliases": ["Mbappé", "Mbappe", "Kylian"], "hint": "52 buts" },
+    { "answer": "Thierry Henry", "aliases": ["Henry", "Titi"], "hint": "50 buts" },
+    { "answer": "Alfredo Di Stéfano", "aliases": ["Di Stéfano", "Di Stefano", "Alfredo Di Stefano"], "hint": "49 buts" },
+    { "answer": "Andriy Shevchenko", "aliases": ["Shevchenko", "Chevtchenko", "Sheva"], "hint": "48 buts" },
+    { "answer": "Zlatan Ibrahimovic", "aliases": ["Ibrahimovic", "Zlatan", "Ibra"], "hint": "48 buts" },
+    { "answer": "Erling Haaland", "aliases": ["Haaland", "Håland", "Erling Braut Haaland"], "hint": "46 buts" },
+    { "answer": "Filippo Inzaghi", "aliases": ["Inzaghi", "Pippo Inzaghi", "Pippo", "F. Inzaghi"], "hint": "46 buts" },
+    { "answer": "Mohamed Salah", "aliases": ["Salah", "Mo Salah", "M. Salah"], "hint": "45 buts" },
+    { "answer": "Didier Drogba", "aliases": ["Drogba", "DD", "Tito"], "hint": "44 buts" },
+    { "answer": "Neymar", "aliases": ["Neymar Jr", "Neymar Junior", "Ney"], "hint": "43 buts" },
+    { "answer": "Alessandro Del Piero", "aliases": ["Del Piero", "Alex Del Piero", "Pinturicchio"], "hint": "42 buts" },
+    { "answer": "Sergio Agüero", "aliases": ["Agüero", "Aguero", "Kun Agüero", "Kun Aguero", "El Kun"], "hint": "41 buts" },
+    { "answer": "Eusébio", "aliases": ["Eusebio", "Eusébio da Silva Ferreira", "Panthère Noire"], "hint": "46 buts (Coupe des Champions)" }
+  ]
+}

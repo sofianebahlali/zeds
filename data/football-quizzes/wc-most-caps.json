@@ -1,0 +1,29 @@
+{
+  "id": "wc-most-caps",
+  "title": "Joueurs les plus capés en Coupe du Monde (Top 20)",
+  "category": "football",
+  "subcategory": "world-cup",
+  "difficulty": "very-hard",
+  "items": [
+    { "answer": "Lionel Messi", "aliases": ["Messi", "Leo Messi"], "hint": "26 matchs (Argentine, 2006-2022)" },
+    { "answer": "Lothar Matthäus", "aliases": ["Matthäus", "Matthaus", "Lothar Matthaus"], "hint": "25 matchs (Allemagne, 1982-1998)" },
+    { "answer": "Miroslav Klose", "aliases": ["Klose"], "hint": "24 matchs (Allemagne, 2002-2014)" },
+    { "answer": "Paolo Maldini", "aliases": ["Maldini"], "hint": "23 matchs (Italie, 1990-2002)" },
+    { "answer": "Cristiano Ronaldo", "aliases": ["CR7", "C. Ronaldo"], "hint": "22 matchs (Portugal, 2006-2022)" },
+    { "answer": "Uwe Seeler", "aliases": ["Seeler"], "hint": "21 matchs (Allemagne, 1958-1970)" },
+    { "answer": "Diego Maradona", "aliases": ["Maradona"], "hint": "21 matchs (Argentine, 1982-1994)" },
+    { "answer": "Władysław Żmuda", "aliases": ["Żmuda", "Zmuda", "Wladyslaw Zmuda"], "hint": "21 matchs (Pologne, 1974-1986)" },
+    { "answer": "Grzegorz Lato", "aliases": ["Lato"], "hint": "20 matchs (Pologne, 1974-1982)" },
+    { "answer": "Cafu", "aliases": ["Marcos Evangelista de Moraes"], "hint": "20 matchs (Brésil, 1994-2006)" },
+    { "answer": "Philipp Lahm", "aliases": ["Lahm"], "hint": "20 matchs (Allemagne, 2006-2014)" },
+    { "answer": "Bastian Schweinsteiger", "aliases": ["Schweinsteiger"], "hint": "20 matchs (Allemagne, 2006-2014)" },
+    { "answer": "Ronaldo", "aliases": ["Ronaldo R9", "Ronaldo Nazário", "R9"], "hint": "19 matchs (Brésil, 1998-2006)" },
+    { "answer": "Fabio Cannavaro", "aliases": ["Cannavaro"], "hint": "18 matchs (Italie, 1998-2010)" },
+    { "answer": "Gianluigi Buffon", "aliases": ["Buffon"], "hint": "17 matchs (Italie, 1998-2014)" },
+    { "answer": "Pelé", "aliases": ["Pele"], "hint": "14 matchs (Brésil, 1958-1970)" },
+    { "answer": "Luka Modrić", "aliases": ["Modrić", "Modric", "Luka Modric"], "hint": "19 matchs (Croatie, 2006-2022)" },
+    { "answer": "Thomas Müller", "aliases": ["Müller", "Mueller", "Thomas Mueller"], "hint": "19 matchs (Allemagne, 2010-2018)" },
+    { "answer": "Kylian Mbappé", "aliases": ["Mbappé", "Mbappe"], "hint": "14 matchs (France, 2018-2022)" },
+    { "answer": "Antoine Griezmann", "aliases": ["Griezmann"], "hint": "14 matchs (France, 2014-2022)" }
+  ]
+}

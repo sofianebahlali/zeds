@@ -1,0 +1,29 @@
+{
+  "id": "pl-stadiums",
+  "title": "Stades de Premier League 2025-26",
+  "category": "football",
+  "subcategory": "premier-league",
+  "difficulty": "medium",
+  "items": [
+    { "answer": "Emirates Stadium", "aliases": ["Emirates", "The Emirates", "Arsenal Stadium"], "hint": "Arsenal - 60 704 places" },
+    { "answer": "Villa Park", "aliases": ["Villa Park"], "hint": "Aston Villa - 42 657 places" },
+    { "answer": "Vitality Stadium", "aliases": ["Vitality", "Dean Court"], "hint": "Bournemouth - 11 364 places" },
+    { "answer": "Gtech Community Stadium", "aliases": ["Gtech", "Brentford Community Stadium", "Gtech Stadium"], "hint": "Brentford - 17 250 places" },
+    { "answer": "Amex Stadium", "aliases": ["Amex", "American Express Community Stadium", "Brighton Stadium", "Falmer Stadium", "The Amex"], "hint": "Brighton - 31 800 places" },
+    { "answer": "Stamford Bridge", "aliases": ["Stamford Bridge", "The Bridge"], "hint": "Chelsea - 40 341 places" },
+    { "answer": "Selhurst Park", "aliases": ["Selhurst Park"], "hint": "Crystal Palace - 25 486 places" },
+    { "answer": "Goodison Park", "aliases": ["Goodison"], "hint": "Everton - 39 414 places" },
+    { "answer": "Craven Cottage", "aliases": ["Craven Cottage", "The Cottage"], "hint": "Fulham - 25 700 places" },
+    { "answer": "Portman Road", "aliases": ["Portman Road"], "hint": "Ipswich Town - 30 311 places" },
+    { "answer": "King Power Stadium", "aliases": ["King Power", "KP Stadium"], "hint": "Leicester City - 32 312 places" },
+    { "answer": "Anfield", "aliases": ["Anfield Road", "Anfield Stadium"], "hint": "Liverpool - 61 276 places" },
+    { "answer": "Etihad Stadium", "aliases": ["Etihad", "The Etihad", "City of Manchester Stadium"], "hint": "Manchester City - 53 400 places" },
+    { "answer": "Old Trafford", "aliases": ["Old Trafford", "Theatre of Dreams"], "hint": "Manchester United - 74 310 places" },
+    { "answer": "St James' Park", "aliases": ["St James Park", "Saint James Park", "St James"], "hint": "Newcastle United - 52 305 places" },
+    { "answer": "City Ground", "aliases": ["The City Ground"], "hint": "Nottingham Forest - 30 445 places" },
+    { "answer": "St Mary's Stadium", "aliases": ["St Marys", "St Mary's", "Saint Mary's Stadium", "Saint Marys"], "hint": "Southampton - 32 384 places" },
+    { "answer": "Tottenham Hotspur Stadium", "aliases": ["Tottenham Stadium", "New White Hart Lane", "Spurs Stadium"], "hint": "Tottenham Hotspur - 62 850 places" },
+    { "answer": "London Stadium", "aliases": ["London Stadium", "Olympic Stadium", "Stade Olympique de Londres"], "hint": "West Ham United - 62 500 places" },
+    { "answer": "Molineux", "aliases": ["Molineux Stadium"], "hint": "Wolverhampton Wanderers - 31 750 places" }
+  ]
+}

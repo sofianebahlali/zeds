@@ -1,0 +1,29 @@
+{
+  "id": "pl-5-clubs-players",
+  "title": "Joueurs ayant joue pour 5+ clubs de Premier League",
+  "category": "football",
+  "subcategory": "premier-league",
+  "difficulty": "very-hard",
+  "items": [
+    { "answer": "Nicolas Anelka", "aliases": ["Anelka", "N. Anelka"], "hint": "6 clubs: Arsenal, Liverpool, Man City, Bolton, Chelsea, West Brom" },
+    { "answer": "Craig Bellamy", "aliases": ["Bellamy", "C. Bellamy"], "hint": "6 clubs: Coventry, Newcastle, Blackburn, Liverpool, West Ham, Man City" },
+    { "answer": "Andrew Cole", "aliases": ["Andy Cole", "Cole", "A. Cole"], "hint": "7 clubs: Newcastle, Man Utd, Blackburn, Fulham, Man City, Portsmouth, Sunderland" },
+    { "answer": "Peter Crouch", "aliases": ["Crouch", "P. Crouch", "Crouchy"], "hint": "7 clubs: Aston Villa, Southampton, Liverpool, Portsmouth, Tottenham, Stoke, Burnley" },
+    { "answer": "Marcus Bent", "aliases": ["Bent", "M. Bent"], "hint": "7 clubs: Crystal Palace, Blackburn, Ipswich, Everton, Charlton, Wigan, Wolverhampton" },
+    { "answer": "Robbie Keane", "aliases": ["Keane", "R. Keane"], "hint": "5 clubs: Coventry, Leeds, Tottenham, Liverpool, West Ham, Aston Villa" },
+    { "answer": "Les Ferdinand", "aliases": ["Ferdinand", "L. Ferdinand", "Sir Les"], "hint": "5 clubs: QPR, Newcastle, Tottenham, West Ham, Bolton" },
+    { "answer": "Jermain Defoe", "aliases": ["Defoe", "J. Defoe"], "hint": "5 clubs: West Ham, Tottenham, Portsmouth, Sunderland, Bournemouth" },
+    { "answer": "William Gallas", "aliases": ["Gallas", "W. Gallas"], "hint": "5 clubs: Chelsea, Arsenal, Tottenham et plus en Angleterre" },
+    { "answer": "Mark Hughes", "aliases": ["Hughes", "M. Hughes", "Sparky"], "hint": "5 clubs: Man Utd, Chelsea, Southampton, Everton, Blackburn" },
+    { "answer": "Mark Schwarzer", "aliases": ["Schwarzer", "M. Schwarzer"], "hint": "5 clubs: Bradford, Middlesbrough, Fulham, Chelsea, Leicester" },
+    { "answer": "David James", "aliases": ["James", "D. James", "Jamo"], "hint": "5 clubs: Liverpool, Aston Villa, West Ham, Man City, Portsmouth" },
+    { "answer": "Darren Bent", "aliases": ["D. Bent"], "hint": "5 clubs: Ipswich, Charlton, Tottenham, Sunderland, Aston Villa" },
+    { "answer": "Roque Santa Cruz", "aliases": ["Santa Cruz", "R. Santa Cruz"], "hint": "5 clubs: Blackburn, Man City, Betis... en PL: Blackburn, Man City" },
+    { "answer": "Wayne Bridge", "aliases": ["Bridge", "W. Bridge"], "hint": "5 clubs: Southampton, Chelsea, Fulham, Man City, West Ham, Sunderland" },
+    { "answer": "Jack Rodwell", "aliases": ["Rodwell", "J. Rodwell"], "hint": "5 clubs: Everton, Man City, Sunderland, Blackburn, Sheffield Utd" },
+    { "answer": "Joe Hart", "aliases": ["Hart", "J. Hart"], "hint": "5 clubs: Man City, Birmingham (pret), West Ham, Burnley, Tottenham" },
+    { "answer": "Ashley Young", "aliases": ["Young", "A. Young"], "hint": "5 clubs: Watford, Aston Villa, Man Utd, Everton plus Inter" },
+    { "answer": "Benoit Assou-Ekotto", "aliases": ["Assou-Ekotto"], "hint": "Tottenham principalement, prets divers" },
+    { "answer": "Loic Remy", "aliases": ["Remy", "L. Remy", "Loic Remy"], "hint": "5 clubs: QPR, Newcastle (pret), Chelsea, Crystal Palace" }
+  ]
+}

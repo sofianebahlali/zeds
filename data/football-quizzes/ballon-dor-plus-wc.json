@@ -1,0 +1,20 @@
+{
+  "id": "ballon-dor-plus-wc",
+  "title": "Joueurs ayant gagné le Ballon d'Or ET la Coupe du Monde",
+  "category": "football",
+  "subcategory": "records",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Bobby Charlton", "aliases": ["Charlton", "Sir Bobby Charlton"], "hint": "BdO 1966, CM 1966 (Angleterre)" },
+    { "answer": "Gerd Müller", "aliases": ["Müller", "Muller", "Gerd Muller"], "hint": "BdO 1970, CM 1974 (Allemagne)" },
+    { "answer": "Franz Beckenbauer", "aliases": ["Beckenbauer", "Der Kaiser"], "hint": "BdO 1972/1976, CM 1974 (Allemagne)" },
+    { "answer": "Paolo Rossi", "aliases": ["Rossi"], "hint": "BdO 1982, CM 1982 (Italie)" },
+    { "answer": "Zinédine Zidane", "aliases": ["Zidane", "Zizou"], "hint": "BdO 1998, CM 1998 (France)" },
+    { "answer": "Ronaldo", "aliases": ["Ronaldo Nazário", "R9", "Ronaldo Nazario"], "hint": "BdO 1997/2002, CM 1994/2002 (Brésil)" },
+    { "answer": "Rivaldo", "aliases": [], "hint": "BdO 1999, CM 2002 (Brésil)" },
+    { "answer": "Ronaldinho", "aliases": ["Ronaldinho Gaúcho"], "hint": "BdO 2005, CM 2002 (Brésil)" },
+    { "answer": "Fabio Cannavaro", "aliases": ["Cannavaro"], "hint": "BdO 2006, CM 2006 (Italie)" },
+    { "answer": "Lionel Messi", "aliases": ["Messi", "Leo Messi"], "hint": "8 BdO, CM 2022 (Argentine)" },
+    { "answer": "Raymond Kopa", "aliases": ["Kopa"], "hint": "BdO 1958, CM 1958 3e place (France)" }
+  ]
+}

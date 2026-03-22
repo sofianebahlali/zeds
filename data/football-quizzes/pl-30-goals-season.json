@@ -1,0 +1,19 @@
+{
+  "id": "pl-30-goals-season",
+  "title": "Joueurs ayant marque 30+ buts en une saison de PL",
+  "category": "football",
+  "subcategory": "premier-league",
+  "difficulty": "hard",
+  "items": [
+    { "answer": "Erling Haaland", "aliases": ["Haaland", "E. Haaland"], "hint": "36 buts (2022-23) - Manchester City" },
+    { "answer": "Andy Cole", "aliases": ["Andrew Cole", "Cole", "A. Cole"], "hint": "34 buts (1993-94) - Newcastle United" },
+    { "answer": "Alan Shearer", "aliases": ["Shearer", "A. Shearer"], "hint": "34 buts (1994-95) - Blackburn Rovers" },
+    { "answer": "Alan Shearer", "aliases": ["Shearer", "A. Shearer"], "hint": "31 buts (1995-96) - Blackburn Rovers" },
+    { "answer": "Cristiano Ronaldo", "aliases": ["Ronaldo", "CR7", "C. Ronaldo"], "hint": "31 buts (2007-08) - Manchester United" },
+    { "answer": "Luis Suarez", "aliases": ["Suarez", "L. Suarez"], "hint": "31 buts (2013-14) - Liverpool" },
+    { "answer": "Mohamed Salah", "aliases": ["Salah", "Mo Salah", "M. Salah"], "hint": "32 buts (2017-18) - Liverpool" },
+    { "answer": "Thierry Henry", "aliases": ["Henry", "T. Henry", "Titi"], "hint": "30 buts (2003-04) - Arsenal" },
+    { "answer": "Robin van Persie", "aliases": ["Van Persie", "RVP", "R. van Persie"], "hint": "30 buts (2011-12) - Arsenal" },
+    { "answer": "Kevin Phillips", "aliases": ["Phillips", "K. Phillips", "Super Kev"], "hint": "30 buts (1999-00) - Sunderland" }
+  ]
+}

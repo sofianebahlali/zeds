@@ -1,0 +1,32 @@
+{
+  "id": "wc-golden-boot",
+  "title": "Soulier d'Or de chaque Coupe du Monde",
+  "category": "football",
+  "subcategory": "world-cup",
+  "difficulty": "very-hard",
+  "items": [
+    { "answer": "Guillermo Stábile", "aliases": ["Stábile", "Stabile"], "hint": "1930, 8 buts (Argentine)" },
+    { "answer": "Oldřich Nejedlý", "aliases": ["Nejedlý", "Nejedly", "Oldrich Nejedly"], "hint": "1934, 5 buts (Tchécoslovaquie)" },
+    { "answer": "Leônidas", "aliases": ["Leonidas", "Leônidas da Silva"], "hint": "1938, 7 buts (Brésil)" },
+    { "answer": "Ademir", "aliases": ["Ademir de Menezes"], "hint": "1950, 8 buts (Brésil)" },
+    { "answer": "Sándor Kocsis", "aliases": ["Kocsis", "Sandor Kocsis"], "hint": "1954, 11 buts (Hongrie)" },
+    { "answer": "Just Fontaine", "aliases": ["Fontaine"], "hint": "1958, 13 buts (France) - record absolu" },
+    { "answer": "Garrincha", "aliases": ["Mané Garrincha", "Garrincha et Vavá"], "hint": "1962, 4 buts (Brésil), ex-aequo avec 5 autres dont Vavá" },
+    { "answer": "Eusébio", "aliases": ["Eusebio"], "hint": "1966, 9 buts (Portugal)" },
+    { "answer": "Gerd Müller", "aliases": ["Müller", "Mueller", "Gerd Mueller"], "hint": "1970, 10 buts (Allemagne)" },
+    { "answer": "Grzegorz Lato", "aliases": ["Lato"], "hint": "1974, 7 buts (Pologne)" },
+    { "answer": "Mario Kempes", "aliases": ["Kempes"], "hint": "1978, 6 buts (Argentine)" },
+    { "answer": "Paolo Rossi", "aliases": ["Rossi"], "hint": "1982, 6 buts (Italie)" },
+    { "answer": "Gary Lineker", "aliases": ["Lineker"], "hint": "1986, 6 buts (Angleterre)" },
+    { "answer": "Salvatore Schillaci", "aliases": ["Schillaci", "Totò Schillaci"], "hint": "1990, 6 buts (Italie)" },
+    { "answer": "Oleg Salenko", "aliases": ["Salenko"], "hint": "1994, 6 buts (Russie), ex-aequo avec Stoichkov, 5 buts en un match vs Cameroun" },
+    { "answer": "Hristo Stoichkov", "aliases": ["Stoichkov"], "hint": "1994, 6 buts (Bulgarie), ex-aequo avec Salenko" },
+    { "answer": "Davor Šuker", "aliases": ["Šuker", "Suker", "Davor Suker"], "hint": "1998, 6 buts (Croatie)" },
+    { "answer": "Ronaldo", "aliases": ["Ronaldo Nazário", "R9", "Ronaldo R9"], "hint": "2002, 8 buts (Brésil)" },
+    { "answer": "Miroslav Klose", "aliases": ["Klose"], "hint": "2006, 5 buts (Allemagne)" },
+    { "answer": "Thomas Müller", "aliases": ["Thomas Mueller", "T. Müller"], "hint": "2010, 5 buts (Allemagne)" },
+    { "answer": "James Rodríguez", "aliases": ["James", "James Rodriguez"], "hint": "2014, 6 buts (Colombie)" },
+    { "answer": "Harry Kane", "aliases": ["Kane"], "hint": "2018, 6 buts (Angleterre)" },
+    { "answer": "Kylian Mbappé", "aliases": ["Mbappé", "Mbappe"], "hint": "2022, 8 buts (France), dont un triplé en finale" }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "top-transfers",
+  "title": "Top 10 transferts les plus chers de l'histoire",
+  "category": "football",
+  "subcategory": "records",
+  "difficulty": "medium",
+  "items": [
+    { "answer": "Neymar", "aliases": ["Neymar Jr", "Neymar Junior"], "hint": "222M€ - Barcelone → PSG (2017)" },
+    { "answer": "Kylian Mbappé", "aliases": ["Mbappé", "Mbappe"], "hint": "180M€ - Monaco → PSG (2018)" },
+    { "answer": "Philippe Coutinho", "aliases": ["Coutinho"], "hint": "160M€ - Liverpool → Barcelone (2018)" },
+    { "answer": "Ousmane Dembélé", "aliases": ["Dembélé", "Dembele"], "hint": "140M€ - Dortmund → Barcelone (2017)" },
+    { "answer": "João Félix", "aliases": ["João Felix", "Joao Felix"], "hint": "127M€ - Benfica → Atlético Madrid (2019)" },
+    { "answer": "Antoine Griezmann", "aliases": ["Griezmann"], "hint": "120M€ - Atlético → Barcelone (2019)" },
+    { "answer": "Jack Grealish", "aliases": ["Grealish"], "hint": "117M€ - Aston Villa → Manchester City (2021)" },
+    { "answer": "Romelu Lukaku", "aliases": ["Lukaku"], "hint": "115M€ - Inter → Chelsea (2021)" },
+    { "answer": "Eden Hazard", "aliases": ["Hazard"], "hint": "115M€ - Chelsea → Real Madrid (2019)" },
+    { "answer": "Gonzalo Higuaín", "aliases": ["Higuaín", "Higuain"], "hint": "90M€ - Napoli → Juventus (2016)" }
+  ]
+}

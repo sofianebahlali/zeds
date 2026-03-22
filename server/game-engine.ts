@@ -50,6 +50,12 @@ import type {
   TeamInfo,
   TeamRoundData,
   TeamRoundResult,
+  ListeQuestion,
+  ListeItem,
+  ListeFoundItem,
+  ListePlayerState,
+  ListeProgressData,
+  ListeRoundResult,
 } from "../src/types";
 import { PETITBAC_ALL_CATEGORIES, PETITBAC_CATEGORIES_PER_ROUND } from "../src/types";
 import { getQuestions as getDbQuestions, getTotalCount as getDbTotalCount } from "./question-db";
@@ -172,6 +178,8 @@ export class GameEngine {
   // Petit Bac state
   private petitBacValidating: boolean = false;
   private petitBacGracePeriod: boolean = false;
+  private petitBacStopTriggered: boolean = false;
+  private petitBacStopTimer: NodeJS.Timeout | null = null;
 
   // GeoQuiz state
   private geoQuizValidating: boolean = false;
@@ -229,6 +237,11 @@ export class GameEngine {
   private splitStealPairingType: "pair" | "cycle" = "pair";
   private splitStealPairs: [string, string][] = []; // For pairs: [A, B] means A↔B
   private splitStealCycle: string[] = []; // For cycle: [A, B, C] means A→B→C→A
+
+  // Liste mode state
+  private listeFoundItems: Map<string, Set<number>> = new Map(); // playerId -> set of found item indices
+  private listeGlobalFound: Map<number, string> = new Map(); // item index -> first playerId who found it
+  private listeFinishedPlayers: Set<string> = new Set(); // players who clicked "J'ai fini"
 
   // Team rounds state
   private teamRoundsEnabled: boolean = false;
@@ -400,6 +413,29 @@ export class GameEngine {
       return JSON.parse(raw) as ConsensusQuestion[];
     } catch {
       console.warn("No consensus questions found at", filePath);
+      return [];
+    }
+  }
+
+  private static loadListeQuizzes(): { id: string; title: string; category: string; subcategory: string; difficulty: string; items: ListeItem[] }[] {
+    const dir = path.resolve(__dirname, "../data/football-quizzes");
+    try {
+      const files = fs.readdirSync(dir).filter(f => f.endsWith(".json"));
+      const quizzes: { id: string; title: string; category: string; subcategory: string; difficulty: string; items: ListeItem[] }[] = [];
+      for (const file of files) {
+        try {
+          const raw = fs.readFileSync(path.join(dir, file), "utf-8");
+          const quiz = JSON.parse(raw);
+          if (quiz.items && Array.isArray(quiz.items)) {
+            quizzes.push(quiz);
+          }
+        } catch {
+          console.warn(`Failed to load liste quiz: ${file}`);
+        }
+      }
+      return quizzes;
+    } catch {
+      console.warn("No football-quizzes directory found at", dir);
       return [];
     }
   }
@@ -623,6 +659,30 @@ export class GameEngine {
         }
         return questions;
       }
+      case "liste": {
+        const quizzes = GameEngine.loadListeQuizzes();
+        if (quizzes.length === 0) {
+          return [...SAMPLE_QUESTIONS].slice(0, count);
+        }
+        const shuffled = quizzes.sort(() => Math.random() - 0.5).slice(0, count);
+        return shuffled.map((quiz, i) => {
+          const itemCount = quiz.items.length;
+          const timeLimit = Math.max(90, Math.min(360, itemCount * 8));
+          const basePoints = Math.max(150, Math.min(300, itemCount * 10));
+          return {
+            id: `liste_${i + 1}`,
+            type: "liste" as const,
+            title: quiz.title,
+            quizId: quiz.id,
+            category: quiz.category,
+            subcategory: quiz.subcategory,
+            difficulty: quiz.difficulty as "easy" | "medium" | "hard" | "very-hard",
+            items: quiz.items,
+            timeLimit,
+            points: basePoints, // total base points for the quiz
+          };
+        });
+      }
       default:
         pool = [...SAMPLE_QUESTIONS];
         break;
@@ -771,6 +831,20 @@ export class GameEngine {
       this.lineupGlobalFound.clear();
     }
 
+    // Liste mode: reset per-round tracking
+    if (nextMode === "liste") {
+      this.listeFoundItems.clear();
+      this.listeGlobalFound.clear();
+      this.listeFinishedPlayers.clear();
+    }
+
+    // Petit Bac: reset stop state
+    this.petitBacStopTriggered = false;
+    if (this.petitBacStopTimer) {
+      clearTimeout(this.petitBacStopTimer);
+      this.petitBacStopTimer = null;
+    }
+
     this.currentQuestion = nextQuestion;
     this.timeRemaining = this.currentQuestion.timeLimit;
 
@@ -856,6 +930,17 @@ export class GameEngine {
         },
       };
     }
+    if (question.type === "liste") {
+      // Send quiz metadata but hide the actual answers — client only sees count and title
+      return {
+        ...question,
+        items: question.items.map((item) => ({
+          answer: "",
+          aliases: [],
+          hint: item.hint || "",
+        })),
+      };
+    }
     // petitbac: nothing to hide
     return question;
   }
@@ -902,6 +987,12 @@ export class GameEngine {
       return;
     }
 
+    // Liste mode: continuous multi-answer per round
+    if (this.currentQuestion.type === "liste") {
+      this.handleListeGuess(playerId, answerText);
+      return;
+    }
+
     if (this.answers.has(playerId)) return; // Already answered
     if (this.timeRemaining <= 0 && !this.petitBacGracePeriod) return; // Time's up (except during petit bac grace period)
 
@@ -920,6 +1011,21 @@ export class GameEngine {
     // Notify others that player answered (without revealing the answer)
     this.io.to(this.room.code).emit("game:player_answered", playerId);
 
+    // Petit Bac: first submit triggers 3s countdown for everyone
+    if (this.currentQuestion.type === "petitbac" && !this.petitBacStopTriggered) {
+      this.petitBacStopTriggered = true;
+      const stoppedByPlayer = this.room.players.find(p => p.id === playerId);
+      this.io.to(this.room.code).emit("petitbac:stop_triggered", {
+        playerId,
+        playerName: stoppedByPlayer?.name || "?",
+        countdown: 3,
+      });
+      this.petitBacStopTimer = setTimeout(() => {
+        this.endRound();
+      }, 3000);
+      return;
+    }
+
     // Check if everyone has answered
     const activePlayers = this.room.players.filter(
       (p) => p.isConnected && !this.disconnectedPlayers.has(p.id)
@@ -935,6 +1041,12 @@ export class GameEngine {
    */
   private endRound(): void {
     this.stopTimer();
+
+    // Clear petit bac stop timer if active
+    if (this.petitBacStopTimer) {
+      clearTimeout(this.petitBacStopTimer);
+      this.petitBacStopTimer = null;
+    }
 
     if (!this.currentQuestion) return;
 
@@ -975,6 +1087,12 @@ export class GameEngine {
     // Consensus: enter host validation phase instead of auto-scoring
     if (this.currentQuestion.type === "consensus") {
       this.startConsensusValidation();
+      return;
+    }
+
+    // Liste: calculate scores based on found items
+    if (this.currentQuestion.type === "liste") {
+      this.finalizeListeRound();
       return;
     }
 
@@ -1457,6 +1575,8 @@ export class GameEngine {
         return (this.currentQuestion as ChronoQuestion).label;
       case "consensus":
         return (this.currentQuestion as ConsensusQuestion).prompt;
+      case "liste":
+        return (this.currentQuestion as ListeQuestion).title;
       default:
         return "";
     }
@@ -1550,6 +1670,8 @@ export class GameEngine {
         return false; // Handled in calculateChronoScores
       case "consensus":
         return false; // Handled in calculateConsensusScores
+      case "liste":
+        return false; // Handled in handleListeGuess
       default:
         return false;
     }
@@ -1728,6 +1850,186 @@ export class GameEngine {
     if (this.lineupRevealTimer) {
       this.finalizeLineupRound();
     }
+  }
+
+  // ==========================================
+  // LISTE MODE METHODS
+  // ==========================================
+
+  /**
+   * Handle a Liste guess: check if the guessed text matches any unfound item
+   */
+  private handleListeGuess(playerId: string, guess: string): void {
+    if (!this.currentQuestion || this.currentQuestion.type !== "liste") return;
+    if (this.listeFinishedPlayers.has(playerId)) return;
+    if (this.timeRemaining <= 0) return;
+
+    const q = this.currentQuestion as ListeQuestion;
+    const normalizedGuess = GameEngine.normalizeForComparison(guess);
+    if (normalizedGuess.length < 2) return;
+
+    // Get this player's found items
+    if (!this.listeFoundItems.has(playerId)) {
+      this.listeFoundItems.set(playerId, new Set());
+    }
+    const playerFound = this.listeFoundItems.get(playerId)!;
+
+    // Check against all items
+    let matchedIndex = -1;
+    for (let i = 0; i < q.items.length; i++) {
+      if (playerFound.has(i)) continue; // Already found by this player
+
+      const item = q.items[i];
+      const allNames = [item.answer, ...item.aliases];
+      for (const name of allNames) {
+        const normalizedName = GameEngine.normalizeForComparison(name);
+        // Exact match
+        if (normalizedName === normalizedGuess) {
+          matchedIndex = i;
+          break;
+        }
+        // Last-name match for player names (3+ chars, word boundary)
+        if (normalizedGuess.length >= 3 && normalizedName.endsWith(normalizedGuess) &&
+            normalizedName[normalizedName.length - normalizedGuess.length - 1] === " ") {
+          matchedIndex = i;
+          break;
+        }
+      }
+      if (matchedIndex >= 0) break;
+    }
+
+    if (matchedIndex >= 0) {
+      playerFound.add(matchedIndex);
+
+      // Track global first finder
+      if (!this.listeGlobalFound.has(matchedIndex)) {
+        this.listeGlobalFound.set(matchedIndex, playerId);
+      }
+
+      // Emit item found to all
+      this.io.to(this.room.code).emit("liste:item_found", {
+        playerId,
+        itemIndex: matchedIndex,
+        answer: q.items[matchedIndex].answer,
+      });
+    }
+  }
+
+  /**
+   * Player clicks "J'ai fini" — finish early if unanimous
+   */
+  submitListeFinish(playerId: string): void {
+    if (!this.currentQuestion || this.currentQuestion.type !== "liste") return;
+    if (this.listeFinishedPlayers.has(playerId)) return;
+
+    this.listeFinishedPlayers.add(playerId);
+
+    const activePlayers = this.getActivePlayers();
+    const finishedCount = this.listeFinishedPlayers.size;
+    const totalPlayers = activePlayers.length;
+
+    // Notify all players
+    this.io.to(this.room.code).emit("liste:player_finished", {
+      playerId,
+      finishedCount,
+      totalPlayers,
+    });
+
+    // If everyone finished, end the round
+    if (finishedCount >= totalPlayers) {
+      this.endRound();
+    }
+  }
+
+  /**
+   * Finalize the Liste round: calculate scores and emit results
+   */
+  private finalizeListeRound(): void {
+    this.stopTimer();
+    if (!this.currentQuestion || this.currentQuestion.type !== "liste") return;
+
+    const q = this.currentQuestion as ListeQuestion;
+    const totalItems = q.items.length;
+    const basePoints = q.points; // Already clamped: max(150, min(300, items*10))
+    const pointsPerItem = basePoints / totalItems;
+    const COMPLETION_BONUS = 100;
+
+    const playerResults: ListeRoundResult["playerResults"] = [];
+
+    for (const player of this.room.players) {
+      const found = this.listeFoundItems.get(player.id) || new Set<number>();
+      const foundCount = found.size;
+      const itemPoints = Math.round(pointsPerItem * foundCount);
+      const isComplete = foundCount >= totalItems;
+      const totalPoints = itemPoints + (isComplete ? COMPLETION_BONUS : 0);
+
+      // Update player score
+      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, totalPoints);
+
+      playerResults.push({
+        playerId: player.id,
+        playerName: player.name,
+        playerAvatar: player.avatar,
+        foundCount,
+        points: totalPoints,
+        total: updatedPlayer?.score || player.score,
+        foundItems: Array.from(found),
+        completionBonus: isComplete,
+      });
+    }
+
+    // Sort by points desc
+    playerResults.sort((a, b) => b.points - a.points);
+
+    const listeResult: ListeRoundResult = {
+      roundNumber: this.currentRound,
+      quizTitle: q.title,
+      items: q.items,
+      playerResults,
+    };
+
+    // Also build a standard RoundResult for compatibility
+    const scores = playerResults.map(r => ({
+      playerId: r.playerId,
+      points: r.points,
+      total: r.total,
+    }));
+
+    const roundResult: RoundResult = {
+      roundNumber: this.currentRound,
+      question: q,
+      answers: [],
+      correctAnswer: q.title,
+      winner: playerResults[0] ? this.room.players.find(p => p.id === playerResults[0].playerId) : undefined,
+      scores,
+    };
+
+    // Update lose streaks
+    this.updateLoseStreaks(roundResult);
+
+    // Emit both custom result and standard round_end
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+    this.io.to(this.room.code).emit("liste:round_end", listeResult);
+    this.io.to(this.room.code).emit("game:round_end", roundResult);
+
+    // Team round end processing
+    if (this.currentTeams) {
+      this.processTeamRoundEnd(scores);
+    }
+
+    // Reset liste state
+    this.listeFoundItems.clear();
+    this.listeGlobalFound.clear();
+    this.listeFinishedPlayers.clear();
+
+    // Auto-proceed
+    setTimeout(() => {
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+      setTimeout(() => {
+        this.nextRound();
+      }, 2000);
+    }, 6000);
   }
 
   // ==========================================
