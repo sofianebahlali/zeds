@@ -4261,7 +4261,7 @@ export class GameEngine {
     const finalPoints = (this.comebackMode && this.comebackBonusPlayerId === playerId && points > 0)
       ? points * 2
       : points;
-    return this.updateScore(playerId, finalPoints);
+    return this.roomManager.updatePlayerScore(playerId, finalPoints);
   }
 
   private getComebackLastPlayer(): Player {
