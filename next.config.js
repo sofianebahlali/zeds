@@ -1,11 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    serverComponentsExternalPackages: ["socket.io"],
-  },
-  // Enable standalone output for deployment
-  output: "standalone",
+  serverExternalPackages: ["socket.io"],
 };
 
 module.exports = nextConfig;

@@ -1,14 +1,17 @@
 # Stage 1: Install all dependencies (for building)
 FROM node:20-alpine AS deps
 WORKDIR /app
+# Build tools needed for native modules (better-sqlite3)
+RUN apk add --no-cache python3 make g++
 COPY package.json package-lock.json ./
 RUN npm ci
 
 # Stage 2: Install production dependencies only (for runtime)
 FROM node:20-alpine AS prod-deps
 WORKDIR /app
+# Build tools needed for native modules (better-sqlite3)
+RUN apk add --no-cache python3 make g++
 COPY package.json package-lock.json ./
-ENV PUPPETEER_SKIP_DOWNLOAD=true
 RUN npm ci --omit=dev
 
 # Stage 3: Build Next.js + compile server TypeScript
@@ -27,7 +30,7 @@ ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Production node_modules
+# Production node_modules (includes better-sqlite3 native bindings)
 COPY --from=prod-deps /app/node_modules ./node_modules
 
 # Next.js build output + config
@@ -50,4 +53,5 @@ USER nextjs
 EXPOSE 3000
 ENV PORT=3000
 
-CMD ["node", "server/production.js"]
+# Limit Node.js heap to 384MB to avoid OOM kills on 512MB free tier
+CMD ["node", "--max-old-space-size=384", "server/production.js"]
