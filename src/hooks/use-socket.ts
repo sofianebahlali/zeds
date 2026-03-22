@@ -344,6 +344,15 @@ function setupSocketListeners() {
     useGameStore.getState().setListeRoundResult(result);
   });
 
+  // Comeback mode events
+  socket.on("comeback:pick_mode", (data: { playerId: string; playerName: string; playerAvatar: string; availableModes: GameMode[]; timeLimit: number }) => {
+    useGameStore.getState().setComebackPickData(data);
+  });
+
+  socket.on("comeback:mode_picked", (data: { playerId: string; playerName: string; mode: GameMode; bonusPlayerId: string }) => {
+    useGameStore.getState().setComebackModePicked(data);
+  });
+
   // Team events
   socket.on("game:team_round_start", (data: TeamRoundData) => {
     useGameStore.getState().setTeamRoundStart(data);
@@ -595,6 +604,10 @@ export function useSocket() {
     socket.emit("liste:finish");
   }, [socket]);
 
+  const chooseComebackMode = useCallback((mode: GameMode) => {
+    socket.emit("comeback:choose_mode", mode);
+  }, [socket]);
+
   const sendChatMessage = useCallback((message: string) => {
     socket.emit("chat:send_message", message);
   }, [socket]);
@@ -642,6 +655,7 @@ export function useSocket() {
     submitSplitStealChoice,
     submitListeAnswer,
     submitListeFinish,
+    chooseComebackMode,
     sendChatMessage,
     sendLaughReaction,
     playAgain,

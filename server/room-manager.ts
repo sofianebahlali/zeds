@@ -15,6 +15,8 @@ const DEFAULT_SETTINGS: GameSettings = {
   teamRoundsEnabled: false,
   hideScoresBetweenRounds: false,
   shufflePlaylist: false,
+  comebackMode: false,
+  comebackTotalRounds: 15,
 };
 
 export class RoomManager {
@@ -240,8 +242,10 @@ export class RoomManager {
 
     room.settings = { ...room.settings, ...settings };
 
-    // Recompute totalRounds from playlist
-    if (room.settings.playlist) {
+    // Recompute totalRounds
+    if (room.settings.comebackMode) {
+      room.settings.totalRounds = room.settings.comebackTotalRounds ?? 15;
+    } else if (room.settings.playlist) {
       room.settings.totalRounds = computeTotalRounds(room.settings.playlist);
     }
     room.totalRounds = room.settings.totalRounds;

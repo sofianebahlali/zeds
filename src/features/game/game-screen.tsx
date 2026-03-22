@@ -21,6 +21,7 @@ import { LineupRevealScreen } from "./lineup-reveal-screen";
 import { SplitStealChoiceScreen } from "./splitsteal-choice-screen";
 import { SplitStealRevealScreen } from "./splitsteal-reveal-screen";
 import { ListeGameScreen } from "./liste-game-screen";
+import { ComebackPickScreen } from "./comeback-pick-screen";
 import { GameChat } from "./game-chat";
 import { ScreenContainer } from "@/components/layout";
 import { GAME_MODES } from "@/types";
@@ -31,8 +32,10 @@ export function GameScreen() {
   const totalRounds = useGameStore((s) => s.totalRounds);
   const teamData = useGameStore((s) => s.teamData);
   const modeTransition = useGameStore((s) => s.modeTransition);
+  const comebackBonusPlayerId = useGameStore((s) => s.comebackBonusPlayerId);
   const room = useRoomStore((s) => s.room);
   const myPlayerId = usePlayerStore((s) => s.playerId);
+  const players = useRoomStore((s) => s.players);
   const currentGameMode = room?.gameMode;
   const isDrawingMode = currentGameMode === "drawing";
   const isPetitBac = currentGameMode === "petitbac";
@@ -127,6 +130,24 @@ export function GameScreen() {
         </div>
       )}
 
+      {/* Comeback bonus banner */}
+      {comebackBonusPlayerId && status !== "comeback_picking" && (
+        <div className={`fixed ${teamData ? "top-24" : "top-14"} left-4 right-4 z-10 flex justify-center`}>
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-500/15 border border-amber-500/30"
+          >
+            <span className="text-amber-400 font-bold text-xs">×2</span>
+            <span className="text-xs text-amber-300">
+              {comebackBonusPlayerId === myPlayerId
+                ? "Tes points sont doublés !"
+                : `Points doublés pour ${players.find((p) => p.id === comebackBonusPlayerId)?.name ?? "?"}`}
+            </span>
+          </motion.div>
+        </div>
+      )}
+
       {/* Mode transition overlay */}
       <AnimatePresence>
         {transitionModeInfo && (
@@ -196,6 +217,7 @@ export function GameScreen() {
           {status === "lineup_revealing" && <LineupRevealScreen key="lineup-reveal" />}
           {status === "splitsteal_choosing" && <SplitStealChoiceScreen key="splitsteal-choice" />}
           {status === "splitsteal_revealing" && <SplitStealRevealScreen key="splitsteal-reveal" />}
+          {status === "comeback_picking" && <ComebackPickScreen key="comeback-pick" />}
         </AnimatePresence>
       </div>
 

@@ -1,6 +1,21 @@
 import { create } from "zustand";
 import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ListeRoundResult } from "@/types";
 
+export interface ComebackPickData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  availableModes: GameMode[];
+  timeLimit: number;
+}
+
+export interface ComebackModePickedData {
+  playerId: string;
+  playerName: string;
+  mode: GameMode;
+  bonusPlayerId: string;
+}
+
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
   | "petitbac_validating"
@@ -11,7 +26,8 @@ type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" 
   | "consensus_validating"
   | "lineup_revealing"
   | "splitsteal_choosing"
-  | "splitsteal_revealing";
+  | "splitsteal_revealing"
+  | "comeback_picking";
 
 interface GameStoreState {
   // Game state
@@ -86,6 +102,11 @@ interface GameStoreState {
   listeFinishedPlayers: string[];
   listeRoundResult: ListeRoundResult | null;
 
+  // Comeback mode
+  comebackPickData: ComebackPickData | null;
+  comebackModePicked: ComebackModePickedData | null;
+  comebackBonusPlayerId: string | null; // player with x2 bonus this round
+
   // Mode transition
   modeTransition: GameMode | null;
 
@@ -153,6 +174,11 @@ interface GameStoreState {
   addListeFoundItem: (itemIndex: number, answer: string, foundByPlayerId: string) => void;
   addListeFinishedPlayer: (playerId: string) => void;
   setListeRoundResult: (result: ListeRoundResult) => void;
+
+  // Comeback actions
+  setComebackPickData: (data: ComebackPickData | null) => void;
+  setComebackModePicked: (data: ComebackModePickedData | null) => void;
+  setComebackBonusPlayerId: (playerId: string | null) => void;
 
   // Mode transition
   setModeTransition: (mode: GameMode | null) => void;
@@ -233,6 +259,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   listeFinishedPlayers: [],
   listeRoundResult: null,
 
+  // Comeback mode initial state
+  comebackPickData: null,
+  comebackModePicked: null,
+  comebackBonusPlayerId: null,
+
   // Mode transition initial state
   modeTransition: null,
 
@@ -261,6 +292,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       listeMyFoundCount: 0,
       listeFinishedPlayers: [],
       listeRoundResult: null,
+      comebackPickData: null,
+      comebackModePicked: null,
     })),
 
   setTimeRemaining: (time) => set({ timeRemaining: time }),
@@ -354,6 +387,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       listeMyFoundCount: 0,
       listeFinishedPlayers: [],
       listeRoundResult: null,
+      comebackPickData: null,
+      comebackModePicked: null,
       modeTransition: null,
       teamData: null,
       teamRoundResult: null,
@@ -405,6 +440,9 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       listeMyFoundCount: 0,
       listeFinishedPlayers: [],
       listeRoundResult: null,
+      comebackPickData: null,
+      comebackModePicked: null,
+      comebackBonusPlayerId: null,
       modeTransition: null,
       teamData: null,
       teamRoundResult: null,
@@ -594,6 +632,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         : [...state.listeFinishedPlayers, playerId],
     })),
   setListeRoundResult: (result) => set({ listeRoundResult: result }),
+
+  // Comeback actions
+  setComebackPickData: (data) => set({ comebackPickData: data, comebackModePicked: null, status: data ? "comeback_picking" : "idle" }),
+  setComebackModePicked: (data) => set({ comebackModePicked: data, comebackBonusPlayerId: data?.bonusPlayerId ?? null }),
+  setComebackBonusPlayerId: (playerId) => set({ comebackBonusPlayerId: playerId }),
 
   // Mode transition
   setModeTransition: (mode) => set({ modeTransition: mode }),

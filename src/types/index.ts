@@ -56,6 +56,8 @@ export interface GameSettings {
   difficulty: "easy" | "medium" | "hard";
   playlist: GameModeConfig[];
   teamRoundsEnabled: boolean;
+  comebackMode: boolean; // "Aide aux derniers" — last player picks next mode & gets x2
+  comebackTotalRounds: number; // total rounds when comeback mode is active (default 15)
 }
 
 // ==========================================
@@ -95,6 +97,8 @@ export const DEFAULT_GAME_SETTINGS: GameSettings = {
   difficulty: "medium",
   playlist: DEFAULT_PLAYLIST,
   teamRoundsEnabled: false,
+  comebackMode: false,
+  comebackTotalRounds: 15,
 };
 
 // ==========================================
@@ -781,6 +785,10 @@ export interface ServerToClientEvents {
   "liste:progress": (data: ListeProgressData) => void;
   "liste:round_end": (result: ListeRoundResult) => void;
 
+  // Comeback mode events
+  "comeback:pick_mode": (data: { playerId: string; playerName: string; playerAvatar: string; availableModes: GameMode[]; timeLimit: number }) => void;
+  "comeback:mode_picked": (data: { playerId: string; playerName: string; mode: GameMode; bonusPlayerId: string }) => void;
+
   // Team events
   "game:team_round_start": (data: TeamRoundData) => void;
   "game:team_round_end": (result: TeamRoundResult) => void;
@@ -854,6 +862,9 @@ export interface ClientToServerEvents {
   // Liste events
   "liste:submit_answer": (answer: string) => void;
   "liste:finish": () => void;
+
+  // Comeback mode events
+  "comeback:choose_mode": (mode: GameMode) => void;
 
   // Connection events
   "connection:reconnect": (roomCode: string, playerId: string) => void;

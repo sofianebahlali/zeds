@@ -441,6 +441,23 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     });
 
     // ==========================================
+    // COMEBACK MODE EVENTS
+    // ==========================================
+
+    socket.on("comeback:choose_mode", (mode: GameMode) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.handleComebackChooseMode(playerId, mode);
+    });
+
+    // ==========================================
     // DRAWING EVENTS
     // ==========================================
 

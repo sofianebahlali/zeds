@@ -248,11 +248,17 @@ export class GameEngine {
   private currentTeams: TeamInfo[] | null = null;
   private teamBurstRemaining: number = 0;
 
+  // Comeback mode state ("Aide aux derniers")
+  private comebackMode: boolean = false;
+  private comebackBonusPlayerId: string | null = null; // player who gets x2 this round
+  private comebackPickTimer: NodeJS.Timeout | null = null;
+
   constructor(room: Room, io: TypedIO, roomManager: RoomManager) {
     this.room = room;
     this.io = io;
     this.roomManager = roomManager;
     this.teamRoundsEnabled = room.settings.teamRoundsEnabled ?? false;
+    this.comebackMode = room.settings.comebackMode ?? false;
     this.prepareQuestions();
   }
 
@@ -696,6 +702,15 @@ export class GameEngine {
    * Prepare questions for the game from the playlist
    */
   private prepareQuestions(): void {
+    // Comeback mode: questions are loaded dynamically as the last player picks
+    if (this.comebackMode) {
+      this.questions = [];
+      const total = this.room.settings.comebackTotalRounds || 15;
+      this.room.settings.totalRounds = total;
+      this.room.totalRounds = total;
+      return;
+    }
+
     const playlist = this.room.settings.playlist;
 
     if (!playlist || playlist.length === 0) {
@@ -767,6 +782,27 @@ export class GameEngine {
     this.currentRound++;
     this.answers.clear();
     this.roomManager.resetRoundScores(this.room.code);
+
+    // Comeback mode: check if we've reached the total
+    if (this.comebackMode) {
+      const total = this.room.settings.comebackTotalRounds || 15;
+      if (this.currentRound > total) {
+        this.finishGame();
+        return;
+      }
+      // Round 1: random mode. Round 2+: last player picks
+      if (this.currentRound === 1) {
+        this.comebackBonusPlayerId = null;
+        this.comebackLoadRandomAndStart();
+        return;
+      } else {
+        // Find the last player(s) in the leaderboard
+        const lastPlayer = this.getComebackLastPlayer();
+        this.comebackBonusPlayerId = lastPlayer.id;
+        this.startComebackPick(lastPlayer);
+        return;
+      }
+    }
 
     if (this.currentRound > this.questions.length) {
       this.finishGame();
@@ -1219,7 +1255,7 @@ export class GameEngine {
       }
 
       // Update player score
-      const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);
+      const updatedPlayer = this.updateScore(playerId, points);
       if (updatedPlayer) {
         scores.push({
           playerId,
@@ -1268,7 +1304,7 @@ export class GameEngine {
       if (isNaN(guess)) {
         answer.isCorrect = false;
         answer.points = 0;
-        const updatedPlayer = this.roomManager.updatePlayerScore(playerId, 0);
+        const updatedPlayer = this.updateScore(playerId, 0);
         if (updatedPlayer) {
           scores.push({ playerId, points: 0, total: updatedPlayer.score });
         }
@@ -1294,7 +1330,7 @@ export class GameEngine {
         winner = this.room.players.find((p) => p.id === playerId);
       }
 
-      const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);
+      const updatedPlayer = this.updateScore(playerId, points);
       if (updatedPlayer) {
         scores.push({ playerId, points, total: updatedPlayer.score });
       }
@@ -1344,7 +1380,7 @@ export class GameEngine {
         winner = this.room.players.find((p) => p.id === playerId);
       }
 
-      const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);
+      const updatedPlayer = this.updateScore(playerId, points);
       if (updatedPlayer) {
         scores.push({ playerId, points, total: updatedPlayer.score });
       }
@@ -1423,7 +1459,7 @@ export class GameEngine {
         answer.points = points;
       }
 
-      const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);
+      const updatedPlayer = this.updateScore(playerId, points);
       if (updatedPlayer) {
         scores.push({ playerId, points, total: updatedPlayer.score });
       }
@@ -1502,7 +1538,7 @@ export class GameEngine {
         winner = this.room.players.find((p) => p.id === playerId);
       }
 
-      const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);
+      const updatedPlayer = this.updateScore(playerId, points);
       if (updatedPlayer) {
         scores.push({ playerId, points, total: updatedPlayer.score });
       }
@@ -1740,7 +1776,7 @@ export class GameEngine {
 
       // Award points immediately
       const points = this.currentQuestion.points;
-      this.roomManager.updatePlayerScore(playerId, points);
+      this.updateScore(playerId, points);
 
       // Send result to all players
       const result: LineupGuessResult = {
@@ -1793,7 +1829,7 @@ export class GameEngine {
       // Award x2 bonus for exclusive finds (extra points on top of what was already given)
       const bonusPoints = exclusiveCount * q.points;
       if (bonusPoints > 0) {
-        this.roomManager.updatePlayerScore(player.id, bonusPoints);
+        this.updateScore(player.id, bonusPoints);
       }
 
       const totalPoints = foundCount * q.points + bonusPoints;
@@ -1964,7 +2000,7 @@ export class GameEngine {
       const totalPoints = itemPoints + (isComplete ? COMPLETION_BONUS : 0);
 
       // Update player score
-      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, totalPoints);
+      const updatedPlayer = this.updateScore(player.id, totalPoints);
 
       playerResults.push({
         playerId: player.id,
@@ -2159,7 +2195,7 @@ export class GameEngine {
         answer.isCorrect = totalPoints > 0;
       }
 
-      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, totalPoints);
+      const updatedPlayer = this.updateScore(player.id, totalPoints);
       scores.push({
         playerId: player.id,
         points: totalPoints,
@@ -2411,7 +2447,7 @@ export class GameEngine {
         answer.isCorrect = isValidated;
       }
 
-      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, points);
+      const updatedPlayer = this.updateScore(player.id, points);
       scores.push({
         playerId: player.id,
         points,
@@ -2638,7 +2674,7 @@ export class GameEngine {
         answer.isCorrect = atLeastOneCorrect;
       }
 
-      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, points);
+      const updatedPlayer = this.updateScore(player.id, points);
       scores.push({
         playerId: player.id,
         points,
@@ -2812,7 +2848,7 @@ export class GameEngine {
         answer.isCorrect = isValidated;
       }
 
-      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, points);
+      const updatedPlayer = this.updateScore(player.id, points);
       scores.push({
         playerId: player.id,
         points,
@@ -3000,7 +3036,7 @@ export class GameEngine {
         answer.isCorrect = isValidated;
       }
 
-      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, points);
+      const updatedPlayer = this.updateScore(player.id, points);
       scores.push({
         playerId: player.id,
         points,
@@ -3209,7 +3245,7 @@ export class GameEngine {
         winner = this.room.players.find((p) => p.id === playerId);
       }
 
-      const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);
+      const updatedPlayer = this.updateScore(playerId, points);
       if (updatedPlayer) {
         scores.push({ playerId, points, total: updatedPlayer.score });
       }
@@ -3588,7 +3624,7 @@ export class GameEngine {
       if (drawingGuessedByOther) points += 100;
       if (youGuessedCorrectly) points += 100;
 
-      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, points);
+      const updatedPlayer = this.updateScore(player.id, points);
 
       scores.push({
         playerId: player.id,
@@ -3912,7 +3948,7 @@ export class GameEngine {
     const scores: { playerId: string; points: number; total: number }[] = [];
     for (const player of this.room.players) {
       const pts = playerScores.get(player.id) || 0;
-      this.roomManager.updatePlayerScore(player.id, pts);
+      this.updateScore(player.id, pts);
       const updatedPlayer = this.room.players.find((p) => p.id === player.id);
       scores.push({
         playerId: player.id,
@@ -3964,11 +4000,205 @@ export class GameEngine {
    * Proceed to the next round
    */
   nextRound(): void {
-    if (this.currentRound >= this.questions.length) {
+    if (this.comebackMode) {
+      const total = this.room.settings.comebackTotalRounds || 15;
+      if (this.currentRound >= total) {
+        this.finishGame();
+      } else {
+        this.startRound();
+      }
+    } else if (this.currentRound >= this.questions.length) {
       this.finishGame();
     } else {
       this.startRound();
     }
+  }
+
+  // ==========================================
+  // COMEBACK MODE HELPERS ("Aide aux derniers")
+  // ==========================================
+
+  /** Wrapper for updatePlayerScore that applies comeback x2 bonus */
+  private updateScore(playerId: string, points: number): Player | null {
+    const finalPoints = (this.comebackMode && this.comebackBonusPlayerId === playerId && points > 0)
+      ? points * 2
+      : points;
+    return this.updateScore(playerId, finalPoints);
+  }
+
+  private getComebackLastPlayer(): Player {
+    const connected = this.room.players.filter((p) => p.isConnected);
+    if (connected.length === 0) return this.room.players[0];
+    // Sort ascending by score, pick the lowest
+    const sorted = [...connected].sort((a, b) => a.score - b.score);
+    const minScore = sorted[0].score;
+    const lastPlayers = sorted.filter((p) => p.score === minScore);
+    // Random among tied players
+    return lastPlayers[Math.floor(Math.random() * lastPlayers.length)];
+  }
+
+  private getComebackAvailableModes(): string[] {
+    // All game modes that have content available
+    return [
+      "qcm", "open", "estimation", "dictation", "parcours",
+      "image", "petitbac", "geoquiz", "langue", "maths",
+      "guessgame", "lineup", "jerseynumber", "futcard",
+      "chrono", "consensus", "liste",
+    ];
+  }
+
+  private startComebackPick(lastPlayer: Player): void {
+    const availableModes = this.getComebackAvailableModes();
+
+    // Emit pick event to all players
+    this.io.to(this.room.code).emit("comeback:pick_mode", {
+      playerId: lastPlayer.id,
+      playerName: lastPlayer.name,
+      playerAvatar: lastPlayer.avatar,
+      availableModes: availableModes as any,
+      timeLimit: 10,
+    });
+
+    // 10-second timeout — fallback to random
+    this.comebackPickTimer = setTimeout(() => {
+      this.comebackPickTimer = null;
+      const randomMode = availableModes[Math.floor(Math.random() * availableModes.length)];
+      this.comebackExecutePick(randomMode, lastPlayer);
+    }, 10000);
+  }
+
+  /** Called when the last player picks a mode (or timeout fallback) */
+  handleComebackChooseMode(playerId: string, mode: string): void {
+    // Only the designated last player can pick
+    if (!this.comebackMode || this.comebackBonusPlayerId !== playerId) return;
+    if (!this.comebackPickTimer) return; // already picked or timed out
+
+    clearTimeout(this.comebackPickTimer);
+    this.comebackPickTimer = null;
+
+    const available = this.getComebackAvailableModes();
+    const finalMode = available.includes(mode) ? mode : available[Math.floor(Math.random() * available.length)];
+
+    const player = this.room.players.find((p) => p.id === playerId);
+    if (player) {
+      this.comebackExecutePick(finalMode, player);
+    }
+  }
+
+  private comebackExecutePick(mode: string, picker: Player): void {
+    // Notify all players which mode was picked
+    this.io.to(this.room.code).emit("comeback:mode_picked", {
+      playerId: picker.id,
+      playerName: picker.name,
+      mode: mode as any,
+      bonusPlayerId: this.comebackBonusPlayerId!,
+    });
+
+    // Short delay to show the pick, then load question and start
+    setTimeout(() => {
+      this.comebackLoadAndStart(mode);
+    }, 2500);
+  }
+
+  private comebackLoadRandomAndStart(): void {
+    const modes = this.getComebackAvailableModes();
+    const mode = modes[Math.floor(Math.random() * modes.length)];
+    this.comebackLoadAndStart(mode);
+  }
+
+  private comebackLoadAndStart(mode: string): void {
+    // Load 1 question for this mode
+    const questions = this.loadQuestionsForMode(mode, 1);
+    if (questions.length === 0) {
+      // Fallback
+      this.questions.push(SAMPLE_QUESTIONS[Math.floor(Math.random() * SAMPLE_QUESTIONS.length)]);
+    } else {
+      this.questions.push(questions[0]);
+    }
+
+    // Now proceed with the standard round start logic
+    this.comebackStartLoadedRound();
+  }
+
+  /** Start a round that was already loaded into this.questions (comeback mode) */
+  private comebackStartLoadedRound(): void {
+    const nextQuestion = this.questions[this.currentRound - 1];
+    const nextMode = nextQuestion.type;
+
+    // Detect mode change and emit event
+    if (nextMode !== this.currentMode) {
+      this.currentMode = nextMode;
+      this.room.gameMode = nextMode;
+      this.roomManager.updateGameMode(this.room.code, nextMode);
+      this.io.to(this.room.code).emit("game:mode_changed", nextMode);
+    }
+
+    // Update room state
+    const room = this.roomManager.getRoom(this.room.code);
+    if (room) {
+      room.currentRound = this.currentRound;
+    }
+
+    // Team burst logic (skip for drawing and lineup modes)
+    if (this.teamRoundsEnabled && nextMode !== "drawing" && nextMode !== "lineup") {
+      if (this.teamBurstRemaining > 0) {
+        this.teamBurstRemaining--;
+        this.io.to(this.room.code).emit("game:team_round_start", {
+          teams: this.currentTeams!,
+          burstRoundsRemaining: this.teamBurstRemaining,
+        });
+      } else if (this.currentTeams === null && Math.random() < 0.3) {
+        const burstLength = 1 + Math.floor(Math.random() * 3);
+        this.teamBurstRemaining = burstLength - 1;
+        this.currentTeams = this.splitPlayersIntoTeams();
+        this.io.to(this.room.code).emit("game:team_round_start", {
+          teams: this.currentTeams,
+          burstRoundsRemaining: this.teamBurstRemaining,
+        });
+      }
+    }
+
+    // Split or Steal mode
+    if (nextMode === "splitsteal") {
+      this.currentQuestion = nextQuestion;
+      this.startSplitStealPhase();
+      return;
+    }
+
+    // Drawing mode
+    if (nextMode === "drawing") {
+      this.currentQuestion = nextQuestion;
+      this.startSuggestionPhase();
+      return;
+    }
+
+    // Lineup mode
+    if (nextMode === "lineup") {
+      this.lineupFoundPlayers.clear();
+      this.lineupGlobalFound.clear();
+    }
+
+    // Liste mode
+    if (nextMode === "liste") {
+      this.listeFoundItems.clear();
+      this.listeGlobalFound.clear();
+      this.listeFinishedPlayers.clear();
+    }
+
+    // Petit Bac
+    this.petitBacStopTriggered = false;
+    if (this.petitBacStopTimer) {
+      clearTimeout(this.petitBacStopTimer);
+      this.petitBacStopTimer = null;
+    }
+
+    this.currentQuestion = nextQuestion;
+    this.timeRemaining = this.currentQuestion.timeLimit;
+
+    const questionForClient = this.sanitizeQuestionForClient(this.currentQuestion);
+    this.io.to(this.room.code).emit("game:round_start", this.currentRound, questionForClient);
+
+    this.startTimer();
   }
 
   // ==========================================
@@ -4011,7 +4241,7 @@ export class GameEngine {
     if (winningTeamId !== "tie") {
       const winningTeam = this.currentTeams.find((t) => t.id === winningTeamId)!;
       for (const pid of winningTeam.playerIds) {
-        this.roomManager.updatePlayerScore(pid, TEAM_BONUS);
+        this.updateScore(pid, TEAM_BONUS);
       }
     }
 

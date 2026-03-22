@@ -14,6 +14,7 @@ import {
   Trash2,
   Users,
   WifiOff,
+  Shield,
 } from "lucide-react";
 import { Button, Card, Avatar, Badge, StatusBadge, ScrollArea } from "@/components/ui";
 import { ScreenContainer } from "@/components/layout";
@@ -49,12 +50,14 @@ export function LobbyScreen() {
 
   const readyCount = players.filter((p) => p.isReady || p.isHost).length;
   const playlist = room.settings.playlist || DEFAULT_PLAYLIST;
-  const hasDrawing = playlist.some((s) => s.mode === "drawing");
-  const hasPetitBac = playlist.some((s) => s.mode === "petitbac");
+  const isComebackMode = room.settings.comebackMode ?? false;
+  const comebackTotalRounds = room.settings.comebackTotalRounds ?? 15;
+  const hasDrawing = !isComebackMode && playlist.some((s) => s.mode === "drawing");
+  const hasPetitBac = !isComebackMode && playlist.some((s) => s.mode === "petitbac");
   const minPlayers = hasDrawing ? 3 : hasPetitBac ? 2 : 1;
   const hasEnoughPlayers = players.length >= minPlayers;
   const canStart = hasEnoughPlayers && players.every((p) => p.isReady || p.isHost);
-  const totalRounds = playlist.reduce((sum, s) => sum + s.rounds, 0);
+  const totalRounds = isComebackMode ? comebackTotalRounds : playlist.reduce((sum, s) => sum + s.rounds, 0);
 
   return (
     <ScreenContainer centered={false} className="py-4">
@@ -132,12 +135,62 @@ export function LobbyScreen() {
               exit={{ opacity: 0 }}
               className="mb-6 space-y-4"
             >
-              <PlaylistBuilder
-                playlist={playlist}
-                onChange={(newPlaylist) => {
-                  updateRoomSettings({ playlist: newPlaylist });
-                }}
-              />
+              {/* Aide aux derniers toggle */}
+              <Card>
+                <label className="flex items-center justify-between cursor-pointer">
+                  <div>
+                    <p className="text-sm font-medium text-surface-100">Aide aux derniers</p>
+                    <p className="text-xs text-surface-500">Le dernier choisit le mode et gagne ×2</p>
+                  </div>
+                  <button
+                    role="switch"
+                    aria-checked={isComebackMode}
+                    onClick={() => updateRoomSettings({ comebackMode: !isComebackMode })}
+                    className={cn(
+                      "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
+                      isComebackMode ? "bg-amber-500" : "bg-surface-700"
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "inline-block h-4 w-4 rounded-full bg-white transition-transform",
+                        isComebackMode ? "translate-x-6" : "translate-x-1"
+                      )}
+                    />
+                  </button>
+                </label>
+                {isComebackMode && (
+                  <div className="mt-4 pt-3 border-t border-surface-700">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs text-surface-400">Nombre de manches</p>
+                      <span className="text-sm font-mono font-bold text-surface-100">{comebackTotalRounds}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={5}
+                      max={30}
+                      step={1}
+                      value={comebackTotalRounds}
+                      onChange={(e) => updateRoomSettings({ comebackTotalRounds: parseInt(e.target.value) })}
+                      className="w-full h-2 rounded-full appearance-none cursor-pointer bg-surface-700 accent-amber-500"
+                    />
+                    <div className="flex justify-between text-[10px] text-surface-600 mt-1">
+                      <span>5</span>
+                      <span>30</span>
+                    </div>
+                  </div>
+                )}
+              </Card>
+
+              {/* Playlist builder — hidden in comeback mode */}
+              {!isComebackMode && (
+                <PlaylistBuilder
+                  playlist={playlist}
+                  onChange={(newPlaylist) => {
+                    updateRoomSettings({ playlist: newPlaylist });
+                  }}
+                />
+              )}
               <Card>
                 <label className="flex items-center justify-between cursor-pointer">
                   <div>
@@ -222,18 +275,29 @@ export function LobbyScreen() {
           className="mb-4"
         >
           <div className="flex items-center justify-center gap-1.5 text-surface-400 flex-wrap">
-            {playlist.map((seg, i) => {
-              const mode = GAME_MODES.find((m) => m.id === seg.mode);
-              return (
-                <span key={i} className="flex items-center gap-0.5">
-                  {i > 0 && <span className="text-surface-600 mx-1">→</span>}
-                  <span className="text-base">{mode?.icon}</span>
-                  <span className="text-xs">{seg.rounds}</span>
-                </span>
-              );
-            })}
-            <span className="text-surface-600 ml-2">·</span>
-            <span className="text-sm ml-1">{totalRounds} manches</span>
+            {isComebackMode ? (
+              <>
+                <Shield className="w-4 h-4 text-amber-400" />
+                <span className="text-sm text-amber-400 font-medium">Aide aux derniers</span>
+                <span className="text-surface-600 ml-1">·</span>
+                <span className="text-sm ml-1">{totalRounds} manches</span>
+              </>
+            ) : (
+              <>
+                {playlist.map((seg, i) => {
+                  const mode = GAME_MODES.find((m) => m.id === seg.mode);
+                  return (
+                    <span key={i} className="flex items-center gap-0.5">
+                      {i > 0 && <span className="text-surface-600 mx-1">→</span>}
+                      <span className="text-base">{mode?.icon}</span>
+                      <span className="text-xs">{seg.rounds}</span>
+                    </span>
+                  );
+                })}
+                <span className="text-surface-600 ml-2">·</span>
+                <span className="text-sm ml-1">{totalRounds} manches</span>
+              </>
+            )}
           </div>
         </motion.div>
 
