@@ -8,7 +8,7 @@ import { useGameStore, useRoomStore, usePlayerStore } from "@/stores";
 import { useChatStore } from "@/stores/chat-store";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
-import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion } from "@/types";
+import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion, ListeRoundResult as ListeRoundResultType } from "@/types";
 
 const PETITBAC_CATEGORY_ICONS: Record<string, string> = {
   "Prénom": "👤",
@@ -81,6 +81,18 @@ export function RoundResult() {
   const isJerseyNumber = roundResult.question.type === "jerseynumber";
   const isChrono = roundResult.question.type === "chrono";
   const isConsensus = roundResult.question.type === "consensus";
+  const isListe = roundResult.question.type === "liste";
+  const listeRoundResult = useGameStore((s) => s.listeRoundResult);
+
+  if (isListe && listeRoundResult) {
+    return (
+      <ListeRoundResultView
+        roundResult={roundResult}
+        listeResult={listeRoundResult}
+        myPlayerId={myPlayerId}
+      />
+    );
+  }
 
   if (isChrono) {
     return (
@@ -976,6 +988,138 @@ function ConsensusRoundResult({
             </div>
           );
         })()}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ==========================================
+// LISTE ROUND RESULT
+// ==========================================
+
+function ListeRoundResultView({
+  roundResult,
+  listeResult,
+  myPlayerId,
+}: {
+  roundResult: NonNullable<ReturnType<typeof useGameStore.getState>["roundResult"]>;
+  listeResult: ListeRoundResultType;
+  myPlayerId: string;
+}) {
+  const myPlayerResult = listeResult.playerResults.find((r) => r.playerId === myPlayerId);
+  const myFoundSet = new Set(myPlayerResult?.foundItems || []);
+  const totalItems = listeResult.items.length;
+  const foundCount = myPlayerResult?.foundCount || 0;
+  const myPoints = myPlayerResult?.points || 0;
+  const gotBonus = myPlayerResult?.completionBonus || false;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex flex-col h-full px-4 pb-4"
+    >
+      {/* Header */}
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        className="text-center pt-6 mb-4"
+      >
+        <div className="flex justify-center mb-3">
+          <motion.div
+            className={cn(
+              "w-16 h-16 rounded-2xl flex items-center justify-center",
+              foundCount === totalItems ? "bg-success-500" : foundCount > totalItems / 2 ? "bg-amber-500" : "bg-danger-500"
+            )}
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <Trophy className="w-8 h-8 text-white" />
+          </motion.div>
+        </div>
+
+        <h3 className="text-lg font-display font-bold text-surface-100 mb-1">
+          {listeResult.quizTitle}
+        </h3>
+        <p className="text-sm text-surface-400">
+          <span className="text-lime-400 font-bold">{foundCount}</span>/{totalItems} trouvés
+          {" — "}
+          <span className="text-brand-400 font-bold">+{myPoints}</span> pts
+          {gotBonus && <span className="text-amber-400 ml-1">(+100 bonus !)</span>}
+        </p>
+      </motion.div>
+
+      {/* Items list — green if found by me, red if not */}
+      <div className="flex-1 overflow-y-auto min-h-0 mb-4">
+        <div className="grid grid-cols-2 gap-1.5">
+          {listeResult.items.map((item, idx) => {
+            const foundByMe = myFoundSet.has(idx);
+
+            return (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: Math.min(idx * 0.03, 1.5) }}
+                className={cn(
+                  "flex items-center gap-1.5 px-2 py-1.5 rounded-lg border text-xs",
+                  foundByMe
+                    ? "bg-lime-500/10 border-lime-500/30 text-lime-300"
+                    : "bg-red-500/10 border-red-500/30 text-red-300"
+                )}
+              >
+                <span className="w-4 h-4 flex-shrink-0 flex items-center justify-center">
+                  {foundByMe ? (
+                    <CheckCircle className="w-3 h-3 text-lime-400" />
+                  ) : (
+                    <XCircle className="w-3 h-3 text-red-400" />
+                  )}
+                </span>
+                <span className="truncate font-medium">
+                  {item.answer}
+                </span>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Player scores */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className="space-y-1"
+      >
+        {listeResult.playerResults.map((result, idx) => {
+          const isMe = result.playerId === myPlayerId;
+          return (
+            <div
+              key={result.playerId}
+              className={cn(
+                "flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm",
+                isMe ? "bg-brand-500/10 border border-brand-500/20" : "bg-surface-900/50"
+              )}
+            >
+              {idx === 0 && <Trophy className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />}
+              <Avatar emoji={result.playerAvatar} size="sm" />
+              <span className={cn("font-medium truncate", isMe ? "text-brand-300" : "text-surface-200")}>
+                {result.playerName}
+              </span>
+              <span className="ml-auto text-xs text-surface-400">
+                {result.foundCount}/{totalItems}
+              </span>
+              <span className={cn(
+                "font-display font-bold text-sm",
+                result.completionBonus ? "text-amber-400" : "text-surface-100"
+              )}>
+                +{result.points}
+              </span>
+            </div>
+          );
+        })}
       </motion.div>
     </motion.div>
   );
