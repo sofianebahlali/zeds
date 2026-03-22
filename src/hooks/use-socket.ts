@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction, SplitStealStartData, SplitStealRevealData, ListeRoundResult, ListeProgressData } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction, SplitStealStartData, SplitStealRevealData, ValiseStartData, ValiseRevealData, ListeRoundResult, ListeProgressData, LettresDrawData, LettresLetterDrawnData, LettresValidationData, LettresAnswerResultData } from "@/types";
 import { useChatStore } from "@/stores/chat-store";
 
 // Module-level flag: listeners are attached ONCE across all component instances
@@ -303,6 +303,19 @@ function setupSocketListeners() {
     useGameStore.getState().setSplitStealReveal(data);
   });
 
+  // Valise Mystère events
+  socket.on("valise:phase_start", (data: ValiseStartData) => {
+    useGameStore.getState().setValisePhase(data);
+  });
+
+  socket.on("valise:porteur_signal", (signal: "prends" | "laisse") => {
+    useGameStore.getState().setValisePorteurSignal(signal);
+  });
+
+  socket.on("valise:reveal", (data: ValiseRevealData) => {
+    useGameStore.getState().setValiseReveal(data);
+  });
+
   // Lineup events
   socket.on("lineup:guess_result", (result: LineupGuessResult) => {
     const store = useGameStore.getState();
@@ -342,6 +355,27 @@ function setupSocketListeners() {
 
   socket.on("liste:round_end", (result: ListeRoundResult) => {
     useGameStore.getState().setListeRoundResult(result);
+  });
+
+  // Lettres events
+  socket.on("lettres:draw_start", (data: LettresDrawData) => {
+    useGameStore.getState().setLettresDrawStart(data);
+  });
+
+  socket.on("lettres:letter_drawn", (data: LettresLetterDrawnData) => {
+    useGameStore.getState().setLettresLetterDrawn(data);
+  });
+
+  socket.on("lettres:find_phase", (data: { letters: string[]; timeLimit: number }) => {
+    useGameStore.getState().setLettresFindPhase(data.letters, data.timeLimit);
+  });
+
+  socket.on("lettres:validation_start", (data: LettresValidationData) => {
+    useGameStore.getState().setLettresValidation(data);
+  });
+
+  socket.on("lettres:answer_result", (data: LettresAnswerResultData) => {
+    useGameStore.getState().addLettresAnswerResult(data);
   });
 
   // Comeback mode events
@@ -594,6 +628,16 @@ export function useSocket() {
     useGameStore.setState({ hasAnswered: true, myAnswer: choice });
   }, [socket]);
 
+  const submitValiseSignal = useCallback((signal: "prends" | "laisse") => {
+    socket.emit("valise:submit_signal", signal);
+    useGameStore.setState({ hasAnswered: true, myAnswer: signal });
+  }, [socket]);
+
+  const submitValiseChoice = useCallback((choice: "voler" | "laisser") => {
+    socket.emit("valise:submit_choice", choice);
+    useGameStore.setState({ hasAnswered: true, myAnswer: choice });
+  }, [socket]);
+
   const submitListeAnswer = useCallback((answer: string) => {
     if (useGameStore.getState().timeRemaining > 0) {
       socket.emit("liste:submit_answer", answer);
@@ -602,6 +646,14 @@ export function useSocket() {
 
   const submitListeFinish = useCallback(() => {
     socket.emit("liste:finish");
+  }, [socket]);
+
+  const chooseLettresChoice = useCallback((choice: "voyelle" | "consonne") => {
+    socket.emit("lettres:choose", choice);
+  }, [socket]);
+
+  const validateLettresAnswer = useCallback((playerId: string, accepted: boolean) => {
+    socket.emit("lettres:validate_answer", playerId, accepted);
   }, [socket]);
 
   const chooseComebackMode = useCallback((mode: GameMode) => {
@@ -653,8 +705,12 @@ export function useSocket() {
     submitLineupGuess,
     skipLineupReveal,
     submitSplitStealChoice,
+    submitValiseSignal,
+    submitValiseChoice,
     submitListeAnswer,
     submitListeFinish,
+    chooseLettresChoice,
+    validateLettresAnswer,
     chooseComebackMode,
     sendChatMessage,
     sendLaughReaction,

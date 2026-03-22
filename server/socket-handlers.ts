@@ -411,6 +411,36 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     });
 
     // ==========================================
+    // VALISE MYSTÈRE EVENTS
+    // ==========================================
+
+    socket.on("valise:submit_signal", (signal: "prends" | "laisse") => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.submitValiseSignal(playerId, signal);
+    });
+
+    socket.on("valise:submit_choice", (choice: "voler" | "laisser") => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.submitValiseChoice(playerId, choice);
+    });
+
+    // ==========================================
     // LISTE EVENTS
     // ==========================================
 
@@ -438,6 +468,36 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
       if (!gameEngine) return;
 
       gameEngine.submitListeFinish(playerId);
+    });
+
+    // ==========================================
+    // LETTRES EVENTS
+    // ==========================================
+
+    socket.on("lettres:choose", (choice: "voyelle" | "consonne") => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.handleLettresChoose(playerId, choice);
+    });
+
+    socket.on("lettres:validate_answer", (targetPlayerId: string, accepted: boolean) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.validateSingleLettresAnswer(targetPlayerId, accepted);
     });
 
     // ==========================================

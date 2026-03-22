@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ListeRoundResult } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ValiseStartData, ValiseRevealData, ListeRoundResult, LettresDrawData, LettresLetterDrawnData, LettresValidationData, LettresAnswerResultData } from "@/types";
 
 export interface ComebackPickData {
   playerId: string;
@@ -27,7 +27,12 @@ type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" 
   | "lineup_revealing"
   | "splitsteal_choosing"
   | "splitsteal_revealing"
-  | "comeback_picking";
+  | "valise_choosing"
+  | "valise_revealing"
+  | "comeback_picking"
+  | "lettres_drawing"
+  | "lettres_finding"
+  | "lettres_validating";
 
 interface GameStoreState {
   // Game state
@@ -96,11 +101,26 @@ interface GameStoreState {
   splitStealData: SplitStealStartData | null;
   splitStealReveal: SplitStealRevealData | null;
 
+  // Valise Mystère mode (2-player Split or Steal)
+  valiseData: ValiseStartData | null;
+  valiseReveal: ValiseRevealData | null;
+  valisePorteurSignal: "prends" | "laisse" | null;
+
   // Liste mode
   listeFoundItems: { itemIndex: number; answer: string; foundByPlayerId: string }[];
   listeMyFoundCount: number;
   listeFinishedPlayers: string[];
   listeRoundResult: ListeRoundResult | null;
+
+  // Lettres mode
+  lettresLetters: string[];
+  lettresCurrentPickerId: string | null;
+  lettresCurrentPickerName: string | null;
+  lettresForcedChoice: "voyelle" | "consonne" | null;
+  lettresPickIndex: number;
+  lettresTimePerPick: number;
+  lettresValidationData: LettresValidationData | null;
+  lettresAnswerResults: LettresAnswerResultData[];
 
   // Comeback mode
   comebackPickData: ComebackPickData | null;
@@ -170,10 +190,22 @@ interface GameStoreState {
   setSplitStealPhase: (data: SplitStealStartData) => void;
   setSplitStealReveal: (data: SplitStealRevealData) => void;
 
+  // Valise Mystère actions
+  setValisePhase: (data: ValiseStartData) => void;
+  setValisePorteurSignal: (signal: "prends" | "laisse") => void;
+  setValiseReveal: (data: ValiseRevealData) => void;
+
   // Liste actions
   addListeFoundItem: (itemIndex: number, answer: string, foundByPlayerId: string) => void;
   addListeFinishedPlayer: (playerId: string) => void;
   setListeRoundResult: (result: ListeRoundResult) => void;
+
+  // Lettres actions
+  setLettresDrawStart: (data: LettresDrawData) => void;
+  setLettresLetterDrawn: (data: LettresLetterDrawnData) => void;
+  setLettresFindPhase: (letters: string[], timeLimit: number) => void;
+  setLettresValidation: (data: LettresValidationData) => void;
+  addLettresAnswerResult: (result: LettresAnswerResultData) => void;
 
   // Comeback actions
   setComebackPickData: (data: ComebackPickData | null) => void;
@@ -253,11 +285,26 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   splitStealData: null,
   splitStealReveal: null,
 
+  // Valise Mystère initial state
+  valiseData: null,
+  valiseReveal: null,
+  valisePorteurSignal: null,
+
   // Liste initial state
   listeFoundItems: [],
   listeMyFoundCount: 0,
   listeFinishedPlayers: [],
   listeRoundResult: null,
+
+  // Lettres initial state
+  lettresLetters: [],
+  lettresCurrentPickerId: null,
+  lettresCurrentPickerName: null,
+  lettresForcedChoice: null,
+  lettresPickIndex: 0,
+  lettresTimePerPick: 5,
+  lettresValidationData: null,
+  lettresAnswerResults: [],
 
   // Comeback mode initial state
   comebackPickData: null,
@@ -383,10 +430,20 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       lineupRevealMatch: null,
       splitStealData: null,
       splitStealReveal: null,
+      valiseData: null,
+      valiseReveal: null,
+      valisePorteurSignal: null,
       listeFoundItems: [],
       listeMyFoundCount: 0,
       listeFinishedPlayers: [],
       listeRoundResult: null,
+      lettresLetters: [],
+      lettresCurrentPickerId: null,
+      lettresCurrentPickerName: null,
+      lettresForcedChoice: null,
+      lettresPickIndex: 0,
+      lettresValidationData: null,
+      lettresAnswerResults: [],
       comebackPickData: null,
       comebackModePicked: null,
       modeTransition: null,
@@ -436,10 +493,20 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       lineupRevealMatch: null,
       splitStealData: null,
       splitStealReveal: null,
+      valiseData: null,
+      valiseReveal: null,
+      valisePorteurSignal: null,
       listeFoundItems: [],
       listeMyFoundCount: 0,
       listeFinishedPlayers: [],
       listeRoundResult: null,
+      lettresLetters: [],
+      lettresCurrentPickerId: null,
+      lettresCurrentPickerName: null,
+      lettresForcedChoice: null,
+      lettresPickIndex: 0,
+      lettresValidationData: null,
+      lettresAnswerResults: [],
       comebackPickData: null,
       comebackModePicked: null,
       comebackBonusPlayerId: null,
@@ -620,6 +687,26 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     status: "splitsteal_revealing",
   }),
 
+  // Valise Mystère actions
+  setValisePhase: (data: ValiseStartData) => set({
+    valiseData: data,
+    valiseReveal: null,
+    valisePorteurSignal: null,
+    hasAnswered: false,
+    answeredPlayers: [],
+    timeRemaining: data.timeLimit,
+    status: "valise_choosing",
+  }),
+
+  setValisePorteurSignal: (signal: "prends" | "laisse") => set({
+    valisePorteurSignal: signal,
+  }),
+
+  setValiseReveal: (data: ValiseRevealData) => set({
+    valiseReveal: data,
+    status: "valise_revealing",
+  }),
+
   // Liste actions
   addListeFoundItem: (itemIndex, answer, foundByPlayerId) =>
     set((state) => ({
@@ -632,6 +719,44 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         : [...state.listeFinishedPlayers, playerId],
     })),
   setListeRoundResult: (result) => set({ listeRoundResult: result }),
+
+  // Lettres actions
+  setLettresDrawStart: (data) => set({
+    lettresLetters: data.letters,
+    lettresCurrentPickerId: data.currentPickerId,
+    lettresCurrentPickerName: data.currentPickerName,
+    lettresForcedChoice: data.forcedChoice,
+    lettresPickIndex: data.pickIndex,
+    lettresTimePerPick: data.timePerPick,
+    lettresValidationData: null,
+    lettresAnswerResults: [],
+    status: "lettres_drawing",
+  }),
+  setLettresLetterDrawn: (data) => set({
+    lettresLetters: data.letters,
+    lettresCurrentPickerId: data.nextPickerId,
+    lettresCurrentPickerName: data.nextPickerName,
+    lettresForcedChoice: data.forcedChoice,
+    lettresPickIndex: data.pickIndex,
+  }),
+  setLettresFindPhase: (letters, timeLimit) => set({
+    lettresLetters: letters,
+    lettresCurrentPickerId: null,
+    lettresCurrentPickerName: null,
+    lettresForcedChoice: null,
+    timeRemaining: timeLimit,
+    hasAnswered: false,
+    myAnswer: null,
+    status: "lettres_finding",
+  }),
+  setLettresValidation: (data) => set({
+    lettresValidationData: data,
+    lettresAnswerResults: [],
+    status: "lettres_validating",
+  }),
+  addLettresAnswerResult: (result) => set((state) => ({
+    lettresAnswerResults: [...state.lettresAnswerResults, result],
+  })),
 
   // Comeback actions
   setComebackPickData: (data) => set({ comebackPickData: data, comebackModePicked: null, status: data ? "comeback_picking" : "idle" }),

@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "lettres";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -553,6 +553,55 @@ export interface ListeRoundResult {
   }[];
 }
 
+// ==========================================
+// LETTRES MODE TYPES (Des Chiffres et des Lettres)
+// ==========================================
+
+export interface LettresQuestion extends BaseQuestion {
+  type: "lettres";
+}
+
+export interface LettresDrawData {
+  letters: string[];
+  currentPickerId: string;
+  currentPickerName: string;
+  pickIndex: number;
+  totalPicks: number;
+  forcedChoice: "voyelle" | "consonne" | null;
+  timePerPick: number;
+}
+
+export interface LettresLetterDrawnData {
+  letter: string;
+  letters: string[];
+  choiceType: "voyelle" | "consonne";
+  nextPickerId: string | null;
+  nextPickerName: string | null;
+  pickIndex: number;
+  forcedChoice: "voyelle" | "consonne" | null;
+}
+
+export interface LettresPlayerAnswerData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  word: string;
+  wordLength: number;
+}
+
+export interface LettresValidationData {
+  letters: string[];
+  playerAnswers: LettresPlayerAnswerData[]; // sorted by word length ascending
+}
+
+export interface LettresAnswerResultData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  word: string;
+  accepted: boolean;
+}
+
 export interface LineupPlayer {
   pos: string;
   name: string;
@@ -591,7 +640,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | LettresQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -695,6 +744,29 @@ export interface SplitStealRevealData {
   playerScores: { playerId: string; points: number; isCenterOfSteals: boolean }[];
 }
 
+// Valise Mystère (2-player Split or Steal variant)
+export interface ValiseStartData {
+  role: "porteur" | "voleur";
+  valiseValue: number | null; // Only visible to porteur (null for voleur)
+  opponentId: string;
+  opponentName: string;
+  opponentAvatar: string;
+  timeLimit: number;
+}
+
+export interface ValiseRevealData {
+  valiseValue: number;
+  porteurId: string;
+  porteurName: string;
+  porteurAvatar: string;
+  porteurSignal: "prends" | "laisse" | null; // null if timeout
+  voleurId: string;
+  voleurName: string;
+  voleurAvatar: string;
+  voleurChoice: "voler" | "laisser";
+  playerScores: { playerId: string; points: number }[];
+}
+
 // ==========================================
 // GAME STATE TYPES
 // ==========================================
@@ -779,11 +851,23 @@ export interface ServerToClientEvents {
   "splitsteal:player_chose": (playerId: string) => void;
   "splitsteal:reveal": (data: SplitStealRevealData) => void;
 
+  // Valise Mystère events (2-player Split or Steal)
+  "valise:phase_start": (data: ValiseStartData) => void;
+  "valise:porteur_signal": (signal: "prends" | "laisse") => void;
+  "valise:reveal": (data: ValiseRevealData) => void;
+
   // Liste events
   "liste:item_found": (data: { playerId: string; itemIndex: number; answer: string }) => void;
   "liste:player_finished": (data: { playerId: string; finishedCount: number; totalPlayers: number }) => void;
   "liste:progress": (data: ListeProgressData) => void;
   "liste:round_end": (result: ListeRoundResult) => void;
+
+  // Lettres events
+  "lettres:draw_start": (data: LettresDrawData) => void;
+  "lettres:letter_drawn": (data: LettresLetterDrawnData) => void;
+  "lettres:find_phase": (data: { letters: string[]; timeLimit: number }) => void;
+  "lettres:validation_start": (data: LettresValidationData) => void;
+  "lettres:answer_result": (data: LettresAnswerResultData) => void;
 
   // Comeback mode events
   "comeback:pick_mode": (data: { playerId: string; playerName: string; playerAvatar: string; availableModes: GameMode[]; timeLimit: number }) => void;
@@ -859,9 +943,17 @@ export interface ClientToServerEvents {
   // Split or Steal events
   "splitsteal:submit_choice": (choice: "split" | "steal") => void;
 
+  // Valise Mystère events
+  "valise:submit_signal": (signal: "prends" | "laisse") => void;
+  "valise:submit_choice": (choice: "voler" | "laisser") => void;
+
   // Liste events
   "liste:submit_answer": (answer: string) => void;
   "liste:finish": () => void;
+
+  // Lettres events
+  "lettres:choose": (choice: "voyelle" | "consonne") => void;
+  "lettres:validate_answer": (playerId: string, accepted: boolean) => void;
 
   // Comeback mode events
   "comeback:choose_mode": (mode: GameMode) => void;
@@ -1081,5 +1173,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Nomme un max d'éléments de la liste !",
     icon: "⚽",
     color: "from-green-500 to-emerald-700",
+  },
+  {
+    id: "lettres",
+    name: "Le Mot le Plus Long",
+    description: "Tire des lettres et trouve le mot le plus long !",
+    icon: "🔠",
+    color: "from-blue-500 to-indigo-700",
   },
 ];

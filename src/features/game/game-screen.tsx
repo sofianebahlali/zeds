@@ -20,7 +20,11 @@ import { LineupGameScreen } from "./lineup-game-screen";
 import { LineupRevealScreen } from "./lineup-reveal-screen";
 import { SplitStealChoiceScreen } from "./splitsteal-choice-screen";
 import { SplitStealRevealScreen } from "./splitsteal-reveal-screen";
+import { ValiseChoiceScreen } from "./valise-choice-screen";
+import { ValiseRevealScreen } from "./valise-reveal-screen";
 import { ListeGameScreen } from "./liste-game-screen";
+import { LettresGameScreen } from "./lettres-game-screen";
+import { LettresValidationScreen } from "./lettres-validation-screen";
 import { ComebackPickScreen } from "./comeback-pick-screen";
 import { GameChat } from "./game-chat";
 import { ScreenContainer } from "@/components/layout";
@@ -43,6 +47,7 @@ export function GameScreen() {
   const isLangue = currentGameMode === "langue";
   const isLineup = currentGameMode === "lineup";
   const isListe = currentGameMode === "liste";
+  const isLettres = currentGameMode === "lettres";
   const currentModeInfo = GAME_MODES.find((m) => m.id === currentGameMode);
   const transitionModeInfo = modeTransition ? GAME_MODES.find((m) => m.id === modeTransition) : null;
 
@@ -55,6 +60,11 @@ export function GameScreen() {
     if (status === "consensus_validating") return "Validation";
     if (status === "splitsteal_choosing") return "Split or Steal";
     if (status === "splitsteal_revealing") return "Resultats";
+    if (status === "valise_choosing") return "Valise Mystère";
+    if (status === "valise_revealing") return "Resultats";
+    if (status === "lettres_drawing") return "Tirage";
+    if (status === "lettres_finding") return "Cherche !";
+    if (status === "lettres_validating") return "Validation";
     if (!isDrawingMode) return null;
     switch (status) {
       case "suggesting": return "Suggère !";
@@ -202,6 +212,8 @@ export function GameScreen() {
             isListe ? <ListeGameScreen key="liste" /> :
             isLineup ? <LineupGameScreen key="lineup" /> : <QuestionDisplay key="question" />
           )}
+          {(status === "lettres_drawing" || status === "lettres_finding") && <LettresGameScreen key="lettres" />}
+          {status === "lettres_validating" && <LettresValidationScreen key="lettres-validation" />}
           {status === "revealing" && <RoundResult key="result" />}
           {status === "leaderboard" && <LeaderboardDisplay key="leaderboard" />}
           {status === "suggesting" && <SuggestionPhaseScreen key="suggesting" />}
@@ -217,6 +229,8 @@ export function GameScreen() {
           {status === "lineup_revealing" && <LineupRevealScreen key="lineup-reveal" />}
           {status === "splitsteal_choosing" && <SplitStealChoiceScreen key="splitsteal-choice" />}
           {status === "splitsteal_revealing" && <SplitStealRevealScreen key="splitsteal-reveal" />}
+          {status === "valise_choosing" && <ValiseChoiceScreen key="valise-choice" />}
+          {status === "valise_revealing" && <ValiseRevealScreen key="valise-reveal" />}
           {status === "comeback_picking" && <ComebackPickScreen key="comeback-pick" />}
         </AnimatePresence>
       </div>

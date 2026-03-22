@@ -56,6 +56,12 @@ import type {
   ListePlayerState,
   ListeProgressData,
   ListeRoundResult,
+  LettresQuestion,
+  LettresDrawData,
+  LettresLetterDrawnData,
+  LettresPlayerAnswerData,
+  LettresValidationData,
+  LettresAnswerResultData,
 } from "../src/types";
 import { PETITBAC_ALL_CATEGORIES, PETITBAC_CATEGORIES_PER_ROUND } from "../src/types";
 import { getQuestions as getDbQuestions, getTotalCount as getDbTotalCount } from "./question-db";
@@ -238,10 +244,47 @@ export class GameEngine {
   private splitStealPairs: [string, string][] = []; // For pairs: [A, B] means A↔B
   private splitStealCycle: string[] = []; // For cycle: [A, B, C] means A→B→C→A
 
+  // Valise Mystère state (2-player Split or Steal)
+  private valiseMode: boolean = false;
+  private valisePorteurId: string = "";
+  private valiseVoleurId: string = "";
+  private valiseValue: number = 0;
+  private valisePorteurSignal: "prends" | "laisse" | null = null;
+  private valiseVoleurChoice: "voler" | "laisser" | null = null;
+  private valiseRoundIndex: number = 0; // tracks alternation
+
   // Liste mode state
   private listeFoundItems: Map<string, Set<number>> = new Map(); // playerId -> set of found item indices
   private listeGlobalFound: Map<number, string> = new Map(); // item index -> first playerId who found it
   private listeFinishedPlayers: Set<string> = new Set(); // players who clicked "J'ai fini"
+
+  // Lettres mode state
+  private lettresLetters: string[] = [];
+  private lettresVowelCount: number = 0;
+  private lettresConsonantCount: number = 0;
+  private lettresPickOrder: string[] = []; // player IDs in pick order
+  private lettresCurrentPickIndex: number = 0;
+  private lettresPickTimer: NodeJS.Timeout | null = null;
+  private lettresValidating: boolean = false;
+  private lettresAutoValidationTimer: NodeJS.Timeout | null = null;
+  private lettresDecisions: Map<string, boolean> = new Map();
+  private lettresPlayerAnswers: LettresPlayerAnswerData[] = [];
+
+  // Lettres letter pools (French Scrabble-inspired frequencies, no accents)
+  private static readonly LETTRES_VOWELS: [string, number][] = [
+    ["A", 9], ["E", 15], ["I", 8], ["O", 6], ["U", 6], ["Y", 1],
+  ];
+  private static readonly LETTRES_CONSONANTS: [string, number][] = [
+    ["B", 2], ["C", 3], ["D", 3], ["F", 2], ["G", 2], ["H", 2],
+    ["J", 1], ["K", 1], ["L", 5], ["M", 3], ["N", 6], ["P", 2],
+    ["Q", 1], ["R", 6], ["S", 6], ["T", 6], ["V", 2], ["W", 1],
+    ["X", 1], ["Z", 1],
+  ];
+  private static readonly LETTRES_TOTAL_PICKS = 9;
+  private static readonly LETTRES_MIN_VOWELS = 2;
+  private static readonly LETTRES_MIN_CONSONANTS = 2;
+  private static readonly LETTRES_TIME_PER_PICK = 5; // seconds
+  private static readonly LETTRES_FIND_TIME = 25; // seconds
 
   // Team rounds state
   private teamRoundsEnabled: boolean = false;
@@ -689,6 +732,18 @@ export class GameEngine {
           };
         });
       }
+      case "lettres": {
+        const questions: Question[] = [];
+        for (let i = 0; i < count; i++) {
+          questions.push({
+            id: `lettres_${i + 1}`,
+            type: "lettres" as const,
+            timeLimit: GameEngine.LETTRES_FIND_TIME,
+            points: 100,
+          });
+        }
+        return questions;
+      }
       default:
         pool = [...SAMPLE_QUESTIONS];
         break;
@@ -826,8 +881,8 @@ export class GameEngine {
       room.currentRound = this.currentRound;
     }
 
-    // Team burst logic (skip for drawing and lineup modes)
-    if (this.teamRoundsEnabled && nextMode !== "drawing" && nextMode !== "lineup") {
+    // Team burst logic (skip for drawing, lineup, and lettres modes)
+    if (this.teamRoundsEnabled && nextMode !== "drawing" && nextMode !== "lineup" && nextMode !== "lettres") {
       if (this.teamBurstRemaining > 0) {
         // Already in a burst, decrement and re-emit
         this.teamBurstRemaining--;
@@ -858,6 +913,13 @@ export class GameEngine {
     if (nextMode === "drawing") {
       this.currentQuestion = nextQuestion;
       this.startSuggestionPhase();
+      return;
+    }
+
+    // Lettres mode has its own multi-phase flow (draw → find → validate)
+    if (nextMode === "lettres") {
+      this.currentQuestion = nextQuestion;
+      this.startLettresDrawPhase();
       return;
     }
 
@@ -992,6 +1054,8 @@ export class GameEngine {
       if (this.timeRemaining <= 0) {
         if (this.currentQuestion?.type === "drawing") {
           this.onDrawingTimerExpired();
+        } else if (this.currentQuestion?.type === "splitsteal" && this.valiseMode) {
+          this.resolveValise();
         } else if (this.currentQuestion?.type === "splitsteal") {
           this.resolveSplitSteal();
         } else {
@@ -1123,6 +1187,12 @@ export class GameEngine {
     // Consensus: enter host validation phase instead of auto-scoring
     if (this.currentQuestion.type === "consensus") {
       this.startConsensusValidation();
+      return;
+    }
+
+    // Lettres: enter host validation phase
+    if (this.currentQuestion.type === "lettres") {
+      this.startLettresValidation();
       return;
     }
 
@@ -3744,6 +3814,12 @@ export class GameEngine {
       return;
     }
 
+    // 2-player variant: Valise Mystère
+    if (activePlayers.length === 2) {
+      this.startValisePhase(activePlayers);
+      return;
+    }
+
     const shuffled = [...activePlayers].sort(() => Math.random() - 0.5);
     const isOdd = shuffled.length % 2 !== 0;
 
@@ -3840,6 +3916,168 @@ export class GameEngine {
     if (this.splitStealChoices.size >= activePlayers.length) {
       this.resolveSplitSteal();
     }
+  }
+
+  // ==========================================
+  // VALISE MYSTÈRE METHODS (2-player variant)
+  // ==========================================
+
+  private startValisePhase(activePlayers: { id: string; name: string; avatar: string; score: number }[]): void {
+    this.valiseMode = true;
+    this.valisePorteurSignal = null;
+    this.valiseVoleurChoice = null;
+
+    // Alternate roles each round
+    const porteurIndex = this.valiseRoundIndex % 2;
+    this.valiseRoundIndex++;
+
+    const porteur = activePlayers[porteurIndex];
+    const voleur = activePlayers[1 - porteurIndex];
+    this.valisePorteurId = porteur.id;
+    this.valiseVoleurId = voleur.id;
+
+    // Random value from [-200, -150, -100, -50, +50, +100, +150, +200]
+    const possibleValues = [-200, -150, -100, -50, 50, 100, 150, 200];
+    this.valiseValue = possibleValues[Math.floor(Math.random() * possibleValues.length)];
+
+    // Send porteur their data (with valise value visible)
+    const porteurSocketId = this.roomManager.getSocketIdFromPlayerId(porteur.id);
+    if (porteurSocketId) {
+      this.io.to(porteurSocketId).emit("valise:phase_start", {
+        role: "porteur",
+        valiseValue: this.valiseValue,
+        opponentId: voleur.id,
+        opponentName: voleur.name,
+        opponentAvatar: voleur.avatar,
+        timeLimit: 30,
+      });
+    }
+
+    // Send voleur their data (valise value hidden)
+    const voleurSocketId = this.roomManager.getSocketIdFromPlayerId(voleur.id);
+    if (voleurSocketId) {
+      this.io.to(voleurSocketId).emit("valise:phase_start", {
+        role: "voleur",
+        valiseValue: null,
+        opponentId: porteur.id,
+        opponentName: porteur.name,
+        opponentAvatar: porteur.avatar,
+        timeLimit: 30,
+      });
+    }
+
+    // Start 30s timer
+    this.timeRemaining = 30;
+    this.startTimer();
+  }
+
+  submitValiseSignal(playerId: string, signal: "prends" | "laisse"): void {
+    if (playerId !== this.valisePorteurId) return;
+    if (this.valisePorteurSignal !== null) return;
+
+    this.valisePorteurSignal = signal;
+
+    // Broadcast signal to the voleur
+    const voleurSocketId = this.roomManager.getSocketIdFromPlayerId(this.valiseVoleurId);
+    if (voleurSocketId) {
+      this.io.to(voleurSocketId).emit("valise:porteur_signal", signal);
+    }
+  }
+
+  submitValiseChoice(playerId: string, choice: "voler" | "laisser"): void {
+    if (playerId !== this.valiseVoleurId) return;
+    if (this.valiseVoleurChoice !== null) return;
+
+    this.valiseVoleurChoice = choice;
+    this.resolveValise();
+  }
+
+  private resolveValise(): void {
+    this.stopTimer();
+    this.valiseMode = false;
+
+    // If voleur didn't choose (timeout), random 50/50
+    if (this.valiseVoleurChoice === null) {
+      this.valiseVoleurChoice = Math.random() < 0.5 ? "voler" : "laisser";
+    }
+
+    const activePlayers = this.getActivePlayers();
+    const porteur = activePlayers.find((p) => p.id === this.valisePorteurId);
+    const voleur = activePlayers.find((p) => p.id === this.valiseVoleurId);
+    if (!porteur || !voleur) {
+      this.nextRound();
+      return;
+    }
+
+    // Resolve scoring
+    let porteurPoints = 0;
+    let voleurPoints = 0;
+
+    if (this.valiseVoleurChoice === "laisser") {
+      // Voleur leaves → porteur gets the valise points
+      porteurPoints = this.valiseValue;
+      voleurPoints = 0;
+    } else {
+      // Voleur steals → voleur gets the valise points (positive or negative!)
+      porteurPoints = 0;
+      voleurPoints = this.valiseValue;
+    }
+
+    // Apply scores
+    this.updateScore(porteur.id, porteurPoints);
+    this.updateScore(voleur.id, voleurPoints);
+
+    const scores: { playerId: string; points: number; total: number }[] = [];
+    for (const player of this.room.players) {
+      const pts = player.id === porteur.id ? porteurPoints : player.id === voleur.id ? voleurPoints : 0;
+      const updatedPlayer = this.room.players.find((p) => p.id === player.id);
+      scores.push({
+        playerId: player.id,
+        points: pts,
+        total: updatedPlayer?.score || 0,
+      });
+    }
+
+    // Build reveal data
+    const revealData = {
+      valiseValue: this.valiseValue,
+      porteurId: porteur.id,
+      porteurName: porteur.name,
+      porteurAvatar: porteur.avatar,
+      porteurSignal: this.valisePorteurSignal,
+      voleurId: voleur.id,
+      voleurName: voleur.name,
+      voleurAvatar: voleur.avatar,
+      voleurChoice: this.valiseVoleurChoice,
+      playerScores: scores.map((s) => ({ playerId: s.playerId, points: s.points })),
+    };
+
+    // Build round result
+    const roundResult = {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion!,
+      answers: [],
+      correctAnswer: "",
+      scores,
+    };
+
+    // Emit reveal
+    this.io.to(this.room.code).emit("valise:reveal", revealData);
+
+    // Update lose streaks
+    this.updateLoseStreaks(roundResult);
+
+    // After reveal delay, proceed
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+    this.io.to(this.room.code).emit("game:round_end", roundResult);
+
+    setTimeout(() => {
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+      setTimeout(() => {
+        this.nextRound();
+      }, 2000);
+    }, 6000);
   }
 
   private resolveSplitSteal(): void {
@@ -4139,8 +4377,8 @@ export class GameEngine {
       room.currentRound = this.currentRound;
     }
 
-    // Team burst logic (skip for drawing and lineup modes)
-    if (this.teamRoundsEnabled && nextMode !== "drawing" && nextMode !== "lineup") {
+    // Team burst logic (skip for drawing, lineup, and lettres modes)
+    if (this.teamRoundsEnabled && nextMode !== "drawing" && nextMode !== "lineup" && nextMode !== "lettres") {
       if (this.teamBurstRemaining > 0) {
         this.teamBurstRemaining--;
         this.io.to(this.room.code).emit("game:team_round_start", {
@@ -4274,6 +4512,356 @@ export class GameEngine {
     this.io.to(this.room.code).emit("game:finished", finalScores);
   }
 
+  // ==========================================
+  // LETTRES MODE
+  // ==========================================
+
+  /**
+   * Draw a weighted random letter from a pool
+   */
+  private static drawWeightedLetter(pool: [string, number][]): string {
+    const totalWeight = pool.reduce((sum, [, w]) => sum + w, 0);
+    let rand = Math.random() * totalWeight;
+    for (const [letter, weight] of pool) {
+      rand -= weight;
+      if (rand <= 0) return letter;
+    }
+    return pool[pool.length - 1][0];
+  }
+
+  /**
+   * Determine if the current pick is forced (to guarantee min vowels/consonants)
+   */
+  private getLettresForceChoice(): "voyelle" | "consonne" | null {
+    const remaining = GameEngine.LETTRES_TOTAL_PICKS - this.lettresLetters.length;
+    const vowelsNeeded = Math.max(0, GameEngine.LETTRES_MIN_VOWELS - this.lettresVowelCount);
+    const consonantsNeeded = Math.max(0, GameEngine.LETTRES_MIN_CONSONANTS - this.lettresConsonantCount);
+
+    // If all remaining picks must be vowels to meet minimum
+    if (remaining <= vowelsNeeded) return "voyelle";
+    // If all remaining picks must be consonants to meet minimum
+    if (remaining <= consonantsNeeded) return "consonne";
+
+    return null;
+  }
+
+  /**
+   * Start the letter drawing phase
+   */
+  private startLettresDrawPhase(): void {
+    // Reset state
+    this.lettresLetters = [];
+    this.lettresVowelCount = 0;
+    this.lettresConsonantCount = 0;
+    this.lettresValidating = false;
+    this.lettresDecisions.clear();
+    this.lettresPlayerAnswers = [];
+    this.answers.clear();
+
+    // Build pick order: rotate through active players
+    const activePlayers = this.getActivePlayers();
+    this.lettresPickOrder = [];
+    for (let i = 0; i < GameEngine.LETTRES_TOTAL_PICKS; i++) {
+      this.lettresPickOrder.push(activePlayers[i % activePlayers.length].id);
+    }
+    this.lettresCurrentPickIndex = 0;
+
+    const firstPicker = activePlayers.find(p => p.id === this.lettresPickOrder[0]);
+    const forced = this.getLettresForceChoice();
+
+    // Emit round start with lettres question (for UI to know the mode)
+    const questionForClient = this.sanitizeQuestionForClient(this.currentQuestion!);
+    this.io.to(this.room.code).emit("game:round_start", this.currentRound, questionForClient);
+
+    // Start draw phase
+    this.io.to(this.room.code).emit("lettres:draw_start", {
+      letters: [],
+      currentPickerId: this.lettresPickOrder[0],
+      currentPickerName: firstPicker?.name || "?",
+      pickIndex: 0,
+      totalPicks: GameEngine.LETTRES_TOTAL_PICKS,
+      forcedChoice: forced,
+      timePerPick: GameEngine.LETTRES_TIME_PER_PICK,
+    });
+
+    // Start pick timer
+    this.startLettresPickTimer();
+  }
+
+  /**
+   * Start a timer for the current pick (auto-pick on timeout)
+   */
+  private startLettresPickTimer(): void {
+    if (this.lettresPickTimer) {
+      clearTimeout(this.lettresPickTimer);
+    }
+    this.lettresPickTimer = setTimeout(() => {
+      // Auto-pick: random choice respecting forced constraint
+      const forced = this.getLettresForceChoice();
+      const choice = forced || (Math.random() < 0.5 ? "voyelle" : "consonne");
+      this.processLettresChoice(this.lettresPickOrder[this.lettresCurrentPickIndex], choice);
+    }, GameEngine.LETTRES_TIME_PER_PICK * 1000);
+  }
+
+  /**
+   * Handle a player's voyelle/consonne choice
+   */
+  handleLettresChoose(playerId: string, choice: "voyelle" | "consonne"): void {
+    // Only current picker can choose
+    if (this.lettresCurrentPickIndex >= this.lettresPickOrder.length) return;
+    if (playerId !== this.lettresPickOrder[this.lettresCurrentPickIndex]) return;
+
+    // Enforce forced choice
+    const forced = this.getLettresForceChoice();
+    const finalChoice = forced || choice;
+
+    this.processLettresChoice(playerId, finalChoice);
+  }
+
+  /**
+   * Process a letter choice (draw a letter and advance)
+   */
+  private processLettresChoice(_pickerId: string, choice: "voyelle" | "consonne"): void {
+    if (this.lettresPickTimer) {
+      clearTimeout(this.lettresPickTimer);
+      this.lettresPickTimer = null;
+    }
+
+    // Draw a letter
+    const pool = choice === "voyelle"
+      ? GameEngine.LETTRES_VOWELS
+      : GameEngine.LETTRES_CONSONANTS;
+    const letter = GameEngine.drawWeightedLetter(pool);
+
+    this.lettresLetters.push(letter);
+    if (choice === "voyelle") {
+      this.lettresVowelCount++;
+    } else {
+      this.lettresConsonantCount++;
+    }
+
+    this.lettresCurrentPickIndex++;
+
+    // Check if all letters drawn
+    if (this.lettresCurrentPickIndex >= GameEngine.LETTRES_TOTAL_PICKS) {
+      // Emit final letter and transition to find phase
+      this.io.to(this.room.code).emit("lettres:letter_drawn", {
+        letter,
+        letters: [...this.lettresLetters],
+        choiceType: choice,
+        nextPickerId: null,
+        nextPickerName: null,
+        pickIndex: this.lettresCurrentPickIndex,
+        forcedChoice: null,
+      });
+
+      // Short delay then start find phase
+      setTimeout(() => {
+        this.startLettresFindPhase();
+      }, 1500);
+      return;
+    }
+
+    // Next picker
+    const nextPickerId = this.lettresPickOrder[this.lettresCurrentPickIndex];
+    const nextPicker = this.room.players.find(p => p.id === nextPickerId);
+    const forced = this.getLettresForceChoice();
+
+    this.io.to(this.room.code).emit("lettres:letter_drawn", {
+      letter,
+      letters: [...this.lettresLetters],
+      choiceType: choice,
+      nextPickerId,
+      nextPickerName: nextPicker?.name || "?",
+      pickIndex: this.lettresCurrentPickIndex,
+      forcedChoice: forced,
+    });
+
+    // Start timer for next pick
+    this.startLettresPickTimer();
+  }
+
+  /**
+   * Start the word-finding phase (25s timer)
+   */
+  private startLettresFindPhase(): void {
+    if (!this.currentQuestion) return;
+
+    this.timeRemaining = GameEngine.LETTRES_FIND_TIME;
+    this.io.to(this.room.code).emit("lettres:find_phase", {
+      letters: [...this.lettresLetters],
+      timeLimit: GameEngine.LETTRES_FIND_TIME,
+    });
+
+    // Use standard timer — when it hits 0, endRound() will trigger lettres validation
+    this.startTimer();
+  }
+
+  /**
+   * Start the host validation phase for Lettres
+   */
+  private startLettresValidation(): void {
+    this.lettresValidating = true;
+    this.lettresDecisions.clear();
+    const activePlayers = this.getActivePlayers();
+
+    // Build player answers list, sorted by word length ascending
+    this.lettresPlayerAnswers = activePlayers
+      .map((player) => {
+        const answer = this.answers.get(player.id);
+        const word = (answer?.answer || "").trim().toUpperCase();
+        return {
+          playerId: player.id,
+          playerName: player.name,
+          playerAvatar: player.avatar,
+          word,
+          wordLength: word.length,
+        };
+      })
+      .filter((pa) => pa.wordLength > 0) // exclude empty answers
+      .sort((a, b) => a.wordLength - b.wordLength); // ascending by length
+
+    this.io.to(this.room.code).emit("lettres:validation_start", {
+      letters: [...this.lettresLetters],
+      playerAnswers: this.lettresPlayerAnswers,
+    });
+
+    // Auto-validation timeout: 90 seconds
+    this.lettresAutoValidationTimer = setTimeout(() => {
+      if (this.lettresValidating) {
+        // Auto-accept all remaining
+        for (const pa of this.lettresPlayerAnswers) {
+          if (this.lettresDecisions.has(pa.playerId)) continue;
+          this.lettresDecisions.set(pa.playerId, true);
+          this.io.to(this.room.code).emit("lettres:answer_result", {
+            playerId: pa.playerId,
+            playerName: pa.playerName,
+            playerAvatar: pa.playerAvatar,
+            word: pa.word,
+            accepted: true,
+          });
+        }
+        setTimeout(() => {
+          this.finalizeLettresFromDecisions();
+        }, 1500);
+      }
+    }, 90000);
+  }
+
+  /**
+   * Validate a single player's word in Lettres mode
+   */
+  validateSingleLettresAnswer(playerId: string, accepted: boolean): void {
+    if (!this.lettresValidating || !this.currentQuestion) return;
+    if (this.lettresDecisions.has(playerId)) return;
+
+    this.lettresDecisions.set(playerId, accepted);
+
+    const pa = this.lettresPlayerAnswers.find((p) => p.playerId === playerId);
+    if (!pa) return;
+
+    this.io.to(this.room.code).emit("lettres:answer_result", {
+      playerId: pa.playerId,
+      playerName: pa.playerName,
+      playerAvatar: pa.playerAvatar,
+      word: pa.word,
+      accepted,
+    });
+
+    // Check if all have been reviewed
+    const allReviewed = this.lettresPlayerAnswers.every((p) =>
+      this.lettresDecisions.has(p.playerId)
+    );
+
+    if (allReviewed) {
+      setTimeout(() => {
+        this.finalizeLettresFromDecisions();
+      }, 2000);
+    }
+  }
+
+  /**
+   * Finalize Lettres round from host decisions
+   */
+  private finalizeLettresFromDecisions(): void {
+    if (!this.lettresValidating || !this.currentQuestion) return;
+    this.lettresValidating = false;
+
+    if (this.lettresAutoValidationTimer) {
+      clearTimeout(this.lettresAutoValidationTimer);
+      this.lettresAutoValidationTimer = null;
+    }
+
+    const basePoints = this.currentQuestion.points;
+
+    // Find the longest validated word
+    let maxLength = 0;
+    for (const pa of this.lettresPlayerAnswers) {
+      if (this.lettresDecisions.get(pa.playerId) === true) {
+        maxLength = Math.max(maxLength, pa.wordLength);
+      }
+    }
+
+    const scores: { playerId: string; points: number; total: number }[] = [];
+    let winner: Player | undefined;
+
+    for (const player of this.room.players) {
+      const pa = this.lettresPlayerAnswers.find((p) => p.playerId === player.id);
+      const accepted = this.lettresDecisions.get(player.id) === true;
+      let points = 0;
+
+      if (accepted && pa && maxLength > 0) {
+        // Punitive scoring: (wordLength / maxLength)^2
+        const ratio = pa.wordLength / maxLength;
+        points = Math.round(basePoints * ratio * ratio);
+
+        // Track winner (longest validated word)
+        if (pa.wordLength === maxLength) {
+          winner = player;
+        }
+      }
+
+      // Apply comeback bonus
+      if (this.comebackBonusPlayerId === player.id) {
+        points *= 2;
+      }
+
+      const updatedPlayer = this.updateScore(player.id, points);
+      scores.push({
+        playerId: player.id,
+        points,
+        total: updatedPlayer?.score ?? player.score,
+      });
+    }
+
+    const correctAnswer = this.lettresLetters.join(" ");
+
+    const results: RoundResult = {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion,
+      answers: Array.from(this.answers.values()),
+      correctAnswer,
+      winner,
+      scores,
+    };
+
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+    this.updateLoseStreaks(results);
+    this.io.to(this.room.code).emit("game:round_end", results);
+
+    if (this.currentTeams) {
+      this.processTeamRoundEnd(results.scores);
+    }
+
+    setTimeout(() => {
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+      setTimeout(() => {
+        this.nextRound();
+      }, 2000);
+    }, 6000);
+  }
+
   /**
    * Handle player disconnect during game
    */
@@ -4284,6 +4872,15 @@ export class GameEngine {
     const activePlayers = this.room.players.filter(
       (p) => p.isConnected && !this.disconnectedPlayers.has(p.id)
     );
+
+    // Valise Mystère: resolve immediately on disconnect
+    if (this.currentQuestion?.type === "splitsteal" && this.valiseMode) {
+      // If voleur disconnects, auto-random choice and resolve
+      if (playerId === this.valiseVoleurId && this.valiseVoleurChoice === null) {
+        this.resolveValise();
+      }
+      return;
+    }
 
     // Split or Steal: auto-steal for disconnected, check if all chose
     if (this.currentQuestion?.type === "splitsteal") {
@@ -4331,6 +4928,14 @@ export class GameEngine {
     if (this.guessGameAutoValidationTimer) {
       clearTimeout(this.guessGameAutoValidationTimer);
       this.guessGameAutoValidationTimer = null;
+    }
+    if (this.lettresPickTimer) {
+      clearTimeout(this.lettresPickTimer);
+      this.lettresPickTimer = null;
+    }
+    if (this.lettresAutoValidationTimer) {
+      clearTimeout(this.lettresAutoValidationTimer);
+      this.lettresAutoValidationTimer = null;
     }
   }
 }
