@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "lettres";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "lettres" | "dialed";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -492,6 +492,14 @@ export interface ConsensusAnswerResultData {
   accepted: boolean;
 }
 
+export interface DialedQuestion extends BaseQuestion {
+  type: "dialed";
+  targetH: number; // Hue 0-360
+  targetS: number; // Saturation 0-100
+  targetL: number; // Lightness 0-100
+  memorizeDuration: number; // seconds to show color before hiding (e.g. 5)
+}
+
 export interface SplitStealQuestion extends BaseQuestion {
   type: "splitsteal";
 }
@@ -640,7 +648,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | LettresQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | LettresQuestion | DialedQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -1180,5 +1188,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Tire des lettres et trouve le mot le plus long !",
     icon: "🔠",
     color: "from-blue-500 to-indigo-700",
+  },
+  {
+    id: "dialed",
+    name: "Dialed",
+    description: "Mémorise la couleur puis reproduis-la avec les sliders !",
+    icon: "🎨",
+    color: "from-fuchsia-500 to-violet-700",
   },
 ];
