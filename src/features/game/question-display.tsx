@@ -2270,14 +2270,19 @@ function DialedQuestionView({
                 <CheckCircle className="w-6 h-6 text-success-400" />
                 <div className="text-left">
                   <p className="text-sm text-surface-400">Couleur envoyée !</p>
-                  <div className="flex items-center gap-2 mt-1">
+                  <div className="flex items-center gap-3 mt-2">
                     <div
-                      className="w-8 h-8 rounded-lg border border-surface-600"
+                      className="w-10 h-10 rounded-lg border border-surface-600 shrink-0"
                       style={{ backgroundColor: guessColor }}
                     />
-                    <span className="text-sm text-surface-300 font-mono">
-                      H:{h} S:{s} L:{l}
-                    </span>
+                    <div>
+                      <span className="text-sm text-surface-300 font-mono">
+                        H:{h} S:{s} L:{l}
+                      </span>
+                      <p className="text-xs text-surface-500 mt-0.5">
+                        En attente du résultat...
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>

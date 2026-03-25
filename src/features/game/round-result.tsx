@@ -8,7 +8,7 @@ import { useGameStore, useRoomStore, usePlayerStore } from "@/stores";
 import { useChatStore } from "@/stores/chat-store";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
-import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion, ListeRoundResult as ListeRoundResultType } from "@/types";
+import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion, ListeRoundResult as ListeRoundResultType, DialedQuestion } from "@/types";
 
 const PETITBAC_CATEGORY_ICONS: Record<string, string> = {
   "Prénom": "👤",
@@ -82,6 +82,7 @@ export function RoundResult() {
   const isChrono = roundResult.question.type === "chrono";
   const isConsensus = roundResult.question.type === "consensus";
   const isListe = roundResult.question.type === "liste";
+  const isDialed = roundResult.question.type === "dialed";
   const listeRoundResult = useGameStore((s) => s.listeRoundResult);
 
   if (isListe && listeRoundResult) {
@@ -114,6 +115,17 @@ export function RoundResult() {
         myPlayerId={myPlayerId}
         myResult={myResult}
         isCorrect={!!isCorrect}
+      />
+    );
+  }
+
+  if (isDialed) {
+    return (
+      <DialedRoundResult
+        roundResult={roundResult}
+        players={players}
+        myPlayerId={myPlayerId}
+        myResult={myResult}
       />
     );
   }
@@ -194,6 +206,10 @@ export function RoundResult() {
             ? isCorrect
               ? "Dans le consensus !"
               : "Pas dans la majorité !"
+            : isDialed
+            ? isCorrect
+              ? "Très proche !"
+              : "Pas évident !"
             : isCorrect
             ? "Bonne réponse !"
             : "Raté !"}
@@ -1120,6 +1136,171 @@ function ListeRoundResultView({
             </div>
           );
         })}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ==========================================
+// DIALED ROUND RESULT (Color Memory)
+// ==========================================
+
+function DialedRoundResult({
+  roundResult,
+  players,
+  myPlayerId,
+  myResult,
+}: {
+  roundResult: NonNullable<ReturnType<typeof useGameStore.getState>["roundResult"]>;
+  players: ReturnType<typeof useRoomStore.getState>["players"];
+  myPlayerId: string;
+  myResult?: { playerId: string; points: number; total: number };
+}) {
+  const q = roundResult.question as DialedQuestion;
+  const targetColor = `hsl(${q.targetH}, ${q.targetS}%, ${q.targetL}%)`;
+  const myNote = myResult ? (myResult.points / 100) : 0;
+  const myAnswer = roundResult.answers.find((a) => a.playerId === myPlayerId);
+  let myGuessColor: string | null = null;
+  if (myAnswer) {
+    try {
+      const parsed = JSON.parse(myAnswer.answer);
+      myGuessColor = `hsl(${parsed.h}, ${parsed.s}%, ${parsed.l}%)`;
+    } catch { /* ignore */ }
+  }
+
+  // Sort players by points descending
+  const sortedScores = useMemo(
+    () => [...roundResult.scores].sort((a, b) => b.points - a.points),
+    [roundResult.scores]
+  );
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex flex-col h-full px-5 pb-4"
+    >
+      {/* Result header with note /10 */}
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        className="text-center mb-6 pt-8"
+      >
+        <motion.div
+          className="text-5xl font-display font-bold text-surface-100 mb-1"
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          {myNote.toFixed(2)}<span className="text-2xl text-surface-400">/10</span>
+        </motion.div>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className={cn(
+            "text-lg font-display font-semibold",
+            myNote >= 8 ? "text-success-400" : myNote >= 5 ? "text-accent-400" : "text-danger-400"
+          )}
+        >
+          {myNote >= 9 ? "Incroyable !" : myNote >= 7 ? "Bien vu !" : myNote >= 4 ? "Pas mal !" : "Difficile !"}
+        </motion.p>
+      </motion.div>
+
+      {/* Color comparison: target vs guess */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+      >
+        <Card className="mb-6">
+          <div className="flex items-center justify-center gap-4">
+            <div className="text-center">
+              <div
+                className="w-20 h-20 rounded-xl border-2 border-surface-600 mx-auto mb-2"
+                style={{ backgroundColor: targetColor }}
+              />
+              <p className="text-xs text-surface-400">Cible</p>
+            </div>
+            {myGuessColor && (
+              <>
+                <span className="text-surface-600 text-2xl">→</span>
+                <div className="text-center">
+                  <div
+                    className="w-20 h-20 rounded-xl border-2 border-surface-600 mx-auto mb-2"
+                    style={{ backgroundColor: myGuessColor }}
+                  />
+                  <p className="text-xs text-surface-400">Toi</p>
+                </div>
+              </>
+            )}
+          </div>
+        </Card>
+      </motion.div>
+
+      {/* Player rankings with /10 notes */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="flex-1 overflow-y-auto"
+      >
+        <p className="text-xs text-surface-500 uppercase tracking-wide mb-3 font-semibold">
+          Classement du round
+        </p>
+        <div className="space-y-2">
+          {sortedScores.map((score, index) => {
+            const player = players.find((p) => p.id === score.playerId);
+            if (!player) return null;
+            const note10 = (score.points / 100).toFixed(2);
+            const isMe = score.playerId === myPlayerId;
+            const answer = roundResult.answers.find((a) => a.playerId === score.playerId);
+            let playerGuessColor: string | null = null;
+            if (answer) {
+              try {
+                const parsed = JSON.parse(answer.answer);
+                playerGuessColor = `hsl(${parsed.h}, ${parsed.s}%, ${parsed.l}%)`;
+              } catch { /* ignore */ }
+            }
+
+            return (
+              <motion.div
+                key={score.playerId}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.7 + index * 0.05 }}
+                className={cn(
+                  "flex items-center gap-3 p-3 rounded-xl",
+                  isMe ? "bg-brand-500/10 border border-brand-500/20" : "bg-surface-900 border border-surface-800"
+                )}
+              >
+                <span className="text-sm font-bold text-surface-400 w-5 text-center">
+                  {index + 1}
+                </span>
+                <Avatar emoji={player.avatar} size="sm" />
+                {playerGuessColor && (
+                  <div
+                    className="w-8 h-8 rounded-lg border border-surface-600 shrink-0"
+                    style={{ backgroundColor: playerGuessColor }}
+                  />
+                )}
+                <span className={cn(
+                  "flex-1 text-sm font-medium truncate",
+                  isMe ? "text-brand-300" : "text-surface-200"
+                )}>
+                  {player.name}
+                </span>
+                <span className={cn(
+                  "font-display font-bold text-sm",
+                  parseFloat(note10) >= 8 ? "text-success-400" : parseFloat(note10) >= 5 ? "text-accent-400" : "text-surface-300"
+                )}>
+                  {note10}/10
+                </span>
+              </motion.div>
+            );
+          })}
+        </div>
       </motion.div>
     </motion.div>
   );

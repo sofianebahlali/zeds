@@ -756,10 +756,23 @@ export class GameEngine {
         }
         return questions;
       }
-      case "dialed":
-        pool = GameEngine.loadDialedQuestions();
-        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
-        break;
+      case "dialed": {
+        // Auto-generate random colors — unlimited supply
+        const dialedQuestions: Question[] = [];
+        for (let i = 0; i < count; i++) {
+          dialedQuestions.push({
+            id: `dialed_${i + 1}`,
+            type: "dialed" as const,
+            targetH: Math.floor(Math.random() * 360),
+            targetS: 30 + Math.floor(Math.random() * 60), // 30-89% (avoid extremes)
+            targetL: 25 + Math.floor(Math.random() * 45), // 25-69% (avoid too dark/light)
+            memorizeDuration: 5,
+            timeLimit: 20,
+            points: 1000,
+          });
+        }
+        return dialedQuestions;
+      }
       default:
         pool = [...SAMPLE_QUESTIONS];
         break;

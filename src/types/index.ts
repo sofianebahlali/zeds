@@ -1191,7 +1191,7 @@ export const GAME_MODES: GameModeInfo[] = [
   },
   {
     id: "dialed",
-    name: "Dialed",
+    name: "Devine la couleur",
     description: "Mémorise la couleur puis reproduis-la avec les sliders !",
     icon: "🎨",
     color: "from-fuchsia-500 to-violet-700",
