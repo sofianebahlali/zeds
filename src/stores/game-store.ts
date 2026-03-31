@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ListeRoundResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ListeRoundResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult, PokemonRoundResult, PokemonAbandonResult, PokemonValidationData } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
@@ -11,7 +11,8 @@ type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" 
   | "consensus_validating"
   | "lineup_revealing"
   | "splitsteal_choosing"
-  | "splitsteal_revealing";
+  | "splitsteal_revealing"
+  | "pokemon_validating";
 
 interface GameStoreState {
   // Game state
@@ -95,6 +96,17 @@ interface GameStoreState {
   pokestatsAbandoned: boolean;
   pokestatsAbandonData: PokestatsAbandonResult | null;
 
+  // Pokemon Silhouette mode
+  pokemonFound: boolean;
+  pokemonMyPoints: number;
+  pokemonIsFirst: boolean;
+  pokemonFoundPlayers: { playerId: string; isFirst: boolean }[];
+  pokemonRoundResult: PokemonRoundResult | null;
+  pokemonAbandoned: boolean;
+  pokemonAbandonData: PokemonAbandonResult | null;
+  pokemonValidationData: PokemonValidationData | null;
+  pokemonAnswerResults: { playerId: string; playerName: string; playerAvatar: string; answer: string; accepted: boolean }[];
+
   // Mode transition
   modeTransition: GameMode | null;
 
@@ -169,6 +181,14 @@ interface GameStoreState {
   addPokestatsFoundPlayer: (playerId: string, hintsUsed: number) => void;
   setPokestatsRoundResult: (result: PokestatsRoundResult) => void;
   setPokestatsAbandoned: (data: PokestatsAbandonResult) => void;
+
+  // Pokemon Silhouette actions
+  setPokemonFound: (points: number, isFirst: boolean) => void;
+  addPokemonFoundPlayer: (playerId: string, isFirst: boolean) => void;
+  setPokemonRoundResult: (result: PokemonRoundResult) => void;
+  setPokemonAbandoned: (data: PokemonAbandonResult) => void;
+  setPokemonValidation: (data: PokemonValidationData) => void;
+  addPokemonAnswerResult: (result: { playerId: string; playerName: string; playerAvatar: string; answer: string; accepted: boolean }) => void;
 
   // Mode transition
   setModeTransition: (mode: GameMode | null) => void;
@@ -258,6 +278,17 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   pokestatsAbandoned: false,
   pokestatsAbandonData: null,
 
+  // Pokemon Silhouette initial state
+  pokemonFound: false,
+  pokemonMyPoints: 0,
+  pokemonIsFirst: false,
+  pokemonFoundPlayers: [],
+  pokemonRoundResult: null,
+  pokemonAbandoned: false,
+  pokemonAbandonData: null,
+  pokemonValidationData: null,
+  pokemonAnswerResults: [],
+
   // Mode transition initial state
   modeTransition: null,
 
@@ -293,6 +324,15 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       pokestatsRoundResult: null,
       pokestatsAbandoned: false,
       pokestatsAbandonData: null,
+      pokemonFound: false,
+      pokemonMyPoints: 0,
+      pokemonIsFirst: false,
+      pokemonFoundPlayers: [],
+      pokemonRoundResult: null,
+      pokemonAbandoned: false,
+      pokemonAbandonData: null,
+      pokemonValidationData: null,
+      pokemonAnswerResults: [],
     })),
 
   setTimeRemaining: (time) => set({ timeRemaining: time }),
@@ -391,6 +431,15 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       pokestatsMyPoints: 0,
       pokestatsFoundPlayers: [],
       pokestatsRoundResult: null,
+      pokemonFound: false,
+      pokemonMyPoints: 0,
+      pokemonIsFirst: false,
+      pokemonFoundPlayers: [],
+      pokemonRoundResult: null,
+      pokemonAbandoned: false,
+      pokemonAbandonData: null,
+      pokemonValidationData: null,
+      pokemonAnswerResults: [],
       modeTransition: null,
       teamData: null,
       teamRoundResult: null,
@@ -449,6 +498,15 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       pokestatsMyPoints: 0,
       pokestatsFoundPlayers: [],
       pokestatsRoundResult: null,
+      pokemonFound: false,
+      pokemonMyPoints: 0,
+      pokemonIsFirst: false,
+      pokemonFoundPlayers: [],
+      pokemonRoundResult: null,
+      pokemonAbandoned: false,
+      pokemonAbandonData: null,
+      pokemonValidationData: null,
+      pokemonAnswerResults: [],
       modeTransition: null,
       teamData: null,
       teamRoundResult: null,
@@ -649,6 +707,22 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   })),
   setPokestatsRoundResult: (result) => set({ pokestatsRoundResult: result }),
   setPokestatsAbandoned: (data) => set({ pokestatsAbandoned: true, pokestatsAbandonData: data }),
+
+  // Pokemon Silhouette actions
+  setPokemonFound: (points, isFirst) => set({ pokemonFound: true, pokemonMyPoints: points, pokemonIsFirst: isFirst }),
+  addPokemonFoundPlayer: (playerId, isFirst) => set((state) => ({
+    pokemonFoundPlayers: [...state.pokemonFoundPlayers, { playerId, isFirst }],
+  })),
+  setPokemonRoundResult: (result) => set({ pokemonRoundResult: result }),
+  setPokemonAbandoned: (data) => set({ pokemonAbandoned: true, pokemonAbandonData: data }),
+  setPokemonValidation: (data) => set({
+    pokemonValidationData: data,
+    pokemonAnswerResults: [],
+    status: "pokemon_validating",
+  }),
+  addPokemonAnswerResult: (result) => set((state) => ({
+    pokemonAnswerResults: [...state.pokemonAnswerResults, result],
+  })),
 
   // Mode transition
   setModeTransition: (mode) => set({ modeTransition: mode }),

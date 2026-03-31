@@ -443,6 +443,36 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     });
 
     // ==========================================
+    // POKEMON SILHOUETTE EVENTS
+    // ==========================================
+
+    socket.on("pokemon:abandon", () => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.handlePokemonAbandon(playerId);
+    });
+
+    socket.on("pokemon:validate_answer", (targetPlayerId: string, accepted: boolean) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.validateSinglePokemonAnswer(targetPlayerId, accepted);
+    });
+
+    // ==========================================
     // LISTE EVENTS
     // ==========================================
 

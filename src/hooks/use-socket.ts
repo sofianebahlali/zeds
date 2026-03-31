@@ -367,6 +367,33 @@ function setupSocketListeners() {
     useGameStore.getState().setPokestatsAbandoned(data);
   });
 
+  // Pokemon Silhouette events
+  socket.on("pokemon:guess_result", (result) => {
+    if (result.correct && result.points !== undefined) {
+      useGameStore.getState().setPokemonFound(result.points, result.isFirst || false);
+    }
+  });
+
+  socket.on("pokemon:player_found", (data) => {
+    useGameStore.getState().addPokemonFoundPlayer(data.playerId, data.isFirst);
+  });
+
+  socket.on("pokemon:round_end", (result) => {
+    useGameStore.getState().setPokemonRoundResult(result);
+  });
+
+  socket.on("pokemon:abandon_result", (data) => {
+    useGameStore.getState().setPokemonAbandoned(data);
+  });
+
+  socket.on("pokemon:validation_start", (data) => {
+    useGameStore.getState().setPokemonValidation(data);
+  });
+
+  socket.on("pokemon:answer_result", (data) => {
+    useGameStore.getState().addPokemonAnswerResult(data);
+  });
+
   // Team events
   socket.on("game:team_round_start", (data: TeamRoundData) => {
     useGameStore.getState().setTeamRoundStart(data);
@@ -634,6 +661,20 @@ export function useSocket() {
     socket.emit("pokestats:abandon");
   }, [socket]);
 
+  const submitPokemonGuess = useCallback((guess: string) => {
+    if (useGameStore.getState().timeRemaining > 0 && !useGameStore.getState().pokemonFound) {
+      socket.emit("game:submit_answer", guess);
+    }
+  }, [socket]);
+
+  const abandonPokemon = useCallback(() => {
+    socket.emit("pokemon:abandon");
+  }, [socket]);
+
+  const validatePokemonAnswer = useCallback((playerId: string, accepted: boolean) => {
+    socket.emit("pokemon:validate_answer", playerId, accepted);
+  }, [socket]);
+
   const sendChatMessage = useCallback((message: string) => {
     socket.emit("chat:send_message", message);
   }, [socket]);
@@ -684,6 +725,9 @@ export function useSocket() {
     submitPokestatsGuess,
     usePokestatsHint,
     abandonPokestats,
+    submitPokemonGuess,
+    abandonPokemon,
+    validatePokemonAnswer,
     sendChatMessage,
     sendLaughReaction,
     playAgain,

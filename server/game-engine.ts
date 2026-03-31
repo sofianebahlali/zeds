@@ -60,6 +60,9 @@ import type {
   PokestatsGuessResult,
   PokestatsHintData,
   PokestatsRoundResult,
+  PokemonSilhouetteQuestion,
+  PokemonRoundResult,
+  PokemonValidationData,
   GameModeConfig,
 } from "../src/types";
 import { PETITBAC_ALL_CATEGORIES, PETITBAC_CATEGORIES_PER_ROUND } from "../src/types";
@@ -254,6 +257,15 @@ export class GameEngine {
   private pokestatsHintsUsed: Map<string, number> = new Map(); // playerId -> number of hint button presses
   private pokestatsHintSequence: PokestatsHintData[] = []; // pre-computed hint sequence for current question
   private pokestatsAbandonedPlayers: Set<string> = new Set(); // players who gave up
+
+  // Pokemon Silhouette mode state
+  private pokemonFoundPlayers: Map<string, { foundAt: number; points: number; isFirst: boolean }> = new Map();
+  private pokemonAbandonedPlayers: Set<string> = new Set();
+  private pokemonFirstFinder: string | null = null; // playerId of the first player who found it
+  private pokemonValidating: boolean = false;
+  private pokemonAutoValidationTimer: NodeJS.Timeout | null = null;
+  private pokemonDecisions: Map<string, boolean> = new Map();
+  private pokemonPlayerAnswers: { playerId: string; playerName: string; playerAvatar: string; answer: string }[] = [];
 
   // Auto-advance timer (used by pokestats, liste, and standard rounds)
   private autoAdvanceTimer: NodeJS.Timeout | null = null;
@@ -741,6 +753,32 @@ export class GameEngine {
           points: 200,
         }));
       }
+      case "pokemon": {
+        const allPokemon = GameEngine.loadPokemonStatsData();
+        if (allPokemon.length === 0) return [...SAMPLE_QUESTIONS].slice(0, count);
+
+        let filtered = allPokemon;
+        if (config?.pokemonGenerations?.length) {
+          filtered = allPokemon.filter(p => config.pokemonGenerations!.includes(p.generation));
+        }
+        if (filtered.length === 0) filtered = allPokemon;
+
+        const shuffledPoke = filtered.sort(() => Math.random() - 0.5).slice(0, count);
+        return shuffledPoke.map((p, i) => ({
+          id: `pokemon_${i + 1}`,
+          type: "pokemon" as const,
+          pokemonId: p.id,
+          imageUrl: `/images/pokemon/${p.id}.png`,
+          nameEn: p.nameEn,
+          nameFr: p.nameFr,
+          aliases: p.aliases || [],
+          generation: p.generation,
+          types: p.types,
+          typesFr: p.typesFr,
+          timeLimit: 20,
+          points: 100,
+        }));
+      }
       default:
         pool = [...SAMPLE_QUESTIONS];
         break;
@@ -911,6 +949,16 @@ export class GameEngine {
       this.pokestatsHintSequence = this.buildPokestatsHintSequence(nextQuestion as PokemonStatsQuestion);
     }
 
+    // Pokemon Silhouette mode: reset per-round tracking
+    if (nextMode === "pokemon") {
+      this.pokemonFoundPlayers.clear();
+      this.pokemonAbandonedPlayers.clear();
+      this.pokemonFirstFinder = null;
+      this.pokemonValidating = false;
+      this.pokemonDecisions.clear();
+      this.pokemonPlayerAnswers = [];
+    }
+
     // Petit Bac: reset stop state
     this.petitBacStopTriggered = false;
     if (this.petitBacStopTimer) {
@@ -1028,6 +1076,18 @@ export class GameEngine {
         abilitiesFr: [],
       };
     }
+    if (question.type === "pokemon") {
+      // Send image URL but hide the Pokémon name
+      return {
+        ...question,
+        nameEn: "",
+        nameFr: "",
+        aliases: [],
+        types: [],
+        typesFr: [],
+        generation: 0,
+      };
+    }
     // petitbac: nothing to hide
     return question;
   }
@@ -1099,6 +1159,12 @@ export class GameEngine {
     // Pokemon Stats mode: continuous guessing until correct
     if (this.currentQuestion.type === "pokestats") {
       this.handlePokestatsGuess(playerId, answerText);
+      return;
+    }
+
+    // Pokemon Silhouette mode: solo = continuous auto-validated, multi = single answer for host validation
+    if (this.currentQuestion.type === "pokemon") {
+      this.handlePokemonGuess(playerId, answerText);
       return;
     }
 
@@ -1212,6 +1278,17 @@ export class GameEngine {
     // Pokemon Stats: calculate scores based on who found it
     if (this.currentQuestion.type === "pokestats") {
       this.finalizePokestatsRound();
+      return;
+    }
+
+    // Pokemon Silhouette: multi = host validation, solo = finalize directly
+    if (this.currentQuestion.type === "pokemon") {
+      const isSolo = this.room.players.filter(p => p.isConnected).length === 1;
+      if (isSolo) {
+        this.finalizePokemonRound();
+      } else {
+        this.startPokemonValidation();
+      }
       return;
     }
 
@@ -1699,6 +1776,10 @@ export class GameEngine {
         return (this.currentQuestion as ConsensusQuestion).prompt;
       case "liste":
         return (this.currentQuestion as ListeQuestion).title;
+      case "pokemon": {
+        const q = this.currentQuestion as PokemonSilhouetteQuestion;
+        return `${q.nameFr} / ${q.nameEn}`;
+      }
       default:
         return "";
     }
@@ -1794,6 +1875,8 @@ export class GameEngine {
         return false; // Handled in calculateConsensusScores
       case "liste":
         return false; // Handled in handleListeGuess
+      case "pokemon":
+        return false; // Handled in handlePokemonGuess / host validation
       default:
         return false;
     }
@@ -3654,6 +3737,355 @@ export class GameEngine {
   }
 
   // ==========================================
+  // POKEMON SILHOUETTE MODE METHODS
+  // ==========================================
+
+  /**
+   * Handle a Pokemon Silhouette guess.
+   * Solo: auto-validate (continuous guessing).
+   * Multi: record the answer for host validation (single answer per player).
+   */
+  private handlePokemonGuess(playerId: string, guess: string): void {
+    if (!this.currentQuestion || this.currentQuestion.type !== "pokemon") return;
+    if (this.pokemonFoundPlayers.has(playerId)) return;
+    if (this.pokemonAbandonedPlayers.has(playerId)) return;
+    if (this.timeRemaining <= 0) return;
+
+    const q = this.currentQuestion as PokemonSilhouetteQuestion;
+    const normalizedGuess = GameEngine.normalizeForComparison(guess);
+    if (normalizedGuess.length < 2) return;
+
+    const isSolo = this.room.players.filter(p => p.isConnected).length === 1;
+
+    if (isSolo) {
+      // Auto-validate: check against names
+      const allNames = [q.nameEn, q.nameFr, ...q.aliases];
+      let isCorrect = false;
+      for (const name of allNames) {
+        if (GameEngine.normalizeForComparison(name) === normalizedGuess) {
+          isCorrect = true;
+          break;
+        }
+      }
+
+      const socketId = this.roomManager.getSocketIdFromPlayerId(playerId);
+      if (!socketId) return;
+
+      if (isCorrect) {
+        const isFirst = this.pokemonFirstFinder === null;
+        if (isFirst) this.pokemonFirstFinder = playerId;
+
+        // Scoring: 100 base + speed bonus + first finder bonus
+        const speedBonus = Math.round(50 * this.timeRemaining / q.timeLimit);
+        const firstBonus = isFirst ? 30 : 0;
+        const totalPoints = q.points + speedBonus + firstBonus;
+
+        this.pokemonFoundPlayers.set(playerId, { foundAt: Date.now(), points: totalPoints, isFirst });
+        this.roomManager.updatePlayerScore(playerId, totalPoints);
+
+        this.io.to(socketId).emit("pokemon:guess_result", { correct: true, points: totalPoints, isFirst });
+        this.io.to(this.room.code).emit("pokemon:player_found", { playerId, isFirst });
+
+        // End round since solo
+        this.endRound();
+      } else {
+        this.io.to(socketId).emit("pokemon:guess_result", { correct: false });
+      }
+    } else {
+      // Multi: record single answer per player (host will validate)
+      if (this.answers.has(playerId)) return; // Already submitted
+
+      const responseTime = q.timeLimit - this.timeRemaining;
+      this.answers.set(playerId, {
+        playerId,
+        questionId: q.id,
+        answer: guess,
+        timestamp: Date.now(),
+        responseTime,
+      });
+
+      this.io.to(this.room.code).emit("game:player_answered", playerId);
+
+      // Check if everyone has answered
+      const activePlayers = this.getActivePlayers();
+      const resolvedCount = this.answers.size + this.pokemonAbandonedPlayers.size;
+      if (resolvedCount >= activePlayers.length) {
+        this.endRound();
+      }
+    }
+  }
+
+  /**
+   * Player abandons the current Pokemon Silhouette round
+   */
+  public handlePokemonAbandon(playerId: string): void {
+    if (!this.currentQuestion || this.currentQuestion.type !== "pokemon") return;
+    if (this.pokemonFoundPlayers.has(playerId)) return;
+    if (this.pokemonAbandonedPlayers.has(playerId)) return;
+
+    const q = this.currentQuestion as PokemonSilhouetteQuestion;
+    this.pokemonAbandonedPlayers.add(playerId);
+
+    const socketId = this.roomManager.getSocketIdFromPlayerId(playerId);
+    if (socketId) {
+      this.io.to(socketId).emit("pokemon:abandon_result", {
+        nameFr: q.nameFr,
+        nameEn: q.nameEn,
+        pokemonId: q.pokemonId,
+        imageUrl: q.imageUrl,
+        types: q.types,
+        typesFr: q.typesFr,
+        generation: q.generation,
+      });
+    }
+
+    this.io.to(this.room.code).emit("pokemon:player_found", { playerId, isFirst: false });
+
+    // Check if all resolved
+    const isSolo = this.room.players.filter(p => p.isConnected).length === 1;
+    if (isSolo) {
+      this.endRound();
+    } else {
+      const activePlayers = this.getActivePlayers();
+      const resolvedCount = this.answers.size + this.pokemonAbandonedPlayers.size;
+      if (resolvedCount >= activePlayers.length) {
+        this.endRound();
+      }
+    }
+  }
+
+  /**
+   * Start host validation for Pokemon Silhouette mode (multiplayer)
+   */
+  private startPokemonValidation(): void {
+    this.pokemonValidating = true;
+    this.pokemonDecisions.clear();
+    const q = this.currentQuestion as PokemonSilhouetteQuestion;
+    const activePlayers = this.getActivePlayers();
+
+    // Ensure all players have an answer entry
+    for (const player of activePlayers) {
+      if (!this.answers.has(player.id) && !this.pokemonAbandonedPlayers.has(player.id)) {
+        this.answers.set(player.id, {
+          playerId: player.id,
+          questionId: q.id,
+          answer: "",
+          timestamp: Date.now(),
+        });
+      }
+    }
+
+    this.pokemonPlayerAnswers = activePlayers
+      .filter(p => !this.pokemonAbandonedPlayers.has(p.id))
+      .map((player) => {
+        const answer = this.answers.get(player.id);
+        return {
+          playerId: player.id,
+          playerName: player.name,
+          playerAvatar: player.avatar,
+          answer: answer?.answer || "",
+        };
+      });
+
+    this.io.to(this.room.code).emit("pokemon:validation_start", {
+      nameFr: q.nameFr,
+      nameEn: q.nameEn,
+      imageUrl: q.imageUrl,
+      playerAnswers: this.pokemonPlayerAnswers,
+    });
+
+    // If no answers to review, skip
+    const hasAnswersToReview = this.pokemonPlayerAnswers.some(p => p.answer.trim().length > 0);
+    if (!hasAnswersToReview) {
+      for (const pa of this.pokemonPlayerAnswers) {
+        this.pokemonDecisions.set(pa.playerId, false);
+      }
+      setTimeout(() => {
+        this.finalizePokemonFromDecisions();
+      }, 1500);
+      return;
+    }
+
+    // Auto-validation timeout: 60 seconds
+    this.pokemonAutoValidationTimer = setTimeout(() => {
+      if (this.pokemonValidating) {
+        for (const pa of this.pokemonPlayerAnswers) {
+          if (this.pokemonDecisions.has(pa.playerId)) continue;
+          if (!pa.answer) {
+            this.pokemonDecisions.set(pa.playerId, false);
+            continue;
+          }
+          // Auto-validate using name matching
+          const normalized = GameEngine.normalizeForComparison(pa.answer);
+          const allNames = [q.nameEn, q.nameFr, ...q.aliases];
+          const isMatch = allNames.some(name => GameEngine.normalizeForComparison(name) === normalized);
+          this.pokemonDecisions.set(pa.playerId, isMatch);
+          this.io.to(this.room.code).emit("pokemon:answer_result", {
+            playerId: pa.playerId,
+            playerName: pa.playerName,
+            playerAvatar: pa.playerAvatar,
+            answer: pa.answer,
+            accepted: isMatch,
+          });
+        }
+        setTimeout(() => {
+          this.finalizePokemonFromDecisions();
+        }, 1500);
+      }
+    }, 60000);
+  }
+
+  /**
+   * Host validates a single Pokemon answer
+   */
+  validateSinglePokemonAnswer(playerId: string, accepted: boolean): void {
+    if (!this.pokemonValidating || !this.currentQuestion) return;
+    if (this.pokemonDecisions.has(playerId)) return;
+
+    this.pokemonDecisions.set(playerId, accepted);
+
+    const pa = this.pokemonPlayerAnswers.find(p => p.playerId === playerId);
+    if (!pa) return;
+
+    this.io.to(this.room.code).emit("pokemon:answer_result", {
+      playerId: pa.playerId,
+      playerName: pa.playerName,
+      playerAvatar: pa.playerAvatar,
+      answer: pa.answer,
+      accepted,
+    });
+
+    const playersToReview = this.pokemonPlayerAnswers.filter(p => p.answer.trim().length > 0);
+    const allReviewed = playersToReview.every(p => this.pokemonDecisions.has(p.playerId));
+
+    if (allReviewed) {
+      for (const p of this.pokemonPlayerAnswers) {
+        if (!this.pokemonDecisions.has(p.playerId)) {
+          this.pokemonDecisions.set(p.playerId, false);
+        }
+      }
+      setTimeout(() => {
+        this.finalizePokemonFromDecisions();
+      }, 2000);
+    }
+  }
+
+  private finalizePokemonFromDecisions(): void {
+    if (!this.pokemonValidating) return;
+    this.pokemonValidating = false;
+
+    if (this.pokemonAutoValidationTimer) {
+      clearTimeout(this.pokemonAutoValidationTimer);
+      this.pokemonAutoValidationTimer = null;
+    }
+
+    // Determine first finder from decisions (earliest responseTime among accepted)
+    let earliestTime = Infinity;
+    let firstPlayerId: string | null = null;
+    for (const [pid, accepted] of this.pokemonDecisions) {
+      if (!accepted) continue;
+      const answer = this.answers.get(pid);
+      if (answer && (answer.responseTime || Infinity) < earliestTime) {
+        earliestTime = answer.responseTime || Infinity;
+        firstPlayerId = pid;
+      }
+    }
+
+    const q = this.currentQuestion as PokemonSilhouetteQuestion;
+
+    for (const [pid, accepted] of this.pokemonDecisions) {
+      if (!accepted) continue;
+      const answer = this.answers.get(pid);
+      const isFirst = pid === firstPlayerId;
+      const speedBonus = answer?.responseTime !== undefined
+        ? Math.round(50 * (q.timeLimit - answer.responseTime) / q.timeLimit)
+        : 0;
+      const firstBonus = isFirst ? 30 : 0;
+      const totalPoints = q.points + speedBonus + firstBonus;
+
+      this.pokemonFoundPlayers.set(pid, { foundAt: answer?.timestamp || Date.now(), points: totalPoints, isFirst });
+      this.roomManager.updatePlayerScore(pid, totalPoints);
+    }
+
+    this.finalizePokemonRound();
+  }
+
+  /**
+   * Finalize a Pokemon Silhouette round
+   */
+  private finalizePokemonRound(): void {
+    this.stopTimer();
+    if (!this.currentQuestion || this.currentQuestion.type !== "pokemon") return;
+
+    const q = this.currentQuestion as PokemonSilhouetteQuestion;
+
+    const playerResults: PokemonRoundResult["playerResults"] = [];
+
+    for (const player of this.room.players) {
+      const foundData = this.pokemonFoundPlayers.get(player.id);
+      playerResults.push({
+        playerId: player.id,
+        playerName: player.name,
+        playerAvatar: player.avatar,
+        found: !!foundData,
+        points: foundData?.points || 0,
+        total: player.score,
+        isFirst: foundData?.isFirst || false,
+      });
+    }
+
+    playerResults.sort((a, b) => b.points - a.points);
+
+    const pokemonResult: PokemonRoundResult = {
+      roundNumber: this.currentRound,
+      pokemonId: q.pokemonId,
+      nameEn: q.nameEn,
+      nameFr: q.nameFr,
+      imageUrl: q.imageUrl,
+      types: q.types,
+      typesFr: q.typesFr,
+      generation: q.generation,
+      playerResults,
+    };
+
+    const scores = playerResults.map(r => ({ playerId: r.playerId, points: r.points, total: r.total }));
+    const roundResult: RoundResult = {
+      roundNumber: this.currentRound,
+      question: q,
+      answers: Array.from(this.answers.values()),
+      correctAnswer: `${q.nameFr} / ${q.nameEn}`,
+      winner: playerResults[0] ? this.room.players.find(p => p.id === playerResults[0].playerId) : undefined,
+      scores,
+    };
+
+    this.updateLoseStreaks(roundResult);
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+    this.io.to(this.room.code).emit("pokemon:round_end", pokemonResult);
+    this.io.to(this.room.code).emit("game:round_end", roundResult);
+
+    if (this.currentTeams) {
+      this.processTeamRoundEnd(scores);
+    }
+
+    // Reset state
+    this.pokemonFoundPlayers.clear();
+    this.pokemonAbandonedPlayers.clear();
+    this.pokemonFirstFinder = null;
+
+    // Auto-proceed
+    this.cancelAutoAdvance();
+    this.autoAdvanceTimer = setTimeout(() => {
+      this.autoAdvanceTimer = null;
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+      this.autoAdvanceInnerTimer = setTimeout(() => {
+        this.autoAdvanceInnerTimer = null;
+        this.nextRound();
+      }, 2000);
+    }, 6000);
+  }
+
+  // ==========================================
   // DRAWING MODE METHODS
   // ==========================================
 
@@ -4540,6 +4972,10 @@ export class GameEngine {
     if (this.drawingAutoValidationTimer) {
       clearTimeout(this.drawingAutoValidationTimer);
       this.drawingAutoValidationTimer = null;
+    }
+    if (this.pokemonAutoValidationTimer) {
+      clearTimeout(this.pokemonAutoValidationTimer);
+      this.pokemonAutoValidationTimer = null;
     }
   }
 }

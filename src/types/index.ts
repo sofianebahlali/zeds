@@ -39,12 +39,13 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon";
 
 export interface GameModeConfig {
   mode: GameMode;
   rounds: number;
   pokestatsGenerations?: number[]; // Filter by generation(s) for pokestats mode
+  pokemonGenerations?: number[]; // Filter by generation(s) for pokemon silhouette mode
 }
 
 export interface GameSettings {
@@ -624,6 +625,72 @@ export interface PokestatsAbandonResult {
   abilitiesFr: string[];
 }
 
+// ==========================================
+// POKEMON SILHOUETTE MODE TYPES
+// ==========================================
+
+export interface PokemonSilhouetteQuestion extends BaseQuestion {
+  type: "pokemon";
+  pokemonId: number;
+  imageUrl: string;
+  nameEn: string;
+  nameFr: string;
+  aliases: string[];
+  generation: number;
+  types: string[];
+  typesFr: string[];
+}
+
+export interface PokemonPlayerAnswerData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  answer: string;
+}
+
+export interface PokemonValidationData {
+  nameFr: string;
+  nameEn: string;
+  imageUrl: string;
+  playerAnswers: PokemonPlayerAnswerData[];
+}
+
+export interface PokemonGuessResult {
+  correct: boolean;
+  points?: number;
+  isFirst?: boolean;
+}
+
+export interface PokemonRoundResult {
+  roundNumber: number;
+  pokemonId: number;
+  nameEn: string;
+  nameFr: string;
+  imageUrl: string;
+  types: string[];
+  typesFr: string[];
+  generation: number;
+  playerResults: {
+    playerId: string;
+    playerName: string;
+    playerAvatar: string;
+    found: boolean;
+    points: number;
+    total: number;
+    isFirst: boolean;
+  }[];
+}
+
+export interface PokemonAbandonResult {
+  nameFr: string;
+  nameEn: string;
+  pokemonId: number;
+  imageUrl: string;
+  types: string[];
+  typesFr: string[];
+  generation: number;
+}
+
 export interface LineupPlayer {
   pos: string;
   name: string;
@@ -662,7 +729,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -863,6 +930,14 @@ export interface ServerToClientEvents {
   "pokestats:player_found": (data: { playerId: string; hintsUsed: number }) => void;
   "pokestats:abandon_result": (data: PokestatsAbandonResult) => void;
 
+  // Pokemon Silhouette events
+  "pokemon:guess_result": (result: PokemonGuessResult) => void;
+  "pokemon:round_end": (result: PokemonRoundResult) => void;
+  "pokemon:player_found": (data: { playerId: string; isFirst: boolean }) => void;
+  "pokemon:abandon_result": (data: PokemonAbandonResult) => void;
+  "pokemon:validation_start": (data: PokemonValidationData) => void;
+  "pokemon:answer_result": (data: { playerId: string; playerName: string; playerAvatar: string; answer: string; accepted: boolean }) => void;
+
   // Team events
   "game:team_round_start": (data: TeamRoundData) => void;
   "game:team_round_end": (result: TeamRoundResult) => void;
@@ -940,6 +1015,10 @@ export interface ClientToServerEvents {
   // Pokemon Stats events
   "pokestats:use_hint": () => void;
   "pokestats:abandon": () => void;
+
+  // Pokemon Silhouette events
+  "pokemon:abandon": () => void;
+  "pokemon:validate_answer": (playerId: string, accepted: boolean) => void;
 
   // Connection events
   "connection:reconnect": (roomCode: string, playerId: string) => void;
@@ -1163,5 +1242,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Devine le Pokémon à partir de ses stats !",
     icon: "⚡",
     color: "from-yellow-400 to-red-500",
+  },
+  {
+    id: "pokemon",
+    name: "Quel est ce Pokémon ?",
+    description: "Devine le Pokémon à partir de sa silhouette !",
+    icon: "❓",
+    color: "from-purple-500 to-indigo-700",
   },
 ];

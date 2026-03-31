@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Pokemon sprites (downloaded via scripts/download-pokemon-sprites.sh)
+/public/images/pokemon/

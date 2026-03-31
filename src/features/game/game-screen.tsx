@@ -22,6 +22,8 @@ import { SplitStealChoiceScreen } from "./splitsteal-choice-screen";
 import { SplitStealRevealScreen } from "./splitsteal-reveal-screen";
 import { ListeGameScreen } from "./liste-game-screen";
 import { PokestatsGameScreen } from "./pokestats-game-screen";
+import { PokemonGameScreen } from "./pokemon-game-screen";
+import { PokemonValidationScreen } from "./pokemon-validation-screen";
 import { GameChat } from "./game-chat";
 import { ScreenContainer } from "@/components/layout";
 import { GAME_MODES } from "@/types";
@@ -42,6 +44,7 @@ export function GameScreen() {
   const isLineup = currentGameMode === "lineup";
   const isListe = currentGameMode === "liste";
   const isPokestats = currentGameMode === "pokestats";
+  const isPokemon = currentGameMode === "pokemon";
   const currentModeInfo = GAME_MODES.find((m) => m.id === currentGameMode);
   const transitionModeInfo = modeTransition ? GAME_MODES.find((m) => m.id === modeTransition) : null;
 
@@ -52,6 +55,7 @@ export function GameScreen() {
     if (status === "parcours_validating") return "Validation";
     if (status === "guessgame_validating") return "Validation";
     if (status === "consensus_validating") return "Validation";
+    if (status === "pokemon_validating") return "Validation";
     if (status === "splitsteal_choosing") return "Split or Steal";
     if (status === "splitsteal_revealing") return "Resultats";
     if (!isDrawingMode) return null;
@@ -180,6 +184,7 @@ export function GameScreen() {
         <AnimatePresence mode="wait">
           {status === "countdown" && <CountdownOverlay key="countdown" />}
           {(status === "question" || status === "answering") && (
+            isPokemon ? <PokemonGameScreen key="pokemon" /> :
             isPokestats ? <PokestatsGameScreen key="pokestats" /> :
             isListe ? <ListeGameScreen key="liste" /> :
             isLineup ? <LineupGameScreen key="lineup" /> : <QuestionDisplay key="question" />
@@ -196,6 +201,7 @@ export function GameScreen() {
           {status === "parcours_validating" && <ParcoursValidationScreen key="parcours-validation" />}
           {status === "guessgame_validating" && <GuessGameValidationScreen key="guessgame-validation" />}
           {status === "consensus_validating" && <ConsensusValidationScreen key="consensus-validation" />}
+          {status === "pokemon_validating" && <PokemonValidationScreen key="pokemon-validation" />}
           {status === "lineup_revealing" && <LineupRevealScreen key="lineup-reveal" />}
           {status === "splitsteal_choosing" && <SplitStealChoiceScreen key="splitsteal-choice" />}
           {status === "splitsteal_revealing" && <SplitStealRevealScreen key="splitsteal-reveal" />}
