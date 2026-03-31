@@ -429,6 +429,19 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
       gameEngine.usePokestatsHint(playerId);
     });
 
+    socket.on("pokestats:abandon", () => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.handlePokestatsAbandon(playerId);
+    });
+
     // ==========================================
     // LISTE EVENTS
     // ==========================================

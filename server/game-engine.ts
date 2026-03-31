@@ -253,6 +253,11 @@ export class GameEngine {
   private pokestatsFoundPlayers: Map<string, { hintsUsed: number; foundAt: number; points: number }> = new Map();
   private pokestatsHintsUsed: Map<string, number> = new Map(); // playerId -> number of hint button presses
   private pokestatsHintSequence: PokestatsHintData[] = []; // pre-computed hint sequence for current question
+  private pokestatsAbandonedPlayers: Set<string> = new Set(); // players who gave up
+
+  // Auto-advance timer (used by pokestats, liste, and standard rounds)
+  private autoAdvanceTimer: NodeJS.Timeout | null = null;
+  private autoAdvanceInnerTimer: NodeJS.Timeout | null = null;
 
   // Countdown state
   private countdownInterval: NodeJS.Timeout | null = null;
@@ -796,6 +801,7 @@ export class GameEngine {
    */
   start(): void {
     this.roomManager.updateRoomStatus(this.room.code, "starting");
+    this.cancelAutoAdvance(); // Cancel any stale auto-advance from previous game
 
     // Send countdown (clear any existing to prevent duplicates)
     if (this.countdownInterval) {
@@ -821,6 +827,7 @@ export class GameEngine {
    * Start a new round
    */
   private startRound(): void {
+    this.cancelAutoAdvance(); // Cancel any pending auto-advance from previous round
     this.roundEnding = false; // Reset guard for the new round
     this.currentRound++;
     this.answers.clear();
@@ -900,6 +907,7 @@ export class GameEngine {
     if (nextMode === "pokestats") {
       this.pokestatsFoundPlayers.clear();
       this.pokestatsHintsUsed.clear();
+      this.pokestatsAbandonedPlayers.clear();
       this.pokestatsHintSequence = this.buildPokestatsHintSequence(nextQuestion as PokemonStatsQuestion);
     }
 
@@ -1028,6 +1036,8 @@ export class GameEngine {
    * Start the round timer
    */
   private startTimer(): void {
+    // Safety: stop any existing timer to prevent leaked intervals
+    this.stopTimer();
     this.timerInterval = setInterval(() => {
       this.timeRemaining--;
       this.io.to(this.room.code).emit("game:time_update", this.timeRemaining);
@@ -1051,6 +1061,20 @@ export class GameEngine {
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
       this.timerInterval = null;
+    }
+  }
+
+  /**
+   * Cancel any pending auto-advance timers (prevents stale callbacks after restart/Rejouer)
+   */
+  private cancelAutoAdvance(): void {
+    if (this.autoAdvanceTimer) {
+      clearTimeout(this.autoAdvanceTimer);
+      this.autoAdvanceTimer = null;
+    }
+    if (this.autoAdvanceInnerTimer) {
+      clearTimeout(this.autoAdvanceInnerTimer);
+      this.autoAdvanceInnerTimer = null;
     }
   }
 
@@ -1228,11 +1252,14 @@ export class GameEngine {
       this.processTeamRoundEnd(results.scores);
     }
 
-    // Update scores then auto-proceed (no leaderboard screen between rounds)
-    setTimeout(() => {
+    // Update scores then auto-proceed (store references so they can be canceled)
+    this.cancelAutoAdvance();
+    this.autoAdvanceTimer = setTimeout(() => {
+      this.autoAdvanceTimer = null;
       const leaderboard = this.roomManager.getLeaderboard(this.room.code);
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
-      setTimeout(() => {
+      this.autoAdvanceInnerTimer = setTimeout(() => {
+        this.autoAdvanceInnerTimer = null;
         this.nextRound();
       }, 2000);
     }, 6000);
@@ -2121,11 +2148,14 @@ export class GameEngine {
     this.listeGlobalFound.clear();
     this.listeFinishedPlayers.clear();
 
-    // Auto-proceed
-    setTimeout(() => {
+    // Auto-proceed (store references so they can be canceled)
+    this.cancelAutoAdvance();
+    this.autoAdvanceTimer = setTimeout(() => {
+      this.autoAdvanceTimer = null;
       const leaderboard = this.roomManager.getLeaderboard(this.room.code);
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
-      setTimeout(() => {
+      this.autoAdvanceInnerTimer = setTimeout(() => {
+        this.autoAdvanceInnerTimer = null;
         this.nextRound();
       }, 2000);
     }, 6000);
@@ -2160,6 +2190,7 @@ export class GameEngine {
   private handlePokestatsGuess(playerId: string, guess: string): void {
     if (!this.currentQuestion || this.currentQuestion.type !== "pokestats") return;
     if (this.pokestatsFoundPlayers.has(playerId)) return;
+    if (this.pokestatsAbandonedPlayers.has(playerId)) return;
     if (this.timeRemaining <= 0) return;
 
     const q = this.currentQuestion as PokemonStatsQuestion;
@@ -2198,9 +2229,10 @@ export class GameEngine {
       // Notify all players
       this.io.to(this.room.code).emit("pokestats:player_found", { playerId, hintsUsed });
 
-      // End round if all active players found it
+      // End round if all active players found or abandoned
       const activePlayers = this.getActivePlayers();
-      if (this.pokestatsFoundPlayers.size >= activePlayers.length) {
+      const resolvedCount = this.pokestatsFoundPlayers.size + this.pokestatsAbandonedPlayers.size;
+      if (resolvedCount >= activePlayers.length) {
         this.endRound();
       }
     } else {
@@ -2217,6 +2249,7 @@ export class GameEngine {
   public usePokestatsHint(playerId: string): void {
     if (!this.currentQuestion || this.currentQuestion.type !== "pokestats") return;
     if (this.pokestatsFoundPlayers.has(playerId)) return;
+    if (this.pokestatsAbandonedPlayers.has(playerId)) return;
     if (this.timeRemaining <= 0) return;
 
     const currentUsed = this.pokestatsHintsUsed.get(playerId) || 0;
@@ -2228,6 +2261,42 @@ export class GameEngine {
     const socketId = this.roomManager.getSocketIdFromPlayerId(playerId);
     if (socketId) {
       this.io.to(socketId).emit("pokestats:hint", hint);
+    }
+  }
+
+  /**
+   * Player abandons the current Pokémon Stats round (gives up, gets 0 points, sees the answer)
+   */
+  public handlePokestatsAbandon(playerId: string): void {
+    if (!this.currentQuestion || this.currentQuestion.type !== "pokestats") return;
+    if (this.pokestatsFoundPlayers.has(playerId)) return;
+    if (this.pokestatsAbandonedPlayers.has(playerId)) return;
+
+    const q = this.currentQuestion as PokemonStatsQuestion;
+    this.pokestatsAbandonedPlayers.add(playerId);
+
+    const socketId = this.roomManager.getSocketIdFromPlayerId(playerId);
+    if (socketId) {
+      this.io.to(socketId).emit("pokestats:abandon_result", {
+        nameFr: q.nameFr,
+        nameEn: q.nameEn,
+        pokemonId: q.pokemonId,
+        types: q.types,
+        typesFr: q.typesFr,
+        generation: q.generation,
+        abilities: q.abilities,
+        abilitiesFr: q.abilitiesFr,
+      });
+    }
+
+    // Notify all players
+    this.io.to(this.room.code).emit("pokestats:player_found", { playerId, hintsUsed: -1 });
+
+    // End round if all active players have found or abandoned
+    const activePlayers = this.getActivePlayers();
+    const resolvedCount = this.pokestatsFoundPlayers.size + this.pokestatsAbandonedPlayers.size;
+    if (resolvedCount >= activePlayers.length) {
+      this.endRound();
     }
   }
 
@@ -2297,12 +2366,16 @@ export class GameEngine {
     this.pokestatsFoundPlayers.clear();
     this.pokestatsHintsUsed.clear();
     this.pokestatsHintSequence = [];
+    this.pokestatsAbandonedPlayers.clear();
 
-    // Auto-proceed
-    setTimeout(() => {
+    // Auto-proceed (store references so they can be canceled)
+    this.cancelAutoAdvance();
+    this.autoAdvanceTimer = setTimeout(() => {
+      this.autoAdvanceTimer = null;
       const leaderboard = this.roomManager.getLeaderboard(this.room.code);
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
-      setTimeout(() => {
+      this.autoAdvanceInnerTimer = setTimeout(() => {
+        this.autoAdvanceInnerTimer = null;
         this.nextRound();
       }, 2000);
     }, 6000);
@@ -4399,7 +4472,17 @@ export class GameEngine {
       return;
     }
 
-    if (!this.roundEnding && this.answers.size >= activePlayers.length && activePlayers.length > 0) {
+    // Pokemon Stats / Liste: check if all remaining active players have found/abandoned/finished
+    if (!this.roundEnding && this.currentQuestion?.type === "pokestats" && activePlayers.length > 0) {
+      const resolvedCount = this.pokestatsFoundPlayers.size + this.pokestatsAbandonedPlayers.size;
+      // Only count active players who haven't found/abandoned
+      const activeUnresolved = activePlayers.filter(
+        p => !this.pokestatsFoundPlayers.has(p.id) && !this.pokestatsAbandonedPlayers.has(p.id)
+      );
+      if (activeUnresolved.length === 0) {
+        this.endRound();
+      }
+    } else if (!this.roundEnding && this.answers.size >= activePlayers.length && activePlayers.length > 0) {
       this.endRound();
     }
 
@@ -4421,6 +4504,7 @@ export class GameEngine {
    */
   destroy(): void {
     this.stopTimer();
+    this.cancelAutoAdvance();
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval);
       this.countdownInterval = null;

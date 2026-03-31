@@ -46,22 +46,13 @@ export function ListeGameScreen() {
     return set;
   }, [listeFoundItems, myPlayerId]);
 
-  // All found indices (by anyone)
-  const allFoundIndices = useMemo(() => {
-    const set = new Set<number>();
-    for (const item of listeFoundItems) {
-      set.add(item.itemIndex);
-    }
-    return set;
-  }, [listeFoundItems]);
-
-  // Get the answer text for a found item
+  // Get the answer text for a found item (only my own)
   const getFoundAnswer = useCallback(
     (index: number) => {
-      const item = listeFoundItems.find((i) => i.itemIndex === index);
+      const item = listeFoundItems.find((i) => i.itemIndex === index && i.foundByPlayerId === myPlayerId);
       return item?.answer || "";
     },
-    [listeFoundItems]
+    [listeFoundItems, myPlayerId]
   );
 
   // Detect new found item for feedback
@@ -156,9 +147,7 @@ export function ListeGameScreen() {
         <div className="grid grid-cols-2 gap-1.5">
           {q.items.map((item, idx) => {
             const foundByMe = myFoundIndices.has(idx);
-            const foundByOther = allFoundIndices.has(idx) && !foundByMe;
-            const isFound = foundByMe || foundByOther;
-            const answer = isFound ? getFoundAnswer(idx) : "";
+            const answer = foundByMe ? getFoundAnswer(idx) : "";
 
             return (
               <motion.div
@@ -167,23 +156,21 @@ export function ListeGameScreen() {
                   "flex items-center gap-1.5 px-2 py-1.5 rounded-lg border text-xs transition-all duration-300",
                   foundByMe
                     ? "bg-lime-500/10 border-lime-500/30 text-lime-300"
-                    : foundByOther
-                    ? "bg-sky-500/10 border-sky-500/30 text-sky-300"
                     : "bg-surface-900/50 border-surface-800 text-surface-600"
                 )}
                 initial={false}
-                animate={isFound ? { scale: [1, 1.05, 1] } : {}}
+                animate={foundByMe ? { scale: [1, 1.05, 1] } : {}}
                 transition={{ duration: 0.2 }}
               >
                 <span className="w-4 h-4 flex-shrink-0 flex items-center justify-center">
-                  {isFound ? (
+                  {foundByMe ? (
                     <Check className="w-3 h-3" />
                   ) : (
                     <span className="text-[10px] text-surface-600">{idx + 1}</span>
                   )}
                 </span>
                 <span className="truncate font-medium">
-                  {isFound ? answer : (item.hint || "???")}
+                  {foundByMe ? answer : (item.hint || "???")}
                 </span>
               </motion.div>
             );

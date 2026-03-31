@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ListeRoundResult, PokestatsHintData, PokestatsRoundResult } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ListeRoundResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
@@ -92,6 +92,8 @@ interface GameStoreState {
   pokestatsMyPoints: number;
   pokestatsFoundPlayers: { playerId: string; hintsUsed: number }[];
   pokestatsRoundResult: PokestatsRoundResult | null;
+  pokestatsAbandoned: boolean;
+  pokestatsAbandonData: PokestatsAbandonResult | null;
 
   // Mode transition
   modeTransition: GameMode | null;
@@ -166,6 +168,7 @@ interface GameStoreState {
   setPokestatsFound: (points: number) => void;
   addPokestatsFoundPlayer: (playerId: string, hintsUsed: number) => void;
   setPokestatsRoundResult: (result: PokestatsRoundResult) => void;
+  setPokestatsAbandoned: (data: PokestatsAbandonResult) => void;
 
   // Mode transition
   setModeTransition: (mode: GameMode | null) => void;
@@ -252,6 +255,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   pokestatsMyPoints: 0,
   pokestatsFoundPlayers: [],
   pokestatsRoundResult: null,
+  pokestatsAbandoned: false,
+  pokestatsAbandonData: null,
 
   // Mode transition initial state
   modeTransition: null,
@@ -286,6 +291,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       pokestatsMyPoints: 0,
       pokestatsFoundPlayers: [],
       pokestatsRoundResult: null,
+      pokestatsAbandoned: false,
+      pokestatsAbandonData: null,
     })),
 
   setTimeRemaining: (time) => set({ timeRemaining: time }),
@@ -641,6 +648,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     pokestatsFoundPlayers: [...state.pokestatsFoundPlayers, { playerId, hintsUsed }],
   })),
   setPokestatsRoundResult: (result) => set({ pokestatsRoundResult: result }),
+  setPokestatsAbandoned: (data) => set({ pokestatsAbandoned: true, pokestatsAbandonData: data }),
 
   // Mode transition
   setModeTransition: (mode) => set({ modeTransition: mode }),

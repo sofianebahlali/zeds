@@ -1350,7 +1350,7 @@ function LangueQuestionView({
               size="lg"
               fullWidth
               onClick={onSubmit}
-              disabled={!languageAnswer.trim() && !meaningAnswer.trim()}
+              disabled={!languageAnswer.trim() || !meaningAnswer.trim()}
               rightIcon={<Send className="w-5 h-5" />}
             >
               Valider
@@ -1811,14 +1811,21 @@ function FutCardQuestionView({
 
             {/* Stats grid */}
             <div className="grid grid-cols-3 gap-x-4 gap-y-1.5 px-2">
-              {[
+              {(question.position === "GK" ? [
+                { label: "DIV", value: stats.pac },
+                { label: "HAN", value: stats.sho },
+                { label: "KIC", value: stats.pas },
+                { label: "REF", value: stats.dri },
+                { label: "SPD", value: stats.def },
+                { label: "POS", value: stats.phy },
+              ] : [
                 { label: "PAC", value: stats.pac },
                 { label: "SHO", value: stats.sho },
                 { label: "PAS", value: stats.pas },
                 { label: "DRI", value: stats.dri },
                 { label: "DEF", value: stats.def },
                 { label: "PHY", value: stats.phy },
-              ].map(({ label, value }) => (
+              ]).map(({ label, value }) => (
                 <div key={label} className="flex items-center justify-between">
                   <span className="text-[10px] font-bold text-white/50">{label}</span>
                   <span className={cn(

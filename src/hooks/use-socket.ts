@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction, SplitStealStartData, SplitStealRevealData, ListeRoundResult, ListeProgressData, PokestatsGuessResult, PokestatsHintData, PokestatsRoundResult } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction, SplitStealStartData, SplitStealRevealData, ListeRoundResult, ListeProgressData, PokestatsGuessResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult } from "@/types";
 import { useChatStore } from "@/stores/chat-store";
 
 // Module-level flag: listeners are attached ONCE across all component instances
@@ -363,6 +363,10 @@ function setupSocketListeners() {
     useGameStore.getState().setPokestatsRoundResult(result);
   });
 
+  socket.on("pokestats:abandon_result", (data: PokestatsAbandonResult) => {
+    useGameStore.getState().setPokestatsAbandoned(data);
+  });
+
   // Team events
   socket.on("game:team_round_start", (data: TeamRoundData) => {
     useGameStore.getState().setTeamRoundStart(data);
@@ -626,6 +630,10 @@ export function useSocket() {
     socket.emit("pokestats:use_hint");
   }, [socket]);
 
+  const abandonPokestats = useCallback(() => {
+    socket.emit("pokestats:abandon");
+  }, [socket]);
+
   const sendChatMessage = useCallback((message: string) => {
     socket.emit("chat:send_message", message);
   }, [socket]);
@@ -675,6 +683,7 @@ export function useSocket() {
     submitListeFinish,
     submitPokestatsGuess,
     usePokestatsHint,
+    abandonPokestats,
     sendChatMessage,
     sendLaughReaction,
     playAgain,

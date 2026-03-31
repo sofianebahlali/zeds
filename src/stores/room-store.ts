@@ -46,12 +46,15 @@ export const useRoomStore = create<RoomState>((set, get) => ({
   setPlayers: (players) => set({ players }),
 
   addPlayer: (player) =>
-    set((state) => ({
-      players: [...state.players, player],
-      room: state.room
-        ? { ...state.room, players: [...state.players, player] }
-        : null,
-    })),
+    set((state) => {
+      const newPlayers = [...state.players, player];
+      return {
+        players: newPlayers,
+        room: state.room
+          ? { ...state.room, players: newPlayers }
+          : null,
+      };
+    }),
 
   removePlayer: (playerId) =>
     set((state) => {

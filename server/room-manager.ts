@@ -381,9 +381,15 @@ export class RoomManager {
 
     for (const [code, room] of this.rooms.entries()) {
       if (room.createdAt < oneHourAgo && room.status === "waiting") {
-        // Remove all player mappings
+        // Remove all player and socket mappings
         room.players.forEach((p) => {
           this.playerRooms.delete(p.id);
+          // Clean up socket→player mappings for this player
+          for (const [socketId, playerId] of this.socketPlayers) {
+            if (playerId === p.id) {
+              this.socketPlayers.delete(socketId);
+            }
+          }
         });
         this.rooms.delete(code);
         console.log(`Room ${code} cleaned up (inactive)`);

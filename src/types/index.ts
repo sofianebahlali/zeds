@@ -613,6 +613,17 @@ export interface PokestatsRoundResult {
   }[];
 }
 
+export interface PokestatsAbandonResult {
+  nameFr: string;
+  nameEn: string;
+  pokemonId: number;
+  types: string[];
+  typesFr: string[];
+  generation: number;
+  abilities: string[];
+  abilitiesFr: string[];
+}
+
 export interface LineupPlayer {
   pos: string;
   name: string;
@@ -850,6 +861,7 @@ export interface ServerToClientEvents {
   "pokestats:hint": (data: PokestatsHintData) => void;
   "pokestats:round_end": (result: PokestatsRoundResult) => void;
   "pokestats:player_found": (data: { playerId: string; hintsUsed: number }) => void;
+  "pokestats:abandon_result": (data: PokestatsAbandonResult) => void;
 
   // Team events
   "game:team_round_start": (data: TeamRoundData) => void;
@@ -927,6 +939,7 @@ export interface ClientToServerEvents {
 
   // Pokemon Stats events
   "pokestats:use_hint": () => void;
+  "pokestats:abandon": () => void;
 
   // Connection events
   "connection:reconnect": (roomCode: string, playerId: string) => void;

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Lightbulb, Check, Trophy } from "lucide-react";
+import { Send, Lightbulb, Check, Trophy, Flag } from "lucide-react";
 import { Button, Input, TimerProgress } from "@/components/ui";
 import { useGameStore, useRoomStore, usePlayerStore } from "@/stores";
 import { useSocket } from "@/hooks";
@@ -192,9 +192,11 @@ export function PokestatsGameScreen() {
   const pokestatsFound = useGameStore((s) => s.pokestatsFound);
   const pokestatsMyPoints = useGameStore((s) => s.pokestatsMyPoints);
   const pokestatsFoundPlayers = useGameStore((s) => s.pokestatsFoundPlayers);
+  const pokestatsAbandoned = useGameStore((s) => s.pokestatsAbandoned);
+  const pokestatsAbandonData = useGameStore((s) => s.pokestatsAbandonData);
   const players = useRoomStore((s) => s.players);
   const myPlayerId = usePlayerStore((s) => s.playerId);
-  const { submitPokestatsGuess, usePokestatsHint } = useSocket();
+  const { submitPokestatsGuess, usePokestatsHint, abandonPokestats } = useSocket();
 
   const [guess, setGuess] = useState("");
   const [lastWrong, setLastWrong] = useState(false);
@@ -319,7 +321,7 @@ export function PokestatsGameScreen() {
         )}
       </AnimatePresence>
 
-      {/* Found indicator / Other players */}
+      {/* Found indicator / Abandoned indicator / Other players */}
       <div className="flex items-center justify-center gap-2 min-h-[20px]">
         {pokestatsFound ? (
           <motion.div
@@ -332,6 +334,37 @@ export function PokestatsGameScreen() {
               Trouvé ! +{pokestatsMyPoints} pts
             </span>
           </motion.div>
+        ) : pokestatsAbandoned && pokestatsAbandonData ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col items-center gap-1 px-4 py-2 rounded-xl bg-surface-800/80 border border-surface-700"
+          >
+            <span className="text-xs text-surface-500">C&apos;était :</span>
+            <div className="flex items-center gap-2">
+              <img
+                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokestatsAbandonData.pokemonId}.png`}
+                alt={pokestatsAbandonData.nameFr}
+                className="w-12 h-12 object-contain"
+              />
+              <div>
+                <span className="text-sm font-display font-bold text-surface-100">
+                  {pokestatsAbandonData.nameFr}
+                </span>
+                <span className="text-xs text-surface-500 ml-1">
+                  ({pokestatsAbandonData.nameEn})
+                </span>
+                <div className="flex gap-1 mt-0.5">
+                  {pokestatsAbandonData.typesFr.map((t) => (
+                    <span key={t} className="text-[10px] px-1.5 py-0.5 rounded-full bg-surface-700 text-surface-300">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <span className="text-[10px] text-red-400 font-semibold">+0 pts</span>
+          </motion.div>
         ) : otherFoundCount > 0 ? (
           <span className="text-[10px] text-surface-500">
             {otherFoundCount} joueur{otherFoundCount > 1 ? "s" : ""} {otherFoundCount > 1 ? "ont" : "a"} trouvé
@@ -341,7 +374,7 @@ export function PokestatsGameScreen() {
 
       {/* Feedback */}
       <AnimatePresence>
-        {lastWrong && !pokestatsFound && (
+        {lastWrong && !pokestatsFound && !pokestatsAbandoned && (
           <motion.div
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
@@ -356,7 +389,7 @@ export function PokestatsGameScreen() {
       {/* Input + controls */}
       <div className="space-y-2 pb-safe mt-auto">
         {/* Input row */}
-        {!pokestatsFound && (
+        {!pokestatsFound && !pokestatsAbandoned && (
           <div className="flex gap-2">
             <Input
               ref={inputRef}
@@ -364,7 +397,7 @@ export function PokestatsGameScreen() {
               onChange={(e) => setGuess(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Nom du Pokémon..."
-              disabled={pokestatsFound || timeRemaining <= 0}
+              disabled={pokestatsFound || pokestatsAbandoned || timeRemaining <= 0}
               className="flex-1"
               autoFocus
               autoComplete="off"
@@ -374,7 +407,7 @@ export function PokestatsGameScreen() {
             />
             <Button
               onClick={handleSubmit}
-              disabled={!guess.trim() || pokestatsFound || timeRemaining <= 0}
+              disabled={!guess.trim() || pokestatsFound || pokestatsAbandoned || timeRemaining <= 0}
               size="icon"
               className="bg-brand-500 hover:bg-brand-600 text-white"
             >
@@ -383,9 +416,9 @@ export function PokestatsGameScreen() {
           </div>
         )}
 
-        {/* Hint button */}
-        {!pokestatsFound && timeRemaining > 0 && (
-          <div className="flex justify-center">
+        {/* Hint + Abandon buttons */}
+        {!pokestatsFound && !pokestatsAbandoned && timeRemaining > 0 && (
+          <div className="flex justify-center gap-3">
             <Button
               onClick={handleHint}
               disabled={pokestatsHints.length >= maxHints}
@@ -400,6 +433,15 @@ export function PokestatsGameScreen() {
                   ({pokestatsHints.length} utilisé{pokestatsHints.length > 1 ? "s" : ""})
                 </span>
               )}
+            </Button>
+            <Button
+              onClick={abandonPokestats}
+              variant="outline"
+              size="sm"
+              className="text-xs gap-1.5 border-red-500/30 text-red-400 hover:bg-red-500/10"
+            >
+              <Flag className="w-3 h-3" />
+              Abandonner
             </Button>
           </div>
         )}
