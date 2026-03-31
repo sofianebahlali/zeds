@@ -184,27 +184,27 @@ export function GameScreen() {
         <AnimatePresence mode="wait">
           {status === "countdown" && <CountdownOverlay key="countdown" />}
           {(status === "question" || status === "answering") && (
-            isPokemon ? <PokemonGameScreen key="pokemon" /> :
-            isPokestats ? <PokestatsGameScreen key="pokestats" /> :
-            isListe ? <ListeGameScreen key="liste" /> :
-            isLineup ? <LineupGameScreen key="lineup" /> : <QuestionDisplay key="question" />
+            isPokemon ? <PokemonGameScreen key={`pokemon-${currentRound}`} /> :
+            isPokestats ? <PokestatsGameScreen key={`pokestats-${currentRound}`} /> :
+            isListe ? <ListeGameScreen key={`liste-${currentRound}`} /> :
+            isLineup ? <LineupGameScreen key={`lineup-${currentRound}`} /> : <QuestionDisplay key={`question-${currentRound}`} />
           )}
-          {status === "revealing" && <RoundResult key="result" />}
+          {status === "revealing" && <RoundResult key={`result-${currentRound}`} />}
           {status === "leaderboard" && <LeaderboardDisplay key="leaderboard" />}
-          {status === "suggesting" && <SuggestionPhaseScreen key="suggesting" />}
-          {status === "drawing" && <DrawingPhaseScreen key="drawing" />}
-          {status === "guessing" && <GuessingPhaseScreen key="guessing" />}
-          {status === "drawing_reveal" && <DrawingRevealScreen key="drawing-reveal" />}
-          {status === "petitbac_validating" && <PetitBacValidationScreen key="petitbac-validation" />}
-          {status === "geoquiz_validating" && <GeoQuizValidationScreen key="geoquiz-validation" />}
-          {status === "langue_validating" && <LangueValidationScreen key="langue-validation" />}
-          {status === "parcours_validating" && <ParcoursValidationScreen key="parcours-validation" />}
-          {status === "guessgame_validating" && <GuessGameValidationScreen key="guessgame-validation" />}
-          {status === "consensus_validating" && <ConsensusValidationScreen key="consensus-validation" />}
-          {status === "pokemon_validating" && <PokemonValidationScreen key="pokemon-validation" />}
-          {status === "lineup_revealing" && <LineupRevealScreen key="lineup-reveal" />}
-          {status === "splitsteal_choosing" && <SplitStealChoiceScreen key="splitsteal-choice" />}
-          {status === "splitsteal_revealing" && <SplitStealRevealScreen key="splitsteal-reveal" />}
+          {status === "suggesting" && <SuggestionPhaseScreen key={`suggesting-${currentRound}`} />}
+          {status === "drawing" && <DrawingPhaseScreen key={`drawing-${currentRound}`} />}
+          {status === "guessing" && <GuessingPhaseScreen key={`guessing-${currentRound}`} />}
+          {status === "drawing_reveal" && <DrawingRevealScreen key={`drawing-reveal-${currentRound}`} />}
+          {status === "petitbac_validating" && <PetitBacValidationScreen key={`petitbac-validation-${currentRound}`} />}
+          {status === "geoquiz_validating" && <GeoQuizValidationScreen key={`geoquiz-validation-${currentRound}`} />}
+          {status === "langue_validating" && <LangueValidationScreen key={`langue-validation-${currentRound}`} />}
+          {status === "parcours_validating" && <ParcoursValidationScreen key={`parcours-validation-${currentRound}`} />}
+          {status === "guessgame_validating" && <GuessGameValidationScreen key={`guessgame-validation-${currentRound}`} />}
+          {status === "consensus_validating" && <ConsensusValidationScreen key={`consensus-validation-${currentRound}`} />}
+          {status === "pokemon_validating" && <PokemonValidationScreen key={`pokemon-validation-${currentRound}`} />}
+          {status === "lineup_revealing" && <LineupRevealScreen key={`lineup-reveal-${currentRound}`} />}
+          {status === "splitsteal_choosing" && <SplitStealChoiceScreen key={`splitsteal-choice-${currentRound}`} />}
+          {status === "splitsteal_revealing" && <SplitStealRevealScreen key={`splitsteal-reveal-${currentRound}`} />}
         </AnimatePresence>
       </div>
 

@@ -307,6 +307,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       myAnswer: null,
       hasAnswered: false,
       answeredPlayers: [],
+      roundResult: null,
       status: "question",
       geoQuizHint: null,
       lineupFoundPlayers: [],

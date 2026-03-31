@@ -43,7 +43,11 @@ export const useRoomStore = create<RoomState>((set, get) => ({
       room: state.room ? { ...state.room, status } : null,
     })),
 
-  setPlayers: (players) => set({ players }),
+  setPlayers: (players) =>
+    set((state) => ({
+      players,
+      room: state.room ? { ...state.room, players } : null,
+    })),
 
   addPlayer: (player) =>
     set((state) => {

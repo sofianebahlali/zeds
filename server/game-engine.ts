@@ -176,6 +176,7 @@ export class GameEngine {
   private timerInterval: NodeJS.Timeout | null = null;
   private timeRemaining: number = 0;
   private roundEnding: boolean = false; // Guard against double endRound() calls
+  private roundStarting: boolean = false; // Guard against double startRound() calls
   private questions: Question[] = [];
   private disconnectedPlayers: Set<string> = new Set();
   private usedQuestionDbIds: Set<number> = new Set(); // Track used SQLite question IDs per session
@@ -840,6 +841,7 @@ export class GameEngine {
   start(): void {
     this.roomManager.updateRoomStatus(this.room.code, "starting");
     this.cancelAutoAdvance(); // Cancel any stale auto-advance from previous game
+    this.roundStarting = false; // Clean state for fresh game
 
     // Send countdown (clear any existing to prevent duplicates)
     if (this.countdownInterval) {
@@ -865,6 +867,8 @@ export class GameEngine {
    * Start a new round
    */
   private startRound(): void {
+    if (this.roundStarting) return;
+    this.roundStarting = true;
     this.cancelAutoAdvance(); // Cancel any pending auto-advance from previous round
     this.roundEnding = false; // Reset guard for the new round
     this.currentRound++;
@@ -1218,6 +1222,7 @@ export class GameEngine {
     // Guard against double endRound() calls (e.g. timer + disconnect + all-answered race)
     if (this.roundEnding) return;
     this.roundEnding = true;
+    this.roundStarting = false; // Allow next round to start
 
     this.stopTimer();
 
@@ -4876,6 +4881,7 @@ export class GameEngine {
    */
   private finishGame(): void {
     this.stopTimer();
+    this.roundStarting = false;
     this.roomManager.updateRoomStatus(this.room.code, "finished");
 
     const finalScores = this.roomManager.getLeaderboard(this.room.code);
