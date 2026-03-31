@@ -56,6 +56,11 @@ import type {
   ListePlayerState,
   ListeProgressData,
   ListeRoundResult,
+  PokemonStatsQuestion,
+  PokestatsGuessResult,
+  PokestatsHintData,
+  PokestatsRoundResult,
+  GameModeConfig,
 } from "../src/types";
 import { PETITBAC_ALL_CATEGORIES, PETITBAC_CATEGORIES_PER_ROUND } from "../src/types";
 import { getQuestions as getDbQuestions, getTotalCount as getDbTotalCount } from "./question-db";
@@ -167,6 +172,7 @@ export class GameEngine {
   private answers: Map<string, Answer> = new Map();
   private timerInterval: NodeJS.Timeout | null = null;
   private timeRemaining: number = 0;
+  private roundEnding: boolean = false; // Guard against double endRound() calls
   private questions: Question[] = [];
   private disconnectedPlayers: Set<string> = new Set();
   private usedQuestionDbIds: Set<number> = new Set(); // Track used SQLite question IDs per session
@@ -242,6 +248,14 @@ export class GameEngine {
   private listeFoundItems: Map<string, Set<number>> = new Map(); // playerId -> set of found item indices
   private listeGlobalFound: Map<number, string> = new Map(); // item index -> first playerId who found it
   private listeFinishedPlayers: Set<string> = new Set(); // players who clicked "J'ai fini"
+
+  // Pokemon Stats mode state
+  private pokestatsFoundPlayers: Map<string, { hintsUsed: number; foundAt: number; points: number }> = new Map();
+  private pokestatsHintsUsed: Map<string, number> = new Map(); // playerId -> number of hint button presses
+  private pokestatsHintSequence: PokestatsHintData[] = []; // pre-computed hint sequence for current question
+
+  // Countdown state
+  private countdownInterval: NodeJS.Timeout | null = null;
 
   // Team rounds state
   private teamRoundsEnabled: boolean = false;
@@ -417,6 +431,17 @@ export class GameEngine {
     }
   }
 
+  private static loadPokemonStatsData(): { id: number; nameEn: string; nameFr: string; aliases: string[]; generation: number; types: string[]; typesFr: string[]; stats: { hp: number; atk: number; def: number; spa: number; spd: number; spe: number }; abilities: string[]; abilitiesFr: string[] }[] {
+    const filePath = path.resolve(__dirname, "../data/questions/pokemon-stats.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw);
+    } catch {
+      console.warn("No pokemon-stats data found at", filePath);
+      return [];
+    }
+  }
+
   private static loadListeQuizzes(): { id: string; title: string; category: string; subcategory: string; difficulty: string; items: ListeItem[] }[] {
     const dir = path.resolve(__dirname, "../data/football-quizzes");
     try {
@@ -530,7 +555,7 @@ export class GameEngine {
   /**
    * Load questions for a specific mode and return N shuffled questions
    */
-  private loadQuestionsForMode(mode: string, count: number): Question[] {
+  private loadQuestionsForMode(mode: string, count: number, config?: GameModeConfig): Question[] {
     let pool: Question[];
 
     switch (mode) {
@@ -683,6 +708,34 @@ export class GameEngine {
           };
         });
       }
+      case "pokestats": {
+        const allPokemon = GameEngine.loadPokemonStatsData();
+        if (allPokemon.length === 0) return [...SAMPLE_QUESTIONS].slice(0, count);
+
+        let filtered = allPokemon;
+        if (config?.pokestatsGenerations?.length) {
+          filtered = allPokemon.filter(p => config.pokestatsGenerations!.includes(p.generation));
+        }
+        if (filtered.length === 0) filtered = allPokemon;
+
+        const shuffledPoke = filtered.sort(() => Math.random() - 0.5).slice(0, count);
+        return shuffledPoke.map((p, i) => ({
+          id: `pokestats_${i + 1}`,
+          type: "pokestats" as const,
+          pokemonId: p.id,
+          nameEn: p.nameEn,
+          nameFr: p.nameFr,
+          aliases: p.aliases || [],
+          generation: p.generation,
+          types: p.types,
+          typesFr: p.typesFr,
+          stats: p.stats,
+          abilities: p.abilities,
+          abilitiesFr: p.abilitiesFr,
+          timeLimit: 60,
+          points: 200,
+        }));
+      }
       default:
         pool = [...SAMPLE_QUESTIONS];
         break;
@@ -712,7 +765,7 @@ export class GameEngine {
     let drawingCounter = 0;
 
     for (const segment of playlist) {
-      const segQuestions = this.loadQuestionsForMode(segment.mode, segment.rounds);
+      const segQuestions = this.loadQuestionsForMode(segment.mode, segment.rounds, segment);
 
       // Re-number IDs to be globally unique
       segQuestions.forEach((q, i) => {
@@ -744,16 +797,20 @@ export class GameEngine {
   start(): void {
     this.roomManager.updateRoomStatus(this.room.code, "starting");
 
-    // Send countdown
+    // Send countdown (clear any existing to prevent duplicates)
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
     let countdown = 3;
     this.io.to(this.room.code).emit("game:starting", countdown);
 
-    const countdownInterval = setInterval(() => {
+    this.countdownInterval = setInterval(() => {
       countdown--;
       if (countdown > 0) {
         this.io.to(this.room.code).emit("game:starting", countdown);
       } else {
-        clearInterval(countdownInterval);
+        clearInterval(this.countdownInterval!);
+        this.countdownInterval = null;
         this.roomManager.updateRoomStatus(this.room.code, "playing");
         this.startRound();
       }
@@ -764,6 +821,7 @@ export class GameEngine {
    * Start a new round
    */
   private startRound(): void {
+    this.roundEnding = false; // Reset guard for the new round
     this.currentRound++;
     this.answers.clear();
     this.roomManager.resetRoundScores(this.room.code);
@@ -836,6 +894,13 @@ export class GameEngine {
       this.listeFoundItems.clear();
       this.listeGlobalFound.clear();
       this.listeFinishedPlayers.clear();
+    }
+
+    // Pokemon Stats mode: reset per-round tracking and build hint sequence
+    if (nextMode === "pokestats") {
+      this.pokestatsFoundPlayers.clear();
+      this.pokestatsHintsUsed.clear();
+      this.pokestatsHintSequence = this.buildPokestatsHintSequence(nextQuestion as PokemonStatsQuestion);
     }
 
     // Petit Bac: reset stop state
@@ -941,6 +1006,20 @@ export class GameEngine {
         })),
       };
     }
+    if (question.type === "pokestats") {
+      // Send stats but hide the Pokémon identity and hint data
+      return {
+        ...question,
+        nameEn: "",
+        nameFr: "",
+        aliases: [],
+        types: [],
+        typesFr: [],
+        generation: 0,
+        abilities: [],
+        abilitiesFr: [],
+      };
+    }
     // petitbac: nothing to hide
     return question;
   }
@@ -993,6 +1072,12 @@ export class GameEngine {
       return;
     }
 
+    // Pokemon Stats mode: continuous guessing until correct
+    if (this.currentQuestion.type === "pokestats") {
+      this.handlePokestatsGuess(playerId, answerText);
+      return;
+    }
+
     if (this.answers.has(playerId)) return; // Already answered
     if (this.timeRemaining <= 0 && !this.petitBacGracePeriod) return; // Time's up (except during petit bac grace period)
 
@@ -1040,6 +1125,10 @@ export class GameEngine {
    * End the current round
    */
   private endRound(): void {
+    // Guard against double endRound() calls (e.g. timer + disconnect + all-answered race)
+    if (this.roundEnding) return;
+    this.roundEnding = true;
+
     this.stopTimer();
 
     // Clear petit bac stop timer if active
@@ -1093,6 +1182,12 @@ export class GameEngine {
     // Liste: calculate scores based on found items
     if (this.currentQuestion.type === "liste") {
       this.finalizeListeRound();
+      return;
+    }
+
+    // Pokemon Stats: calculate scores based on who found it
+    if (this.currentQuestion.type === "pokestats") {
+      this.finalizePokestatsRound();
       return;
     }
 
@@ -1906,12 +2001,15 @@ export class GameEngine {
         this.listeGlobalFound.set(matchedIndex, playerId);
       }
 
-      // Emit item found to all
-      this.io.to(this.room.code).emit("liste:item_found", {
-        playerId,
-        itemIndex: matchedIndex,
-        answer: q.items[matchedIndex].answer,
-      });
+      // Emit item found only to the finder (not to others — each player discovers independently)
+      const finderSocketId = this.roomManager.getSocketIdFromPlayerId(playerId);
+      if (finderSocketId) {
+        this.io.to(finderSocketId).emit("liste:item_found", {
+          playerId,
+          itemIndex: matchedIndex,
+          answer: q.items[matchedIndex].answer,
+        });
+      }
     }
   }
 
@@ -1937,6 +2035,7 @@ export class GameEngine {
 
     // If everyone finished, end the round
     if (finishedCount >= totalPlayers) {
+      this.stopTimer(); // Stop timer first to prevent race with timer-based endRound
       this.endRound();
     }
   }
@@ -2021,6 +2120,183 @@ export class GameEngine {
     this.listeFoundItems.clear();
     this.listeGlobalFound.clear();
     this.listeFinishedPlayers.clear();
+
+    // Auto-proceed
+    setTimeout(() => {
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+      setTimeout(() => {
+        this.nextRound();
+      }, 2000);
+    }, 6000);
+  }
+
+  // ==========================================
+  // POKEMON STATS MODE METHODS
+  // ==========================================
+
+  /**
+   * Build the hint sequence for a Pokémon Stats question.
+   * Sequence: Type1 → Type2 (skip if mono-type) → Generation → Ability
+   */
+  private buildPokestatsHintSequence(q: PokemonStatsQuestion): PokestatsHintData[] {
+    const hints: PokestatsHintData[] = [];
+    hints.push({ hintLevel: 1, hintType: "type1", value: q.types[0] || "???", valueFr: q.typesFr[0] || "???", hintsRemaining: 0 });
+    if (q.types.length >= 2) {
+      hints.push({ hintLevel: 2, hintType: "type2", value: q.types[1], valueFr: q.typesFr[1], hintsRemaining: 0 });
+    }
+    hints.push({ hintLevel: hints.length + 1, hintType: "generation", value: String(q.generation), valueFr: String(q.generation), hintsRemaining: 0 });
+    hints.push({ hintLevel: hints.length + 1, hintType: "ability", value: q.abilities[0] || "???", valueFr: q.abilitiesFr[0] || "???", hintsRemaining: 0 });
+    // Set hintsRemaining for each
+    for (let i = 0; i < hints.length; i++) {
+      hints[i].hintsRemaining = hints.length - i - 1;
+    }
+    return hints;
+  }
+
+  /**
+   * Handle a Pokémon Stats guess
+   */
+  private handlePokestatsGuess(playerId: string, guess: string): void {
+    if (!this.currentQuestion || this.currentQuestion.type !== "pokestats") return;
+    if (this.pokestatsFoundPlayers.has(playerId)) return;
+    if (this.timeRemaining <= 0) return;
+
+    const q = this.currentQuestion as PokemonStatsQuestion;
+    const normalizedGuess = GameEngine.normalizeForComparison(guess);
+    if (normalizedGuess.length < 2) return;
+
+    const allNames = [q.nameEn, q.nameFr, ...q.aliases];
+    let isCorrect = false;
+    for (const name of allNames) {
+      if (GameEngine.normalizeForComparison(name) === normalizedGuess) {
+        isCorrect = true;
+        break;
+      }
+    }
+
+    const socketId = this.roomManager.getSocketIdFromPlayerId(playerId);
+    if (!socketId) return;
+
+    if (isCorrect) {
+      const hintsUsed = this.pokestatsHintsUsed.get(playerId) || 0;
+
+      // Scoring: base points decrease with hints, speed bonus for 0-3 hints
+      const basePointsByHints = [200, 150, 100, 50, 25];
+      const basePoints = basePointsByHints[Math.min(hintsUsed, 4)];
+      const speedBonus = hintsUsed < 4 ? Math.round(50 * this.timeRemaining / q.timeLimit) : 0;
+      const totalPoints = basePoints + speedBonus;
+
+      this.pokestatsFoundPlayers.set(playerId, { hintsUsed, foundAt: Date.now(), points: totalPoints });
+
+      // Update player score
+      this.roomManager.updatePlayerScore(playerId, totalPoints);
+
+      // Notify the guesser
+      this.io.to(socketId).emit("pokestats:guess_result", { correct: true, hintsUsed, points: totalPoints });
+
+      // Notify all players
+      this.io.to(this.room.code).emit("pokestats:player_found", { playerId, hintsUsed });
+
+      // End round if all active players found it
+      const activePlayers = this.getActivePlayers();
+      if (this.pokestatsFoundPlayers.size >= activePlayers.length) {
+        this.endRound();
+      }
+    } else {
+      this.io.to(socketId).emit("pokestats:guess_result", {
+        correct: false,
+        hintsUsed: this.pokestatsHintsUsed.get(playerId) || 0,
+      });
+    }
+  }
+
+  /**
+   * Player requests a hint for Pokémon Stats
+   */
+  public usePokestatsHint(playerId: string): void {
+    if (!this.currentQuestion || this.currentQuestion.type !== "pokestats") return;
+    if (this.pokestatsFoundPlayers.has(playerId)) return;
+    if (this.timeRemaining <= 0) return;
+
+    const currentUsed = this.pokestatsHintsUsed.get(playerId) || 0;
+    if (currentUsed >= this.pokestatsHintSequence.length) return; // No more hints
+
+    const hint = this.pokestatsHintSequence[currentUsed];
+    this.pokestatsHintsUsed.set(playerId, currentUsed + 1);
+
+    const socketId = this.roomManager.getSocketIdFromPlayerId(playerId);
+    if (socketId) {
+      this.io.to(socketId).emit("pokestats:hint", hint);
+    }
+  }
+
+  /**
+   * Finalize a Pokémon Stats round
+   */
+  private finalizePokestatsRound(): void {
+    this.stopTimer();
+    if (!this.currentQuestion || this.currentQuestion.type !== "pokestats") return;
+
+    const q = this.currentQuestion as PokemonStatsQuestion;
+
+    const playerResults: PokestatsRoundResult["playerResults"] = [];
+
+    for (const player of this.room.players) {
+      const foundData = this.pokestatsFoundPlayers.get(player.id);
+      const hintsUsed = this.pokestatsHintsUsed.get(player.id) || 0;
+
+      playerResults.push({
+        playerId: player.id,
+        playerName: player.name,
+        playerAvatar: player.avatar,
+        found: !!foundData,
+        hintsUsed,
+        points: foundData?.points || 0,
+        total: player.score,
+      });
+    }
+
+    playerResults.sort((a, b) => b.points - a.points);
+
+    const pokestatsResult: PokestatsRoundResult = {
+      roundNumber: this.currentRound,
+      pokemonId: q.pokemonId,
+      nameEn: q.nameEn,
+      nameFr: q.nameFr,
+      stats: q.stats,
+      types: q.types,
+      typesFr: q.typesFr,
+      generation: q.generation,
+      abilities: q.abilities,
+      abilitiesFr: q.abilitiesFr,
+      playerResults,
+    };
+
+    // Standard RoundResult for compatibility
+    const scores = playerResults.map(r => ({ playerId: r.playerId, points: r.points, total: r.total }));
+    const roundResult: RoundResult = {
+      roundNumber: this.currentRound,
+      question: q,
+      answers: [],
+      correctAnswer: `${q.nameFr} / ${q.nameEn}`,
+      winner: playerResults[0] ? this.room.players.find(p => p.id === playerResults[0].playerId) : undefined,
+      scores,
+    };
+
+    this.updateLoseStreaks(roundResult);
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+    this.io.to(this.room.code).emit("pokestats:round_end", pokestatsResult);
+    this.io.to(this.room.code).emit("game:round_end", roundResult);
+
+    if (this.currentTeams) {
+      this.processTeamRoundEnd(scores);
+    }
+
+    // Reset state
+    this.pokestatsFoundPlayers.clear();
+    this.pokestatsHintsUsed.clear();
+    this.pokestatsHintSequence = [];
 
     // Auto-proceed
     setTimeout(() => {
@@ -2241,6 +2517,20 @@ export class GameEngine {
       imageUrl: q.imageUrl,
       playerAnswers: this.geoQuizPlayerAnswers,
     });
+
+    // If no players have non-empty answers, skip validation entirely
+    const hasAnswersToReview = this.geoQuizPlayerAnswers.some(
+      (p) => p.answer.trim().length > 0
+    );
+    if (!hasAnswersToReview) {
+      for (const pa of this.geoQuizPlayerAnswers) {
+        this.geoQuizDecisions.set(pa.playerId, false);
+      }
+      setTimeout(() => {
+        this.finalizeGeoQuizFromDecisions();
+      }, 1500);
+      return;
+    }
 
     // Auto-validation timeout: 60 seconds for step-by-step review
     this.geoQuizAutoValidationTimer = setTimeout(() => {
@@ -2490,6 +2780,20 @@ export class GameEngine {
       playerAnswers: this.languePlayerAnswers,
     });
 
+    // If no players have any answers, skip validation entirely
+    const hasAnswersToReview = this.languePlayerAnswers.some(
+      (p) => p.languageAnswer.trim().length > 0 || p.meaningAnswer.trim().length > 0
+    );
+    if (!hasAnswersToReview) {
+      for (const pa of this.languePlayerAnswers) {
+        this.langueDecisions.set(pa.playerId, { languageCorrect: false, meaningCorrect: false });
+      }
+      setTimeout(() => {
+        this.finalizeLangueFromDecisions();
+      }, 1500);
+      return;
+    }
+
     // Auto-validation timeout: 60 seconds
     this.langueAutoValidationTimer = setTimeout(() => {
       if (this.langueValidating) {
@@ -2703,6 +3007,20 @@ export class GameEngine {
       correctAnswer: q.playerName,
     });
 
+    // If no players have non-empty answers, skip validation entirely
+    const hasAnswersToReview = this.parcoursPlayerAnswers.some(
+      (p) => p.answer.trim().length > 0
+    );
+    if (!hasAnswersToReview) {
+      for (const pa of this.parcoursPlayerAnswers) {
+        this.parcoursDecisions.set(pa.playerId, false);
+      }
+      setTimeout(() => {
+        this.finalizeParcoursFromDecisions();
+      }, 1500);
+      return;
+    }
+
     // Auto-validation timeout: 60 seconds
     this.parcoursAutoValidationTimer = setTimeout(() => {
       if (this.parcoursValidating) {
@@ -2890,6 +3208,21 @@ export class GameEngine {
       imageUrl: q.imageUrl,
       playerAnswers: this.guessGamePlayerAnswers,
     });
+
+    // If no players have non-empty answers, skip validation entirely
+    const hasAnswersToReview = this.guessGamePlayerAnswers.some(
+      (p) => p.answer.trim().length > 0
+    );
+    if (!hasAnswersToReview) {
+      // Mark all as rejected (no answer) and finalize immediately
+      for (const pa of this.guessGamePlayerAnswers) {
+        this.guessGameDecisions.set(pa.playerId, false);
+      }
+      setTimeout(() => {
+        this.finalizeGuessGameFromDecisions();
+      }, 1500);
+      return;
+    }
 
     // Auto-validation timeout: 60 seconds
     this.guessGameAutoValidationTimer = setTimeout(() => {
@@ -4058,13 +4391,15 @@ export class GameEngine {
     // Split or Steal: auto-steal for disconnected, check if all chose
     if (this.currentQuestion?.type === "splitsteal") {
       this.splitStealChoices.set(playerId, "steal");
-      if (this.splitStealChoices.size >= activePlayers.length + 1 && activePlayers.length > 0) {
+      // Check if ALL players (active + disconnected) have made their choice
+      const totalPlayers = this.room.players.length;
+      if (this.splitStealChoices.size >= totalPlayers && activePlayers.length > 0) {
         this.resolveSplitSteal();
       }
       return;
     }
 
-    if (this.answers.size >= activePlayers.length && activePlayers.length > 0) {
+    if (!this.roundEnding && this.answers.size >= activePlayers.length && activePlayers.length > 0) {
       this.endRound();
     }
 
@@ -4086,6 +4421,10 @@ export class GameEngine {
    */
   destroy(): void {
     this.stopTimer();
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+      this.countdownInterval = null;
+    }
     if (this.geoQuizAutoValidationTimer) {
       clearTimeout(this.geoQuizAutoValidationTimer);
       this.geoQuizAutoValidationTimer = null;
@@ -4101,6 +4440,22 @@ export class GameEngine {
     if (this.guessGameAutoValidationTimer) {
       clearTimeout(this.guessGameAutoValidationTimer);
       this.guessGameAutoValidationTimer = null;
+    }
+    if (this.consensusAutoValidationTimer) {
+      clearTimeout(this.consensusAutoValidationTimer);
+      this.consensusAutoValidationTimer = null;
+    }
+    if (this.petitBacStopTimer) {
+      clearTimeout(this.petitBacStopTimer);
+      this.petitBacStopTimer = null;
+    }
+    if (this.lineupRevealTimer) {
+      clearTimeout(this.lineupRevealTimer);
+      this.lineupRevealTimer = null;
+    }
+    if (this.drawingAutoValidationTimer) {
+      clearTimeout(this.drawingAutoValidationTimer);
+      this.drawingAutoValidationTimer = null;
     }
   }
 }

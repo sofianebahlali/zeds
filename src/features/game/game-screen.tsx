@@ -21,6 +21,7 @@ import { LineupRevealScreen } from "./lineup-reveal-screen";
 import { SplitStealChoiceScreen } from "./splitsteal-choice-screen";
 import { SplitStealRevealScreen } from "./splitsteal-reveal-screen";
 import { ListeGameScreen } from "./liste-game-screen";
+import { PokestatsGameScreen } from "./pokestats-game-screen";
 import { GameChat } from "./game-chat";
 import { ScreenContainer } from "@/components/layout";
 import { GAME_MODES } from "@/types";
@@ -40,6 +41,7 @@ export function GameScreen() {
   const isLangue = currentGameMode === "langue";
   const isLineup = currentGameMode === "lineup";
   const isListe = currentGameMode === "liste";
+  const isPokestats = currentGameMode === "pokestats";
   const currentModeInfo = GAME_MODES.find((m) => m.id === currentGameMode);
   const transitionModeInfo = modeTransition ? GAME_MODES.find((m) => m.id === modeTransition) : null;
 
@@ -178,6 +180,7 @@ export function GameScreen() {
         <AnimatePresence mode="wait">
           {status === "countdown" && <CountdownOverlay key="countdown" />}
           {(status === "question" || status === "answering") && (
+            isPokestats ? <PokestatsGameScreen key="pokestats" /> :
             isListe ? <ListeGameScreen key="liste" /> :
             isLineup ? <LineupGameScreen key="lineup" /> : <QuestionDisplay key="question" />
           )}

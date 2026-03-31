@@ -17,6 +17,8 @@ type TypedSocket = Socket<ClientToServerEvents, ServerToClientEvents>;
 
 // Store game engines per room
 const gameEngines = new Map<string, GameEngine>();
+// Store disconnect timeouts per player so they can be cancelled on reconnection
+const disconnectTimeouts = new Map<string, NodeJS.Timeout>();
 
 export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
   io.on("connection", (socket: TypedSocket) => {
@@ -411,6 +413,23 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     });
 
     // ==========================================
+    // POKEMON STATS EVENTS
+    // ==========================================
+
+    socket.on("pokestats:use_hint", () => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.usePokestatsHint(playerId);
+    });
+
+    // ==========================================
     // LISTE EVENTS
     // ==========================================
 
@@ -587,6 +606,13 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
       const { room, player } = result;
       socket.join(room.code);
 
+      // Cancel pending disconnect timeout
+      const timeout = disconnectTimeouts.get(player.id);
+      if (timeout) {
+        clearTimeout(timeout);
+        disconnectTimeouts.delete(player.id);
+      }
+
       // Notify game engine so it removes the player from disconnectedPlayers set
       const gameEngine = gameEngines.get(room.code);
       if (gameEngine) {
@@ -647,8 +673,9 @@ function handlePlayerDisconnect(
     gameEngine.handlePlayerDisconnect(player.id);
   }
 
-  // Schedule removal after timeout (30 seconds)
-  setTimeout(() => {
+  // Schedule removal after timeout (30 seconds) — cancellable on reconnection
+  const timeout = setTimeout(() => {
+    disconnectTimeouts.delete(player.id);
     const currentRoom = roomManager.getRoom(room.code);
     if (!currentRoom) return;
 
@@ -664,4 +691,5 @@ function handlePlayerDisconnect(
       }
     }
   }, 30000);
+  disconnectTimeouts.set(player.id, timeout);
 }

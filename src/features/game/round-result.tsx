@@ -8,7 +8,8 @@ import { useGameStore, useRoomStore, usePlayerStore } from "@/stores";
 import { useChatStore } from "@/stores/chat-store";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
-import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion } from "@/types";
+import Image from "next/image";
+import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion, PokestatsRoundResult as PokestatsRoundResultType } from "@/types";
 
 const PETITBAC_CATEGORY_ICONS: Record<string, string> = {
   "Prénom": "👤",
@@ -68,6 +69,7 @@ export function RoundResult() {
   const players = useRoomStore((s) => s.players);
   const petitBacValidationData = useGameStore((s) => s.petitBacValidationData);
   const petitBacValidatedAnswers = useGameStore((s) => s.petitBacValidatedAnswers);
+  const pokestatsRoundResult = useGameStore((s) => s.pokestatsRoundResult);
   const myPlayerId = usePlayerStore((s) => s.playerId);
 
   if (!roundResult) return null;
@@ -81,6 +83,7 @@ export function RoundResult() {
   const isJerseyNumber = roundResult.question.type === "jerseynumber";
   const isChrono = roundResult.question.type === "chrono";
   const isConsensus = roundResult.question.type === "consensus";
+  const isPokestats = roundResult.question.type === "pokestats";
 
   if (isChrono) {
     return (
@@ -116,6 +119,15 @@ export function RoundResult() {
         isCorrect={!!isCorrect}
         petitBacValidationData={petitBacValidationData}
         petitBacValidatedAnswers={petitBacValidatedAnswers}
+      />
+    );
+  }
+
+  if (isPokestats && pokestatsRoundResult) {
+    return (
+      <PokestatsRoundResultView
+        result={pokestatsRoundResult}
+        myPlayerId={myPlayerId}
       />
     );
   }
@@ -976,6 +988,176 @@ function ConsensusRoundResult({
             </div>
           );
         })()}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ==========================================
+// POKEMON STATS ROUND RESULT
+// ==========================================
+
+const POKESTATS_TYPE_COLORS: Record<string, string> = {
+  Normal: "bg-gray-400", Fire: "bg-orange-500", Water: "bg-blue-500",
+  Electric: "bg-yellow-400", Grass: "bg-green-500", Ice: "bg-cyan-300",
+  Fighting: "bg-red-700", Poison: "bg-purple-500", Ground: "bg-amber-600",
+  Flying: "bg-indigo-300", Psychic: "bg-pink-500", Bug: "bg-lime-500",
+  Rock: "bg-yellow-700", Ghost: "bg-purple-700", Dragon: "bg-indigo-600",
+  Dark: "bg-stone-700", Steel: "bg-slate-400", Fairy: "bg-pink-300",
+};
+
+function PokestatsRoundResultView({
+  result,
+  myPlayerId,
+}: {
+  result: PokestatsRoundResultType;
+  myPlayerId: string;
+}) {
+  const myResult = result.playerResults.find((r) => r.playerId === myPlayerId);
+  const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${result.pokemonId}.png`;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex flex-col h-full px-4 pb-4 overflow-y-auto"
+    >
+      {/* Pokémon reveal */}
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        className="text-center pt-4 mb-4"
+      >
+        {/* Pokémon image */}
+        <motion.div
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="relative w-32 h-32 mx-auto mb-3"
+        >
+          <Image
+            src={imageUrl}
+            alt={result.nameFr}
+            fill
+            className="object-contain drop-shadow-[0_0_20px_rgba(250,204,21,0.3)]"
+            unoptimized
+          />
+        </motion.div>
+
+        {/* Pokémon name */}
+        <motion.h2
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="text-2xl font-display font-bold text-yellow-400 mb-1"
+        >
+          {result.nameFr}
+        </motion.h2>
+        {result.nameFr !== result.nameEn && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="text-sm text-surface-400"
+          >
+            {result.nameEn}
+          </motion.p>
+        )}
+
+        {/* Type badges + info */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="flex flex-wrap items-center justify-center gap-2 mt-3"
+        >
+          {result.typesFr.map((t, i) => (
+            <span
+              key={i}
+              className={cn(
+                "text-xs font-bold px-2.5 py-0.5 rounded-full text-white",
+                POKESTATS_TYPE_COLORS[result.types[i]] || "bg-surface-600"
+              )}
+            >
+              {t}
+            </span>
+          ))}
+          <span className="text-xs text-surface-500">
+            Gen {result.generation}
+          </span>
+          {result.abilitiesFr[0] && (
+            <span className="text-xs text-surface-500">
+              {result.abilitiesFr[0]}
+            </span>
+          )}
+        </motion.div>
+
+        {/* My result */}
+        {myResult && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+            className="mt-3"
+          >
+            {myResult.found ? (
+              <div className="flex items-center justify-center gap-2">
+                <Zap className="w-5 h-5 text-accent-400" />
+                <span className="text-xl font-display font-bold text-surface-100">
+                  +{myResult.points} pts
+                </span>
+              </div>
+            ) : (
+              <span className="text-surface-500">Pas trouvé</span>
+            )}
+          </motion.div>
+        )}
+      </motion.div>
+
+      {/* Player results */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+        className="space-y-1.5"
+      >
+        {result.playerResults.map((pr, i) => (
+          <motion.div
+            key={pr.playerId}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.9 + i * 0.1 }}
+            className={cn(
+              "flex items-center gap-2 px-3 py-2 rounded-xl border",
+              pr.found
+                ? "bg-lime-500/10 border-lime-500/20"
+                : "bg-surface-900/50 border-surface-800"
+            )}
+          >
+            <Avatar emoji={pr.playerAvatar} size="sm" />
+            <div className="flex-1 min-w-0">
+              <span className={cn(
+                "text-sm font-medium truncate block",
+                pr.playerId === myPlayerId ? "text-yellow-400" : "text-surface-200"
+              )}>
+                {pr.playerName}
+              </span>
+              <span className="text-[10px] text-surface-500">
+                {pr.found
+                  ? `${pr.hintsUsed} indice${pr.hintsUsed !== 1 ? "s" : ""}`
+                  : "Pas trouvé"}
+              </span>
+            </div>
+            <span className={cn(
+              "text-sm font-display font-bold",
+              pr.found ? "text-lime-400" : "text-surface-600"
+            )}>
+              +{pr.points}
+            </span>
+          </motion.div>
+        ))}
       </motion.div>
     </motion.div>
   );

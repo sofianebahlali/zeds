@@ -39,11 +39,12 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats";
 
 export interface GameModeConfig {
   mode: GameMode;
   rounds: number;
+  pokestatsGenerations?: number[]; // Filter by generation(s) for pokestats mode
 }
 
 export interface GameSettings {
@@ -549,6 +550,69 @@ export interface ListeRoundResult {
   }[];
 }
 
+// ==========================================
+// POKEMON STATS MODE TYPES
+// ==========================================
+
+export interface PokemonStats {
+  hp: number;
+  atk: number;
+  def: number;
+  spa: number;
+  spd: number;
+  spe: number;
+}
+
+export interface PokemonStatsQuestion extends BaseQuestion {
+  type: "pokestats";
+  pokemonId: number;
+  nameEn: string;
+  nameFr: string;
+  aliases: string[];
+  generation: number;
+  types: string[];
+  typesFr: string[];
+  stats: PokemonStats;
+  abilities: string[];
+  abilitiesFr: string[];
+}
+
+export interface PokestatsGuessResult {
+  correct: boolean;
+  hintsUsed: number;
+  points?: number;
+}
+
+export interface PokestatsHintData {
+  hintLevel: number;
+  hintType: "type1" | "type2" | "generation" | "ability";
+  value: string;
+  valueFr: string;
+  hintsRemaining: number;
+}
+
+export interface PokestatsRoundResult {
+  roundNumber: number;
+  pokemonId: number;
+  nameEn: string;
+  nameFr: string;
+  stats: PokemonStats;
+  types: string[];
+  typesFr: string[];
+  generation: number;
+  abilities: string[];
+  abilitiesFr: string[];
+  playerResults: {
+    playerId: string;
+    playerName: string;
+    playerAvatar: string;
+    found: boolean;
+    hintsUsed: number;
+    points: number;
+    total: number;
+  }[];
+}
+
 export interface LineupPlayer {
   pos: string;
   name: string;
@@ -587,7 +651,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -781,6 +845,12 @@ export interface ServerToClientEvents {
   "liste:progress": (data: ListeProgressData) => void;
   "liste:round_end": (result: ListeRoundResult) => void;
 
+  // Pokemon Stats events
+  "pokestats:guess_result": (result: PokestatsGuessResult) => void;
+  "pokestats:hint": (data: PokestatsHintData) => void;
+  "pokestats:round_end": (result: PokestatsRoundResult) => void;
+  "pokestats:player_found": (data: { playerId: string; hintsUsed: number }) => void;
+
   // Team events
   "game:team_round_start": (data: TeamRoundData) => void;
   "game:team_round_end": (result: TeamRoundResult) => void;
@@ -854,6 +924,9 @@ export interface ClientToServerEvents {
   // Liste events
   "liste:submit_answer": (answer: string) => void;
   "liste:finish": () => void;
+
+  // Pokemon Stats events
+  "pokestats:use_hint": () => void;
 
   // Connection events
   "connection:reconnect": (roomCode: string, playerId: string) => void;
@@ -1070,5 +1143,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Nomme un max d'éléments de la liste !",
     icon: "⚽",
     color: "from-green-500 to-emerald-700",
+  },
+  {
+    id: "pokestats",
+    name: "Pokémon Stats",
+    description: "Devine le Pokémon à partir de ses stats !",
+    icon: "⚡",
+    color: "from-yellow-400 to-red-500",
   },
 ];

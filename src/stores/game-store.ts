@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ListeRoundResult } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ListeRoundResult, PokestatsHintData, PokestatsRoundResult } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
@@ -86,6 +86,13 @@ interface GameStoreState {
   listeFinishedPlayers: string[];
   listeRoundResult: ListeRoundResult | null;
 
+  // Pokemon Stats mode
+  pokestatsHints: PokestatsHintData[];
+  pokestatsFound: boolean;
+  pokestatsMyPoints: number;
+  pokestatsFoundPlayers: { playerId: string; hintsUsed: number }[];
+  pokestatsRoundResult: PokestatsRoundResult | null;
+
   // Mode transition
   modeTransition: GameMode | null;
 
@@ -153,6 +160,12 @@ interface GameStoreState {
   addListeFoundItem: (itemIndex: number, answer: string, foundByPlayerId: string) => void;
   addListeFinishedPlayer: (playerId: string) => void;
   setListeRoundResult: (result: ListeRoundResult) => void;
+
+  // Pokemon Stats actions
+  addPokestatsHint: (hint: PokestatsHintData) => void;
+  setPokestatsFound: (points: number) => void;
+  addPokestatsFoundPlayer: (playerId: string, hintsUsed: number) => void;
+  setPokestatsRoundResult: (result: PokestatsRoundResult) => void;
 
   // Mode transition
   setModeTransition: (mode: GameMode | null) => void;
@@ -233,6 +246,13 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   listeFinishedPlayers: [],
   listeRoundResult: null,
 
+  // Pokemon Stats initial state
+  pokestatsHints: [],
+  pokestatsFound: false,
+  pokestatsMyPoints: 0,
+  pokestatsFoundPlayers: [],
+  pokestatsRoundResult: null,
+
   // Mode transition initial state
   modeTransition: null,
 
@@ -261,6 +281,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       listeMyFoundCount: 0,
       listeFinishedPlayers: [],
       listeRoundResult: null,
+      pokestatsHints: [],
+      pokestatsFound: false,
+      pokestatsMyPoints: 0,
+      pokestatsFoundPlayers: [],
+      pokestatsRoundResult: null,
     })),
 
   setTimeRemaining: (time) => set({ timeRemaining: time }),
@@ -354,6 +379,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       listeMyFoundCount: 0,
       listeFinishedPlayers: [],
       listeRoundResult: null,
+      pokestatsHints: [],
+      pokestatsFound: false,
+      pokestatsMyPoints: 0,
+      pokestatsFoundPlayers: [],
+      pokestatsRoundResult: null,
       modeTransition: null,
       teamData: null,
       teamRoundResult: null,
@@ -398,13 +428,20 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       lineupFoundPlayers: [],
       lineupMyFoundCount: 0,
       lineupLastGuessCorrect: null,
+      lineupRevealScores: null,
       lineupRevealMatch: null,
+      lineupAlsoFoundNotifications: [],
       splitStealData: null,
       splitStealReveal: null,
       listeFoundItems: [],
       listeMyFoundCount: 0,
       listeFinishedPlayers: [],
       listeRoundResult: null,
+      pokestatsHints: [],
+      pokestatsFound: false,
+      pokestatsMyPoints: 0,
+      pokestatsFoundPlayers: [],
+      pokestatsRoundResult: null,
       modeTransition: null,
       teamData: null,
       teamRoundResult: null,
@@ -594,6 +631,16 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         : [...state.listeFinishedPlayers, playerId],
     })),
   setListeRoundResult: (result) => set({ listeRoundResult: result }),
+
+  // Pokemon Stats actions
+  addPokestatsHint: (hint) => set((state) => ({
+    pokestatsHints: [...state.pokestatsHints, hint],
+  })),
+  setPokestatsFound: (points) => set({ pokestatsFound: true, pokestatsMyPoints: points }),
+  addPokestatsFoundPlayer: (playerId, hintsUsed) => set((state) => ({
+    pokestatsFoundPlayers: [...state.pokestatsFoundPlayers, { playerId, hintsUsed }],
+  })),
+  setPokestatsRoundResult: (result) => set({ pokestatsRoundResult: result }),
 
   // Mode transition
   setModeTransition: (mode) => set({ modeTransition: mode }),

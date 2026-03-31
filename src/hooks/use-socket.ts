@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction, SplitStealStartData, SplitStealRevealData, ListeRoundResult, ListeProgressData } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction, SplitStealStartData, SplitStealRevealData, ListeRoundResult, ListeProgressData, PokestatsGuessResult, PokestatsHintData, PokestatsRoundResult } from "@/types";
 import { useChatStore } from "@/stores/chat-store";
 
 // Module-level flag: listeners are attached ONCE across all component instances
@@ -328,11 +328,11 @@ function setupSocketListeners() {
 
   // Liste events
   socket.on("liste:item_found", (data: { playerId: string; itemIndex: number; answer: string }) => {
-    const store = useGameStore.getState();
     const myPlayerId = usePlayerStore.getState().playerId;
-    store.addListeFoundItem(data.itemIndex, data.answer, data.playerId);
+    useGameStore.getState().addListeFoundItem(data.itemIndex, data.answer, data.playerId);
     if (data.playerId === myPlayerId) {
-      useGameStore.setState({ listeMyFoundCount: store.listeMyFoundCount + 1 });
+      // Use functional update to avoid stale count race condition
+      useGameStore.setState((state) => ({ listeMyFoundCount: state.listeMyFoundCount + 1 }));
     }
   });
 
@@ -342,6 +342,25 @@ function setupSocketListeners() {
 
   socket.on("liste:round_end", (result: ListeRoundResult) => {
     useGameStore.getState().setListeRoundResult(result);
+  });
+
+  // Pokemon Stats events
+  socket.on("pokestats:guess_result", (result: PokestatsGuessResult) => {
+    if (result.correct && result.points !== undefined) {
+      useGameStore.getState().setPokestatsFound(result.points);
+    }
+  });
+
+  socket.on("pokestats:hint", (data: PokestatsHintData) => {
+    useGameStore.getState().addPokestatsHint(data);
+  });
+
+  socket.on("pokestats:player_found", (data: { playerId: string; hintsUsed: number }) => {
+    useGameStore.getState().addPokestatsFoundPlayer(data.playerId, data.hintsUsed);
+  });
+
+  socket.on("pokestats:round_end", (result: PokestatsRoundResult) => {
+    useGameStore.getState().setPokestatsRoundResult(result);
   });
 
   // Team events
@@ -404,6 +423,7 @@ function setupSocketListeners() {
   socket.on("room:play_again", (room: Room) => {
     useRoomStore.getState().setRoom(room);
     useGameStore.getState().resetGame();
+    useChatStore.getState().reset();
     usePlayerStore.getState().setIsReady(false);
     useUIStore.getState().setScreen("lobby");
     useUIStore.getState().addNotification({
@@ -463,6 +483,7 @@ export function useSocket() {
     useRoomStore.getState().setRoom(null);
     useUIStore.getState().setScreen("home");
     useGameStore.getState().resetGame();
+    useChatStore.getState().reset();
   }, [socket]);
 
   const setReady = useCallback((isReady: boolean) => {
@@ -595,6 +616,16 @@ export function useSocket() {
     socket.emit("liste:finish");
   }, [socket]);
 
+  const submitPokestatsGuess = useCallback((guess: string) => {
+    if (useGameStore.getState().timeRemaining > 0 && !useGameStore.getState().pokestatsFound) {
+      socket.emit("game:submit_answer", guess);
+    }
+  }, [socket]);
+
+  const usePokestatsHint = useCallback(() => {
+    socket.emit("pokestats:use_hint");
+  }, [socket]);
+
   const sendChatMessage = useCallback((message: string) => {
     socket.emit("chat:send_message", message);
   }, [socket]);
@@ -642,6 +673,8 @@ export function useSocket() {
     submitSplitStealChoice,
     submitListeAnswer,
     submitListeFinish,
+    submitPokestatsGuess,
+    usePokestatsHint,
     sendChatMessage,
     sendLaughReaction,
     playAgain,
