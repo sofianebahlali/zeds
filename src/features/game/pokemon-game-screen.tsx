@@ -132,7 +132,7 @@ export function PokemonGameScreen() {
             fill
             className={cn(
               "object-contain transition-all duration-700 ease-out",
-              !revealed && "brightness-0"
+              !revealed && "brightness-0 invert"
             )}
             priority
             unoptimized

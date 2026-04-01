@@ -9,7 +9,7 @@ import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { getSocket } from "@/lib/socket";
 import { cn } from "@/lib/utils";
-import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion, FutCardQuestion, ChronoQuestion, ConsensusQuestion } from "@/types";
+import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion, FutCardQuestion, ChronoQuestion, ConsensusQuestion, DialedQuestion } from "@/types";
 
 export function QuestionDisplay() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
@@ -34,6 +34,10 @@ export function QuestionDisplay() {
   const [chronoStartTime, setChronoStartTime] = useState<number | null>(null);
   const [chronoStopped, setChronoStopped] = useState(false);
   const [consensusAnswer, setConsensusAnswer] = useState("");
+  const [dialedH, setDialedH] = useState(180);
+  const [dialedS, setDialedS] = useState(50);
+  const [dialedL, setDialedL] = useState(50);
+  const [dialedSubmitted, setDialedSubmitted] = useState(false);
 
   // Ref to access latest petitBac answers in the auto-submit effect
   const petitBacAnswersRef = useRef(petitBacAnswers);
@@ -70,6 +74,10 @@ export function QuestionDisplay() {
     setChronoStartTime(null);
     setChronoStopped(false);
     setConsensusAnswer("");
+    setDialedH(180);
+    setDialedS(50);
+    setDialedL(50);
+    setDialedSubmitted(false);
   }, [currentQuestion?.id]);
 
   if (!currentQuestion) return null;
@@ -101,6 +109,9 @@ export function QuestionDisplay() {
       submitAnswer(futCardAnswer.trim());
     } else if (currentQuestion.type === "consensus" && consensusAnswer.trim()) {
       submitAnswer(consensusAnswer.trim());
+    } else if (currentQuestion.type === "dialed") {
+      submitAnswer(JSON.stringify({ h: dialedH, s: dialedS, l: dialedL }));
+      setDialedSubmitted(true);
     } else if (textAnswer.trim()) {
       submitAnswer(textAnswer.trim());
     }
@@ -257,6 +268,22 @@ export function QuestionDisplay() {
             hasAnswered={hasAnswered}
             onChange={setConsensusAnswer}
             onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "dialed" && (
+          <DialedQuestionView
+            question={currentQuestion as DialedQuestion}
+            h={dialedH}
+            s={dialedS}
+            l={dialedL}
+            onChangeH={setDialedH}
+            onChangeS={setDialedS}
+            onChangeL={setDialedL}
+            hasAnswered={hasAnswered}
+            submitted={dialedSubmitted}
+            onSubmit={handleSubmit}
+            timeRemaining={timeRemaining}
           />
         )}
 
@@ -2127,6 +2154,216 @@ function ConsensusQuestionView({
               Valider
             </Button>
           </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ==========================================
+// DIALED QUESTION VIEW (Color Memory Game)
+// ==========================================
+
+interface DialedQuestionViewProps {
+  question: DialedQuestion;
+  h: number;
+  s: number;
+  l: number;
+  onChangeH: (v: number) => void;
+  onChangeS: (v: number) => void;
+  onChangeL: (v: number) => void;
+  hasAnswered: boolean;
+  submitted: boolean;
+  onSubmit: () => void;
+  timeRemaining: number;
+}
+
+function DialedQuestionView({
+  question,
+  h, s, l,
+  onChangeH, onChangeS, onChangeL,
+  hasAnswered,
+  submitted,
+  onSubmit,
+  timeRemaining,
+}: DialedQuestionViewProps) {
+  const memDuration = question.memorizeDuration || 5;
+  const totalTime = question.timeLimit;
+  const elapsed = totalTime - timeRemaining;
+  const isMemorizing = elapsed < memDuration;
+
+  const targetColor = `hsl(${question.targetH}, ${question.targetS}%, ${question.targetL}%)`;
+  const guessColor = `hsl(${h}, ${s}%, ${l}%)`;
+
+  return (
+    <>
+      <div className="text-center mb-4">
+        <AnimatePresence mode="wait">
+          {isMemorizing ? (
+            <motion.div
+              key="memorize"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+            >
+              <p className="text-lg font-display font-bold text-surface-100">
+                Mémorise cette couleur !
+              </p>
+              <p className="text-sm text-surface-400 mt-1">
+                {Math.max(0, Math.ceil(memDuration - elapsed))}s restantes
+              </p>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="guess"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+            >
+              <p className="text-lg font-display font-bold text-surface-100">
+                Reproduis la couleur !
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <div className="flex justify-center gap-4 mb-6">
+        <motion.div
+          className="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl border-2 border-surface-700 shadow-lg flex items-center justify-center overflow-hidden"
+          style={{
+            backgroundColor: isMemorizing ? targetColor : "transparent",
+          }}
+          animate={{
+            scale: isMemorizing ? [1, 1.02, 1] : 1,
+          }}
+          transition={{ duration: 1.5, repeat: isMemorizing ? Infinity : 0 }}
+        >
+          {!isMemorizing && (
+            <div className="text-center">
+              <div className="text-3xl mb-1">&#x2753;</div>
+              <span className="text-xs text-surface-500">Cible</span>
+            </div>
+          )}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: isMemorizing ? 0.3 : 1, scale: 1 }}
+          className="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl border-2 border-surface-600 shadow-lg flex items-center justify-center"
+          style={{ backgroundColor: guessColor }}
+        >
+          {isMemorizing && (
+            <span className="text-xs text-white/60 font-medium drop-shadow">Ton choix</span>
+          )}
+        </motion.div>
+      </div>
+
+      <div className="flex-1 flex flex-col justify-end">
+        {hasAnswered || submitted ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center"
+          >
+            <Card className="inline-block">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-success-400" />
+                <div className="text-left">
+                  <p className="text-sm text-surface-400">Couleur envoyée !</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div
+                      className="w-8 h-8 rounded-lg border border-surface-600"
+                      style={{ backgroundColor: guessColor }}
+                    />
+                    <span className="text-sm text-surface-300 font-mono">
+                      H:{h} S:{s} L:{l}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: isMemorizing ? 0.4 : 1, y: 0 }}
+            className="space-y-4"
+          >
+            <div>
+              <div className="flex justify-between mb-1.5">
+                <label className="text-xs font-semibold text-surface-300 uppercase tracking-wide">
+                  Teinte (H)
+                </label>
+                <span className="text-xs text-surface-400 font-mono">{h}°</span>
+              </div>
+              <input
+                type="range"
+                min={0}
+                max={360}
+                value={h}
+                onChange={(e) => onChangeH(Number(e.target.value))}
+                disabled={isMemorizing}
+                className="w-full h-3 rounded-full appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-surface-300 [&::-webkit-slider-thumb]:cursor-pointer"
+                style={{
+                  background: "linear-gradient(to right, hsl(0,100%,50%), hsl(60,100%,50%), hsl(120,100%,50%), hsl(180,100%,50%), hsl(240,100%,50%), hsl(300,100%,50%), hsl(360,100%,50%))",
+                }}
+              />
+            </div>
+
+            <div>
+              <div className="flex justify-between mb-1.5">
+                <label className="text-xs font-semibold text-surface-300 uppercase tracking-wide">
+                  Saturation (S)
+                </label>
+                <span className="text-xs text-surface-400 font-mono">{s}%</span>
+              </div>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={s}
+                onChange={(e) => onChangeS(Number(e.target.value))}
+                disabled={isMemorizing}
+                className="w-full h-3 rounded-full appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-surface-300 [&::-webkit-slider-thumb]:cursor-pointer"
+                style={{
+                  background: `linear-gradient(to right, hsl(${h},0%,${l}%), hsl(${h},100%,${l}%))`,
+                }}
+              />
+            </div>
+
+            <div>
+              <div className="flex justify-between mb-1.5">
+                <label className="text-xs font-semibold text-surface-300 uppercase tracking-wide">
+                  Luminosité (L)
+                </label>
+                <span className="text-xs text-surface-400 font-mono">{l}%</span>
+              </div>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={l}
+                onChange={(e) => onChangeL(Number(e.target.value))}
+                disabled={isMemorizing}
+                className="w-full h-3 rounded-full appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-surface-300 [&::-webkit-slider-thumb]:cursor-pointer"
+                style={{
+                  background: `linear-gradient(to right, hsl(${h},${s}%,0%), hsl(${h},${s}%,50%), hsl(${h},${s}%,100%))`,
+                }}
+              />
+            </div>
+
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onSubmit}
+              disabled={isMemorizing}
+              rightIcon={<Send className="w-5 h-5" />}
+            >
+              Valider ma couleur
+            </Button>
+          </motion.div>
         )}
       </div>
     </>

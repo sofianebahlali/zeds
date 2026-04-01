@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon" | "dialed";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -494,6 +494,14 @@ export interface SplitStealQuestion extends BaseQuestion {
   type: "splitsteal";
 }
 
+export interface DialedQuestion extends BaseQuestion {
+  type: "dialed";
+  targetH: number; // Hue 0-360
+  targetS: number; // Saturation 0-100
+  targetL: number; // Lightness 0-100
+  memorizeDuration: number; // seconds to show color before hiding
+}
+
 // ==========================================
 // LISTE MODE TYPES
 // ==========================================
@@ -729,7 +737,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion | DialedQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -1249,5 +1257,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Devine le Pokémon à partir de sa silhouette !",
     icon: "❓",
     color: "from-purple-500 to-indigo-700",
+  },
+  {
+    id: "dialed",
+    name: "Devine la couleur",
+    description: "Mémorise la couleur puis reproduis-la avec les sliders !",
+    icon: "🎨",
+    color: "from-fuchsia-500 to-violet-700",
   },
 ];

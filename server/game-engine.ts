@@ -64,6 +64,7 @@ import type {
   PokemonRoundResult,
   PokemonValidationData,
   GameModeConfig,
+  DialedQuestion,
 } from "../src/types";
 import { PETITBAC_ALL_CATEGORIES, PETITBAC_CATEGORIES_PER_ROUND } from "../src/types";
 import { getQuestions as getDbQuestions, getTotalCount as getDbTotalCount } from "./question-db";
@@ -634,7 +635,7 @@ export class GameEngine {
           type: "lineup" as const,
           match,
           timeLimit: 120,
-          points: 10, // points per player found
+          points: 20, // points per player found (x2)
         }));
       }
       case "drawing": {
@@ -779,6 +780,23 @@ export class GameEngine {
           timeLimit: 20,
           points: 100,
         }));
+      }
+      case "dialed": {
+        // Auto-generate random HSL colors
+        const dialedQuestions: Question[] = [];
+        for (let i = 0; i < count; i++) {
+          dialedQuestions.push({
+            id: `dialed_${i + 1}`,
+            type: "dialed" as const,
+            targetH: Math.floor(Math.random() * 360),
+            targetS: 30 + Math.floor(Math.random() * 60), // 30-89%
+            targetL: 25 + Math.floor(Math.random() * 45), // 25-69%
+            memorizeDuration: 5,
+            timeLimit: 20,
+            points: 100,
+          });
+        }
+        return dialedQuestions;
       }
       default:
         pool = [...SAMPLE_QUESTIONS];
@@ -1403,6 +1421,10 @@ export class GameEngine {
       return this.calculateConsensusScores(correctAnswer, scores);
     }
 
+    if (this.currentQuestion.type === "dialed") {
+      return this.calculateDialedScores(correctAnswer, scores);
+    }
+
     let fastestCorrectTime = Infinity;
 
     // Process each answer
@@ -1729,6 +1751,121 @@ export class GameEngine {
   }
 
   /**
+   * Calculate color proximity scores for dialed questions.
+   * Uses CIE76 Delta-E in Lab color space for perceptual accuracy.
+   * Score is out of 100 (proximity note).
+   */
+  private calculateDialedScores(
+    correctAnswer: string,
+    scores: { playerId: string; points: number; total: number }[]
+  ): RoundResult {
+    const q = this.currentQuestion as DialedQuestion;
+    const targetLab = GameEngine.hslToLab(q.targetH, q.targetS, q.targetL);
+    let winner: Player | undefined;
+    let bestDeltaE = Infinity;
+
+    for (const [playerId, answer] of this.answers) {
+      let h: number, s: number, l: number;
+      try {
+        const parsed = JSON.parse(answer.answer);
+        h = parsed.h;
+        s = parsed.s;
+        l = parsed.l;
+      } catch {
+        answer.isCorrect = false;
+        answer.points = 0;
+        const updatedPlayer = this.roomManager.updatePlayerScore(playerId, 0);
+        if (updatedPlayer) {
+          scores.push({ playerId, points: 0, total: updatedPlayer.score });
+        }
+        continue;
+      }
+
+      const guessLab = GameEngine.hslToLab(h, s, l);
+      const deltaE = Math.sqrt(
+        (targetLab.L - guessLab.L) ** 2 +
+        (targetLab.a - guessLab.a) ** 2 +
+        (targetLab.b - guessLab.b) ** 2
+      );
+
+      // Score: linear from 100 (deltaE=0) to 0 (deltaE>=80)
+      const MAX_DELTA = 80;
+      const proximityScore = deltaE >= MAX_DELTA ? 0 : 1 - deltaE / MAX_DELTA;
+      const points = Math.round(q.points * proximityScore);
+
+      answer.isCorrect = deltaE <= 10;
+      answer.points = points;
+
+      if (deltaE < bestDeltaE) {
+        bestDeltaE = deltaE;
+        winner = this.room.players.find((p) => p.id === playerId);
+      }
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);
+      if (updatedPlayer) {
+        scores.push({ playerId, points, total: updatedPlayer.score });
+      }
+    }
+
+    for (const player of this.room.players) {
+      if (!this.answers.has(player.id)) {
+        scores.push({ playerId: player.id, points: 0, total: player.score });
+      }
+    }
+
+    return {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion!,
+      answers: Array.from(this.answers.values()),
+      correctAnswer,
+      winner,
+      scores,
+    };
+  }
+
+  /**
+   * Convert HSL to CIE Lab color space for perceptual comparison.
+   */
+  private static hslToLab(h: number, s: number, l: number): { L: number; a: number; b: number } {
+    const sn = s / 100;
+    const ln = l / 100;
+    const c = (1 - Math.abs(2 * ln - 1)) * sn;
+    const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+    const m = ln - c / 2;
+    let r1: number, g1: number, b1: number;
+    if (h < 60) { r1 = c; g1 = x; b1 = 0; }
+    else if (h < 120) { r1 = x; g1 = c; b1 = 0; }
+    else if (h < 180) { r1 = 0; g1 = c; b1 = x; }
+    else if (h < 240) { r1 = 0; g1 = x; b1 = c; }
+    else if (h < 300) { r1 = x; g1 = 0; b1 = c; }
+    else { r1 = c; g1 = 0; b1 = x; }
+    const r = r1 + m;
+    const g = g1 + m;
+    const b = b1 + m;
+
+    // RGB → XYZ (sRGB D65)
+    const linearize = (v: number) => v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    const rl = linearize(r);
+    const gl = linearize(g);
+    const bl = linearize(b);
+    const X = 0.4124564 * rl + 0.3575761 * gl + 0.1804375 * bl;
+    const Y = 0.2126729 * rl + 0.7151522 * gl + 0.0721750 * bl;
+    const Z = 0.0193339 * rl + 0.1191920 * gl + 0.9503041 * bl;
+
+    // XYZ → Lab (D65 white point)
+    const Xn = 0.95047, Yn = 1.00000, Zn = 1.08883;
+    const f = (t: number) => t > 0.008856 ? Math.cbrt(t) : (903.3 * t + 16) / 116;
+    const fx = f(X / Xn);
+    const fy = f(Y / Yn);
+    const fz = f(Z / Zn);
+    return {
+      L: 116 * fy - 16,
+      a: 500 * (fx - fy),
+      b: 200 * (fy - fz),
+    };
+  }
+
+  /**
    * Get the correct answer for the current question
    */
   private getCorrectAnswer(): string {
@@ -1784,6 +1921,10 @@ export class GameEngine {
       case "pokemon": {
         const q = this.currentQuestion as PokemonSilhouetteQuestion;
         return `${q.nameFr} / ${q.nameEn}`;
+      }
+      case "dialed": {
+        const q = this.currentQuestion as DialedQuestion;
+        return `hsl(${q.targetH}, ${q.targetS}%, ${q.targetL}%)`;
       }
       default:
         return "";
@@ -1882,6 +2023,8 @@ export class GameEngine {
         return false; // Handled in handleListeGuess
       case "pokemon":
         return false; // Handled in handlePokemonGuess / host validation
+      case "dialed":
+        return false; // Handled in calculateDialedScores
       default:
         return false;
     }
