@@ -770,7 +770,7 @@ export class GameEngine {
           id: `pokemon_${i + 1}`,
           type: "pokemon" as const,
           pokemonId: p.id,
-          imageUrl: `/images/pokemon/${p.id}.png`,
+          imageUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png`,
           nameEn: p.nameEn,
           nameFr: p.nameFr,
           aliases: p.aliases || [],
