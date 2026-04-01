@@ -65,6 +65,9 @@ import type {
   PokemonValidationData,
   GameModeConfig,
   DialedQuestion,
+  PokeGeoQuestion,
+  PokeGeoValidationSubmission,
+  PokeGeoPlayerAnswerData,
 } from "../src/types";
 import { PETITBAC_ALL_CATEGORIES, PETITBAC_CATEGORIES_PER_ROUND } from "../src/types";
 import { getQuestions as getDbQuestions, getTotalCount as getDbTotalCount } from "./question-db";
@@ -198,6 +201,13 @@ export class GameEngine {
   private geoQuizAutoValidationTimer: NodeJS.Timeout | null = null;
   private geoQuizDecisions: Map<string, boolean> = new Map();
   private geoQuizPlayerAnswers: GeoQuizPlayerAnswerData[] = [];
+
+  // PokéGeo state
+  private pokeGeoValidating: boolean = false;
+  private pokeGeoHintUsers: Set<string> = new Set();
+  private pokeGeoAutoValidationTimer: NodeJS.Timeout | null = null;
+  private pokeGeoDecisions: Map<string, boolean> = new Map();
+  private pokeGeoPlayerAnswers: PokeGeoPlayerAnswerData[] = [];
 
   // Langue state
   private langueValidating: boolean = false;
@@ -355,6 +365,20 @@ export class GameEngine {
       return JSON.parse(raw) as GeoQuizQuestion[];
     } catch {
       console.warn("No geoquiz questions found at", filePath);
+      return [];
+    }
+  }
+
+  /**
+   * Load pokegeo questions from JSON file
+   */
+  private static loadPokeGeoQuestions(): Question[] {
+    const filePath = path.resolve(__dirname, "../data/questions/pokegeo.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw) as PokeGeoQuestion[];
+    } catch {
+      console.warn("No pokegeo questions found at", filePath);
       return [];
     }
   }
@@ -609,6 +633,10 @@ export class GameEngine {
         break;
       case "geoquiz":
         pool = GameEngine.loadGeoQuizQuestions();
+        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
+        break;
+      case "pokegeo":
+        pool = GameEngine.loadPokeGeoQuestions();
         if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
         break;
       case "langue":
@@ -1037,6 +1065,14 @@ export class GameEngine {
         hint: "", // Hide hint (revealed via socket event)
       };
     }
+    if (question.type === "pokegeo") {
+      return {
+        ...question,
+        location: "", // Hide the location name
+        acceptedAnswers: [], // Hide accepted answers
+        hint: "", // Hide hint (revealed via socket event)
+      };
+    }
     if (question.type === "langue") {
       return {
         ...question,
@@ -1265,6 +1301,12 @@ export class GameEngine {
     // GeoQuiz: enter host validation phase instead of auto-scoring
     if (this.currentQuestion.type === "geoquiz") {
       this.startGeoQuizValidation();
+      return;
+    }
+
+    // PokéGeo: enter host validation phase instead of auto-scoring
+    if (this.currentQuestion.type === "pokegeo") {
+      this.startPokeGeoValidation();
       return;
     }
 
@@ -1892,6 +1934,8 @@ export class GameEngine {
         return (this.currentQuestion as PetitBacQuestion).letter;
       case "geoquiz":
         return (this.currentQuestion as GeoQuizQuestion).city;
+      case "pokegeo":
+        return (this.currentQuestion as PokeGeoQuestion).location;
       case "langue": {
         const q = this.currentQuestion as LangueQuestion;
         return `${q.language} — ${q.meaning}`;
@@ -1978,6 +2022,9 @@ export class GameEngine {
         return false;
       case "geoquiz":
         // GeoQuiz scoring is handled manually by host validation
+        return false;
+      case "pokegeo":
+        // PokéGeo scoring is handled manually by host validation
         return false;
       case "langue":
         // Langue scoring is handled manually by host validation
@@ -3023,6 +3070,227 @@ export class GameEngine {
       question: this.currentQuestion!,
       answers: Array.from(this.answers.values()),
       correctAnswer: q.city,
+      winner,
+      scores,
+    };
+  }
+
+  // ==========================================
+  // POKEGEO METHODS
+  // ==========================================
+
+  usePokeGeoHint(playerId: string): void {
+    if (!this.currentQuestion || this.currentQuestion.type !== "pokegeo") return;
+    const socketId = this.roomManager.getSocketIdFromPlayerId(playerId);
+    if (!socketId) return;
+    const q = this.currentQuestion as PokeGeoQuestion;
+    this.pokeGeoHintUsers.add(playerId);
+    this.io.to(socketId).emit("pokegeo:hint_revealed", q.hint || q.region);
+  }
+
+  private startPokeGeoValidation(): void {
+    this.pokeGeoValidating = true;
+    this.pokeGeoDecisions.clear();
+    const q = this.currentQuestion as PokeGeoQuestion;
+    const activePlayers = this.getActivePlayers();
+
+    for (const player of activePlayers) {
+      if (!this.answers.has(player.id)) {
+        this.answers.set(player.id, {
+          playerId: player.id,
+          questionId: q.id,
+          answer: "",
+          timestamp: Date.now(),
+        });
+      }
+    }
+
+    this.pokeGeoPlayerAnswers = activePlayers.map((player) => {
+      const answer = this.answers.get(player.id);
+      return {
+        playerId: player.id,
+        playerName: player.name,
+        playerAvatar: player.avatar,
+        answer: answer?.answer || "",
+        usedHint: this.pokeGeoHintUsers.has(player.id),
+      };
+    });
+
+    this.io.to(this.room.code).emit("pokegeo:validation_start", {
+      location: q.location,
+      game: q.game,
+      region: q.region,
+      imageUrl: q.imageUrl,
+      playerAnswers: this.pokeGeoPlayerAnswers,
+    });
+
+    const hasAnswersToReview = this.pokeGeoPlayerAnswers.some(
+      (p) => p.answer.trim().length > 0
+    );
+    if (!hasAnswersToReview) {
+      for (const pa of this.pokeGeoPlayerAnswers) {
+        this.pokeGeoDecisions.set(pa.playerId, false);
+      }
+      setTimeout(() => {
+        this.finalizePokeGeoFromDecisions();
+      }, 1500);
+      return;
+    }
+
+    this.pokeGeoAutoValidationTimer = setTimeout(() => {
+      if (this.pokeGeoValidating) {
+        for (const pa of this.pokeGeoPlayerAnswers) {
+          if (this.pokeGeoDecisions.has(pa.playerId)) continue;
+          if (!pa.answer) {
+            this.pokeGeoDecisions.set(pa.playerId, false);
+            continue;
+          }
+          const normalized = GameEngine.normalizeForComparison(pa.answer);
+          const isMatch = q.acceptedAnswers.some(
+            (accepted) => GameEngine.normalizeForComparison(accepted) === normalized
+          );
+          this.pokeGeoDecisions.set(pa.playerId, isMatch);
+          this.io.to(this.room.code).emit("pokegeo:answer_result", {
+            playerId: pa.playerId,
+            playerName: pa.playerName,
+            playerAvatar: pa.playerAvatar,
+            answer: pa.answer,
+            usedHint: pa.usedHint,
+            accepted: isMatch,
+          });
+        }
+        setTimeout(() => {
+          this.finalizePokeGeoFromDecisions();
+        }, 1500);
+      }
+    }, 60000);
+  }
+
+  validateSinglePokeGeoAnswer(playerId: string, accepted: boolean): void {
+    if (!this.pokeGeoValidating || !this.currentQuestion) return;
+    if (this.pokeGeoDecisions.has(playerId)) return;
+
+    this.pokeGeoDecisions.set(playerId, accepted);
+
+    const pa = this.pokeGeoPlayerAnswers.find((p) => p.playerId === playerId);
+    if (!pa) return;
+
+    this.io.to(this.room.code).emit("pokegeo:answer_result", {
+      playerId: pa.playerId,
+      playerName: pa.playerName,
+      playerAvatar: pa.playerAvatar,
+      answer: pa.answer,
+      usedHint: pa.usedHint,
+      accepted,
+    });
+
+    const playersToReview = this.pokeGeoPlayerAnswers.filter(
+      (p) => p.answer.trim().length > 0
+    );
+    const allReviewed = playersToReview.every((p) =>
+      this.pokeGeoDecisions.has(p.playerId)
+    );
+
+    if (allReviewed) {
+      for (const p of this.pokeGeoPlayerAnswers) {
+        if (!this.pokeGeoDecisions.has(p.playerId)) {
+          this.pokeGeoDecisions.set(p.playerId, false);
+        }
+      }
+      setTimeout(() => {
+        this.finalizePokeGeoFromDecisions();
+      }, 2000);
+    }
+  }
+
+  private finalizePokeGeoFromDecisions(): void {
+    if (!this.pokeGeoValidating) return;
+
+    const validatedPlayerIds = Array.from(this.pokeGeoDecisions.entries())
+      .filter(([, accepted]) => accepted)
+      .map(([id]) => id);
+
+    this.submitPokeGeoValidation({ validatedPlayerIds });
+  }
+
+  submitPokeGeoValidation(validation: PokeGeoValidationSubmission): void {
+    if (!this.currentQuestion || !this.pokeGeoValidating) return;
+    this.pokeGeoValidating = false;
+
+    if (this.pokeGeoAutoValidationTimer) {
+      clearTimeout(this.pokeGeoAutoValidationTimer);
+      this.pokeGeoAutoValidationTimer = null;
+    }
+
+    const q = this.currentQuestion as PokeGeoQuestion;
+    const results = this.calculatePokeGeoScores(q, validation);
+
+    this.io.to(this.room.code).emit("pokegeo:validation_result", validation);
+
+    this.updateLoseStreaks(results);
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+    this.io.to(this.room.code).emit("game:round_end", results);
+
+    if (this.currentTeams) {
+      this.processTeamRoundEnd(results.scores);
+    }
+
+    this.pokeGeoHintUsers.clear();
+
+    setTimeout(() => {
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+
+      setTimeout(() => {
+        this.nextRound();
+      }, 2000);
+    }, 6000);
+  }
+
+  private calculatePokeGeoScores(
+    q: PokeGeoQuestion,
+    validation: PokeGeoValidationSubmission
+  ): RoundResult {
+    const scores: { playerId: string; points: number; total: number }[] = [];
+    let bestPoints = 0;
+    let winner: Player | undefined;
+
+    for (const player of this.room.players) {
+      const answer = this.answers.get(player.id);
+      const isValidated = validation.validatedPlayerIds.includes(player.id);
+
+      let points = 0;
+      if (isValidated && answer) {
+        points = q.points;
+
+        if (this.pokeGeoHintUsers.has(player.id)) {
+          points = Math.floor(points / 2);
+        }
+      }
+
+      if (answer) {
+        answer.points = points;
+        answer.isCorrect = isValidated;
+      }
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, points);
+      scores.push({
+        playerId: player.id,
+        points,
+        total: updatedPlayer?.score || player.score,
+      });
+
+      if (points > bestPoints) {
+        bestPoints = points;
+        winner = player;
+      }
+    }
+
+    return {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion!,
+      answers: Array.from(this.answers.values()),
+      correctAnswer: q.location,
       winner,
       scores,
     };

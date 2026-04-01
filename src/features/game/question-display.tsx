@@ -9,7 +9,7 @@ import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { getSocket } from "@/lib/socket";
 import { cn } from "@/lib/utils";
-import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion, FutCardQuestion, ChronoQuestion, ConsensusQuestion, DialedQuestion } from "@/types";
+import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion, FutCardQuestion, ChronoQuestion, ConsensusQuestion, DialedQuestion, PokeGeoQuestion } from "@/types";
 
 export function QuestionDisplay() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
@@ -26,6 +26,7 @@ export function QuestionDisplay() {
   const [parcoursAnswer, setParcoursAnswer] = useState("");
   const [petitBacAnswers, setPetitBacAnswers] = useState<Record<string, string>>({});
   const [geoQuizAnswer, setGeoQuizAnswer] = useState("");
+  const [pokeGeoAnswer, setPokeGeoAnswer] = useState("");
   const [langueLanguage, setLangueLanguage] = useState("");
   const [langueMeaning, setLangueMeaning] = useState("");
   const [guessGameAnswer, setGuessGameAnswer] = useState("");
@@ -66,6 +67,7 @@ export function QuestionDisplay() {
     setParcoursAnswer("");
     setPetitBacAnswers({});
     setGeoQuizAnswer("");
+    setPokeGeoAnswer("");
     setLangueLanguage("");
     setLangueMeaning("");
     setGuessGameAnswer("");
@@ -99,6 +101,8 @@ export function QuestionDisplay() {
       submitAnswer(JSON.stringify(petitBacAnswers));
     } else if (currentQuestion.type === "geoquiz" && geoQuizAnswer.trim()) {
       submitAnswer(geoQuizAnswer.trim());
+    } else if (currentQuestion.type === "pokegeo" && pokeGeoAnswer.trim()) {
+      submitAnswer(pokeGeoAnswer.trim());
     } else if (currentQuestion.type === "langue" && (langueLanguage.trim() || langueMeaning.trim())) {
       submitAnswer(JSON.stringify({ language: langueLanguage.trim(), meaning: langueMeaning.trim() }));
     } else if (currentQuestion.type === "guessgame" && guessGameAnswer.trim()) {
@@ -188,6 +192,16 @@ export function QuestionDisplay() {
             answer={geoQuizAnswer}
             hasAnswered={hasAnswered}
             onChange={setGeoQuizAnswer}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "pokegeo" && (
+          <PokeGeoQuestionView
+            question={currentQuestion as PokeGeoQuestion}
+            answer={pokeGeoAnswer}
+            hasAnswered={hasAnswered}
+            onChange={setPokeGeoAnswer}
             onSubmit={handleSubmit}
           />
         )}
@@ -1202,6 +1216,161 @@ function GeoQuizQuestionView({
               onChange={(e) => onChange(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Nom de la ville..."
+              autoFocus
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+            />
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onSubmit}
+              disabled={!answer.trim()}
+              rightIcon={<Send className="w-5 h-5" />}
+            >
+              Valider
+            </Button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ==========================================
+// POKEGEO QUESTION VIEW (Pokémon GeoGuessr)
+// ==========================================
+
+interface PokeGeoQuestionViewProps {
+  question: PokeGeoQuestion;
+  answer: string;
+  hasAnswered: boolean;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+}
+
+function PokeGeoQuestionView({
+  question,
+  answer,
+  hasAnswered,
+  onChange,
+  onSubmit,
+}: PokeGeoQuestionViewProps) {
+  const [imageError, setImageError] = useState(false);
+
+  useEffect(() => {
+    setImageError(false);
+  }, [question.imageUrl]);
+
+  const pokeGeoHint = useGameStore((s) => s.pokeGeoHint);
+  const { usePokeGeoHint } = useSocket();
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSubmit();
+    }
+  };
+
+  const handleUseHint = () => {
+    if (!pokeGeoHint) {
+      usePokeGeoHint();
+    }
+  };
+
+  return (
+    <>
+      {/* Header */}
+      <div className="mb-3 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-800 border border-surface-700 mb-3">
+          <span className="text-lg">🗺️</span>
+          <span className="text-xs font-medium text-surface-300">PokéGeo</span>
+        </div>
+        <h2 className="text-lg sm:text-xl font-display font-bold text-surface-100 text-balance">
+          Quel est ce lieu Pokémon ?
+        </h2>
+      </div>
+
+      {/* Screenshot */}
+      {question.imageUrl && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="flex justify-center mb-3"
+        >
+          <div className="w-full max-w-sm aspect-[4/3] rounded-2xl overflow-hidden bg-surface-800 shadow-lg">
+            {imageError ? (
+              <div className="w-full h-full flex flex-col items-center justify-center text-surface-500 gap-2">
+                <Gamepad2 className="w-8 h-8 text-surface-600" />
+                <span className="text-xs">Image indisponible</span>
+              </div>
+            ) : (
+              <img
+                src={question.imageUrl}
+                alt="Lieu Pokémon à deviner"
+                className="w-full h-full object-cover"
+                onError={() => setImageError(true)}
+              />
+            )}
+          </div>
+        </motion.div>
+      )}
+
+      {/* Hint */}
+      <AnimatePresence>
+        {pokeGeoHint ? (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            className="mb-3"
+          >
+            <div className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/30">
+              <Gamepad2 className="w-4 h-4 text-red-400" />
+              <span className="text-sm text-red-300">{pokeGeoHint}</span>
+              <Badge variant="warning" size="sm">-50%</Badge>
+            </div>
+          </motion.div>
+        ) : !hasAnswered ? (
+          <motion.div className="mb-3 flex justify-center">
+            <button
+              onClick={handleUseHint}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-800 border border-surface-700 hover:border-red-500/50 transition-colors"
+            >
+              <Eye className="w-4 h-4 text-red-400" />
+              <span className="text-sm text-surface-300">Indice</span>
+              <span className="text-xs text-surface-500">(points /2)</span>
+            </button>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+
+      {/* Answer input */}
+      <div className="flex-1 flex flex-col justify-end">
+        {hasAnswered ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center"
+          >
+            <Card className="inline-block">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-success-400" />
+                <div className="text-left">
+                  <p className="text-sm text-surface-400">Ta réponse :</p>
+                  <p className="text-lg font-medium text-surface-100">{answer}</p>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        ) : (
+          <div className="space-y-3">
+            <Input
+              value={answer}
+              onChange={(e) => onChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Nom du lieu..."
               autoFocus
               autoComplete="off"
               autoCorrect="off"

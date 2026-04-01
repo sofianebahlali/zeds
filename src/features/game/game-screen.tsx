@@ -24,6 +24,7 @@ import { ListeGameScreen } from "./liste-game-screen";
 import { PokestatsGameScreen } from "./pokestats-game-screen";
 import { PokemonGameScreen } from "./pokemon-game-screen";
 import { PokemonValidationScreen } from "./pokemon-validation-screen";
+import { PokeGeoValidationScreen } from "./pokegeo-validation-screen";
 import { GameChat } from "./game-chat";
 import { ScreenContainer } from "@/components/layout";
 import { GAME_MODES } from "@/types";
@@ -45,6 +46,7 @@ export function GameScreen() {
   const isListe = currentGameMode === "liste";
   const isPokestats = currentGameMode === "pokestats";
   const isPokemon = currentGameMode === "pokemon";
+  const isPokeGeo = currentGameMode === "pokegeo";
   const currentModeInfo = GAME_MODES.find((m) => m.id === currentGameMode);
   const transitionModeInfo = modeTransition ? GAME_MODES.find((m) => m.id === modeTransition) : null;
 
@@ -56,6 +58,7 @@ export function GameScreen() {
     if (status === "guessgame_validating") return "Validation";
     if (status === "consensus_validating") return "Validation";
     if (status === "pokemon_validating") return "Validation";
+    if (isPokeGeo && status === "pokegeo_validating") return "Validation";
     if (status === "splitsteal_choosing") return "Split or Steal";
     if (status === "splitsteal_revealing") return "Resultats";
     if (!isDrawingMode) return null;
@@ -202,6 +205,7 @@ export function GameScreen() {
           {status === "guessgame_validating" && <GuessGameValidationScreen key={`guessgame-validation-${currentRound}`} />}
           {status === "consensus_validating" && <ConsensusValidationScreen key={`consensus-validation-${currentRound}`} />}
           {status === "pokemon_validating" && <PokemonValidationScreen key={`pokemon-validation-${currentRound}`} />}
+          {status === "pokegeo_validating" && <PokeGeoValidationScreen key={`pokegeo-validation-${currentRound}`} />}
           {status === "lineup_revealing" && <LineupRevealScreen key={`lineup-reveal-${currentRound}`} />}
           {status === "splitsteal_choosing" && <SplitStealChoiceScreen key={`splitsteal-choice-${currentRound}`} />}
           {status === "splitsteal_revealing" && <SplitStealRevealScreen key={`splitsteal-reveal-${currentRound}`} />}

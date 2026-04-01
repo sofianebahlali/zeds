@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ListeRoundResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult, PokemonRoundResult, PokemonAbandonResult, PokemonValidationData } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ListeRoundResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult, PokemonRoundResult, PokemonAbandonResult, PokemonValidationData, PokeGeoValidationData, PokeGeoValidationSubmission, PokeGeoAnswerResultData } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
@@ -12,7 +12,8 @@ type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" 
   | "lineup_revealing"
   | "splitsteal_choosing"
   | "splitsteal_revealing"
-  | "pokemon_validating";
+  | "pokemon_validating"
+  | "pokegeo_validating";
 
 interface GameStoreState {
   // Game state
@@ -48,6 +49,12 @@ interface GameStoreState {
   geoQuizHint: string | null;
   geoQuizAnswerResults: GeoQuizAnswerResultData[];
   geoQuizReviewIndex: number;
+
+  // PokéGeo mode
+  pokeGeoValidationData: PokeGeoValidationData | null;
+  pokeGeoValidatedPlayerIds: string[] | null;
+  pokeGeoHint: string | null;
+  pokeGeoAnswerResults: PokeGeoAnswerResultData[];
 
   // Langue mode
   langueValidationData: LangueValidationData | null;
@@ -144,6 +151,12 @@ interface GameStoreState {
   setGeoQuizHint: (hint: string) => void;
   addGeoQuizAnswerResult: (result: GeoQuizAnswerResultData) => void;
 
+  // PokéGeo actions
+  setPokeGeoValidation: (data: PokeGeoValidationData) => void;
+  setPokeGeoValidatedPlayerIds: (validation: PokeGeoValidationSubmission) => void;
+  setPokeGeoHint: (hint: string) => void;
+  addPokeGeoAnswerResult: (result: PokeGeoAnswerResultData) => void;
+
   // Langue actions
   setLangueValidation: (data: LangueValidationData) => void;
   addLangueAnswerResult: (result: LangueAnswerResultData) => void;
@@ -234,6 +247,12 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   geoQuizHint: null,
   geoQuizAnswerResults: [],
   geoQuizReviewIndex: 0,
+
+  // PokéGeo initial state
+  pokeGeoValidationData: null,
+  pokeGeoValidatedPlayerIds: null,
+  pokeGeoHint: null,
+  pokeGeoAnswerResults: [],
 
   // Langue initial state
   langueValidationData: null,
@@ -408,6 +427,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       geoQuizHint: null,
       geoQuizAnswerResults: [],
       geoQuizReviewIndex: 0,
+      pokeGeoValidationData: null,
+      pokeGeoValidatedPlayerIds: null,
+      pokeGeoHint: null,
+      pokeGeoAnswerResults: [],
       langueValidationData: null,
       langueAnswerResults: [],
       parcoursValidationData: null,
@@ -474,6 +497,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       geoQuizHint: null,
       geoQuizAnswerResults: [],
       geoQuizReviewIndex: 0,
+      pokeGeoValidationData: null,
+      pokeGeoValidatedPlayerIds: null,
+      pokeGeoHint: null,
+      pokeGeoAnswerResults: [],
       langueValidationData: null,
       langueAnswerResults: [],
       parcoursValidationData: null,
@@ -580,6 +607,25 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   addGeoQuizAnswerResult: (result) => set((state) => ({
     geoQuizAnswerResults: [...state.geoQuizAnswerResults, result],
+  })),
+
+  // PokéGeo actions
+  setPokeGeoValidation: (data) => set({
+    pokeGeoValidationData: data,
+    pokeGeoAnswerResults: [],
+    status: "pokegeo_validating",
+  }),
+
+  setPokeGeoValidatedPlayerIds: (validation) => set({
+    pokeGeoValidatedPlayerIds: validation.validatedPlayerIds,
+  }),
+
+  setPokeGeoHint: (hint) => set({
+    pokeGeoHint: hint,
+  }),
+
+  addPokeGeoAnswerResult: (result) => set((state) => ({
+    pokeGeoAnswerResults: [...state.pokeGeoAnswerResults, result],
   })),
 
   // Langue actions

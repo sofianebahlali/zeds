@@ -298,6 +298,49 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     });
 
     // ==========================================
+    // POKEGEO EVENTS
+    // ==========================================
+
+    socket.on("pokegeo:submit_validation", (validation) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.submitPokeGeoValidation(validation);
+    });
+
+    socket.on("pokegeo:validate_answer", (targetPlayerId: string, accepted: boolean) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room || room.hostId !== playerId) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.validateSinglePokeGeoAnswer(targetPlayerId, accepted);
+    });
+
+    socket.on("pokegeo:use_hint", () => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.usePokeGeoHint(playerId);
+    });
+
+    // ==========================================
     // LANGUE EVENTS
     // ==========================================
 

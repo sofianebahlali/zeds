@@ -80,6 +80,7 @@ export function RoundResult() {
   const isParcours = roundResult.question.type === "parcours";
   const isPetitBac = roundResult.question.type === "petitbac";
   const isGeoQuiz = roundResult.question.type === "geoquiz";
+  const isPokeGeo = roundResult.question.type === "pokegeo";
   const isJerseyNumber = roundResult.question.type === "jerseynumber";
   const isChrono = roundResult.question.type === "chrono";
   const isConsensus = roundResult.question.type === "consensus";
@@ -194,7 +195,7 @@ export function RoundResult() {
             ? isCorrect
               ? "Bien trouvé !"
               : "Perdu !"
-            : isGeoQuiz
+            : isGeoQuiz || isPokeGeo
             ? isCorrect
               ? "Bien localisé !"
               : "Perdu !"
@@ -249,6 +250,8 @@ export function RoundResult() {
                 ? "Le joueur était :"
                 : isGeoQuiz
                 ? "La ville était :"
+                : isPokeGeo
+                ? "Le lieu était :"
                 : isJerseyNumber
                 ? "Le vrai numéro :"
                 : isConsensus

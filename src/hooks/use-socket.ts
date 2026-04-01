@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction, SplitStealStartData, SplitStealRevealData, ListeRoundResult, ListeProgressData, PokestatsGuessResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction, SplitStealStartData, SplitStealRevealData, ListeRoundResult, ListeProgressData, PokestatsGuessResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult, PokeGeoValidationData, PokeGeoValidationSubmission, PokeGeoAnswerResultData } from "@/types";
 import { useChatStore } from "@/stores/chat-store";
 
 // Module-level flag: listeners are attached ONCE across all component instances
@@ -240,6 +240,23 @@ function setupSocketListeners() {
 
   socket.on("geoquiz:answer_result", (data: GeoQuizAnswerResultData) => {
     useGameStore.getState().addGeoQuizAnswerResult(data);
+  });
+
+  // PokéGeo events
+  socket.on("pokegeo:validation_start", (data: PokeGeoValidationData) => {
+    useGameStore.getState().setPokeGeoValidation(data);
+  });
+
+  socket.on("pokegeo:validation_result", (validation: PokeGeoValidationSubmission) => {
+    useGameStore.getState().setPokeGeoValidatedPlayerIds(validation);
+  });
+
+  socket.on("pokegeo:hint_revealed", (hint: string) => {
+    useGameStore.getState().setPokeGeoHint(hint);
+  });
+
+  socket.on("pokegeo:answer_result", (data: PokeGeoAnswerResultData) => {
+    useGameStore.getState().addPokeGeoAnswerResult(data);
   });
 
   // Langue events
@@ -602,6 +619,18 @@ export function useSocket() {
     socket.emit("geoquiz:use_hint");
   }, [socket]);
 
+  const submitPokeGeoValidation = useCallback((validation: PokeGeoValidationSubmission) => {
+    socket.emit("pokegeo:submit_validation", validation);
+  }, [socket]);
+
+  const validatePokeGeoAnswer = useCallback((playerId: string, accepted: boolean) => {
+    socket.emit("pokegeo:validate_answer", playerId, accepted);
+  }, [socket]);
+
+  const usePokeGeoHint = useCallback(() => {
+    socket.emit("pokegeo:use_hint");
+  }, [socket]);
+
   const validateLangueAnswer = useCallback((playerId: string, languageCorrect: boolean, meaningCorrect: boolean) => {
     socket.emit("langue:validate_answer", playerId, languageCorrect, meaningCorrect);
   }, [socket]);
@@ -712,6 +741,9 @@ export function useSocket() {
     submitGeoQuizValidation,
     validateGeoQuizAnswer,
     useGeoQuizHint,
+    submitPokeGeoValidation,
+    validatePokeGeoAnswer,
+    usePokeGeoHint,
     validateLangueAnswer,
     submitLangueValidation,
     validateParcoursAnswer,

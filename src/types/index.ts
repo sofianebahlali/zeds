@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon" | "dialed";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon" | "dialed" | "pokegeo";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -228,6 +228,50 @@ export interface GeoQuizValidationSubmission {
 }
 
 export interface GeoQuizAnswerResultData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  answer: string;
+  usedHint: boolean;
+  accepted: boolean;
+}
+
+// ==========================================
+// POKEGEO (Pokémon GeoGuessr) TYPES
+// ==========================================
+
+export interface PokeGeoQuestion extends BaseQuestion {
+  type: "pokegeo";
+  imageUrl: string;
+  location: string; // e.g. "Bourg Palette", "Route 1"
+  game: string; // e.g. "Pokémon Rouge/Bleu", "Pokémon Or/Argent"
+  region: string; // e.g. "Kanto", "Johto"
+  hint: string; // Usually the region or game, revealed on hint button
+  acceptedAnswers: string[];
+  difficulty: "easy" | "medium" | "hard";
+}
+
+export interface PokeGeoPlayerAnswerData {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  answer: string;
+  usedHint: boolean;
+}
+
+export interface PokeGeoValidationData {
+  location: string;
+  game: string;
+  region: string;
+  imageUrl: string;
+  playerAnswers: PokeGeoPlayerAnswerData[];
+}
+
+export interface PokeGeoValidationSubmission {
+  validatedPlayerIds: string[];
+}
+
+export interface PokeGeoAnswerResultData {
   playerId: string;
   playerName: string;
   playerAvatar: string;
@@ -737,7 +781,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion | DialedQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion | DialedQuestion | PokeGeoQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -901,6 +945,12 @@ export interface ServerToClientEvents {
   "geoquiz:hint_revealed": (hint: string) => void;
   "geoquiz:answer_result": (data: GeoQuizAnswerResultData) => void;
 
+  // PokéGeo events
+  "pokegeo:validation_start": (data: PokeGeoValidationData) => void;
+  "pokegeo:validation_result": (validation: PokeGeoValidationSubmission) => void;
+  "pokegeo:hint_revealed": (hint: string) => void;
+  "pokegeo:answer_result": (data: PokeGeoAnswerResultData) => void;
+
   // Langue events
   "langue:validation_start": (data: LangueValidationData) => void;
   "langue:validation_result": (validation: LangueValidationSubmission) => void;
@@ -999,6 +1049,11 @@ export interface ClientToServerEvents {
   "geoquiz:submit_validation": (validation: GeoQuizValidationSubmission) => void;
   "geoquiz:validate_answer": (playerId: string, accepted: boolean) => void;
   "geoquiz:use_hint": () => void;
+
+  // PokéGeo events
+  "pokegeo:submit_validation": (validation: PokeGeoValidationSubmission) => void;
+  "pokegeo:validate_answer": (playerId: string, accepted: boolean) => void;
+  "pokegeo:use_hint": () => void;
 
   // Langue events
   "langue:submit_validation": (validation: LangueValidationSubmission) => void;
@@ -1264,5 +1319,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Mémorise la couleur puis reproduis-la avec les sliders !",
     icon: "🎨",
     color: "from-fuchsia-500 to-violet-700",
+  },
+  {
+    id: "pokegeo",
+    name: "PokéGeo",
+    description: "Reconnais le lieu dans le jeu Pokémon !",
+    icon: "🗺️",
+    color: "from-red-500 to-yellow-500",
   },
 ];
