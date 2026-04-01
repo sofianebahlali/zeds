@@ -39,13 +39,14 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon" | "dialed" | "pokegeo";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon" | "dialed" | "pokegeo" | "pokemontranslate";
 
 export interface GameModeConfig {
   mode: GameMode;
   rounds: number;
   pokestatsGenerations?: number[]; // Filter by generation(s) for pokestats mode
   pokemonGenerations?: number[]; // Filter by generation(s) for pokemon silhouette mode
+  pokemonTranslateGenerations?: number[]; // Filter by generation(s) for pokemon translate mode
 }
 
 export interface GameSettings {
@@ -743,6 +744,20 @@ export interface PokemonAbandonResult {
   generation: number;
 }
 
+// ==========================================
+// POKEMON TRANSLATE MODE TYPES
+// ==========================================
+
+export interface PokemonTranslateQuestion extends BaseQuestion {
+  type: "pokemontranslate";
+  pokemonId: number;
+  nameFr: string;
+  nameEn: string;
+  nameDe: string;
+  nameJa: string;
+  generation: number;
+}
+
 export interface LineupPlayer {
   pos: string;
   name: string;
@@ -781,7 +796,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion | DialedQuestion | PokeGeoQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion | DialedQuestion | PokeGeoQuestion | PokemonTranslateQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -1326,5 +1341,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Reconnais le lieu dans le jeu Pokémon !",
     icon: "🗺️",
     color: "from-red-500 to-yellow-500",
+  },
+  {
+    id: "pokemontranslate",
+    name: "Traduis le Pokémon",
+    description: "Devine le nom français du Pokémon !",
+    icon: "🌐",
+    color: "from-blue-500 to-green-500",
   },
 ];

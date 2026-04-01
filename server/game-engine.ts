@@ -68,6 +68,7 @@ import type {
   PokeGeoQuestion,
   PokeGeoValidationSubmission,
   PokeGeoPlayerAnswerData,
+  PokemonTranslateQuestion,
 } from "../src/types";
 import { PETITBAC_ALL_CATEGORIES, PETITBAC_CATEGORIES_PER_ROUND } from "../src/types";
 import { getQuestions as getDbQuestions, getTotalCount as getDbTotalCount } from "./question-db";
@@ -370,6 +371,20 @@ export class GameEngine {
   }
 
   /**
+   * Load pokemon translate data from JSON file
+   */
+  private static loadPokemonTranslateData(): { id: number; nameEn: string; nameFr: string; nameDe: string; nameJa: string; generation: number }[] {
+    const filePath = path.resolve(__dirname, "../data/questions/pokemon-translate.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw);
+    } catch {
+      console.warn("No pokemon-translate data found at", filePath);
+      return [];
+    }
+  }
+
+  /**
    * Load pokegeo questions from JSON file
    */
   private static loadPokeGeoQuestions(): Question[] {
@@ -519,6 +534,20 @@ export class GameEngine {
       .replace(/[\u0300-\u036f]/g, "") // strip accents
       .replace(/[''`]/g, "'")          // normalize apostrophes
       .replace(/[-]/g, " ");           // normalize hyphens
+  }
+
+  /**
+   * Fuzzy match: normalized exact match OR Levenshtein similarity >= threshold
+   */
+  private static fuzzyMatchAnswer(input: string, acceptedAnswers: string[], threshold = 0.75): boolean {
+    const normalizedInput = GameEngine.normalizeForComparison(input);
+    if (normalizedInput.length < 2) return false;
+    for (const accepted of acceptedAnswers) {
+      const normalizedAccepted = GameEngine.normalizeForComparison(accepted);
+      if (normalizedInput === normalizedAccepted) return true;
+      if (GameEngine.levenshteinSimilarity(normalizedInput, normalizedAccepted) >= threshold) return true;
+    }
+    return false;
   }
 
   /**
@@ -806,6 +835,31 @@ export class GameEngine {
           types: p.types,
           typesFr: p.typesFr,
           timeLimit: 20,
+          points: 100,
+        }));
+      }
+      case "pokemontranslate": {
+        const allPokemon = GameEngine.loadPokemonTranslateData();
+        if (allPokemon.length === 0) return [...SAMPLE_QUESTIONS].slice(0, count);
+
+        let filtered = allPokemon;
+        if (config?.pokemonTranslateGenerations?.length) {
+          filtered = allPokemon.filter(p => config.pokemonTranslateGenerations!.includes(p.generation));
+        }
+        if (filtered.length === 0) filtered = allPokemon;
+
+        const shuffledPoke = filtered.sort(() => Math.random() - 0.5).slice(0, count);
+
+        return shuffledPoke.map((p, i) => ({
+          id: `pokemontranslate_${i + 1}`,
+          type: "pokemontranslate" as const,
+          pokemonId: p.id,
+          nameEn: p.nameEn,
+          nameFr: p.nameFr,
+          nameDe: p.nameDe,
+          nameJa: p.nameJa,
+          generation: p.generation,
+          timeLimit: 15,
           points: 100,
         }));
       }
@@ -1146,6 +1200,13 @@ export class GameEngine {
         generation: 0,
       };
     }
+    if (question.type === "pokemontranslate") {
+      // Send displayName and sourceLang but hide the French answer
+      return {
+        ...question,
+        nameFr: "",
+      };
+    }
     // petitbac: nothing to hide
     return question;
   }
@@ -1304,9 +1365,14 @@ export class GameEngine {
       return;
     }
 
-    // PokéGeo: enter host validation phase instead of auto-scoring
+    // PokéGeo: solo = auto-validate with fuzzy, multi = host validation
     if (this.currentQuestion.type === "pokegeo") {
-      this.startPokeGeoValidation();
+      const isSolo = this.room.players.filter(p => p.isConnected).length === 1;
+      if (isSolo) {
+        this.autoValidatePokeGeoSolo();
+      } else {
+        this.startPokeGeoValidation();
+      }
       return;
     }
 
@@ -1966,6 +2032,10 @@ export class GameEngine {
         const q = this.currentQuestion as PokemonSilhouetteQuestion;
         return `${q.nameFr} / ${q.nameEn}`;
       }
+      case "pokemontranslate": {
+        const q = this.currentQuestion as PokemonTranslateQuestion;
+        return q.nameFr;
+      }
       case "dialed": {
         const q = this.currentQuestion as DialedQuestion;
         return `hsl(${q.targetH}, ${q.targetS}%, ${q.targetL}%)`;
@@ -2057,10 +2127,11 @@ export class GameEngine {
       }
       case "futcard": {
         const q = this.currentQuestion as FutCardQuestion;
-        const normalizedInput = GameEngine.normalizeForComparison(answer);
-        return q.acceptedAnswers.some(
-          (accepted) => GameEngine.normalizeForComparison(accepted) === normalizedInput
-        );
+        return GameEngine.fuzzyMatchAnswer(answer, q.acceptedAnswers);
+      }
+      case "pokemontranslate": {
+        const q = this.currentQuestion as PokemonTranslateQuestion;
+        return GameEngine.fuzzyMatchAnswer(answer, [q.nameFr]);
       }
       case "chrono":
         return false; // Handled in calculateChronoScores
@@ -3088,6 +3159,39 @@ export class GameEngine {
     this.io.to(socketId).emit("pokegeo:hint_revealed", q.hint || q.region);
   }
 
+  /**
+   * Auto-validate PokéGeo answers in solo mode using fuzzy matching
+   */
+  private autoValidatePokeGeoSolo(): void {
+    const q = this.currentQuestion as PokeGeoQuestion;
+    const validatedPlayerIds: string[] = [];
+
+    for (const [playerId, answer] of this.answers) {
+      if (answer.answer && GameEngine.fuzzyMatchAnswer(answer.answer, q.acceptedAnswers)) {
+        validatedPlayerIds.push(playerId);
+      }
+    }
+
+    const results = this.calculatePokeGeoScores(q, { validatedPlayerIds });
+    this.updateLoseStreaks(results);
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+    this.io.to(this.room.code).emit("game:round_end", results);
+
+    if (this.currentTeams) {
+      this.processTeamRoundEnd(results.scores);
+    }
+
+    this.pokeGeoHintUsers.clear();
+
+    setTimeout(() => {
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+      setTimeout(() => {
+        this.nextRound();
+      }, 2000);
+    }, 6000);
+  }
+
   private startPokeGeoValidation(): void {
     this.pokeGeoValidating = true;
     this.pokeGeoDecisions.clear();
@@ -3145,10 +3249,7 @@ export class GameEngine {
             this.pokeGeoDecisions.set(pa.playerId, false);
             continue;
           }
-          const normalized = GameEngine.normalizeForComparison(pa.answer);
-          const isMatch = q.acceptedAnswers.some(
-            (accepted) => GameEngine.normalizeForComparison(accepted) === normalized
-          );
+          const isMatch = GameEngine.fuzzyMatchAnswer(pa.answer, q.acceptedAnswers);
           this.pokeGeoDecisions.set(pa.playerId, isMatch);
           this.io.to(this.room.code).emit("pokegeo:answer_result", {
             playerId: pa.playerId,

@@ -1,0 +1,5194 @@
+[
+  {
+    "id": 1,
+    "nameEn": "Bulbasaur",
+    "nameFr": "Bulbizarre",
+    "nameDe": "Bisasam",
+    "nameJa": "Fushigidane",
+    "generation": 1
+  },
+  {
+    "id": 2,
+    "nameEn": "Ivysaur",
+    "nameFr": "Herbizarre",
+    "nameDe": "Bisaknosp",
+    "nameJa": "Fushigisou",
+    "generation": 1
+  },
+  {
+    "id": 3,
+    "nameEn": "Venusaur",
+    "nameFr": "Florizarre",
+    "nameDe": "Bisaflor",
+    "nameJa": "Fushigibana",
+    "generation": 1
+  },
+  {
+    "id": 4,
+    "nameEn": "Charmander",
+    "nameFr": "Salamèche",
+    "nameDe": "Glumanda",
+    "nameJa": "Hitokage",
+    "generation": 1
+  },
+  {
+    "id": 5,
+    "nameEn": "Charmeleon",
+    "nameFr": "Reptincel",
+    "nameDe": "Glutexo",
+    "nameJa": "Rizaado",
+    "generation": 1
+  },
+  {
+    "id": 6,
+    "nameEn": "Charizard",
+    "nameFr": "Dracaufeu",
+    "nameDe": "Glurak",
+    "nameJa": "Rizaadon",
+    "generation": 1
+  },
+  {
+    "id": 7,
+    "nameEn": "Squirtle",
+    "nameFr": "Carapuce",
+    "nameDe": "Schiggy",
+    "nameJa": "Zenigame",
+    "generation": 1
+  },
+  {
+    "id": 8,
+    "nameEn": "Wartortle",
+    "nameFr": "Carabaffe",
+    "nameDe": "Schillok",
+    "nameJa": "Kameeru",
+    "generation": 1
+  },
+  {
+    "id": 9,
+    "nameEn": "Blastoise",
+    "nameFr": "Tortank",
+    "nameDe": "Turtok",
+    "nameJa": "Kamekkusu",
+    "generation": 1
+  },
+  {
+    "id": 10,
+    "nameEn": "Caterpie",
+    "nameFr": "Chenipan",
+    "nameDe": "Raupy",
+    "nameJa": "Kyatapii",
+    "generation": 1
+  },
+  {
+    "id": 11,
+    "nameEn": "Metapod",
+    "nameFr": "Chrysacier",
+    "nameDe": "Safcon",
+    "nameJa": "Toranseru",
+    "generation": 1
+  },
+  {
+    "id": 12,
+    "nameEn": "Butterfree",
+    "nameFr": "Papilusion",
+    "nameDe": "Smettbo",
+    "nameJa": "Batafurii",
+    "generation": 1
+  },
+  {
+    "id": 13,
+    "nameEn": "Weedle",
+    "nameFr": "Aspicot",
+    "nameDe": "Hornliu",
+    "nameJa": "Biidoru",
+    "generation": 1
+  },
+  {
+    "id": 14,
+    "nameEn": "Kakuna",
+    "nameFr": "Coconfort",
+    "nameDe": "Kokuna",
+    "nameJa": "Kokuun",
+    "generation": 1
+  },
+  {
+    "id": 15,
+    "nameEn": "Beedrill",
+    "nameFr": "Dardargnan",
+    "nameDe": "Bibor",
+    "nameJa": "Supiaa",
+    "generation": 1
+  },
+  {
+    "id": 16,
+    "nameEn": "Pidgey",
+    "nameFr": "Roucool",
+    "nameDe": "Taubsi",
+    "nameJa": "Poppo",
+    "generation": 1
+  },
+  {
+    "id": 17,
+    "nameEn": "Pidgeotto",
+    "nameFr": "Roucoups",
+    "nameDe": "Tauboga",
+    "nameJa": "Pijon",
+    "generation": 1
+  },
+  {
+    "id": 18,
+    "nameEn": "Pidgeot",
+    "nameFr": "Roucarnage",
+    "nameDe": "Tauboss",
+    "nameJa": "Pijotto",
+    "generation": 1
+  },
+  {
+    "id": 19,
+    "nameEn": "Rattata",
+    "nameFr": "Rattata",
+    "nameDe": "Rattfratz",
+    "nameJa": "Koratta",
+    "generation": 1
+  },
+  {
+    "id": 20,
+    "nameEn": "Raticate",
+    "nameFr": "Rattatac",
+    "nameDe": "Rattikarl",
+    "nameJa": "Ratta",
+    "generation": 1
+  },
+  {
+    "id": 21,
+    "nameEn": "Spearow",
+    "nameFr": "Piafabec",
+    "nameDe": "Habitak",
+    "nameJa": "Onisuzume",
+    "generation": 1
+  },
+  {
+    "id": 22,
+    "nameEn": "Fearow",
+    "nameFr": "Rapasdepic",
+    "nameDe": "Ibitak",
+    "nameJa": "Onidoriru",
+    "generation": 1
+  },
+  {
+    "id": 23,
+    "nameEn": "Ekans",
+    "nameFr": "Abo",
+    "nameDe": "Rettan",
+    "nameJa": "Aabo",
+    "generation": 1
+  },
+  {
+    "id": 24,
+    "nameEn": "Arbok",
+    "nameFr": "Arbok",
+    "nameDe": "Arbok",
+    "nameJa": "Aabokku",
+    "generation": 1
+  },
+  {
+    "id": 25,
+    "nameEn": "Pikachu",
+    "nameFr": "Pikachu",
+    "nameDe": "Pikachu",
+    "nameJa": "Pikachuu",
+    "generation": 1
+  },
+  {
+    "id": 26,
+    "nameEn": "Raichu",
+    "nameFr": "Raichu",
+    "nameDe": "Raichu",
+    "nameJa": "Raichuu",
+    "generation": 1
+  },
+  {
+    "id": 27,
+    "nameEn": "Sandshrew",
+    "nameFr": "Sabelette",
+    "nameDe": "Sandan",
+    "nameJa": "Sando",
+    "generation": 1
+  },
+  {
+    "id": 28,
+    "nameEn": "Sandslash",
+    "nameFr": "Sablaireau",
+    "nameDe": "Sandamer",
+    "nameJa": "Sandopan",
+    "generation": 1
+  },
+  {
+    "id": 29,
+    "nameEn": "Nidoran♀",
+    "nameFr": "Nidoran♀",
+    "nameDe": "Nidoran♀",
+    "nameJa": "Nidoran♀",
+    "generation": 1
+  },
+  {
+    "id": 30,
+    "nameEn": "Nidorina",
+    "nameFr": "Nidorina",
+    "nameDe": "Nidorina",
+    "nameJa": "Nidoriina",
+    "generation": 1
+  },
+  {
+    "id": 31,
+    "nameEn": "Nidoqueen",
+    "nameFr": "Nidoqueen",
+    "nameDe": "Nidoqueen",
+    "nameJa": "Nidokuin",
+    "generation": 1
+  },
+  {
+    "id": 32,
+    "nameEn": "Nidoran♂",
+    "nameFr": "Nidoran♂",
+    "nameDe": "Nidoran♂",
+    "nameJa": "Nidoran♂",
+    "generation": 1
+  },
+  {
+    "id": 33,
+    "nameEn": "Nidorino",
+    "nameFr": "Nidorino",
+    "nameDe": "Nidorino",
+    "nameJa": "Nidoriino",
+    "generation": 1
+  },
+  {
+    "id": 34,
+    "nameEn": "Nidoking",
+    "nameFr": "Nidoking",
+    "nameDe": "Nidoking",
+    "nameJa": "Nidokingu",
+    "generation": 1
+  },
+  {
+    "id": 35,
+    "nameEn": "Clefairy",
+    "nameFr": "Mélofée",
+    "nameDe": "Piepi",
+    "nameJa": "Pippi",
+    "generation": 1
+  },
+  {
+    "id": 36,
+    "nameEn": "Clefable",
+    "nameFr": "Mélodelfe",
+    "nameDe": "Pixi",
+    "nameJa": "Pikushii",
+    "generation": 1
+  },
+  {
+    "id": 37,
+    "nameEn": "Vulpix",
+    "nameFr": "Goupix",
+    "nameDe": "Vulpix",
+    "nameJa": "Rokon",
+    "generation": 1
+  },
+  {
+    "id": 38,
+    "nameEn": "Ninetales",
+    "nameFr": "Feunard",
+    "nameDe": "Vulnona",
+    "nameJa": "Kyuukon",
+    "generation": 1
+  },
+  {
+    "id": 39,
+    "nameEn": "Jigglypuff",
+    "nameFr": "Rondoudou",
+    "nameDe": "Pummeluff",
+    "nameJa": "Purin",
+    "generation": 1
+  },
+  {
+    "id": 40,
+    "nameEn": "Wigglytuff",
+    "nameFr": "Grodoudou",
+    "nameDe": "Knuddeluff",
+    "nameJa": "Pukurin",
+    "generation": 1
+  },
+  {
+    "id": 41,
+    "nameEn": "Zubat",
+    "nameFr": "Nosferapti",
+    "nameDe": "Zubat",
+    "nameJa": "Zubatto",
+    "generation": 1
+  },
+  {
+    "id": 42,
+    "nameEn": "Golbat",
+    "nameFr": "Nosferalto",
+    "nameDe": "Golbat",
+    "nameJa": "Gorubatto",
+    "generation": 1
+  },
+  {
+    "id": 43,
+    "nameEn": "Oddish",
+    "nameFr": "Mystherbe",
+    "nameDe": "Myrapla",
+    "nameJa": "Nazonokusa",
+    "generation": 1
+  },
+  {
+    "id": 44,
+    "nameEn": "Gloom",
+    "nameFr": "Ortide",
+    "nameDe": "Duflor",
+    "nameJa": "Kusaihana",
+    "generation": 1
+  },
+  {
+    "id": 45,
+    "nameEn": "Vileplume",
+    "nameFr": "Rafflesia",
+    "nameDe": "Giflor",
+    "nameJa": "Rafureshia",
+    "generation": 1
+  },
+  {
+    "id": 46,
+    "nameEn": "Paras",
+    "nameFr": "Paras",
+    "nameDe": "Paras",
+    "nameJa": "Parasu",
+    "generation": 1
+  },
+  {
+    "id": 47,
+    "nameEn": "Parasect",
+    "nameFr": "Parasect",
+    "nameDe": "Parasek",
+    "nameJa": "Parasekuto",
+    "generation": 1
+  },
+  {
+    "id": 48,
+    "nameEn": "Venonat",
+    "nameFr": "Mimitoss",
+    "nameDe": "Bluzuk",
+    "nameJa": "Konpan",
+    "generation": 1
+  },
+  {
+    "id": 49,
+    "nameEn": "Venomoth",
+    "nameFr": "Aéromite",
+    "nameDe": "Omot",
+    "nameJa": "Morufon",
+    "generation": 1
+  },
+  {
+    "id": 50,
+    "nameEn": "Diglett",
+    "nameFr": "Taupiqueur",
+    "nameDe": "Digda",
+    "nameJa": "Diguda",
+    "generation": 1
+  },
+  {
+    "id": 51,
+    "nameEn": "Dugtrio",
+    "nameFr": "Triopikeur",
+    "nameDe": "Digdri",
+    "nameJa": "Dagutorio",
+    "generation": 1
+  },
+  {
+    "id": 52,
+    "nameEn": "Meowth",
+    "nameFr": "Miaouss",
+    "nameDe": "Mauzi",
+    "nameJa": "Nyaasu",
+    "generation": 1
+  },
+  {
+    "id": 53,
+    "nameEn": "Persian",
+    "nameFr": "Persian",
+    "nameDe": "Snobilikat",
+    "nameJa": "Perushian",
+    "generation": 1
+  },
+  {
+    "id": 54,
+    "nameEn": "Psyduck",
+    "nameFr": "Psykokwak",
+    "nameDe": "Enton",
+    "nameJa": "Kodakku",
+    "generation": 1
+  },
+  {
+    "id": 55,
+    "nameEn": "Golduck",
+    "nameFr": "Akwakwak",
+    "nameDe": "Entoron",
+    "nameJa": "Gorudakku",
+    "generation": 1
+  },
+  {
+    "id": 56,
+    "nameEn": "Mankey",
+    "nameFr": "Férosinge",
+    "nameDe": "Menki",
+    "nameJa": "Mankii",
+    "generation": 1
+  },
+  {
+    "id": 57,
+    "nameEn": "Primeape",
+    "nameFr": "Colossinge",
+    "nameDe": "Rasaff",
+    "nameJa": "Okorizaru",
+    "generation": 1
+  },
+  {
+    "id": 58,
+    "nameEn": "Growlithe",
+    "nameFr": "Caninos",
+    "nameDe": "Fukano",
+    "nameJa": "Gaadi",
+    "generation": 1
+  },
+  {
+    "id": 59,
+    "nameEn": "Arcanine",
+    "nameFr": "Arcanin",
+    "nameDe": "Arkani",
+    "nameJa": "Uindi",
+    "generation": 1
+  },
+  {
+    "id": 60,
+    "nameEn": "Poliwag",
+    "nameFr": "Ptitard",
+    "nameDe": "Quapsel",
+    "nameJa": "Nyoromo",
+    "generation": 1
+  },
+  {
+    "id": 61,
+    "nameEn": "Poliwhirl",
+    "nameFr": "Têtarte",
+    "nameDe": "Quaputzi",
+    "nameJa": "Nyorozo",
+    "generation": 1
+  },
+  {
+    "id": 62,
+    "nameEn": "Poliwrath",
+    "nameFr": "Tartard",
+    "nameDe": "Quappo",
+    "nameJa": "Nyorobon",
+    "generation": 1
+  },
+  {
+    "id": 63,
+    "nameEn": "Abra",
+    "nameFr": "Abra",
+    "nameDe": "Abra",
+    "nameJa": "Keeshii",
+    "generation": 1
+  },
+  {
+    "id": 64,
+    "nameEn": "Kadabra",
+    "nameFr": "Kadabra",
+    "nameDe": "Kadabra",
+    "nameJa": "Yungeraa",
+    "generation": 1
+  },
+  {
+    "id": 65,
+    "nameEn": "Alakazam",
+    "nameFr": "Alakazam",
+    "nameDe": "Simsala",
+    "nameJa": "Fuudin",
+    "generation": 1
+  },
+  {
+    "id": 66,
+    "nameEn": "Machop",
+    "nameFr": "Machoc",
+    "nameDe": "Machollo",
+    "nameJa": "Wanrikii",
+    "generation": 1
+  },
+  {
+    "id": 67,
+    "nameEn": "Machoke",
+    "nameFr": "Machopeur",
+    "nameDe": "Maschock",
+    "nameJa": "Goorikii",
+    "generation": 1
+  },
+  {
+    "id": 68,
+    "nameEn": "Machamp",
+    "nameFr": "Mackogneur",
+    "nameDe": "Machomei",
+    "nameJa": "Kairikii",
+    "generation": 1
+  },
+  {
+    "id": 69,
+    "nameEn": "Bellsprout",
+    "nameFr": "Chétiflor",
+    "nameDe": "Knofensa",
+    "nameJa": "Madatsubomi",
+    "generation": 1
+  },
+  {
+    "id": 70,
+    "nameEn": "Weepinbell",
+    "nameFr": "Boustiflor",
+    "nameDe": "Ultrigaria",
+    "nameJa": "Utsudon",
+    "generation": 1
+  },
+  {
+    "id": 71,
+    "nameEn": "Victreebel",
+    "nameFr": "Empiflor",
+    "nameDe": "Sarzenia",
+    "nameJa": "Utsubotto",
+    "generation": 1
+  },
+  {
+    "id": 72,
+    "nameEn": "Tentacool",
+    "nameFr": "Tentacool",
+    "nameDe": "Tentacha",
+    "nameJa": "Menokurage",
+    "generation": 1
+  },
+  {
+    "id": 73,
+    "nameEn": "Tentacruel",
+    "nameFr": "Tentacruel",
+    "nameDe": "Tentoxa",
+    "nameJa": "Dokukurage",
+    "generation": 1
+  },
+  {
+    "id": 74,
+    "nameEn": "Geodude",
+    "nameFr": "Racaillou",
+    "nameDe": "Kleinstein",
+    "nameJa": "Ishitsubute",
+    "generation": 1
+  },
+  {
+    "id": 75,
+    "nameEn": "Graveler",
+    "nameFr": "Gravalanch",
+    "nameDe": "Georok",
+    "nameJa": "Goroon",
+    "generation": 1
+  },
+  {
+    "id": 76,
+    "nameEn": "Golem",
+    "nameFr": "Grolem",
+    "nameDe": "Geowaz",
+    "nameJa": "Goroonya",
+    "generation": 1
+  },
+  {
+    "id": 77,
+    "nameEn": "Ponyta",
+    "nameFr": "Ponyta",
+    "nameDe": "Ponita",
+    "nameJa": "Poniita",
+    "generation": 1
+  },
+  {
+    "id": 78,
+    "nameEn": "Rapidash",
+    "nameFr": "Galopa",
+    "nameDe": "Gallopa",
+    "nameJa": "Gyaroppu",
+    "generation": 1
+  },
+  {
+    "id": 79,
+    "nameEn": "Slowpoke",
+    "nameFr": "Ramoloss",
+    "nameDe": "Flegmon",
+    "nameJa": "Yadon",
+    "generation": 1
+  },
+  {
+    "id": 80,
+    "nameEn": "Slowbro",
+    "nameFr": "Flagadoss",
+    "nameDe": "Lahmus",
+    "nameJa": "Yadoran",
+    "generation": 1
+  },
+  {
+    "id": 81,
+    "nameEn": "Magnemite",
+    "nameFr": "Magnéti",
+    "nameDe": "Magnetilo",
+    "nameJa": "Koiru",
+    "generation": 1
+  },
+  {
+    "id": 82,
+    "nameEn": "Magneton",
+    "nameFr": "Magnéton",
+    "nameDe": "Magneton",
+    "nameJa": "Reakoiru",
+    "generation": 1
+  },
+  {
+    "id": 83,
+    "nameEn": "Farfetch’d",
+    "nameFr": "Canarticho",
+    "nameDe": "Porenta",
+    "nameJa": "Kamonegi",
+    "generation": 1
+  },
+  {
+    "id": 84,
+    "nameEn": "Doduo",
+    "nameFr": "Doduo",
+    "nameDe": "Dodu",
+    "nameJa": "Doodoo",
+    "generation": 1
+  },
+  {
+    "id": 85,
+    "nameEn": "Dodrio",
+    "nameFr": "Dodrio",
+    "nameDe": "Dodri",
+    "nameJa": "Doodorio",
+    "generation": 1
+  },
+  {
+    "id": 86,
+    "nameEn": "Seel",
+    "nameFr": "Otaria",
+    "nameDe": "Jurob",
+    "nameJa": "Pauwau",
+    "generation": 1
+  },
+  {
+    "id": 87,
+    "nameEn": "Dewgong",
+    "nameFr": "Lamantine",
+    "nameDe": "Jugong",
+    "nameJa": "Jugon",
+    "generation": 1
+  },
+  {
+    "id": 88,
+    "nameEn": "Grimer",
+    "nameFr": "Tadmorv",
+    "nameDe": "Sleima",
+    "nameJa": "Betobetaa",
+    "generation": 1
+  },
+  {
+    "id": 89,
+    "nameEn": "Muk",
+    "nameFr": "Grotadmorv",
+    "nameDe": "Sleimok",
+    "nameJa": "Betobeton",
+    "generation": 1
+  },
+  {
+    "id": 90,
+    "nameEn": "Shellder",
+    "nameFr": "Kokiyas",
+    "nameDe": "Muschas",
+    "nameJa": "Sherudaa",
+    "generation": 1
+  },
+  {
+    "id": 91,
+    "nameEn": "Cloyster",
+    "nameFr": "Crustabri",
+    "nameDe": "Austos",
+    "nameJa": "Parushen",
+    "generation": 1
+  },
+  {
+    "id": 92,
+    "nameEn": "Gastly",
+    "nameFr": "Fantominus",
+    "nameDe": "Nebulak",
+    "nameJa": "Goosu",
+    "generation": 1
+  },
+  {
+    "id": 93,
+    "nameEn": "Haunter",
+    "nameFr": "Spectrum",
+    "nameDe": "Alpollo",
+    "nameJa": "Goosuto",
+    "generation": 1
+  },
+  {
+    "id": 94,
+    "nameEn": "Gengar",
+    "nameFr": "Ectoplasma",
+    "nameDe": "Gengar",
+    "nameJa": "Gengaa",
+    "generation": 1
+  },
+  {
+    "id": 95,
+    "nameEn": "Onix",
+    "nameFr": "Onix",
+    "nameDe": "Onix",
+    "nameJa": "Iwaaku",
+    "generation": 1
+  },
+  {
+    "id": 96,
+    "nameEn": "Drowzee",
+    "nameFr": "Soporifik",
+    "nameDe": "Traumato",
+    "nameJa": "Suriipu",
+    "generation": 1
+  },
+  {
+    "id": 97,
+    "nameEn": "Hypno",
+    "nameFr": "Hypnomade",
+    "nameDe": "Hypno",
+    "nameJa": "Suriipaa",
+    "generation": 1
+  },
+  {
+    "id": 98,
+    "nameEn": "Krabby",
+    "nameFr": "Krabby",
+    "nameDe": "Krabby",
+    "nameJa": "Kurabu",
+    "generation": 1
+  },
+  {
+    "id": 99,
+    "nameEn": "Kingler",
+    "nameFr": "Krabboss",
+    "nameDe": "Kingler",
+    "nameJa": "Kinguraa",
+    "generation": 1
+  },
+  {
+    "id": 100,
+    "nameEn": "Voltorb",
+    "nameFr": "Voltorbe",
+    "nameDe": "Voltobal",
+    "nameJa": "Biriridama",
+    "generation": 1
+  },
+  {
+    "id": 101,
+    "nameEn": "Electrode",
+    "nameFr": "Électrode",
+    "nameDe": "Lektrobal",
+    "nameJa": "Marumain",
+    "generation": 1
+  },
+  {
+    "id": 102,
+    "nameEn": "Exeggcute",
+    "nameFr": "Noeunoeuf",
+    "nameDe": "Owei",
+    "nameJa": "Tamatama",
+    "generation": 1
+  },
+  {
+    "id": 103,
+    "nameEn": "Exeggutor",
+    "nameFr": "Noadkoko",
+    "nameDe": "Kokowei",
+    "nameJa": "Nasshii",
+    "generation": 1
+  },
+  {
+    "id": 104,
+    "nameEn": "Cubone",
+    "nameFr": "Osselait",
+    "nameDe": "Tragosso",
+    "nameJa": "Karakara",
+    "generation": 1
+  },
+  {
+    "id": 105,
+    "nameEn": "Marowak",
+    "nameFr": "Ossatueur",
+    "nameDe": "Knogga",
+    "nameJa": "Garagara",
+    "generation": 1
+  },
+  {
+    "id": 106,
+    "nameEn": "Hitmonlee",
+    "nameFr": "Kicklee",
+    "nameDe": "Kicklee",
+    "nameJa": "Sawamuraa",
+    "generation": 1
+  },
+  {
+    "id": 107,
+    "nameEn": "Hitmonchan",
+    "nameFr": "Tygnon",
+    "nameDe": "Nockchan",
+    "nameJa": "Ebiwaraa",
+    "generation": 1
+  },
+  {
+    "id": 108,
+    "nameEn": "Lickitung",
+    "nameFr": "Excelangue",
+    "nameDe": "Schlurp",
+    "nameJa": "Beroringa",
+    "generation": 1
+  },
+  {
+    "id": 109,
+    "nameEn": "Koffing",
+    "nameFr": "Smogo",
+    "nameDe": "Smogon",
+    "nameJa": "Dogaasu",
+    "generation": 1
+  },
+  {
+    "id": 110,
+    "nameEn": "Weezing",
+    "nameFr": "Smogogo",
+    "nameDe": "Smogmog",
+    "nameJa": "Matadogasu",
+    "generation": 1
+  },
+  {
+    "id": 111,
+    "nameEn": "Rhyhorn",
+    "nameFr": "Rhinocorne",
+    "nameDe": "Rihorn",
+    "nameJa": "Saihoon",
+    "generation": 1
+  },
+  {
+    "id": 112,
+    "nameEn": "Rhydon",
+    "nameFr": "Rhinoféros",
+    "nameDe": "Rizeros",
+    "nameJa": "Saidon",
+    "generation": 1
+  },
+  {
+    "id": 113,
+    "nameEn": "Chansey",
+    "nameFr": "Leveinard",
+    "nameDe": "Chaneira",
+    "nameJa": "Rakkii",
+    "generation": 1
+  },
+  {
+    "id": 114,
+    "nameEn": "Tangela",
+    "nameFr": "Saquedeneu",
+    "nameDe": "Tangela",
+    "nameJa": "Monjara",
+    "generation": 1
+  },
+  {
+    "id": 115,
+    "nameEn": "Kangaskhan",
+    "nameFr": "Kangourex",
+    "nameDe": "Kangama",
+    "nameJa": "Garuura",
+    "generation": 1
+  },
+  {
+    "id": 116,
+    "nameEn": "Horsea",
+    "nameFr": "Hypotrempe",
+    "nameDe": "Seeper",
+    "nameJa": "Tattsuu",
+    "generation": 1
+  },
+  {
+    "id": 117,
+    "nameEn": "Seadra",
+    "nameFr": "Hypocéan",
+    "nameDe": "Seemon",
+    "nameJa": "Shiidora",
+    "generation": 1
+  },
+  {
+    "id": 118,
+    "nameEn": "Goldeen",
+    "nameFr": "Poissirène",
+    "nameDe": "Goldini",
+    "nameJa": "Tosakinto",
+    "generation": 1
+  },
+  {
+    "id": 119,
+    "nameEn": "Seaking",
+    "nameFr": "Poissoroy",
+    "nameDe": "Golking",
+    "nameJa": "Azumaou",
+    "generation": 1
+  },
+  {
+    "id": 120,
+    "nameEn": "Staryu",
+    "nameFr": "Stari",
+    "nameDe": "Sterndu",
+    "nameJa": "Hitodeman",
+    "generation": 1
+  },
+  {
+    "id": 121,
+    "nameEn": "Starmie",
+    "nameFr": "Staross",
+    "nameDe": "Starmie",
+    "nameJa": "Sutaamii",
+    "generation": 1
+  },
+  {
+    "id": 122,
+    "nameEn": "Mr. Mime",
+    "nameFr": "M. Mime",
+    "nameDe": "Pantimos",
+    "nameJa": "Bariyaado",
+    "generation": 1
+  },
+  {
+    "id": 123,
+    "nameEn": "Scyther",
+    "nameFr": "Insécateur",
+    "nameDe": "Sichlor",
+    "nameJa": "Sutoraiku",
+    "generation": 1
+  },
+  {
+    "id": 124,
+    "nameEn": "Jynx",
+    "nameFr": "Lippoutou",
+    "nameDe": "Rossana",
+    "nameJa": "Ruujura",
+    "generation": 1
+  },
+  {
+    "id": 125,
+    "nameEn": "Electabuzz",
+    "nameFr": "Élektek",
+    "nameDe": "Elektek",
+    "nameJa": "Erebuu",
+    "generation": 1
+  },
+  {
+    "id": 126,
+    "nameEn": "Magmar",
+    "nameFr": "Magmar",
+    "nameDe": "Magmar",
+    "nameJa": "Buubaa",
+    "generation": 1
+  },
+  {
+    "id": 127,
+    "nameEn": "Pinsir",
+    "nameFr": "Scarabrute",
+    "nameDe": "Pinsir",
+    "nameJa": "Kairosu",
+    "generation": 1
+  },
+  {
+    "id": 128,
+    "nameEn": "Tauros",
+    "nameFr": "Tauros",
+    "nameDe": "Tauros",
+    "nameJa": "Kentarosu",
+    "generation": 1
+  },
+  {
+    "id": 129,
+    "nameEn": "Magikarp",
+    "nameFr": "Magicarpe",
+    "nameDe": "Karpador",
+    "nameJa": "Koikingu",
+    "generation": 1
+  },
+  {
+    "id": 130,
+    "nameEn": "Gyarados",
+    "nameFr": "Léviator",
+    "nameDe": "Garados",
+    "nameJa": "Gyaradosu",
+    "generation": 1
+  },
+  {
+    "id": 131,
+    "nameEn": "Lapras",
+    "nameFr": "Lokhlass",
+    "nameDe": "Lapras",
+    "nameJa": "Rapurasu",
+    "generation": 1
+  },
+  {
+    "id": 132,
+    "nameEn": "Ditto",
+    "nameFr": "Métamorph",
+    "nameDe": "Ditto",
+    "nameJa": "Metamon",
+    "generation": 1
+  },
+  {
+    "id": 133,
+    "nameEn": "Eevee",
+    "nameFr": "Évoli",
+    "nameDe": "Evoli",
+    "nameJa": "Iibui",
+    "generation": 1
+  },
+  {
+    "id": 134,
+    "nameEn": "Vaporeon",
+    "nameFr": "Aquali",
+    "nameDe": "Aquana",
+    "nameJa": "Shawaazu",
+    "generation": 1
+  },
+  {
+    "id": 135,
+    "nameEn": "Jolteon",
+    "nameFr": "Voltali",
+    "nameDe": "Blitza",
+    "nameJa": "Sandaasu",
+    "generation": 1
+  },
+  {
+    "id": 136,
+    "nameEn": "Flareon",
+    "nameFr": "Pyroli",
+    "nameDe": "Flamara",
+    "nameJa": "Buusutaa",
+    "generation": 1
+  },
+  {
+    "id": 137,
+    "nameEn": "Porygon",
+    "nameFr": "Porygon",
+    "nameDe": "Porygon",
+    "nameJa": "Porigon",
+    "generation": 1
+  },
+  {
+    "id": 138,
+    "nameEn": "Omanyte",
+    "nameFr": "Amonita",
+    "nameDe": "Amonitas",
+    "nameJa": "Omunaito",
+    "generation": 1
+  },
+  {
+    "id": 139,
+    "nameEn": "Omastar",
+    "nameFr": "Amonistar",
+    "nameDe": "Amoroso",
+    "nameJa": "Omusutaa",
+    "generation": 1
+  },
+  {
+    "id": 140,
+    "nameEn": "Kabuto",
+    "nameFr": "Kabuto",
+    "nameDe": "Kabuto",
+    "nameJa": "Kabuto",
+    "generation": 1
+  },
+  {
+    "id": 141,
+    "nameEn": "Kabutops",
+    "nameFr": "Kabutops",
+    "nameDe": "Kabutops",
+    "nameJa": "Kabutopusu",
+    "generation": 1
+  },
+  {
+    "id": 142,
+    "nameEn": "Aerodactyl",
+    "nameFr": "Ptéra",
+    "nameDe": "Aerodactyl",
+    "nameJa": "Putera",
+    "generation": 1
+  },
+  {
+    "id": 143,
+    "nameEn": "Snorlax",
+    "nameFr": "Ronflex",
+    "nameDe": "Relaxo",
+    "nameJa": "Kabigon",
+    "generation": 1
+  },
+  {
+    "id": 144,
+    "nameEn": "Articuno",
+    "nameFr": "Artikodin",
+    "nameDe": "Arktos",
+    "nameJa": "Furiizaa",
+    "generation": 1
+  },
+  {
+    "id": 145,
+    "nameEn": "Zapdos",
+    "nameFr": "Électhor",
+    "nameDe": "Zapdos",
+    "nameJa": "Sandaa",
+    "generation": 1
+  },
+  {
+    "id": 146,
+    "nameEn": "Moltres",
+    "nameFr": "Sulfura",
+    "nameDe": "Lavados",
+    "nameJa": "Faiyaa",
+    "generation": 1
+  },
+  {
+    "id": 147,
+    "nameEn": "Dratini",
+    "nameFr": "Minidraco",
+    "nameDe": "Dratini",
+    "nameJa": "Miniryuu",
+    "generation": 1
+  },
+  {
+    "id": 148,
+    "nameEn": "Dragonair",
+    "nameFr": "Draco",
+    "nameDe": "Dragonir",
+    "nameJa": "Hakuryuu",
+    "generation": 1
+  },
+  {
+    "id": 149,
+    "nameEn": "Dragonite",
+    "nameFr": "Dracolosse",
+    "nameDe": "Dragoran",
+    "nameJa": "Kairyuu",
+    "generation": 1
+  },
+  {
+    "id": 150,
+    "nameEn": "Mewtwo",
+    "nameFr": "Mewtwo",
+    "nameDe": "Mewtu",
+    "nameJa": "Myuutsuu",
+    "generation": 1
+  },
+  {
+    "id": 151,
+    "nameEn": "Mew",
+    "nameFr": "Mew",
+    "nameDe": "Mew",
+    "nameJa": "Myuu",
+    "generation": 1
+  },
+  {
+    "id": 152,
+    "nameEn": "Chikorita",
+    "nameFr": "Germignon",
+    "nameDe": "Endivie",
+    "nameJa": "Chikoriita",
+    "generation": 2
+  },
+  {
+    "id": 153,
+    "nameEn": "Bayleef",
+    "nameFr": "Macronium",
+    "nameDe": "Lorblatt",
+    "nameJa": "Beiriifu",
+    "generation": 2
+  },
+  {
+    "id": 154,
+    "nameEn": "Meganium",
+    "nameFr": "Méganium",
+    "nameDe": "Meganie",
+    "nameJa": "Meganiumu",
+    "generation": 2
+  },
+  {
+    "id": 155,
+    "nameEn": "Cyndaquil",
+    "nameFr": "Héricendre",
+    "nameDe": "Feurigel",
+    "nameJa": "Hinoarashi",
+    "generation": 2
+  },
+  {
+    "id": 156,
+    "nameEn": "Quilava",
+    "nameFr": "Feurisson",
+    "nameDe": "Igelavar",
+    "nameJa": "Magumarashi",
+    "generation": 2
+  },
+  {
+    "id": 157,
+    "nameEn": "Typhlosion",
+    "nameFr": "Typhlosion",
+    "nameDe": "Tornupto",
+    "nameJa": "Bakufuun",
+    "generation": 2
+  },
+  {
+    "id": 158,
+    "nameEn": "Totodile",
+    "nameFr": "Kaiminus",
+    "nameDe": "Karnimani",
+    "nameJa": "Waninoko",
+    "generation": 2
+  },
+  {
+    "id": 159,
+    "nameEn": "Croconaw",
+    "nameFr": "Crocrodil",
+    "nameDe": "Tyracroc",
+    "nameJa": "Arigeitsu",
+    "generation": 2
+  },
+  {
+    "id": 160,
+    "nameEn": "Feraligatr",
+    "nameFr": "Aligatueur",
+    "nameDe": "Impergator",
+    "nameJa": "Oodairu",
+    "generation": 2
+  },
+  {
+    "id": 161,
+    "nameEn": "Sentret",
+    "nameFr": "Fouinette",
+    "nameDe": "Wiesor",
+    "nameJa": "Otachi",
+    "generation": 2
+  },
+  {
+    "id": 162,
+    "nameEn": "Furret",
+    "nameFr": "Fouinar",
+    "nameDe": "Wiesenior",
+    "nameJa": "Ootachi",
+    "generation": 2
+  },
+  {
+    "id": 163,
+    "nameEn": "Hoothoot",
+    "nameFr": "Hoothoot",
+    "nameDe": "Hoothoot",
+    "nameJa": "Hoohoo",
+    "generation": 2
+  },
+  {
+    "id": 164,
+    "nameEn": "Noctowl",
+    "nameFr": "Noarfang",
+    "nameDe": "Noctuh",
+    "nameJa": "Yorunozuku",
+    "generation": 2
+  },
+  {
+    "id": 165,
+    "nameEn": "Ledyba",
+    "nameFr": "Coxy",
+    "nameDe": "Ledyba",
+    "nameJa": "Rediba",
+    "generation": 2
+  },
+  {
+    "id": 166,
+    "nameEn": "Ledian",
+    "nameFr": "Coxyclaque",
+    "nameDe": "Ledian",
+    "nameJa": "Redian",
+    "generation": 2
+  },
+  {
+    "id": 167,
+    "nameEn": "Spinarak",
+    "nameFr": "Mimigal",
+    "nameDe": "Webarak",
+    "nameJa": "Itomaru",
+    "generation": 2
+  },
+  {
+    "id": 168,
+    "nameEn": "Ariados",
+    "nameFr": "Migalos",
+    "nameDe": "Ariados",
+    "nameJa": "Ariadosu",
+    "generation": 2
+  },
+  {
+    "id": 169,
+    "nameEn": "Crobat",
+    "nameFr": "Nostenfer",
+    "nameDe": "Iksbat",
+    "nameJa": "Kurobatto",
+    "generation": 2
+  },
+  {
+    "id": 170,
+    "nameEn": "Chinchou",
+    "nameFr": "Loupio",
+    "nameDe": "Lampi",
+    "nameJa": "Chonchii",
+    "generation": 2
+  },
+  {
+    "id": 171,
+    "nameEn": "Lanturn",
+    "nameFr": "Lanturn",
+    "nameDe": "Lanturn",
+    "nameJa": "Rantaan",
+    "generation": 2
+  },
+  {
+    "id": 172,
+    "nameEn": "Pichu",
+    "nameFr": "Pichu",
+    "nameDe": "Pichu",
+    "nameJa": "Pichuu",
+    "generation": 2
+  },
+  {
+    "id": 173,
+    "nameEn": "Cleffa",
+    "nameFr": "Mélo",
+    "nameDe": "Pii",
+    "nameJa": "Pii",
+    "generation": 2
+  },
+  {
+    "id": 174,
+    "nameEn": "Igglybuff",
+    "nameFr": "Toudoudou",
+    "nameDe": "Fluffeluff",
+    "nameJa": "Pupurin",
+    "generation": 2
+  },
+  {
+    "id": 175,
+    "nameEn": "Togepi",
+    "nameFr": "Togepi",
+    "nameDe": "Togepi",
+    "nameJa": "Togepii",
+    "generation": 2
+  },
+  {
+    "id": 176,
+    "nameEn": "Togetic",
+    "nameFr": "Togetic",
+    "nameDe": "Togetic",
+    "nameJa": "Togechikku",
+    "generation": 2
+  },
+  {
+    "id": 177,
+    "nameEn": "Natu",
+    "nameFr": "Natu",
+    "nameDe": "Natu",
+    "nameJa": "Neiti",
+    "generation": 2
+  },
+  {
+    "id": 178,
+    "nameEn": "Xatu",
+    "nameFr": "Xatu",
+    "nameDe": "Xatu",
+    "nameJa": "Neitio",
+    "generation": 2
+  },
+  {
+    "id": 179,
+    "nameEn": "Mareep",
+    "nameFr": "Wattouat",
+    "nameDe": "Voltilamm",
+    "nameJa": "Meriipu",
+    "generation": 2
+  },
+  {
+    "id": 180,
+    "nameEn": "Flaaffy",
+    "nameFr": "Lainergie",
+    "nameDe": "Waaty",
+    "nameJa": "Mokoko",
+    "generation": 2
+  },
+  {
+    "id": 181,
+    "nameEn": "Ampharos",
+    "nameFr": "Pharamp",
+    "nameDe": "Ampharos",
+    "nameJa": "Denryuu",
+    "generation": 2
+  },
+  {
+    "id": 182,
+    "nameEn": "Bellossom",
+    "nameFr": "Joliflor",
+    "nameDe": "Blubella",
+    "nameJa": "Kireihana",
+    "generation": 2
+  },
+  {
+    "id": 183,
+    "nameEn": "Marill",
+    "nameFr": "Marill",
+    "nameDe": "Marill",
+    "nameJa": "Mariru",
+    "generation": 2
+  },
+  {
+    "id": 184,
+    "nameEn": "Azumarill",
+    "nameFr": "Azumarill",
+    "nameDe": "Azumarill",
+    "nameJa": "Mariruri",
+    "generation": 2
+  },
+  {
+    "id": 185,
+    "nameEn": "Sudowoodo",
+    "nameFr": "Simularbre",
+    "nameDe": "Mogelbaum",
+    "nameJa": "Usokkii",
+    "generation": 2
+  },
+  {
+    "id": 186,
+    "nameEn": "Politoed",
+    "nameFr": "Tarpaud",
+    "nameDe": "Quaxo",
+    "nameJa": "Nyorotono",
+    "generation": 2
+  },
+  {
+    "id": 187,
+    "nameEn": "Hoppip",
+    "nameFr": "Granivol",
+    "nameDe": "Hoppspross",
+    "nameJa": "Hanekko",
+    "generation": 2
+  },
+  {
+    "id": 188,
+    "nameEn": "Skiploom",
+    "nameFr": "Floravol",
+    "nameDe": "Hubelupf",
+    "nameJa": "Popokko",
+    "generation": 2
+  },
+  {
+    "id": 189,
+    "nameEn": "Jumpluff",
+    "nameFr": "Cotovol",
+    "nameDe": "Papungha",
+    "nameJa": "Watakko",
+    "generation": 2
+  },
+  {
+    "id": 190,
+    "nameEn": "Aipom",
+    "nameFr": "Capumain",
+    "nameDe": "Griffel",
+    "nameJa": "Eipamu",
+    "generation": 2
+  },
+  {
+    "id": 191,
+    "nameEn": "Sunkern",
+    "nameFr": "Tournegrin",
+    "nameDe": "Sonnkern",
+    "nameJa": "Himanattsu",
+    "generation": 2
+  },
+  {
+    "id": 192,
+    "nameEn": "Sunflora",
+    "nameFr": "Héliatronc",
+    "nameDe": "Sonnflora",
+    "nameJa": "Kimawari",
+    "generation": 2
+  },
+  {
+    "id": 193,
+    "nameEn": "Yanma",
+    "nameFr": "Yanma",
+    "nameDe": "Yanma",
+    "nameJa": "Yanyanma",
+    "generation": 2
+  },
+  {
+    "id": 194,
+    "nameEn": "Wooper",
+    "nameFr": "Axoloto",
+    "nameDe": "Felino",
+    "nameJa": "Upaa",
+    "generation": 2
+  },
+  {
+    "id": 195,
+    "nameEn": "Quagsire",
+    "nameFr": "Maraiste",
+    "nameDe": "Morlord",
+    "nameJa": "Nuoo",
+    "generation": 2
+  },
+  {
+    "id": 196,
+    "nameEn": "Espeon",
+    "nameFr": "Mentali",
+    "nameDe": "Psiana",
+    "nameJa": "Eefi",
+    "generation": 2
+  },
+  {
+    "id": 197,
+    "nameEn": "Umbreon",
+    "nameFr": "Noctali",
+    "nameDe": "Nachtara",
+    "nameJa": "Burakkii",
+    "generation": 2
+  },
+  {
+    "id": 198,
+    "nameEn": "Murkrow",
+    "nameFr": "Cornèbre",
+    "nameDe": "Kramurx",
+    "nameJa": "Yamikarasu",
+    "generation": 2
+  },
+  {
+    "id": 199,
+    "nameEn": "Slowking",
+    "nameFr": "Roigada",
+    "nameDe": "Laschoking",
+    "nameJa": "Yadokingu",
+    "generation": 2
+  },
+  {
+    "id": 200,
+    "nameEn": "Misdreavus",
+    "nameFr": "Feuforêve",
+    "nameDe": "Traunfugil",
+    "nameJa": "Muuma",
+    "generation": 2
+  },
+  {
+    "id": 201,
+    "nameEn": "Unown",
+    "nameFr": "Zarbi",
+    "nameDe": "Icognito",
+    "nameJa": "Annoon",
+    "generation": 2
+  },
+  {
+    "id": 202,
+    "nameEn": "Wobbuffet",
+    "nameFr": "Qulbutoké",
+    "nameDe": "Woingenau",
+    "nameJa": "Soonansu",
+    "generation": 2
+  },
+  {
+    "id": 203,
+    "nameEn": "Girafarig",
+    "nameFr": "Girafarig",
+    "nameDe": "Girafarig",
+    "nameJa": "Kirinriki",
+    "generation": 2
+  },
+  {
+    "id": 204,
+    "nameEn": "Pineco",
+    "nameFr": "Pomdepik",
+    "nameDe": "Tannza",
+    "nameJa": "Kunugidama",
+    "generation": 2
+  },
+  {
+    "id": 205,
+    "nameEn": "Forretress",
+    "nameFr": "Foretress",
+    "nameDe": "Forstellka",
+    "nameJa": "Foretosu",
+    "generation": 2
+  },
+  {
+    "id": 206,
+    "nameEn": "Dunsparce",
+    "nameFr": "Insolourdo",
+    "nameDe": "Dummisel",
+    "nameJa": "Nokocchi",
+    "generation": 2
+  },
+  {
+    "id": 207,
+    "nameEn": "Gligar",
+    "nameFr": "Scorplane",
+    "nameDe": "Skorgla",
+    "nameJa": "Guraigaa",
+    "generation": 2
+  },
+  {
+    "id": 208,
+    "nameEn": "Steelix",
+    "nameFr": "Steelix",
+    "nameDe": "Stahlos",
+    "nameJa": "Haganeeru",
+    "generation": 2
+  },
+  {
+    "id": 209,
+    "nameEn": "Snubbull",
+    "nameFr": "Snubbull",
+    "nameDe": "Snubbull",
+    "nameJa": "Buruu",
+    "generation": 2
+  },
+  {
+    "id": 210,
+    "nameEn": "Granbull",
+    "nameFr": "Granbull",
+    "nameDe": "Granbull",
+    "nameJa": "Guranburu",
+    "generation": 2
+  },
+  {
+    "id": 211,
+    "nameEn": "Qwilfish",
+    "nameFr": "Qwilfish",
+    "nameDe": "Baldorfish",
+    "nameJa": "Hariisen",
+    "generation": 2
+  },
+  {
+    "id": 212,
+    "nameEn": "Scizor",
+    "nameFr": "Cizayox",
+    "nameDe": "Scherox",
+    "nameJa": "Hassamu",
+    "generation": 2
+  },
+  {
+    "id": 213,
+    "nameEn": "Shuckle",
+    "nameFr": "Caratroc",
+    "nameDe": "Pottrott",
+    "nameJa": "Tsubotsubo",
+    "generation": 2
+  },
+  {
+    "id": 214,
+    "nameEn": "Heracross",
+    "nameFr": "Scarhino",
+    "nameDe": "Skaraborn",
+    "nameJa": "Herakurosu",
+    "generation": 2
+  },
+  {
+    "id": 215,
+    "nameEn": "Sneasel",
+    "nameFr": "Farfuret",
+    "nameDe": "Sniebel",
+    "nameJa": "Nyuura",
+    "generation": 2
+  },
+  {
+    "id": 216,
+    "nameEn": "Teddiursa",
+    "nameFr": "Teddiursa",
+    "nameDe": "Teddiursa",
+    "nameJa": "Himeguma",
+    "generation": 2
+  },
+  {
+    "id": 217,
+    "nameEn": "Ursaring",
+    "nameFr": "Ursaring",
+    "nameDe": "Ursaring",
+    "nameJa": "Ringuma",
+    "generation": 2
+  },
+  {
+    "id": 218,
+    "nameEn": "Slugma",
+    "nameFr": "Limagma",
+    "nameDe": "Schneckmag",
+    "nameJa": "Magumaggu",
+    "generation": 2
+  },
+  {
+    "id": 219,
+    "nameEn": "Magcargo",
+    "nameFr": "Volcaropod",
+    "nameDe": "Magcargo",
+    "nameJa": "Magukarugo",
+    "generation": 2
+  },
+  {
+    "id": 220,
+    "nameEn": "Swinub",
+    "nameFr": "Marcacrin",
+    "nameDe": "Quiekel",
+    "nameJa": "Urimuu",
+    "generation": 2
+  },
+  {
+    "id": 221,
+    "nameEn": "Piloswine",
+    "nameFr": "Cochignon",
+    "nameDe": "Keifel",
+    "nameJa": "Inomuu",
+    "generation": 2
+  },
+  {
+    "id": 222,
+    "nameEn": "Corsola",
+    "nameFr": "Corayon",
+    "nameDe": "Corasonn",
+    "nameJa": "Saniigo",
+    "generation": 2
+  },
+  {
+    "id": 223,
+    "nameEn": "Remoraid",
+    "nameFr": "Rémoraid",
+    "nameDe": "Remoraid",
+    "nameJa": "Teppouo",
+    "generation": 2
+  },
+  {
+    "id": 224,
+    "nameEn": "Octillery",
+    "nameFr": "Octillery",
+    "nameDe": "Octillery",
+    "nameJa": "Okutan",
+    "generation": 2
+  },
+  {
+    "id": 225,
+    "nameEn": "Delibird",
+    "nameFr": "Cadoizo",
+    "nameDe": "Botogel",
+    "nameJa": "Deribaado",
+    "generation": 2
+  },
+  {
+    "id": 226,
+    "nameEn": "Mantine",
+    "nameFr": "Démanta",
+    "nameDe": "Mantax",
+    "nameJa": "Mantain",
+    "generation": 2
+  },
+  {
+    "id": 227,
+    "nameEn": "Skarmory",
+    "nameFr": "Airmure",
+    "nameDe": "Panzaeron",
+    "nameJa": "Eaamudo",
+    "generation": 2
+  },
+  {
+    "id": 228,
+    "nameEn": "Houndour",
+    "nameFr": "Malosse",
+    "nameDe": "Hunduster",
+    "nameJa": "Derubiru",
+    "generation": 2
+  },
+  {
+    "id": 229,
+    "nameEn": "Houndoom",
+    "nameFr": "Démolosse",
+    "nameDe": "Hundemon",
+    "nameJa": "Herugaa",
+    "generation": 2
+  },
+  {
+    "id": 230,
+    "nameEn": "Kingdra",
+    "nameFr": "Hyporoi",
+    "nameDe": "Seedraking",
+    "nameJa": "Kingudora",
+    "generation": 2
+  },
+  {
+    "id": 231,
+    "nameEn": "Phanpy",
+    "nameFr": "Phanpy",
+    "nameDe": "Phanpy",
+    "nameJa": "Gomazou",
+    "generation": 2
+  },
+  {
+    "id": 232,
+    "nameEn": "Donphan",
+    "nameFr": "Donphan",
+    "nameDe": "Donphan",
+    "nameJa": "Donfan",
+    "generation": 2
+  },
+  {
+    "id": 233,
+    "nameEn": "Porygon2",
+    "nameFr": "Porygon2",
+    "nameDe": "Porygon2",
+    "nameJa": "Porigon２",
+    "generation": 2
+  },
+  {
+    "id": 234,
+    "nameEn": "Stantler",
+    "nameFr": "Cerfrousse",
+    "nameDe": "Damhirplex",
+    "nameJa": "Odoshishi",
+    "generation": 2
+  },
+  {
+    "id": 235,
+    "nameEn": "Smeargle",
+    "nameFr": "Queulorior",
+    "nameDe": "Farbeagle",
+    "nameJa": "Dooburu",
+    "generation": 2
+  },
+  {
+    "id": 236,
+    "nameEn": "Tyrogue",
+    "nameFr": "Debugant",
+    "nameDe": "Rabauz",
+    "nameJa": "Barukii",
+    "generation": 2
+  },
+  {
+    "id": 237,
+    "nameEn": "Hitmontop",
+    "nameFr": "Kapoera",
+    "nameDe": "Kapoera",
+    "nameJa": "Kapoeraa",
+    "generation": 2
+  },
+  {
+    "id": 238,
+    "nameEn": "Smoochum",
+    "nameFr": "Lippouti",
+    "nameDe": "Kussilla",
+    "nameJa": "Muchuuru",
+    "generation": 2
+  },
+  {
+    "id": 239,
+    "nameEn": "Elekid",
+    "nameFr": "Élekid",
+    "nameDe": "Elekid",
+    "nameJa": "Erekiddo",
+    "generation": 2
+  },
+  {
+    "id": 240,
+    "nameEn": "Magby",
+    "nameFr": "Magby",
+    "nameDe": "Magby",
+    "nameJa": "Bubii",
+    "generation": 2
+  },
+  {
+    "id": 241,
+    "nameEn": "Miltank",
+    "nameFr": "Écrémeuh",
+    "nameDe": "Miltank",
+    "nameJa": "Mirutanku",
+    "generation": 2
+  },
+  {
+    "id": 242,
+    "nameEn": "Blissey",
+    "nameFr": "Leuphorie",
+    "nameDe": "Heiteira",
+    "nameJa": "Hapinasu",
+    "generation": 2
+  },
+  {
+    "id": 243,
+    "nameEn": "Raikou",
+    "nameFr": "Raikou",
+    "nameDe": "Raikou",
+    "nameJa": "Raikou",
+    "generation": 2
+  },
+  {
+    "id": 244,
+    "nameEn": "Entei",
+    "nameFr": "Entei",
+    "nameDe": "Entei",
+    "nameJa": "Entei",
+    "generation": 2
+  },
+  {
+    "id": 245,
+    "nameEn": "Suicune",
+    "nameFr": "Suicune",
+    "nameDe": "Suicune",
+    "nameJa": "Suikun",
+    "generation": 2
+  },
+  {
+    "id": 246,
+    "nameEn": "Larvitar",
+    "nameFr": "Embrylex",
+    "nameDe": "Larvitar",
+    "nameJa": "Yoogirasu",
+    "generation": 2
+  },
+  {
+    "id": 247,
+    "nameEn": "Pupitar",
+    "nameFr": "Ymphect",
+    "nameDe": "Pupitar",
+    "nameJa": "Sanagirasu",
+    "generation": 2
+  },
+  {
+    "id": 248,
+    "nameEn": "Tyranitar",
+    "nameFr": "Tyranocif",
+    "nameDe": "Despotar",
+    "nameJa": "Bangirasu",
+    "generation": 2
+  },
+  {
+    "id": 249,
+    "nameEn": "Lugia",
+    "nameFr": "Lugia",
+    "nameDe": "Lugia",
+    "nameJa": "Rugia",
+    "generation": 2
+  },
+  {
+    "id": 250,
+    "nameEn": "Ho-Oh",
+    "nameFr": "Ho-Oh",
+    "nameDe": "Ho-Oh",
+    "nameJa": "Houou",
+    "generation": 2
+  },
+  {
+    "id": 251,
+    "nameEn": "Celebi",
+    "nameFr": "Celebi",
+    "nameDe": "Celebi",
+    "nameJa": "Serebii",
+    "generation": 2
+  },
+  {
+    "id": 252,
+    "nameEn": "Treecko",
+    "nameFr": "Arcko",
+    "nameDe": "Geckarbor",
+    "nameJa": "Kimori",
+    "generation": 3
+  },
+  {
+    "id": 253,
+    "nameEn": "Grovyle",
+    "nameFr": "Massko",
+    "nameDe": "Reptain",
+    "nameJa": "Juputoru",
+    "generation": 3
+  },
+  {
+    "id": 254,
+    "nameEn": "Sceptile",
+    "nameFr": "Jungko",
+    "nameDe": "Gewaldro",
+    "nameJa": "Jukain",
+    "generation": 3
+  },
+  {
+    "id": 255,
+    "nameEn": "Torchic",
+    "nameFr": "Poussifeu",
+    "nameDe": "Flemmli",
+    "nameJa": "Achamo",
+    "generation": 3
+  },
+  {
+    "id": 256,
+    "nameEn": "Combusken",
+    "nameFr": "Galifeu",
+    "nameDe": "Jungglut",
+    "nameJa": "Wakashamo",
+    "generation": 3
+  },
+  {
+    "id": 257,
+    "nameEn": "Blaziken",
+    "nameFr": "Braségali",
+    "nameDe": "Lohgock",
+    "nameJa": "Bashaamo",
+    "generation": 3
+  },
+  {
+    "id": 258,
+    "nameEn": "Mudkip",
+    "nameFr": "Gobou",
+    "nameDe": "Hydropi",
+    "nameJa": "Mizugorou",
+    "generation": 3
+  },
+  {
+    "id": 259,
+    "nameEn": "Marshtomp",
+    "nameFr": "Flobio",
+    "nameDe": "Moorabbel",
+    "nameJa": "Numakuroo",
+    "generation": 3
+  },
+  {
+    "id": 260,
+    "nameEn": "Swampert",
+    "nameFr": "Laggron",
+    "nameDe": "Sumpex",
+    "nameJa": "Raguraaji",
+    "generation": 3
+  },
+  {
+    "id": 261,
+    "nameEn": "Poochyena",
+    "nameFr": "Medhyèna",
+    "nameDe": "Fiffyen",
+    "nameJa": "Pochiena",
+    "generation": 3
+  },
+  {
+    "id": 262,
+    "nameEn": "Mightyena",
+    "nameFr": "Grahyèna",
+    "nameDe": "Magnayen",
+    "nameJa": "Guraena",
+    "generation": 3
+  },
+  {
+    "id": 263,
+    "nameEn": "Zigzagoon",
+    "nameFr": "Zigzaton",
+    "nameDe": "Zigzachs",
+    "nameJa": "Jiguzaguma",
+    "generation": 3
+  },
+  {
+    "id": 264,
+    "nameEn": "Linoone",
+    "nameFr": "Linéon",
+    "nameDe": "Geradaks",
+    "nameJa": "Massuguma",
+    "generation": 3
+  },
+  {
+    "id": 265,
+    "nameEn": "Wurmple",
+    "nameFr": "Chenipotte",
+    "nameDe": "Waumpel",
+    "nameJa": "Kemusso",
+    "generation": 3
+  },
+  {
+    "id": 266,
+    "nameEn": "Silcoon",
+    "nameFr": "Armulys",
+    "nameDe": "Schaloko",
+    "nameJa": "Karasarisu",
+    "generation": 3
+  },
+  {
+    "id": 267,
+    "nameEn": "Beautifly",
+    "nameFr": "Charmillon",
+    "nameDe": "Papinella",
+    "nameJa": "Agehanto",
+    "generation": 3
+  },
+  {
+    "id": 268,
+    "nameEn": "Cascoon",
+    "nameFr": "Blindalys",
+    "nameDe": "Panekon",
+    "nameJa": "Mayurudo",
+    "generation": 3
+  },
+  {
+    "id": 269,
+    "nameEn": "Dustox",
+    "nameFr": "Papinox",
+    "nameDe": "Pudox",
+    "nameJa": "Dokukeiru",
+    "generation": 3
+  },
+  {
+    "id": 270,
+    "nameEn": "Lotad",
+    "nameFr": "Nénupiot",
+    "nameDe": "Loturzel",
+    "nameJa": "Hasuboo",
+    "generation": 3
+  },
+  {
+    "id": 271,
+    "nameEn": "Lombre",
+    "nameFr": "Lombre",
+    "nameDe": "Lombrero",
+    "nameJa": "Hasuburero",
+    "generation": 3
+  },
+  {
+    "id": 272,
+    "nameEn": "Ludicolo",
+    "nameFr": "Ludicolo",
+    "nameDe": "Kappalores",
+    "nameJa": "Runpappa",
+    "generation": 3
+  },
+  {
+    "id": 273,
+    "nameEn": "Seedot",
+    "nameFr": "Grainipiot",
+    "nameDe": "Samurzel",
+    "nameJa": "Taneboo",
+    "generation": 3
+  },
+  {
+    "id": 274,
+    "nameEn": "Nuzleaf",
+    "nameFr": "Pifeuil",
+    "nameDe": "Blanas",
+    "nameJa": "Konohana",
+    "generation": 3
+  },
+  {
+    "id": 275,
+    "nameEn": "Shiftry",
+    "nameFr": "Tengalice",
+    "nameDe": "Tengulist",
+    "nameJa": "Daatengu",
+    "generation": 3
+  },
+  {
+    "id": 276,
+    "nameEn": "Taillow",
+    "nameFr": "Nirondelle",
+    "nameDe": "Schwalbini",
+    "nameJa": "Subame",
+    "generation": 3
+  },
+  {
+    "id": 277,
+    "nameEn": "Swellow",
+    "nameFr": "Hélédelle",
+    "nameDe": "Schwalboss",
+    "nameJa": "Oosubame",
+    "generation": 3
+  },
+  {
+    "id": 278,
+    "nameEn": "Wingull",
+    "nameFr": "Goélise",
+    "nameDe": "Wingull",
+    "nameJa": "Kyamome",
+    "generation": 3
+  },
+  {
+    "id": 279,
+    "nameEn": "Pelipper",
+    "nameFr": "Bekipan",
+    "nameDe": "Pelipper",
+    "nameJa": "Perippaa",
+    "generation": 3
+  },
+  {
+    "id": 280,
+    "nameEn": "Ralts",
+    "nameFr": "Tarsal",
+    "nameDe": "Trasla",
+    "nameJa": "Rarutosu",
+    "generation": 3
+  },
+  {
+    "id": 281,
+    "nameEn": "Kirlia",
+    "nameFr": "Kirlia",
+    "nameDe": "Kirlia",
+    "nameJa": "Kiruria",
+    "generation": 3
+  },
+  {
+    "id": 282,
+    "nameEn": "Gardevoir",
+    "nameFr": "Gardevoir",
+    "nameDe": "Guardevoir",
+    "nameJa": "Saanaito",
+    "generation": 3
+  },
+  {
+    "id": 283,
+    "nameEn": "Surskit",
+    "nameFr": "Arakdo",
+    "nameDe": "Gehweiher",
+    "nameJa": "Ametama",
+    "generation": 3
+  },
+  {
+    "id": 284,
+    "nameEn": "Masquerain",
+    "nameFr": "Maskadra",
+    "nameDe": "Maskeregen",
+    "nameJa": "Amemoosu",
+    "generation": 3
+  },
+  {
+    "id": 285,
+    "nameEn": "Shroomish",
+    "nameFr": "Balignon",
+    "nameDe": "Knilz",
+    "nameJa": "Kinokoko",
+    "generation": 3
+  },
+  {
+    "id": 286,
+    "nameEn": "Breloom",
+    "nameFr": "Chapignon",
+    "nameDe": "Kapilz",
+    "nameJa": "Kinogassa",
+    "generation": 3
+  },
+  {
+    "id": 287,
+    "nameEn": "Slakoth",
+    "nameFr": "Parecool",
+    "nameDe": "Bummelz",
+    "nameJa": "Namakero",
+    "generation": 3
+  },
+  {
+    "id": 288,
+    "nameEn": "Vigoroth",
+    "nameFr": "Vigoroth",
+    "nameDe": "Muntier",
+    "nameJa": "Yarukimono",
+    "generation": 3
+  },
+  {
+    "id": 289,
+    "nameEn": "Slaking",
+    "nameFr": "Monaflèmit",
+    "nameDe": "Letarking",
+    "nameJa": "Kekkingu",
+    "generation": 3
+  },
+  {
+    "id": 290,
+    "nameEn": "Nincada",
+    "nameFr": "Ningale",
+    "nameDe": "Nincada",
+    "nameJa": "Tsuchinin",
+    "generation": 3
+  },
+  {
+    "id": 291,
+    "nameEn": "Ninjask",
+    "nameFr": "Ninjask",
+    "nameDe": "Ninjask",
+    "nameJa": "Tekkanin",
+    "generation": 3
+  },
+  {
+    "id": 292,
+    "nameEn": "Shedinja",
+    "nameFr": "Munja",
+    "nameDe": "Ninjatom",
+    "nameJa": "Nukenin",
+    "generation": 3
+  },
+  {
+    "id": 293,
+    "nameEn": "Whismur",
+    "nameFr": "Chuchmur",
+    "nameDe": "Flurmel",
+    "nameJa": "Gonyonyo",
+    "generation": 3
+  },
+  {
+    "id": 294,
+    "nameEn": "Loudred",
+    "nameFr": "Ramboum",
+    "nameDe": "Krakeelo",
+    "nameJa": "Dogoomu",
+    "generation": 3
+  },
+  {
+    "id": 295,
+    "nameEn": "Exploud",
+    "nameFr": "Brouhabam",
+    "nameDe": "Krawumms",
+    "nameJa": "Bakuongu",
+    "generation": 3
+  },
+  {
+    "id": 296,
+    "nameEn": "Makuhita",
+    "nameFr": "Makuhita",
+    "nameDe": "Makuhita",
+    "nameJa": "Makunoshita",
+    "generation": 3
+  },
+  {
+    "id": 297,
+    "nameEn": "Hariyama",
+    "nameFr": "Hariyama",
+    "nameDe": "Hariyama",
+    "nameJa": "Hariteyama",
+    "generation": 3
+  },
+  {
+    "id": 298,
+    "nameEn": "Azurill",
+    "nameFr": "Azurill",
+    "nameDe": "Azurill",
+    "nameJa": "Ruriri",
+    "generation": 3
+  },
+  {
+    "id": 299,
+    "nameEn": "Nosepass",
+    "nameFr": "Tarinor",
+    "nameDe": "Nasgnet",
+    "nameJa": "Nozupasu",
+    "generation": 3
+  },
+  {
+    "id": 300,
+    "nameEn": "Skitty",
+    "nameFr": "Skitty",
+    "nameDe": "Eneco",
+    "nameJa": "Eneko",
+    "generation": 3
+  },
+  {
+    "id": 301,
+    "nameEn": "Delcatty",
+    "nameFr": "Delcatty",
+    "nameDe": "Enekoro",
+    "nameJa": "Enekororo",
+    "generation": 3
+  },
+  {
+    "id": 302,
+    "nameEn": "Sableye",
+    "nameFr": "Ténéfix",
+    "nameDe": "Zobiris",
+    "nameJa": "Yamirami",
+    "generation": 3
+  },
+  {
+    "id": 303,
+    "nameEn": "Mawile",
+    "nameFr": "Mysdibule",
+    "nameDe": "Flunkifer",
+    "nameJa": "Kuchiito",
+    "generation": 3
+  },
+  {
+    "id": 304,
+    "nameEn": "Aron",
+    "nameFr": "Galekid",
+    "nameDe": "Stollunior",
+    "nameJa": "Kokodora",
+    "generation": 3
+  },
+  {
+    "id": 305,
+    "nameEn": "Lairon",
+    "nameFr": "Galegon",
+    "nameDe": "Stollrak",
+    "nameJa": "Kodora",
+    "generation": 3
+  },
+  {
+    "id": 306,
+    "nameEn": "Aggron",
+    "nameFr": "Galeking",
+    "nameDe": "Stolloss",
+    "nameJa": "Bosugodora",
+    "generation": 3
+  },
+  {
+    "id": 307,
+    "nameEn": "Meditite",
+    "nameFr": "Méditikka",
+    "nameDe": "Meditie",
+    "nameJa": "Asanan",
+    "generation": 3
+  },
+  {
+    "id": 308,
+    "nameEn": "Medicham",
+    "nameFr": "Charmina",
+    "nameDe": "Meditalis",
+    "nameJa": "Chaaremu",
+    "generation": 3
+  },
+  {
+    "id": 309,
+    "nameEn": "Electrike",
+    "nameFr": "Dynavolt",
+    "nameDe": "Frizelbliz",
+    "nameJa": "Rakurai",
+    "generation": 3
+  },
+  {
+    "id": 310,
+    "nameEn": "Manectric",
+    "nameFr": "Élecsprint",
+    "nameDe": "Voltenso",
+    "nameJa": "Raiboruto",
+    "generation": 3
+  },
+  {
+    "id": 311,
+    "nameEn": "Plusle",
+    "nameFr": "Posipi",
+    "nameDe": "Plusle",
+    "nameJa": "Purasuru",
+    "generation": 3
+  },
+  {
+    "id": 312,
+    "nameEn": "Minun",
+    "nameFr": "Négapi",
+    "nameDe": "Minun",
+    "nameJa": "Mainan",
+    "generation": 3
+  },
+  {
+    "id": 313,
+    "nameEn": "Volbeat",
+    "nameFr": "Muciole",
+    "nameDe": "Volbeat",
+    "nameJa": "Barubiito",
+    "generation": 3
+  },
+  {
+    "id": 314,
+    "nameEn": "Illumise",
+    "nameFr": "Lumivole",
+    "nameDe": "Illumise",
+    "nameJa": "Irumiize",
+    "generation": 3
+  },
+  {
+    "id": 315,
+    "nameEn": "Roselia",
+    "nameFr": "Rosélia",
+    "nameDe": "Roselia",
+    "nameJa": "Rozeria",
+    "generation": 3
+  },
+  {
+    "id": 316,
+    "nameEn": "Gulpin",
+    "nameFr": "Gloupti",
+    "nameDe": "Schluppuck",
+    "nameJa": "Gokurin",
+    "generation": 3
+  },
+  {
+    "id": 317,
+    "nameEn": "Swalot",
+    "nameFr": "Avaltout",
+    "nameDe": "Schlukwech",
+    "nameJa": "Marunoomu",
+    "generation": 3
+  },
+  {
+    "id": 318,
+    "nameEn": "Carvanha",
+    "nameFr": "Carvanha",
+    "nameDe": "Kanivanha",
+    "nameJa": "Kibania",
+    "generation": 3
+  },
+  {
+    "id": 319,
+    "nameEn": "Sharpedo",
+    "nameFr": "Sharpedo",
+    "nameDe": "Tohaido",
+    "nameJa": "Samehadaa",
+    "generation": 3
+  },
+  {
+    "id": 320,
+    "nameEn": "Wailmer",
+    "nameFr": "Wailmer",
+    "nameDe": "Wailmer",
+    "nameJa": "Hoeruko",
+    "generation": 3
+  },
+  {
+    "id": 321,
+    "nameEn": "Wailord",
+    "nameFr": "Wailord",
+    "nameDe": "Wailord",
+    "nameJa": "Hoeruoo",
+    "generation": 3
+  },
+  {
+    "id": 322,
+    "nameEn": "Numel",
+    "nameFr": "Chamallot",
+    "nameDe": "Camaub",
+    "nameJa": "Donmeru",
+    "generation": 3
+  },
+  {
+    "id": 323,
+    "nameEn": "Camerupt",
+    "nameFr": "Camérupt",
+    "nameDe": "Camerupt",
+    "nameJa": "Bakuuda",
+    "generation": 3
+  },
+  {
+    "id": 324,
+    "nameEn": "Torkoal",
+    "nameFr": "Chartor",
+    "nameDe": "Qurtel",
+    "nameJa": "Kootasu",
+    "generation": 3
+  },
+  {
+    "id": 325,
+    "nameEn": "Spoink",
+    "nameFr": "Spoink",
+    "nameDe": "Spoink",
+    "nameJa": "Banebuu",
+    "generation": 3
+  },
+  {
+    "id": 326,
+    "nameEn": "Grumpig",
+    "nameFr": "Groret",
+    "nameDe": "Groink",
+    "nameJa": "Buupiggu",
+    "generation": 3
+  },
+  {
+    "id": 327,
+    "nameEn": "Spinda",
+    "nameFr": "Spinda",
+    "nameDe": "Pandir",
+    "nameJa": "Pacchiiru",
+    "generation": 3
+  },
+  {
+    "id": 328,
+    "nameEn": "Trapinch",
+    "nameFr": "Kraknoix",
+    "nameDe": "Knacklion",
+    "nameJa": "Nakkuraa",
+    "generation": 3
+  },
+  {
+    "id": 329,
+    "nameEn": "Vibrava",
+    "nameFr": "Vibraninf",
+    "nameDe": "Vibrava",
+    "nameJa": "Biburaaba",
+    "generation": 3
+  },
+  {
+    "id": 330,
+    "nameEn": "Flygon",
+    "nameFr": "Libégon",
+    "nameDe": "Libelldra",
+    "nameJa": "Furaigon",
+    "generation": 3
+  },
+  {
+    "id": 331,
+    "nameEn": "Cacnea",
+    "nameFr": "Cacnea",
+    "nameDe": "Tuska",
+    "nameJa": "Sabonea",
+    "generation": 3
+  },
+  {
+    "id": 332,
+    "nameEn": "Cacturne",
+    "nameFr": "Cacturne",
+    "nameDe": "Noktuska",
+    "nameJa": "Nokutasu",
+    "generation": 3
+  },
+  {
+    "id": 333,
+    "nameEn": "Swablu",
+    "nameFr": "Tylton",
+    "nameDe": "Wablu",
+    "nameJa": "Chirutto",
+    "generation": 3
+  },
+  {
+    "id": 334,
+    "nameEn": "Altaria",
+    "nameFr": "Altaria",
+    "nameDe": "Altaria",
+    "nameJa": "Chirutarisu",
+    "generation": 3
+  },
+  {
+    "id": 335,
+    "nameEn": "Zangoose",
+    "nameFr": "Mangriff",
+    "nameDe": "Sengo",
+    "nameJa": "Zanguusu",
+    "generation": 3
+  },
+  {
+    "id": 336,
+    "nameEn": "Seviper",
+    "nameFr": "Séviper",
+    "nameDe": "Vipitis",
+    "nameJa": "Habuneeku",
+    "generation": 3
+  },
+  {
+    "id": 337,
+    "nameEn": "Lunatone",
+    "nameFr": "Séléroc",
+    "nameDe": "Lunastein",
+    "nameJa": "Runatoon",
+    "generation": 3
+  },
+  {
+    "id": 338,
+    "nameEn": "Solrock",
+    "nameFr": "Solaroc",
+    "nameDe": "Sonnfel",
+    "nameJa": "Sorurokku",
+    "generation": 3
+  },
+  {
+    "id": 339,
+    "nameEn": "Barboach",
+    "nameFr": "Barloche",
+    "nameDe": "Schmerbe",
+    "nameJa": "Dojocchi",
+    "generation": 3
+  },
+  {
+    "id": 340,
+    "nameEn": "Whiscash",
+    "nameFr": "Barbicha",
+    "nameDe": "Welsar",
+    "nameJa": "Namazun",
+    "generation": 3
+  },
+  {
+    "id": 341,
+    "nameEn": "Corphish",
+    "nameFr": "Écrapince",
+    "nameDe": "Krebscorps",
+    "nameJa": "Heigani",
+    "generation": 3
+  },
+  {
+    "id": 342,
+    "nameEn": "Crawdaunt",
+    "nameFr": "Colhomard",
+    "nameDe": "Krebutack",
+    "nameJa": "Shizarigaa",
+    "generation": 3
+  },
+  {
+    "id": 343,
+    "nameEn": "Baltoy",
+    "nameFr": "Balbuto",
+    "nameDe": "Puppance",
+    "nameJa": "Yajiron",
+    "generation": 3
+  },
+  {
+    "id": 344,
+    "nameEn": "Claydol",
+    "nameFr": "Kaorine",
+    "nameDe": "Lepumentas",
+    "nameJa": "Nendooru",
+    "generation": 3
+  },
+  {
+    "id": 345,
+    "nameEn": "Lileep",
+    "nameFr": "Lilia",
+    "nameDe": "Liliep",
+    "nameJa": "Ririira",
+    "generation": 3
+  },
+  {
+    "id": 346,
+    "nameEn": "Cradily",
+    "nameFr": "Vacilys",
+    "nameDe": "Wielie",
+    "nameJa": "Yureidoru",
+    "generation": 3
+  },
+  {
+    "id": 347,
+    "nameEn": "Anorith",
+    "nameFr": "Anorith",
+    "nameDe": "Anorith",
+    "nameJa": "Anopusu",
+    "generation": 3
+  },
+  {
+    "id": 348,
+    "nameEn": "Armaldo",
+    "nameFr": "Armaldo",
+    "nameDe": "Armaldo",
+    "nameJa": "Aamarudo",
+    "generation": 3
+  },
+  {
+    "id": 349,
+    "nameEn": "Feebas",
+    "nameFr": "Barpau",
+    "nameDe": "Barschwa",
+    "nameJa": "Hinbasu",
+    "generation": 3
+  },
+  {
+    "id": 350,
+    "nameEn": "Milotic",
+    "nameFr": "Milobellus",
+    "nameDe": "Milotic",
+    "nameJa": "Mirokarosu",
+    "generation": 3
+  },
+  {
+    "id": 351,
+    "nameEn": "Castform",
+    "nameFr": "Morphéo",
+    "nameDe": "Formeo",
+    "nameJa": "Powarun",
+    "generation": 3
+  },
+  {
+    "id": 352,
+    "nameEn": "Kecleon",
+    "nameFr": "Kecleon",
+    "nameDe": "Kecleon",
+    "nameJa": "Kakureon",
+    "generation": 3
+  },
+  {
+    "id": 353,
+    "nameEn": "Shuppet",
+    "nameFr": "Polichombr",
+    "nameDe": "Shuppet",
+    "nameJa": "Kagebouzu",
+    "generation": 3
+  },
+  {
+    "id": 354,
+    "nameEn": "Banette",
+    "nameFr": "Branette",
+    "nameDe": "Banette",
+    "nameJa": "Jupetta",
+    "generation": 3
+  },
+  {
+    "id": 355,
+    "nameEn": "Duskull",
+    "nameFr": "Skelénox",
+    "nameDe": "Zwirrlicht",
+    "nameJa": "Yomawaru",
+    "generation": 3
+  },
+  {
+    "id": 356,
+    "nameEn": "Dusclops",
+    "nameFr": "Téraclope",
+    "nameDe": "Zwirrklop",
+    "nameJa": "Samayooru",
+    "generation": 3
+  },
+  {
+    "id": 357,
+    "nameEn": "Tropius",
+    "nameFr": "Tropius",
+    "nameDe": "Tropius",
+    "nameJa": "Toropiusu",
+    "generation": 3
+  },
+  {
+    "id": 358,
+    "nameEn": "Chimecho",
+    "nameFr": "Éoko",
+    "nameDe": "Palimpalim",
+    "nameJa": "Chiriin",
+    "generation": 3
+  },
+  {
+    "id": 359,
+    "nameEn": "Absol",
+    "nameFr": "Absol",
+    "nameDe": "Absol",
+    "nameJa": "Abusoru",
+    "generation": 3
+  },
+  {
+    "id": 360,
+    "nameEn": "Wynaut",
+    "nameFr": "Okéoké",
+    "nameDe": "Isso",
+    "nameJa": "Soonano",
+    "generation": 3
+  },
+  {
+    "id": 361,
+    "nameEn": "Snorunt",
+    "nameFr": "Stalgamin",
+    "nameDe": "Schneppke",
+    "nameJa": "Yukiwarashi",
+    "generation": 3
+  },
+  {
+    "id": 362,
+    "nameEn": "Glalie",
+    "nameFr": "Oniglali",
+    "nameDe": "Firnontor",
+    "nameJa": "Onigoori",
+    "generation": 3
+  },
+  {
+    "id": 363,
+    "nameEn": "Spheal",
+    "nameFr": "Obalie",
+    "nameDe": "Seemops",
+    "nameJa": "Tamazarashi",
+    "generation": 3
+  },
+  {
+    "id": 364,
+    "nameEn": "Sealeo",
+    "nameFr": "Phogleur",
+    "nameDe": "Seejong",
+    "nameJa": "Todoguraa",
+    "generation": 3
+  },
+  {
+    "id": 365,
+    "nameEn": "Walrein",
+    "nameFr": "Kaimorse",
+    "nameDe": "Walraisa",
+    "nameJa": "Todozeruga",
+    "generation": 3
+  },
+  {
+    "id": 366,
+    "nameEn": "Clamperl",
+    "nameFr": "Coquiperl",
+    "nameDe": "Perlu",
+    "nameJa": "Paaruru",
+    "generation": 3
+  },
+  {
+    "id": 367,
+    "nameEn": "Huntail",
+    "nameFr": "Serpang",
+    "nameDe": "Aalabyss",
+    "nameJa": "Hanteeru",
+    "generation": 3
+  },
+  {
+    "id": 368,
+    "nameEn": "Gorebyss",
+    "nameFr": "Rosabyss",
+    "nameDe": "Saganabyss",
+    "nameJa": "Sakurabisu",
+    "generation": 3
+  },
+  {
+    "id": 369,
+    "nameEn": "Relicanth",
+    "nameFr": "Relicanth",
+    "nameDe": "Relicanth",
+    "nameJa": "Jiiransu",
+    "generation": 3
+  },
+  {
+    "id": 370,
+    "nameEn": "Luvdisc",
+    "nameFr": "Lovdisc",
+    "nameDe": "Liebiskus",
+    "nameJa": "Rabukasu",
+    "generation": 3
+  },
+  {
+    "id": 371,
+    "nameEn": "Bagon",
+    "nameFr": "Draby",
+    "nameDe": "Kindwurm",
+    "nameJa": "Tatsubei",
+    "generation": 3
+  },
+  {
+    "id": 372,
+    "nameEn": "Shelgon",
+    "nameFr": "Drackhaus",
+    "nameDe": "Draschel",
+    "nameJa": "Komoruu",
+    "generation": 3
+  },
+  {
+    "id": 373,
+    "nameEn": "Salamence",
+    "nameFr": "Drattak",
+    "nameDe": "Brutalanda",
+    "nameJa": "Boomanda",
+    "generation": 3
+  },
+  {
+    "id": 374,
+    "nameEn": "Beldum",
+    "nameFr": "Terhal",
+    "nameDe": "Tanhel",
+    "nameJa": "Danbaru",
+    "generation": 3
+  },
+  {
+    "id": 375,
+    "nameEn": "Metang",
+    "nameFr": "Métang",
+    "nameDe": "Metang",
+    "nameJa": "Metangu",
+    "generation": 3
+  },
+  {
+    "id": 376,
+    "nameEn": "Metagross",
+    "nameFr": "Métalosse",
+    "nameDe": "Metagross",
+    "nameJa": "Metagurosu",
+    "generation": 3
+  },
+  {
+    "id": 377,
+    "nameEn": "Regirock",
+    "nameFr": "Regirock",
+    "nameDe": "Regirock",
+    "nameJa": "Rejirokku",
+    "generation": 3
+  },
+  {
+    "id": 378,
+    "nameEn": "Regice",
+    "nameFr": "Regice",
+    "nameDe": "Regice",
+    "nameJa": "Rejiaisu",
+    "generation": 3
+  },
+  {
+    "id": 379,
+    "nameEn": "Registeel",
+    "nameFr": "Registeel",
+    "nameDe": "Registeel",
+    "nameJa": "Rejisuchiru",
+    "generation": 3
+  },
+  {
+    "id": 380,
+    "nameEn": "Latias",
+    "nameFr": "Latias",
+    "nameDe": "Latias",
+    "nameJa": "Ratiasu",
+    "generation": 3
+  },
+  {
+    "id": 381,
+    "nameEn": "Latios",
+    "nameFr": "Latios",
+    "nameDe": "Latios",
+    "nameJa": "Ratiosu",
+    "generation": 3
+  },
+  {
+    "id": 382,
+    "nameEn": "Kyogre",
+    "nameFr": "Kyogre",
+    "nameDe": "Kyogre",
+    "nameJa": "Kaiooga",
+    "generation": 3
+  },
+  {
+    "id": 383,
+    "nameEn": "Groudon",
+    "nameFr": "Groudon",
+    "nameDe": "Groudon",
+    "nameJa": "Guraadon",
+    "generation": 3
+  },
+  {
+    "id": 384,
+    "nameEn": "Rayquaza",
+    "nameFr": "Rayquaza",
+    "nameDe": "Rayquaza",
+    "nameJa": "Rekkuuza",
+    "generation": 3
+  },
+  {
+    "id": 385,
+    "nameEn": "Jirachi",
+    "nameFr": "Jirachi",
+    "nameDe": "Jirachi",
+    "nameJa": "Jiraachi",
+    "generation": 3
+  },
+  {
+    "id": 386,
+    "nameEn": "Deoxys",
+    "nameFr": "Deoxys",
+    "nameDe": "Deoxys",
+    "nameJa": "Deokishisu",
+    "generation": 3
+  },
+  {
+    "id": 387,
+    "nameEn": "Turtwig",
+    "nameFr": "Tortipouss",
+    "nameDe": "Chelast",
+    "nameJa": "Naetoru",
+    "generation": 4
+  },
+  {
+    "id": 388,
+    "nameEn": "Grotle",
+    "nameFr": "Boskara",
+    "nameDe": "Chelcarain",
+    "nameJa": "Hayashigame",
+    "generation": 4
+  },
+  {
+    "id": 389,
+    "nameEn": "Torterra",
+    "nameFr": "Torterra",
+    "nameDe": "Chelterrar",
+    "nameJa": "Dodaitosu",
+    "generation": 4
+  },
+  {
+    "id": 390,
+    "nameEn": "Chimchar",
+    "nameFr": "Ouisticram",
+    "nameDe": "Panflam",
+    "nameJa": "Hikozaru",
+    "generation": 4
+  },
+  {
+    "id": 391,
+    "nameEn": "Monferno",
+    "nameFr": "Chimpenfeu",
+    "nameDe": "Panpyro",
+    "nameJa": "Moukazaru",
+    "generation": 4
+  },
+  {
+    "id": 392,
+    "nameEn": "Infernape",
+    "nameFr": "Simiabraz",
+    "nameDe": "Panferno",
+    "nameJa": "Goukazaru",
+    "generation": 4
+  },
+  {
+    "id": 393,
+    "nameEn": "Piplup",
+    "nameFr": "Tiplouf",
+    "nameDe": "Plinfa",
+    "nameJa": "Pocchama",
+    "generation": 4
+  },
+  {
+    "id": 394,
+    "nameEn": "Prinplup",
+    "nameFr": "Prinplouf",
+    "nameDe": "Pliprin",
+    "nameJa": "Pottaishi",
+    "generation": 4
+  },
+  {
+    "id": 395,
+    "nameEn": "Empoleon",
+    "nameFr": "Pingoléon",
+    "nameDe": "Impoleon",
+    "nameJa": "Enperuto",
+    "generation": 4
+  },
+  {
+    "id": 396,
+    "nameEn": "Starly",
+    "nameFr": "Étourmi",
+    "nameDe": "Staralili",
+    "nameJa": "Mukkuru",
+    "generation": 4
+  },
+  {
+    "id": 397,
+    "nameEn": "Staravia",
+    "nameFr": "Étourvol",
+    "nameDe": "Staravia",
+    "nameJa": "Mukubaado",
+    "generation": 4
+  },
+  {
+    "id": 398,
+    "nameEn": "Staraptor",
+    "nameFr": "Étouraptor",
+    "nameDe": "Staraptor",
+    "nameJa": "Mukuhooku",
+    "generation": 4
+  },
+  {
+    "id": 399,
+    "nameEn": "Bidoof",
+    "nameFr": "Keunotor",
+    "nameDe": "Bidiza",
+    "nameJa": "Bippa",
+    "generation": 4
+  },
+  {
+    "id": 400,
+    "nameEn": "Bibarel",
+    "nameFr": "Castorno",
+    "nameDe": "Bidifas",
+    "nameJa": "Biidaru",
+    "generation": 4
+  },
+  {
+    "id": 401,
+    "nameEn": "Kricketot",
+    "nameFr": "Crikzik",
+    "nameDe": "Zirpurze",
+    "nameJa": "Korobooshi",
+    "generation": 4
+  },
+  {
+    "id": 402,
+    "nameEn": "Kricketune",
+    "nameFr": "Mélokrik",
+    "nameDe": "Zirpeise",
+    "nameJa": "Korotokku",
+    "generation": 4
+  },
+  {
+    "id": 403,
+    "nameEn": "Shinx",
+    "nameFr": "Lixy",
+    "nameDe": "Sheinux",
+    "nameJa": "Korinku",
+    "generation": 4
+  },
+  {
+    "id": 404,
+    "nameEn": "Luxio",
+    "nameFr": "Luxio",
+    "nameDe": "Luxio",
+    "nameJa": "Rukushio",
+    "generation": 4
+  },
+  {
+    "id": 405,
+    "nameEn": "Luxray",
+    "nameFr": "Luxray",
+    "nameDe": "Luxtra",
+    "nameJa": "Rentoraa",
+    "generation": 4
+  },
+  {
+    "id": 406,
+    "nameEn": "Budew",
+    "nameFr": "Rozbouton",
+    "nameDe": "Knospi",
+    "nameJa": "Subomii",
+    "generation": 4
+  },
+  {
+    "id": 407,
+    "nameEn": "Roserade",
+    "nameFr": "Roserade",
+    "nameDe": "Roserade",
+    "nameJa": "Rozureido",
+    "generation": 4
+  },
+  {
+    "id": 408,
+    "nameEn": "Cranidos",
+    "nameFr": "Kranidos",
+    "nameDe": "Koknodon",
+    "nameJa": "Zugaidosu",
+    "generation": 4
+  },
+  {
+    "id": 409,
+    "nameEn": "Rampardos",
+    "nameFr": "Charkos",
+    "nameDe": "Rameidon",
+    "nameJa": "Ramuparudo",
+    "generation": 4
+  },
+  {
+    "id": 410,
+    "nameEn": "Shieldon",
+    "nameFr": "Dinoclier",
+    "nameDe": "Schilterus",
+    "nameJa": "Tatetopusu",
+    "generation": 4
+  },
+  {
+    "id": 411,
+    "nameEn": "Bastiodon",
+    "nameFr": "Bastiodon",
+    "nameDe": "Bollterus",
+    "nameJa": "Toridepusu",
+    "generation": 4
+  },
+  {
+    "id": 412,
+    "nameEn": "Burmy",
+    "nameFr": "Cheniti",
+    "nameDe": "Burmy",
+    "nameJa": "Minomucchi",
+    "generation": 4
+  },
+  {
+    "id": 413,
+    "nameEn": "Wormadam",
+    "nameFr": "Cheniselle",
+    "nameDe": "Burmadame",
+    "nameJa": "Minomadamu",
+    "generation": 4
+  },
+  {
+    "id": 414,
+    "nameEn": "Mothim",
+    "nameFr": "Papilord",
+    "nameDe": "Moterpel",
+    "nameJa": "Gaameiru",
+    "generation": 4
+  },
+  {
+    "id": 415,
+    "nameEn": "Combee",
+    "nameFr": "Apitrini",
+    "nameDe": "Wadribie",
+    "nameJa": "Mitsuhanii",
+    "generation": 4
+  },
+  {
+    "id": 416,
+    "nameEn": "Vespiquen",
+    "nameFr": "Apireine",
+    "nameDe": "Honweisel",
+    "nameJa": "Biikuin",
+    "generation": 4
+  },
+  {
+    "id": 417,
+    "nameEn": "Pachirisu",
+    "nameFr": "Pachirisu",
+    "nameDe": "Pachirisu",
+    "nameJa": "Pachirisu",
+    "generation": 4
+  },
+  {
+    "id": 418,
+    "nameEn": "Buizel",
+    "nameFr": "Mustébouée",
+    "nameDe": "Bamelin",
+    "nameJa": "Buizeru",
+    "generation": 4
+  },
+  {
+    "id": 419,
+    "nameEn": "Floatzel",
+    "nameFr": "Mustéflott",
+    "nameDe": "Bojelin",
+    "nameJa": "Furoozeru",
+    "generation": 4
+  },
+  {
+    "id": 420,
+    "nameEn": "Cherubi",
+    "nameFr": "Ceribou",
+    "nameDe": "Kikugi",
+    "nameJa": "Cherinbo",
+    "generation": 4
+  },
+  {
+    "id": 421,
+    "nameEn": "Cherrim",
+    "nameFr": "Ceriflor",
+    "nameDe": "Kinoso",
+    "nameJa": "Cherimu",
+    "generation": 4
+  },
+  {
+    "id": 422,
+    "nameEn": "Shellos",
+    "nameFr": "Sancoki",
+    "nameDe": "Schalellos",
+    "nameJa": "Karanakushi",
+    "generation": 4
+  },
+  {
+    "id": 423,
+    "nameEn": "Gastrodon",
+    "nameFr": "Tritosor",
+    "nameDe": "Gastrodon",
+    "nameJa": "Toritodon",
+    "generation": 4
+  },
+  {
+    "id": 424,
+    "nameEn": "Ambipom",
+    "nameFr": "Capidextre",
+    "nameDe": "Ambidiffel",
+    "nameJa": "Eteboosu",
+    "generation": 4
+  },
+  {
+    "id": 425,
+    "nameEn": "Drifloon",
+    "nameFr": "Baudrive",
+    "nameDe": "Driftlon",
+    "nameJa": "Fuwante",
+    "generation": 4
+  },
+  {
+    "id": 426,
+    "nameEn": "Drifblim",
+    "nameFr": "Grodrive",
+    "nameDe": "Drifzepeli",
+    "nameJa": "Fuwaraido",
+    "generation": 4
+  },
+  {
+    "id": 427,
+    "nameEn": "Buneary",
+    "nameFr": "Laporeille",
+    "nameDe": "Haspiror",
+    "nameJa": "Mimiroru",
+    "generation": 4
+  },
+  {
+    "id": 428,
+    "nameEn": "Lopunny",
+    "nameFr": "Lockpin",
+    "nameDe": "Schlapor",
+    "nameJa": "Mimiroppu",
+    "generation": 4
+  },
+  {
+    "id": 429,
+    "nameEn": "Mismagius",
+    "nameFr": "Magirêve",
+    "nameDe": "Traunmagil",
+    "nameJa": "Muumaaji",
+    "generation": 4
+  },
+  {
+    "id": 430,
+    "nameEn": "Honchkrow",
+    "nameFr": "Corboss",
+    "nameDe": "Kramshef",
+    "nameJa": "Donkarasu",
+    "generation": 4
+  },
+  {
+    "id": 431,
+    "nameEn": "Glameow",
+    "nameFr": "Chaglam",
+    "nameDe": "Charmian",
+    "nameJa": "Nyarumaa",
+    "generation": 4
+  },
+  {
+    "id": 432,
+    "nameEn": "Purugly",
+    "nameFr": "Chaffreux",
+    "nameDe": "Shnurgarst",
+    "nameJa": "Bunyatto",
+    "generation": 4
+  },
+  {
+    "id": 433,
+    "nameEn": "Chingling",
+    "nameFr": "Korillon",
+    "nameDe": "Klingplim",
+    "nameJa": "Riishan",
+    "generation": 4
+  },
+  {
+    "id": 434,
+    "nameEn": "Stunky",
+    "nameFr": "Moufouette",
+    "nameDe": "Skunkapuh",
+    "nameJa": "Sukanpuu",
+    "generation": 4
+  },
+  {
+    "id": 435,
+    "nameEn": "Skuntank",
+    "nameFr": "Moufflair",
+    "nameDe": "Skuntank",
+    "nameJa": "Sukatanku",
+    "generation": 4
+  },
+  {
+    "id": 436,
+    "nameEn": "Bronzor",
+    "nameFr": "Archéomire",
+    "nameDe": "Bronzel",
+    "nameJa": "Doomiraa",
+    "generation": 4
+  },
+  {
+    "id": 437,
+    "nameEn": "Bronzong",
+    "nameFr": "Archéodong",
+    "nameDe": "Bronzong",
+    "nameJa": "Dootakun",
+    "generation": 4
+  },
+  {
+    "id": 438,
+    "nameEn": "Bonsly",
+    "nameFr": "Manzaï",
+    "nameDe": "Mobai",
+    "nameJa": "Usohachi",
+    "generation": 4
+  },
+  {
+    "id": 439,
+    "nameEn": "Mime Jr.",
+    "nameFr": "Mime Jr.",
+    "nameDe": "Pantimimi",
+    "nameJa": "Manene",
+    "generation": 4
+  },
+  {
+    "id": 440,
+    "nameEn": "Happiny",
+    "nameFr": "Ptiravi",
+    "nameDe": "Wonneira",
+    "nameJa": "Pinpuku",
+    "generation": 4
+  },
+  {
+    "id": 441,
+    "nameEn": "Chatot",
+    "nameFr": "Pijako",
+    "nameDe": "Plaudagei",
+    "nameJa": "Perappu",
+    "generation": 4
+  },
+  {
+    "id": 442,
+    "nameEn": "Spiritomb",
+    "nameFr": "Spiritomb",
+    "nameDe": "Kryppuk",
+    "nameJa": "Mikaruge",
+    "generation": 4
+  },
+  {
+    "id": 443,
+    "nameEn": "Gible",
+    "nameFr": "Griknot",
+    "nameDe": "Kaumalat",
+    "nameJa": "Fukamaru",
+    "generation": 4
+  },
+  {
+    "id": 444,
+    "nameEn": "Gabite",
+    "nameFr": "Carmache",
+    "nameDe": "Knarksel",
+    "nameJa": "Gabaito",
+    "generation": 4
+  },
+  {
+    "id": 445,
+    "nameEn": "Garchomp",
+    "nameFr": "Carchacrok",
+    "nameDe": "Knakrack",
+    "nameJa": "Gaburiasu",
+    "generation": 4
+  },
+  {
+    "id": 446,
+    "nameEn": "Munchlax",
+    "nameFr": "Goinfrex",
+    "nameDe": "Mampfaxo",
+    "nameJa": "Gonbe",
+    "generation": 4
+  },
+  {
+    "id": 447,
+    "nameEn": "Riolu",
+    "nameFr": "Riolu",
+    "nameDe": "Riolu",
+    "nameJa": "Rioru",
+    "generation": 4
+  },
+  {
+    "id": 448,
+    "nameEn": "Lucario",
+    "nameFr": "Lucario",
+    "nameDe": "Lucario",
+    "nameJa": "Rukario",
+    "generation": 4
+  },
+  {
+    "id": 449,
+    "nameEn": "Hippopotas",
+    "nameFr": "Hippopotas",
+    "nameDe": "Hippopotas",
+    "nameJa": "Hipopotasu",
+    "generation": 4
+  },
+  {
+    "id": 450,
+    "nameEn": "Hippowdon",
+    "nameFr": "Hippodocus",
+    "nameDe": "Hippoterus",
+    "nameJa": "Kabarudon",
+    "generation": 4
+  },
+  {
+    "id": 451,
+    "nameEn": "Skorupi",
+    "nameFr": "Rapion",
+    "nameDe": "Pionskora",
+    "nameJa": "Sukorupi",
+    "generation": 4
+  },
+  {
+    "id": 452,
+    "nameEn": "Drapion",
+    "nameFr": "Drascore",
+    "nameDe": "Piondragi",
+    "nameJa": "Dorapion",
+    "generation": 4
+  },
+  {
+    "id": 453,
+    "nameEn": "Croagunk",
+    "nameFr": "Cradopaud",
+    "nameDe": "Glibunkel",
+    "nameJa": "Guregguru",
+    "generation": 4
+  },
+  {
+    "id": 454,
+    "nameEn": "Toxicroak",
+    "nameFr": "Coatox",
+    "nameDe": "Toxiquak",
+    "nameJa": "Dokuroggu",
+    "generation": 4
+  },
+  {
+    "id": 455,
+    "nameEn": "Carnivine",
+    "nameFr": "Vortente",
+    "nameDe": "Venuflibis",
+    "nameJa": "Masukippa",
+    "generation": 4
+  },
+  {
+    "id": 456,
+    "nameEn": "Finneon",
+    "nameFr": "Écayon",
+    "nameDe": "Finneon",
+    "nameJa": "Keikouo",
+    "generation": 4
+  },
+  {
+    "id": 457,
+    "nameEn": "Lumineon",
+    "nameFr": "Luminéon",
+    "nameDe": "Lumineon",
+    "nameJa": "Neoranto",
+    "generation": 4
+  },
+  {
+    "id": 458,
+    "nameEn": "Mantyke",
+    "nameFr": "Babimanta",
+    "nameDe": "Mantirps",
+    "nameJa": "Tamanta",
+    "generation": 4
+  },
+  {
+    "id": 459,
+    "nameEn": "Snover",
+    "nameFr": "Blizzi",
+    "nameDe": "Shnebedeck",
+    "nameJa": "Yukikaburi",
+    "generation": 4
+  },
+  {
+    "id": 460,
+    "nameEn": "Abomasnow",
+    "nameFr": "Blizzaroi",
+    "nameDe": "Rexblisar",
+    "nameJa": "Yukinooo",
+    "generation": 4
+  },
+  {
+    "id": 461,
+    "nameEn": "Weavile",
+    "nameFr": "Dimoret",
+    "nameDe": "Snibunna",
+    "nameJa": "Manyuura",
+    "generation": 4
+  },
+  {
+    "id": 462,
+    "nameEn": "Magnezone",
+    "nameFr": "Magnézone",
+    "nameDe": "Magnezone",
+    "nameJa": "Jibakoiru",
+    "generation": 4
+  },
+  {
+    "id": 463,
+    "nameEn": "Lickilicky",
+    "nameFr": "Coudlangue",
+    "nameDe": "Schlurplek",
+    "nameJa": "Beroberuto",
+    "generation": 4
+  },
+  {
+    "id": 464,
+    "nameEn": "Rhyperior",
+    "nameFr": "Rhinastoc",
+    "nameDe": "Rihornior",
+    "nameJa": "Dosaidon",
+    "generation": 4
+  },
+  {
+    "id": 465,
+    "nameEn": "Tangrowth",
+    "nameFr": "Bouldeneu",
+    "nameDe": "Tangoloss",
+    "nameJa": "Mojanbo",
+    "generation": 4
+  },
+  {
+    "id": 466,
+    "nameEn": "Electivire",
+    "nameFr": "Élekable",
+    "nameDe": "Elevoltek",
+    "nameJa": "Erekiburu",
+    "generation": 4
+  },
+  {
+    "id": 467,
+    "nameEn": "Magmortar",
+    "nameFr": "Maganon",
+    "nameDe": "Magbrant",
+    "nameJa": "Buubaan",
+    "generation": 4
+  },
+  {
+    "id": 468,
+    "nameEn": "Togekiss",
+    "nameFr": "Togekiss",
+    "nameDe": "Togekiss",
+    "nameJa": "Togekissu",
+    "generation": 4
+  },
+  {
+    "id": 469,
+    "nameEn": "Yanmega",
+    "nameFr": "Yanmega",
+    "nameDe": "Yanmega",
+    "nameJa": "Megayanma",
+    "generation": 4
+  },
+  {
+    "id": 470,
+    "nameEn": "Leafeon",
+    "nameFr": "Phyllali",
+    "nameDe": "Folipurba",
+    "nameJa": "Riifia",
+    "generation": 4
+  },
+  {
+    "id": 471,
+    "nameEn": "Glaceon",
+    "nameFr": "Givrali",
+    "nameDe": "Glaziola",
+    "nameJa": "Gureishia",
+    "generation": 4
+  },
+  {
+    "id": 472,
+    "nameEn": "Gliscor",
+    "nameFr": "Scorvol",
+    "nameDe": "Skorgro",
+    "nameJa": "Guraion",
+    "generation": 4
+  },
+  {
+    "id": 473,
+    "nameEn": "Mamoswine",
+    "nameFr": "Mammochon",
+    "nameDe": "Mamutel",
+    "nameJa": "Manmuu",
+    "generation": 4
+  },
+  {
+    "id": 474,
+    "nameEn": "Porygon-Z",
+    "nameFr": "Porygon-Z",
+    "nameDe": "Porygon-Z",
+    "nameJa": "PorigonＺ",
+    "generation": 4
+  },
+  {
+    "id": 475,
+    "nameEn": "Gallade",
+    "nameFr": "Gallame",
+    "nameDe": "Galagladi",
+    "nameJa": "Erureido",
+    "generation": 4
+  },
+  {
+    "id": 476,
+    "nameEn": "Probopass",
+    "nameFr": "Tarinorme",
+    "nameDe": "Voluminas",
+    "nameJa": "Dainoozu",
+    "generation": 4
+  },
+  {
+    "id": 477,
+    "nameEn": "Dusknoir",
+    "nameFr": "Noctunoir",
+    "nameDe": "Zwirrfinst",
+    "nameJa": "Yonowaaru",
+    "generation": 4
+  },
+  {
+    "id": 478,
+    "nameEn": "Froslass",
+    "nameFr": "Momartik",
+    "nameDe": "Frosdedje",
+    "nameJa": "Yukimenoko",
+    "generation": 4
+  },
+  {
+    "id": 479,
+    "nameEn": "Rotom",
+    "nameFr": "Motisma",
+    "nameDe": "Rotom",
+    "nameJa": "Rotomu",
+    "generation": 4
+  },
+  {
+    "id": 480,
+    "nameEn": "Uxie",
+    "nameFr": "Créhelf",
+    "nameDe": "Selfe",
+    "nameJa": "Yukushii",
+    "generation": 4
+  },
+  {
+    "id": 481,
+    "nameEn": "Mesprit",
+    "nameFr": "Créfollet",
+    "nameDe": "Vesprit",
+    "nameJa": "Emuritto",
+    "generation": 4
+  },
+  {
+    "id": 482,
+    "nameEn": "Azelf",
+    "nameFr": "Créfadet",
+    "nameDe": "Tobutz",
+    "nameJa": "Agunomu",
+    "generation": 4
+  },
+  {
+    "id": 483,
+    "nameEn": "Dialga",
+    "nameFr": "Dialga",
+    "nameDe": "Dialga",
+    "nameJa": "Diaruga",
+    "generation": 4
+  },
+  {
+    "id": 484,
+    "nameEn": "Palkia",
+    "nameFr": "Palkia",
+    "nameDe": "Palkia",
+    "nameJa": "Parukia",
+    "generation": 4
+  },
+  {
+    "id": 485,
+    "nameEn": "Heatran",
+    "nameFr": "Heatran",
+    "nameDe": "Heatran",
+    "nameJa": "Hiidoran",
+    "generation": 4
+  },
+  {
+    "id": 486,
+    "nameEn": "Regigigas",
+    "nameFr": "Regigigas",
+    "nameDe": "Regigigas",
+    "nameJa": "Rejigigasu",
+    "generation": 4
+  },
+  {
+    "id": 487,
+    "nameEn": "Giratina",
+    "nameFr": "Giratina",
+    "nameDe": "Giratina",
+    "nameJa": "Giratina",
+    "generation": 4
+  },
+  {
+    "id": 488,
+    "nameEn": "Cresselia",
+    "nameFr": "Cresselia",
+    "nameDe": "Cresselia",
+    "nameJa": "Kureseria",
+    "generation": 4
+  },
+  {
+    "id": 489,
+    "nameEn": "Phione",
+    "nameFr": "Phione",
+    "nameDe": "Phione",
+    "nameJa": "Fione",
+    "generation": 4
+  },
+  {
+    "id": 490,
+    "nameEn": "Manaphy",
+    "nameFr": "Manaphy",
+    "nameDe": "Manaphy",
+    "nameJa": "Manafi",
+    "generation": 4
+  },
+  {
+    "id": 491,
+    "nameEn": "Darkrai",
+    "nameFr": "Darkrai",
+    "nameDe": "Darkrai",
+    "nameJa": "Daakurai",
+    "generation": 4
+  },
+  {
+    "id": 492,
+    "nameEn": "Shaymin",
+    "nameFr": "Shaymin",
+    "nameDe": "Shaymin",
+    "nameJa": "Sheimi",
+    "generation": 4
+  },
+  {
+    "id": 493,
+    "nameEn": "Arceus",
+    "nameFr": "Arceus",
+    "nameDe": "Arceus",
+    "nameJa": "Aruseusu",
+    "generation": 4
+  },
+  {
+    "id": 494,
+    "nameEn": "Victini",
+    "nameFr": "Victini",
+    "nameDe": "Victini",
+    "nameJa": "Bikutini",
+    "generation": 5
+  },
+  {
+    "id": 495,
+    "nameEn": "Snivy",
+    "nameFr": "Vipélierre",
+    "nameDe": "Serpifeu",
+    "nameJa": "Tsutaaja",
+    "generation": 5
+  },
+  {
+    "id": 496,
+    "nameEn": "Servine",
+    "nameFr": "Lianaja",
+    "nameDe": "Efoserp",
+    "nameJa": "Janobii",
+    "generation": 5
+  },
+  {
+    "id": 497,
+    "nameEn": "Serperior",
+    "nameFr": "Majaspic",
+    "nameDe": "Serpiroyal",
+    "nameJa": "Jarooda",
+    "generation": 5
+  },
+  {
+    "id": 498,
+    "nameEn": "Tepig",
+    "nameFr": "Gruikui",
+    "nameDe": "Floink",
+    "nameJa": "Pokabu",
+    "generation": 5
+  },
+  {
+    "id": 499,
+    "nameEn": "Pignite",
+    "nameFr": "Grotichon",
+    "nameDe": "Ferkokel",
+    "nameJa": "Chaobuu",
+    "generation": 5
+  },
+  {
+    "id": 500,
+    "nameEn": "Emboar",
+    "nameFr": "Roitiflam",
+    "nameDe": "Flambirex",
+    "nameJa": "Enbuoo",
+    "generation": 5
+  },
+  {
+    "id": 501,
+    "nameEn": "Oshawott",
+    "nameFr": "Moustillon",
+    "nameDe": "Ottaro",
+    "nameJa": "Mijumaru",
+    "generation": 5
+  },
+  {
+    "id": 502,
+    "nameEn": "Dewott",
+    "nameFr": "Mateloutre",
+    "nameDe": "Zwottronin",
+    "nameJa": "Futachimaru",
+    "generation": 5
+  },
+  {
+    "id": 503,
+    "nameEn": "Samurott",
+    "nameFr": "Clamiral",
+    "nameDe": "Admurai",
+    "nameJa": "Daikenki",
+    "generation": 5
+  },
+  {
+    "id": 504,
+    "nameEn": "Patrat",
+    "nameFr": "Ratentif",
+    "nameDe": "Nagelotz",
+    "nameJa": "Minezumi",
+    "generation": 5
+  },
+  {
+    "id": 505,
+    "nameEn": "Watchog",
+    "nameFr": "Miradar",
+    "nameDe": "Kukmarda",
+    "nameJa": "Miruhoggu",
+    "generation": 5
+  },
+  {
+    "id": 506,
+    "nameEn": "Lillipup",
+    "nameFr": "Ponchiot",
+    "nameDe": "Yorkleff",
+    "nameJa": "Yooterii",
+    "generation": 5
+  },
+  {
+    "id": 507,
+    "nameEn": "Herdier",
+    "nameFr": "Ponchien",
+    "nameDe": "Terribark",
+    "nameJa": "Haaderia",
+    "generation": 5
+  },
+  {
+    "id": 508,
+    "nameEn": "Stoutland",
+    "nameFr": "Mastouffe",
+    "nameDe": "Bissbark",
+    "nameJa": "Muurando",
+    "generation": 5
+  },
+  {
+    "id": 509,
+    "nameEn": "Purrloin",
+    "nameFr": "Chacripan",
+    "nameDe": "Felilou",
+    "nameJa": "Choroneko",
+    "generation": 5
+  },
+  {
+    "id": 510,
+    "nameEn": "Liepard",
+    "nameFr": "Léopardus",
+    "nameDe": "Kleoparda",
+    "nameJa": "Reparudasu",
+    "generation": 5
+  },
+  {
+    "id": 511,
+    "nameEn": "Pansage",
+    "nameFr": "Feuillajou",
+    "nameDe": "Vegimak",
+    "nameJa": "Yanappu",
+    "generation": 5
+  },
+  {
+    "id": 512,
+    "nameEn": "Simisage",
+    "nameFr": "Feuiloutan",
+    "nameDe": "Vegichita",
+    "nameJa": "Yanakkii",
+    "generation": 5
+  },
+  {
+    "id": 513,
+    "nameEn": "Pansear",
+    "nameFr": "Flamajou",
+    "nameDe": "Grillmak",
+    "nameJa": "Baoppu",
+    "generation": 5
+  },
+  {
+    "id": 514,
+    "nameEn": "Simisear",
+    "nameFr": "Flamoutan",
+    "nameDe": "Grillchita",
+    "nameJa": "Baokkii",
+    "generation": 5
+  },
+  {
+    "id": 515,
+    "nameEn": "Panpour",
+    "nameFr": "Flotajou",
+    "nameDe": "Sodamak",
+    "nameJa": "Hiyappu",
+    "generation": 5
+  },
+  {
+    "id": 516,
+    "nameEn": "Simipour",
+    "nameFr": "Flotoutan",
+    "nameDe": "Sodachita",
+    "nameJa": "Hiyakkii",
+    "generation": 5
+  },
+  {
+    "id": 517,
+    "nameEn": "Munna",
+    "nameFr": "Munna",
+    "nameDe": "Somniam",
+    "nameJa": "Munna",
+    "generation": 5
+  },
+  {
+    "id": 518,
+    "nameEn": "Musharna",
+    "nameFr": "Mushana",
+    "nameDe": "Somnivora",
+    "nameJa": "Mushaana",
+    "generation": 5
+  },
+  {
+    "id": 519,
+    "nameEn": "Pidove",
+    "nameFr": "Poichigeon",
+    "nameDe": "Dusselgurr",
+    "nameJa": "Mamepato",
+    "generation": 5
+  },
+  {
+    "id": 520,
+    "nameEn": "Tranquill",
+    "nameFr": "Colombeau",
+    "nameDe": "Navitaub",
+    "nameJa": "Hatooboo",
+    "generation": 5
+  },
+  {
+    "id": 521,
+    "nameEn": "Unfezant",
+    "nameFr": "Déflaisan",
+    "nameDe": "Fasasnob",
+    "nameJa": "Kenhorou",
+    "generation": 5
+  },
+  {
+    "id": 522,
+    "nameEn": "Blitzle",
+    "nameFr": "Zébibron",
+    "nameDe": "Elezeba",
+    "nameJa": "Shimama",
+    "generation": 5
+  },
+  {
+    "id": 523,
+    "nameEn": "Zebstrika",
+    "nameFr": "Zéblitz",
+    "nameDe": "Zebritz",
+    "nameJa": "Zeburaika",
+    "generation": 5
+  },
+  {
+    "id": 524,
+    "nameEn": "Roggenrola",
+    "nameFr": "Nodulithe",
+    "nameDe": "Kiesling",
+    "nameJa": "Dangoro",
+    "generation": 5
+  },
+  {
+    "id": 525,
+    "nameEn": "Boldore",
+    "nameFr": "Géolithe",
+    "nameDe": "Sedimantur",
+    "nameJa": "Gantoru",
+    "generation": 5
+  },
+  {
+    "id": 526,
+    "nameEn": "Gigalith",
+    "nameFr": "Gigalithe",
+    "nameDe": "Brockoloss",
+    "nameJa": "Gigaiasu",
+    "generation": 5
+  },
+  {
+    "id": 527,
+    "nameEn": "Woobat",
+    "nameFr": "Chovsourir",
+    "nameDe": "Fleknoil",
+    "nameJa": "Koromori",
+    "generation": 5
+  },
+  {
+    "id": 528,
+    "nameEn": "Swoobat",
+    "nameFr": "Rhinolove",
+    "nameDe": "Fletiamo",
+    "nameJa": "Kokoromori",
+    "generation": 5
+  },
+  {
+    "id": 529,
+    "nameEn": "Drilbur",
+    "nameFr": "Rototaupe",
+    "nameDe": "Rotomurf",
+    "nameJa": "Moguryuu",
+    "generation": 5
+  },
+  {
+    "id": 530,
+    "nameEn": "Excadrill",
+    "nameFr": "Minotaupe",
+    "nameDe": "Stalobor",
+    "nameJa": "Doryuuzu",
+    "generation": 5
+  },
+  {
+    "id": 531,
+    "nameEn": "Audino",
+    "nameFr": "Nanméouïe",
+    "nameDe": "Ohrdoch",
+    "nameJa": "Tabunne",
+    "generation": 5
+  },
+  {
+    "id": 532,
+    "nameEn": "Timburr",
+    "nameFr": "Charpenti",
+    "nameDe": "Praktibalk",
+    "nameJa": "Dokkoraa",
+    "generation": 5
+  },
+  {
+    "id": 533,
+    "nameEn": "Gurdurr",
+    "nameFr": "Ouvrifier",
+    "nameDe": "Strepoli",
+    "nameJa": "Dotekkotsu",
+    "generation": 5
+  },
+  {
+    "id": 534,
+    "nameEn": "Conkeldurr",
+    "nameFr": "Bétochef",
+    "nameDe": "Meistagrif",
+    "nameJa": "Roobushin",
+    "generation": 5
+  },
+  {
+    "id": 535,
+    "nameEn": "Tympole",
+    "nameFr": "Tritonde",
+    "nameDe": "Schallquap",
+    "nameJa": "Otamaro",
+    "generation": 5
+  },
+  {
+    "id": 536,
+    "nameEn": "Palpitoad",
+    "nameFr": "Batracné",
+    "nameDe": "Mebrana",
+    "nameJa": "Gamagaru",
+    "generation": 5
+  },
+  {
+    "id": 537,
+    "nameEn": "Seismitoad",
+    "nameFr": "Crapustule",
+    "nameDe": "Branawarz",
+    "nameJa": "Gamageroge",
+    "generation": 5
+  },
+  {
+    "id": 538,
+    "nameEn": "Throh",
+    "nameFr": "Judokrak",
+    "nameDe": "Jiutesto",
+    "nameJa": "Nageki",
+    "generation": 5
+  },
+  {
+    "id": 539,
+    "nameEn": "Sawk",
+    "nameFr": "Karaclée",
+    "nameDe": "Karadonis",
+    "nameJa": "Dageki",
+    "generation": 5
+  },
+  {
+    "id": 540,
+    "nameEn": "Sewaddle",
+    "nameFr": "Larveyette",
+    "nameDe": "Strawickl",
+    "nameJa": "Kurumiru",
+    "generation": 5
+  },
+  {
+    "id": 541,
+    "nameEn": "Swadloon",
+    "nameFr": "Couverdure",
+    "nameDe": "Folikon",
+    "nameJa": "Kurumayu",
+    "generation": 5
+  },
+  {
+    "id": 542,
+    "nameEn": "Leavanny",
+    "nameFr": "Manternel",
+    "nameDe": "Matrifol",
+    "nameJa": "Hahakomori",
+    "generation": 5
+  },
+  {
+    "id": 543,
+    "nameEn": "Venipede",
+    "nameFr": "Venipatte",
+    "nameDe": "Toxiped",
+    "nameJa": "Fushide",
+    "generation": 5
+  },
+  {
+    "id": 544,
+    "nameEn": "Whirlipede",
+    "nameFr": "Scobolide",
+    "nameDe": "Rollum",
+    "nameJa": "Hoiiga",
+    "generation": 5
+  },
+  {
+    "id": 545,
+    "nameEn": "Scolipede",
+    "nameFr": "Brutapode",
+    "nameDe": "Cerapendra",
+    "nameJa": "Pendoraa",
+    "generation": 5
+  },
+  {
+    "id": 546,
+    "nameEn": "Cottonee",
+    "nameFr": "Doudouvet",
+    "nameDe": "Waumboll",
+    "nameJa": "Monmen",
+    "generation": 5
+  },
+  {
+    "id": 547,
+    "nameEn": "Whimsicott",
+    "nameFr": "Farfaduvet",
+    "nameDe": "Elfun",
+    "nameJa": "Erufuun",
+    "generation": 5
+  },
+  {
+    "id": 548,
+    "nameEn": "Petilil",
+    "nameFr": "Chlorobule",
+    "nameDe": "Lilminip",
+    "nameJa": "Churine",
+    "generation": 5
+  },
+  {
+    "id": 549,
+    "nameEn": "Lilligant",
+    "nameFr": "Fragilady",
+    "nameDe": "Dressella",
+    "nameJa": "Doredia",
+    "generation": 5
+  },
+  {
+    "id": 550,
+    "nameEn": "Basculin",
+    "nameFr": "Bargantua",
+    "nameDe": "Barschuft",
+    "nameJa": "Basurao",
+    "generation": 5
+  },
+  {
+    "id": 551,
+    "nameEn": "Sandile",
+    "nameFr": "Mascaïman",
+    "nameDe": "Ganovil",
+    "nameJa": "Meguroko",
+    "generation": 5
+  },
+  {
+    "id": 552,
+    "nameEn": "Krokorok",
+    "nameFr": "Escroco",
+    "nameDe": "Rokkaiman",
+    "nameJa": "Warubiru",
+    "generation": 5
+  },
+  {
+    "id": 553,
+    "nameEn": "Krookodile",
+    "nameFr": "Crocorible",
+    "nameDe": "Rabigator",
+    "nameJa": "Warubiaru",
+    "generation": 5
+  },
+  {
+    "id": 554,
+    "nameEn": "Darumaka",
+    "nameFr": "Darumarond",
+    "nameDe": "Flampion",
+    "nameJa": "Darumakka",
+    "generation": 5
+  },
+  {
+    "id": 555,
+    "nameEn": "Darmanitan",
+    "nameFr": "Darumacho",
+    "nameDe": "Flampivian",
+    "nameJa": "Hihidaruma",
+    "generation": 5
+  },
+  {
+    "id": 556,
+    "nameEn": "Maractus",
+    "nameFr": "Maracachi",
+    "nameDe": "Maracamba",
+    "nameJa": "Marakacchi",
+    "generation": 5
+  },
+  {
+    "id": 557,
+    "nameEn": "Dwebble",
+    "nameFr": "Crabicoque",
+    "nameDe": "Lithomith",
+    "nameJa": "Ishizumai",
+    "generation": 5
+  },
+  {
+    "id": 558,
+    "nameEn": "Crustle",
+    "nameFr": "Crabaraque",
+    "nameDe": "Castellith",
+    "nameJa": "Iwaparesu",
+    "generation": 5
+  },
+  {
+    "id": 559,
+    "nameEn": "Scraggy",
+    "nameFr": "Baggiguane",
+    "nameDe": "Zurrokex",
+    "nameJa": "Zuruggu",
+    "generation": 5
+  },
+  {
+    "id": 560,
+    "nameEn": "Scrafty",
+    "nameFr": "Baggaïd",
+    "nameDe": "Irokex",
+    "nameJa": "Zuruzukin",
+    "generation": 5
+  },
+  {
+    "id": 561,
+    "nameEn": "Sigilyph",
+    "nameFr": "Cryptéro",
+    "nameDe": "Symvolara",
+    "nameJa": "Shinboraa",
+    "generation": 5
+  },
+  {
+    "id": 562,
+    "nameEn": "Yamask",
+    "nameFr": "Tutafeh",
+    "nameDe": "Makabaja",
+    "nameJa": "Desumasu",
+    "generation": 5
+  },
+  {
+    "id": 563,
+    "nameEn": "Cofagrigus",
+    "nameFr": "Tutankafer",
+    "nameDe": "Echnatoll",
+    "nameJa": "Desukaan",
+    "generation": 5
+  },
+  {
+    "id": 564,
+    "nameEn": "Tirtouga",
+    "nameFr": "Carapagos",
+    "nameDe": "Galapaflos",
+    "nameJa": "Purotooga",
+    "generation": 5
+  },
+  {
+    "id": 565,
+    "nameEn": "Carracosta",
+    "nameFr": "Mégapagos",
+    "nameDe": "Karippas",
+    "nameJa": "Abagoora",
+    "generation": 5
+  },
+  {
+    "id": 566,
+    "nameEn": "Archen",
+    "nameFr": "Arkéapti",
+    "nameDe": "Flapteryx",
+    "nameJa": "Aaken",
+    "generation": 5
+  },
+  {
+    "id": 567,
+    "nameEn": "Archeops",
+    "nameFr": "Aéroptéryx",
+    "nameDe": "Aeropteryx",
+    "nameJa": "Aakeosu",
+    "generation": 5
+  },
+  {
+    "id": 568,
+    "nameEn": "Trubbish",
+    "nameFr": "Miamiasme",
+    "nameDe": "Unratütox",
+    "nameJa": "Yabukuron",
+    "generation": 5
+  },
+  {
+    "id": 569,
+    "nameEn": "Garbodor",
+    "nameFr": "Miasmax",
+    "nameDe": "Deponitox",
+    "nameJa": "Dasutodasu",
+    "generation": 5
+  },
+  {
+    "id": 570,
+    "nameEn": "Zorua",
+    "nameFr": "Zorua",
+    "nameDe": "Zorua",
+    "nameJa": "Zoroa",
+    "generation": 5
+  },
+  {
+    "id": 571,
+    "nameEn": "Zoroark",
+    "nameFr": "Zoroark",
+    "nameDe": "Zoroark",
+    "nameJa": "Zoroaaku",
+    "generation": 5
+  },
+  {
+    "id": 572,
+    "nameEn": "Minccino",
+    "nameFr": "Chinchidou",
+    "nameDe": "Picochilla",
+    "nameJa": "Chiraamii",
+    "generation": 5
+  },
+  {
+    "id": 573,
+    "nameEn": "Cinccino",
+    "nameFr": "Pashmilla",
+    "nameDe": "Chillabell",
+    "nameJa": "Chirachiino",
+    "generation": 5
+  },
+  {
+    "id": 574,
+    "nameEn": "Gothita",
+    "nameFr": "Scrutella",
+    "nameDe": "Mollimorba",
+    "nameJa": "Gochimu",
+    "generation": 5
+  },
+  {
+    "id": 575,
+    "nameEn": "Gothorita",
+    "nameFr": "Mesmérella",
+    "nameDe": "Hypnomorba",
+    "nameJa": "Gochimiru",
+    "generation": 5
+  },
+  {
+    "id": 576,
+    "nameEn": "Gothitelle",
+    "nameFr": "Sidérella",
+    "nameDe": "Morbitesse",
+    "nameJa": "Gochiruzeru",
+    "generation": 5
+  },
+  {
+    "id": 577,
+    "nameEn": "Solosis",
+    "nameFr": "Nucléos",
+    "nameDe": "Monozyto",
+    "nameJa": "Yuniran",
+    "generation": 5
+  },
+  {
+    "id": 578,
+    "nameEn": "Duosion",
+    "nameFr": "Méios",
+    "nameDe": "Mitodos",
+    "nameJa": "Daburan",
+    "generation": 5
+  },
+  {
+    "id": 579,
+    "nameEn": "Reuniclus",
+    "nameFr": "Symbios",
+    "nameDe": "Zytomega",
+    "nameJa": "Rankurusu",
+    "generation": 5
+  },
+  {
+    "id": 580,
+    "nameEn": "Ducklett",
+    "nameFr": "Couaneton",
+    "nameDe": "Piccolente",
+    "nameJa": "Koaruhii",
+    "generation": 5
+  },
+  {
+    "id": 581,
+    "nameEn": "Swanna",
+    "nameFr": "Lakmécygne",
+    "nameDe": "Swaroness",
+    "nameJa": "Suwanna",
+    "generation": 5
+  },
+  {
+    "id": 582,
+    "nameEn": "Vanillite",
+    "nameFr": "Sorbébé",
+    "nameDe": "Gelatini",
+    "nameJa": "Banipucchi",
+    "generation": 5
+  },
+  {
+    "id": 583,
+    "nameEn": "Vanillish",
+    "nameFr": "Sorboul",
+    "nameDe": "Gelatroppo",
+    "nameJa": "Baniricchi",
+    "generation": 5
+  },
+  {
+    "id": 584,
+    "nameEn": "Vanilluxe",
+    "nameFr": "Sorbouboul",
+    "nameDe": "Gelatwino",
+    "nameJa": "Baibanira",
+    "generation": 5
+  },
+  {
+    "id": 585,
+    "nameEn": "Deerling",
+    "nameFr": "Vivaldaim",
+    "nameDe": "Sesokitz",
+    "nameJa": "Shikijika",
+    "generation": 5
+  },
+  {
+    "id": 586,
+    "nameEn": "Sawsbuck",
+    "nameFr": "Haydaim",
+    "nameDe": "Kronjuwild",
+    "nameJa": "Mebukijika",
+    "generation": 5
+  },
+  {
+    "id": 587,
+    "nameEn": "Emolga",
+    "nameFr": "Emolga",
+    "nameDe": "Emolga",
+    "nameJa": "Emonga",
+    "generation": 5
+  },
+  {
+    "id": 588,
+    "nameEn": "Karrablast",
+    "nameFr": "Carabing",
+    "nameDe": "Laukaps",
+    "nameJa": "Kaburumo",
+    "generation": 5
+  },
+  {
+    "id": 589,
+    "nameEn": "Escavalier",
+    "nameFr": "Lançargot",
+    "nameDe": "Cavalanzas",
+    "nameJa": "Shubarugo",
+    "generation": 5
+  },
+  {
+    "id": 590,
+    "nameEn": "Foongus",
+    "nameFr": "Trompignon",
+    "nameDe": "Tarnpignon",
+    "nameJa": "Tamagetake",
+    "generation": 5
+  },
+  {
+    "id": 591,
+    "nameEn": "Amoonguss",
+    "nameFr": "Gaulet",
+    "nameDe": "Hutsassa",
+    "nameJa": "Morobareru",
+    "generation": 5
+  },
+  {
+    "id": 592,
+    "nameEn": "Frillish",
+    "nameFr": "Viskuse",
+    "nameDe": "Quabbel",
+    "nameJa": "Pururiru",
+    "generation": 5
+  },
+  {
+    "id": 593,
+    "nameEn": "Jellicent",
+    "nameFr": "Moyade",
+    "nameDe": "Apoquallyp",
+    "nameJa": "Burungeru",
+    "generation": 5
+  },
+  {
+    "id": 594,
+    "nameEn": "Alomomola",
+    "nameFr": "Mamanbo",
+    "nameDe": "Mamolida",
+    "nameJa": "Mamanbou",
+    "generation": 5
+  },
+  {
+    "id": 595,
+    "nameEn": "Joltik",
+    "nameFr": "Statitik",
+    "nameDe": "Wattzapf",
+    "nameJa": "Bachuru",
+    "generation": 5
+  },
+  {
+    "id": 596,
+    "nameEn": "Galvantula",
+    "nameFr": "Mygavolt",
+    "nameDe": "Voltula",
+    "nameJa": "Denchura",
+    "generation": 5
+  },
+  {
+    "id": 597,
+    "nameEn": "Ferroseed",
+    "nameFr": "Grindur",
+    "nameDe": "Kastadur",
+    "nameJa": "Tesshiido",
+    "generation": 5
+  },
+  {
+    "id": 598,
+    "nameEn": "Ferrothorn",
+    "nameFr": "Noacier",
+    "nameDe": "Tentantel",
+    "nameJa": "Nattorei",
+    "generation": 5
+  },
+  {
+    "id": 599,
+    "nameEn": "Klink",
+    "nameFr": "Tic",
+    "nameDe": "Klikk",
+    "nameJa": "Giaru",
+    "generation": 5
+  },
+  {
+    "id": 600,
+    "nameEn": "Klang",
+    "nameFr": "Clic",
+    "nameDe": "Kliklak",
+    "nameJa": "Gigiaru",
+    "generation": 5
+  },
+  {
+    "id": 601,
+    "nameEn": "Klinklang",
+    "nameFr": "Cliticlic",
+    "nameDe": "Klikdiklak",
+    "nameJa": "Gigigiaru",
+    "generation": 5
+  },
+  {
+    "id": 602,
+    "nameEn": "Tynamo",
+    "nameFr": "Anchwatt",
+    "nameDe": "Zapplardin",
+    "nameJa": "Shibishirasu",
+    "generation": 5
+  },
+  {
+    "id": 603,
+    "nameEn": "Eelektrik",
+    "nameFr": "Lampéroie",
+    "nameDe": "Zapplalek",
+    "nameJa": "Shibibiiru",
+    "generation": 5
+  },
+  {
+    "id": 604,
+    "nameEn": "Eelektross",
+    "nameFr": "Ohmassacre",
+    "nameDe": "Zapplarang",
+    "nameJa": "Shibirudon",
+    "generation": 5
+  },
+  {
+    "id": 605,
+    "nameEn": "Elgyem",
+    "nameFr": "Lewsor",
+    "nameDe": "Pygraulon",
+    "nameJa": "Riguree",
+    "generation": 5
+  },
+  {
+    "id": 606,
+    "nameEn": "Beheeyem",
+    "nameFr": "Neitram",
+    "nameDe": "Megalon",
+    "nameJa": "Oobemu",
+    "generation": 5
+  },
+  {
+    "id": 607,
+    "nameEn": "Litwick",
+    "nameFr": "Funécire",
+    "nameDe": "Lichtel",
+    "nameJa": "Hitomoshi",
+    "generation": 5
+  },
+  {
+    "id": 608,
+    "nameEn": "Lampent",
+    "nameFr": "Mélancolux",
+    "nameDe": "Laternecto",
+    "nameJa": "Ranpuraa",
+    "generation": 5
+  },
+  {
+    "id": 609,
+    "nameEn": "Chandelure",
+    "nameFr": "Lugulabre",
+    "nameDe": "Skelabra",
+    "nameJa": "Shandera",
+    "generation": 5
+  },
+  {
+    "id": 610,
+    "nameEn": "Axew",
+    "nameFr": "Coupenotte",
+    "nameDe": "Milza",
+    "nameJa": "Kibago",
+    "generation": 5
+  },
+  {
+    "id": 611,
+    "nameEn": "Fraxure",
+    "nameFr": "Incisache",
+    "nameDe": "Sharfax",
+    "nameJa": "Onondo",
+    "generation": 5
+  },
+  {
+    "id": 612,
+    "nameEn": "Haxorus",
+    "nameFr": "Tranchodon",
+    "nameDe": "Maxax",
+    "nameJa": "Ononokusu",
+    "generation": 5
+  },
+  {
+    "id": 613,
+    "nameEn": "Cubchoo",
+    "nameFr": "Polarhume",
+    "nameDe": "Petznief",
+    "nameJa": "Kumashun",
+    "generation": 5
+  },
+  {
+    "id": 614,
+    "nameEn": "Beartic",
+    "nameFr": "Polagriffe",
+    "nameDe": "Siberio",
+    "nameJa": "Tsunbeaa",
+    "generation": 5
+  },
+  {
+    "id": 615,
+    "nameEn": "Cryogonal",
+    "nameFr": "Hexagel",
+    "nameDe": "Frigometri",
+    "nameJa": "Furiijio",
+    "generation": 5
+  },
+  {
+    "id": 616,
+    "nameEn": "Shelmet",
+    "nameFr": "Escargaume",
+    "nameDe": "Schnuthelm",
+    "nameJa": "Chobomaki",
+    "generation": 5
+  },
+  {
+    "id": 617,
+    "nameEn": "Accelgor",
+    "nameFr": "Limaspeed",
+    "nameDe": "Hydragil",
+    "nameJa": "Agirudaa",
+    "generation": 5
+  },
+  {
+    "id": 618,
+    "nameEn": "Stunfisk",
+    "nameFr": "Limonde",
+    "nameDe": "Flunschlik",
+    "nameJa": "Maggyo",
+    "generation": 5
+  },
+  {
+    "id": 619,
+    "nameEn": "Mienfoo",
+    "nameFr": "Kungfouine",
+    "nameDe": "Lin-Fu",
+    "nameJa": "Kojofuu",
+    "generation": 5
+  },
+  {
+    "id": 620,
+    "nameEn": "Mienshao",
+    "nameFr": "Shaofouine",
+    "nameDe": "Wie-Shu",
+    "nameJa": "Kojondo",
+    "generation": 5
+  },
+  {
+    "id": 621,
+    "nameEn": "Druddigon",
+    "nameFr": "Drakkarmin",
+    "nameDe": "Shardrago",
+    "nameJa": "Kurimugan",
+    "generation": 5
+  },
+  {
+    "id": 622,
+    "nameEn": "Golett",
+    "nameFr": "Gringolem",
+    "nameDe": "Golbit",
+    "nameJa": "Gobitto",
+    "generation": 5
+  },
+  {
+    "id": 623,
+    "nameEn": "Golurk",
+    "nameFr": "Golemastoc",
+    "nameDe": "Golgantes",
+    "nameJa": "Goruugu",
+    "generation": 5
+  },
+  {
+    "id": 624,
+    "nameEn": "Pawniard",
+    "nameFr": "Scalpion",
+    "nameDe": "Gladiantri",
+    "nameJa": "Komatana",
+    "generation": 5
+  },
+  {
+    "id": 625,
+    "nameEn": "Bisharp",
+    "nameFr": "Scalproie",
+    "nameDe": "Caesurio",
+    "nameJa": "Kirikizan",
+    "generation": 5
+  },
+  {
+    "id": 626,
+    "nameEn": "Bouffalant",
+    "nameFr": "Frison",
+    "nameDe": "Bisofank",
+    "nameJa": "Baffuron",
+    "generation": 5
+  },
+  {
+    "id": 627,
+    "nameEn": "Rufflet",
+    "nameFr": "Furaiglon",
+    "nameDe": "Geronimatz",
+    "nameJa": "Washibon",
+    "generation": 5
+  },
+  {
+    "id": 628,
+    "nameEn": "Braviary",
+    "nameFr": "Gueriaigle",
+    "nameDe": "Washakwil",
+    "nameJa": "Wooguru",
+    "generation": 5
+  },
+  {
+    "id": 629,
+    "nameEn": "Vullaby",
+    "nameFr": "Vostourno",
+    "nameDe": "Skallyk",
+    "nameJa": "Baruchai",
+    "generation": 5
+  },
+  {
+    "id": 630,
+    "nameEn": "Mandibuzz",
+    "nameFr": "Vaututrice",
+    "nameDe": "Grypheldis",
+    "nameJa": "Barujiina",
+    "generation": 5
+  },
+  {
+    "id": 631,
+    "nameEn": "Heatmor",
+    "nameFr": "Aflamanoir",
+    "nameDe": "Furnifraß",
+    "nameJa": "Kuitaran",
+    "generation": 5
+  },
+  {
+    "id": 632,
+    "nameEn": "Durant",
+    "nameFr": "Fermite",
+    "nameDe": "Fermicula",
+    "nameJa": "Aianto",
+    "generation": 5
+  },
+  {
+    "id": 633,
+    "nameEn": "Deino",
+    "nameFr": "Solochi",
+    "nameDe": "Kapuno",
+    "nameJa": "Monozu",
+    "generation": 5
+  },
+  {
+    "id": 634,
+    "nameEn": "Zweilous",
+    "nameFr": "Diamat",
+    "nameDe": "Duodino",
+    "nameJa": "Jiheddo",
+    "generation": 5
+  },
+  {
+    "id": 635,
+    "nameEn": "Hydreigon",
+    "nameFr": "Trioxhydre",
+    "nameDe": "Trikephalo",
+    "nameJa": "Sazandora",
+    "generation": 5
+  },
+  {
+    "id": 636,
+    "nameEn": "Larvesta",
+    "nameFr": "Pyronille",
+    "nameDe": "Ignivor",
+    "nameJa": "Meraruba",
+    "generation": 5
+  },
+  {
+    "id": 637,
+    "nameEn": "Volcarona",
+    "nameFr": "Pyrax",
+    "nameDe": "Ramoth",
+    "nameJa": "Urugamosu",
+    "generation": 5
+  },
+  {
+    "id": 638,
+    "nameEn": "Cobalion",
+    "nameFr": "Cobaltium",
+    "nameDe": "Kobalium",
+    "nameJa": "Kobaruon",
+    "generation": 5
+  },
+  {
+    "id": 639,
+    "nameEn": "Terrakion",
+    "nameFr": "Terrakium",
+    "nameDe": "Terrakium",
+    "nameJa": "Terakion",
+    "generation": 5
+  },
+  {
+    "id": 640,
+    "nameEn": "Virizion",
+    "nameFr": "Viridium",
+    "nameDe": "Viridium",
+    "nameJa": "Birijion",
+    "generation": 5
+  },
+  {
+    "id": 641,
+    "nameEn": "Tornadus",
+    "nameFr": "Boréas",
+    "nameDe": "Boreos",
+    "nameJa": "Torunerosu",
+    "generation": 5
+  },
+  {
+    "id": 642,
+    "nameEn": "Thundurus",
+    "nameFr": "Fulguris",
+    "nameDe": "Voltolos",
+    "nameJa": "Borutorosu",
+    "generation": 5
+  },
+  {
+    "id": 643,
+    "nameEn": "Reshiram",
+    "nameFr": "Reshiram",
+    "nameDe": "Reshiram",
+    "nameJa": "Reshiramu",
+    "generation": 5
+  },
+  {
+    "id": 644,
+    "nameEn": "Zekrom",
+    "nameFr": "Zekrom",
+    "nameDe": "Zekrom",
+    "nameJa": "Zekuromu",
+    "generation": 5
+  },
+  {
+    "id": 645,
+    "nameEn": "Landorus",
+    "nameFr": "Démétéros",
+    "nameDe": "Demeteros",
+    "nameJa": "Randorosu",
+    "generation": 5
+  },
+  {
+    "id": 646,
+    "nameEn": "Kyurem",
+    "nameFr": "Kyurem",
+    "nameDe": "Kyurem",
+    "nameJa": "Kyuremu",
+    "generation": 5
+  },
+  {
+    "id": 647,
+    "nameEn": "Keldeo",
+    "nameFr": "Keldeo",
+    "nameDe": "Keldeo",
+    "nameJa": "Kerudio",
+    "generation": 5
+  },
+  {
+    "id": 648,
+    "nameEn": "Meloetta",
+    "nameFr": "Meloetta",
+    "nameDe": "Meloetta",
+    "nameJa": "Meroetta",
+    "generation": 5
+  },
+  {
+    "id": 649,
+    "nameEn": "Genesect",
+    "nameFr": "Genesect",
+    "nameDe": "Genesect",
+    "nameJa": "Genosekuto",
+    "generation": 5
+  }
+]

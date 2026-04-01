@@ -9,7 +9,7 @@ import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { getSocket } from "@/lib/socket";
 import { cn } from "@/lib/utils";
-import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion, FutCardQuestion, ChronoQuestion, ConsensusQuestion, DialedQuestion, PokeGeoQuestion } from "@/types";
+import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion, FutCardQuestion, ChronoQuestion, ConsensusQuestion, DialedQuestion, PokeGeoQuestion, PokemonTranslateQuestion } from "@/types";
 
 export function QuestionDisplay() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
@@ -35,6 +35,7 @@ export function QuestionDisplay() {
   const [chronoStartTime, setChronoStartTime] = useState<number | null>(null);
   const [chronoStopped, setChronoStopped] = useState(false);
   const [consensusAnswer, setConsensusAnswer] = useState("");
+  const [translateAnswer, setTranslateAnswer] = useState("");
   const [dialedH, setDialedH] = useState(180);
   const [dialedS, setDialedS] = useState(50);
   const [dialedL, setDialedL] = useState(50);
@@ -68,6 +69,7 @@ export function QuestionDisplay() {
     setPetitBacAnswers({});
     setGeoQuizAnswer("");
     setPokeGeoAnswer("");
+    setTranslateAnswer("");
     setLangueLanguage("");
     setLangueMeaning("");
     setGuessGameAnswer("");
@@ -111,6 +113,8 @@ export function QuestionDisplay() {
       submitAnswer(jerseyGuess.trim());
     } else if (currentQuestion.type === "futcard" && futCardAnswer.trim()) {
       submitAnswer(futCardAnswer.trim());
+    } else if (currentQuestion.type === "pokemontranslate" && translateAnswer.trim()) {
+      submitAnswer(translateAnswer.trim());
     } else if (currentQuestion.type === "consensus" && consensusAnswer.trim()) {
       submitAnswer(consensusAnswer.trim());
     } else if (currentQuestion.type === "dialed") {
@@ -281,6 +285,16 @@ export function QuestionDisplay() {
             answer={consensusAnswer}
             hasAnswered={hasAnswered}
             onChange={setConsensusAnswer}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "pokemontranslate" && (
+          <PokemonTranslateQuestionView
+            question={currentQuestion as PokemonTranslateQuestion}
+            answer={translateAnswer}
+            hasAnswered={hasAnswered}
+            onChange={setTranslateAnswer}
             onSubmit={handleSubmit}
           />
         )}
@@ -1264,19 +1278,10 @@ function PokeGeoQuestionView({
     setImageError(false);
   }, [question.imageUrl]);
 
-  const pokeGeoHint = useGameStore((s) => s.pokeGeoHint);
-  const { usePokeGeoHint } = useSocket();
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       onSubmit();
-    }
-  };
-
-  const handleUseHint = () => {
-    if (!pokeGeoHint) {
-      usePokeGeoHint();
     }
   };
 
@@ -1318,33 +1323,6 @@ function PokeGeoQuestionView({
         </motion.div>
       )}
 
-      {/* Hint */}
-      <AnimatePresence>
-        {pokeGeoHint ? (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            className="mb-3"
-          >
-            <div className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/30">
-              <Gamepad2 className="w-4 h-4 text-red-400" />
-              <span className="text-sm text-red-300">{pokeGeoHint}</span>
-              <Badge variant="warning" size="sm">-50%</Badge>
-            </div>
-          </motion.div>
-        ) : !hasAnswered ? (
-          <motion.div className="mb-3 flex justify-center">
-            <button
-              onClick={handleUseHint}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-800 border border-surface-700 hover:border-red-500/50 transition-colors"
-            >
-              <Eye className="w-4 h-4 text-red-400" />
-              <span className="text-sm text-surface-300">Indice</span>
-              <span className="text-xs text-surface-500">(points /2)</span>
-            </button>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
 
       {/* Answer input */}
       <div className="flex-1 flex flex-col justify-end">
@@ -2533,6 +2511,115 @@ function DialedQuestionView({
               Valider ma couleur
             </Button>
           </motion.div>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ==========================================
+// POKEMON TRANSLATE QUESTION
+// ==========================================
+
+interface PokemonTranslateQuestionViewProps {
+  question: PokemonTranslateQuestion;
+  answer: string;
+  hasAnswered: boolean;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+}
+
+function PokemonTranslateQuestionView({
+  question,
+  answer,
+  hasAnswered,
+  onChange,
+  onSubmit,
+}: PokemonTranslateQuestionViewProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSubmit();
+    }
+  };
+
+  return (
+    <>
+      {/* Header */}
+      <div className="mb-4 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-800 border border-surface-700 mb-2">
+          <span className="text-lg">🌐</span>
+          <span className="text-xs font-medium text-surface-300">Traduis le Pokémon</span>
+        </div>
+        <h2 className="text-base sm:text-lg font-display font-bold text-surface-100 text-balance">
+          Comment s&apos;appelle ce Pokémon en français ?
+        </h2>
+      </div>
+
+      {/* All 3 language names */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="space-y-2.5 mb-6"
+      >
+        {([
+          { flag: "🇬🇧", label: "Anglais", name: question.nameEn },
+          { flag: "🇩🇪", label: "Allemand", name: question.nameDe },
+          { flag: "🇯🇵", label: "Japonais", name: question.nameJa },
+        ] as const).map((lang, i) => (
+          <motion.div
+            key={lang.label}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 * i, duration: 0.3 }}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-800/80 border border-surface-700"
+          >
+            <span className="text-2xl">{lang.flag}</span>
+            <div className="flex-1 min-w-0">
+              <span className="text-[10px] uppercase tracking-wider text-surface-500 block">{lang.label}</span>
+              <span className="text-xl font-display font-bold text-surface-100">{lang.name}</span>
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* Input */}
+      <div className="mt-auto space-y-3">
+        {hasAnswered ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex items-center justify-center gap-2 p-3 rounded-xl bg-surface-800 border border-surface-700"
+          >
+            <CheckCircle className="w-5 h-5 text-success-500" />
+            <span className="text-surface-300 font-medium">Réponse envoyée !</span>
+          </motion.div>
+        ) : (
+          <div className="flex gap-2">
+            <Input
+              ref={inputRef}
+              type="text"
+              placeholder="Nom français du Pokémon..."
+              value={answer}
+              onChange={(e) => onChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+              autoFocus
+              className="flex-1"
+              autoComplete="off"
+            />
+            <Button
+              variant="primary"
+              size="md"
+              onClick={onSubmit}
+              disabled={!answer.trim()}
+              rightIcon={<Send className="w-4 h-4" />}
+            >
+              OK
+            </Button>
+          </div>
         )}
       </div>
     </>

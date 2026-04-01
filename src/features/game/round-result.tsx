@@ -70,6 +70,7 @@ export function RoundResult() {
   const petitBacValidationData = useGameStore((s) => s.petitBacValidationData);
   const petitBacValidatedAnswers = useGameStore((s) => s.petitBacValidatedAnswers);
   const pokestatsRoundResult = useGameStore((s) => s.pokestatsRoundResult);
+  const pokemonRoundResult = useGameStore((s) => s.pokemonRoundResult);
   const myPlayerId = usePlayerStore((s) => s.playerId);
 
   if (!roundResult) return null;
@@ -273,6 +274,20 @@ export function RoundResult() {
             )}
           </div>
         </Card>
+        {/* Pokémon reveal image */}
+        {pokemonRoundResult?.imageUrl && roundResult.question.type === "pokemon" && (
+          <div className="flex justify-center mt-4">
+            <div className="relative w-40 h-40">
+              <Image
+                src={pokemonRoundResult.imageUrl}
+                alt={pokemonRoundResult.nameFr || "Pokémon"}
+                fill
+                className="object-contain"
+                unoptimized
+              />
+            </div>
+          </div>
+        )}
       </motion.div>
 
       {/* Winner of the round */}
