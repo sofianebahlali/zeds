@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Check, Trophy, Flag } from "lucide-react";
-import Image from "next/image";
 import { Button, Input, TimerProgress } from "@/components/ui";
 import { useGameStore, useRoomStore, usePlayerStore } from "@/stores";
 import { useSocket } from "@/hooks";
@@ -126,16 +125,14 @@ export function PokemonGameScreen() {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.4 }}
         >
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={q.imageUrl}
             alt="Pokémon"
-            fill
             className={cn(
-              "object-contain transition-all duration-700 ease-out",
+              "absolute inset-0 w-full h-full object-contain transition-all duration-700 ease-out",
               !revealed && "brightness-0 invert"
             )}
-            priority
-            unoptimized
           />
         </motion.div>
       </div>

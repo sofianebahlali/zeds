@@ -8,7 +8,6 @@ import { useGameStore, useRoomStore, usePlayerStore } from "@/stores";
 import { useChatStore } from "@/stores/chat-store";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion, PokestatsRoundResult as PokestatsRoundResultType, PokemonAttackRoundResult as PokemonAttackRoundResultType, DialedQuestion, PokedexNumberQuestion } from "@/types";
 
 const PETITBAC_CATEGORY_ICONS: Record<string, string> = {
@@ -299,12 +298,11 @@ export function RoundResult() {
         {pokemonRoundResult?.imageUrl && roundResult.question.type === "pokemon" && (
           <div className="flex justify-center mt-4">
             <div className="relative w-40 h-40">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={pokemonRoundResult.imageUrl}
                 alt={pokemonRoundResult.nameFr || "Pokémon"}
-                fill
-                className="object-contain"
-                unoptimized
+                className="absolute inset-0 w-full h-full object-contain"
               />
             </div>
           </div>
@@ -1088,12 +1086,11 @@ function PokestatsRoundResultView({
           transition={{ delay: 0.2 }}
           className="relative w-32 h-32 mx-auto mb-3"
         >
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={imageUrl}
             alt={result.nameFr}
-            fill
-            className="object-contain drop-shadow-[0_0_20px_rgba(250,204,21,0.3)]"
-            unoptimized
+            className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_0_20px_rgba(250,204,21,0.3)]"
           />
         </motion.div>
 

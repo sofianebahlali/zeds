@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
-import Image from "next/image";
 import { Button, Card, Avatar } from "@/components/ui";
 import { useGameStore, usePlayerStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
@@ -36,12 +35,11 @@ export function PokemonValidationScreen() {
 
         <div className="flex items-center justify-center gap-3 mb-3">
           <div className="relative w-20 h-20">
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src={imageUrl}
               alt={nameFr}
-              fill
-              className="object-contain"
-              unoptimized
+              className="absolute inset-0 w-full h-full object-contain"
             />
           </div>
           <div className="text-left">
