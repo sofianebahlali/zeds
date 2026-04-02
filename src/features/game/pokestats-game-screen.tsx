@@ -343,7 +343,7 @@ export function PokestatsGameScreen() {
             <span className="text-xs text-surface-500">C&apos;était :</span>
             <div className="flex items-center gap-2">
               <img
-                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokestatsAbandonData.pokemonId}.png`}
+                src={`/images/pokemon/${pokestatsAbandonData.pokemonId}.png`}
                 alt={pokestatsAbandonData.nameFr}
                 className="w-12 h-12 object-contain"
               />

@@ -813,10 +813,11 @@ export class GameEngine {
         const allPokemon = GameEngine.loadPokemonStatsData();
         if (allPokemon.length === 0) return [...SAMPLE_QUESTIONS].slice(0, count);
 
-        let filtered = allPokemon;
-        if (config?.pokestatsGenerations?.length) {
-          filtered = allPokemon.filter(p => config.pokestatsGenerations!.includes(p.generation));
-        }
+        // Default to gen 1-5
+        const pokestatsGens = config?.pokestatsGenerations?.length
+          ? config.pokestatsGenerations
+          : [1, 2, 3, 4, 5];
+        let filtered = allPokemon.filter(p => pokestatsGens.includes(p.generation));
         if (filtered.length === 0) filtered = allPokemon;
 
         const shuffledPoke = filtered.sort(() => Math.random() - 0.5).slice(0, count);
@@ -841,10 +842,11 @@ export class GameEngine {
         const allPokemon = GameEngine.loadPokemonStatsData();
         if (allPokemon.length === 0) return [...SAMPLE_QUESTIONS].slice(0, count);
 
-        let filtered = allPokemon;
-        if (config?.pokemonGenerations?.length) {
-          filtered = allPokemon.filter(p => config.pokemonGenerations!.includes(p.generation));
-        }
+        // Default to gen 1-5
+        const pokemonGens = config?.pokemonGenerations?.length
+          ? config.pokemonGenerations
+          : [1, 2, 3, 4, 5];
+        let filtered = allPokemon.filter(p => pokemonGens.includes(p.generation));
         if (filtered.length === 0) filtered = allPokemon;
 
         const shuffledPoke = filtered.sort(() => Math.random() - 0.5).slice(0, count);
@@ -852,7 +854,7 @@ export class GameEngine {
           id: `pokemon_${i + 1}`,
           type: "pokemon" as const,
           pokemonId: p.id,
-          imageUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png`,
+          imageUrl: `/images/pokemon/${p.id}.png`,
           nameEn: p.nameEn,
           nameFr: p.nameFr,
           aliases: p.aliases || [],
@@ -867,10 +869,11 @@ export class GameEngine {
         const allPokemon = GameEngine.loadPokemonTranslateData();
         if (allPokemon.length === 0) return [...SAMPLE_QUESTIONS].slice(0, count);
 
-        let filtered = allPokemon;
-        if (config?.pokemonTranslateGenerations?.length) {
-          filtered = allPokemon.filter(p => config.pokemonTranslateGenerations!.includes(p.generation));
-        }
+        // Default to gen 1-5
+        const translateGens = config?.pokemonTranslateGenerations?.length
+          ? config.pokemonTranslateGenerations
+          : [1, 2, 3, 4, 5];
+        let filtered = allPokemon.filter(p => translateGens.includes(p.generation));
         if (filtered.length === 0) filtered = allPokemon;
 
         const shuffledPoke = filtered.sort(() => Math.random() - 0.5).slice(0, count);
@@ -904,7 +907,7 @@ export class GameEngine {
           id: `pokedexnumber_${i + 1}`,
           type: "pokedexnumber" as const,
           pokemonId: p.id,
-          imageUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png`,
+          imageUrl: `/images/pokemon/${p.id}.png`,
           nameEn: p.nameEn,
           nameFr: p.nameFr,
           generation: p.generation,
@@ -1297,6 +1300,13 @@ export class GameEngine {
     }
     if (question.type === "pokemonattack") {
       const q = question as PokemonAttackQuestion;
+      // Build a mask: reveal first letter, last letter, spaces, apostrophes, hyphens
+      const REVEAL_CHARS = new Set([" ", "'", "'", "-"]);
+      const nameMask = q.nameFr.split("").map((ch, i) => {
+        if (i === 0 || i === q.nameFr.length - 1) return ch;
+        if (REVEAL_CHARS.has(ch)) return ch;
+        return "_";
+      }).join("");
       return Object.assign({}, question, {
         nameFr: "",
         nameEn: "",
@@ -1306,6 +1316,7 @@ export class GameEngine {
         firstLetter: q.nameFr.charAt(0),
         lastLetter: q.nameFr.charAt(q.nameFr.length - 1),
         nameLength: q.nameFr.length,
+        nameMask,
       });
     }
     // petitbac: nothing to hide

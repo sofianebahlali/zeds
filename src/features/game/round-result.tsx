@@ -1063,7 +1063,7 @@ function PokestatsRoundResultView({
   myPlayerId: string;
 }) {
   const myResult = result.playerResults.find((r) => r.playerId === myPlayerId);
-  const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${result.pokemonId}.png`;
+  const imageUrl = `/images/pokemon/${result.pokemonId}.png`;
 
   return (
     <motion.div

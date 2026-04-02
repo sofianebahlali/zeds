@@ -35,5 +35,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Pokemon sprites (downloaded via scripts/download-pokemon-sprites.sh)
-/public/images/pokemon/
+# Pokemon sprites are now committed for local serving

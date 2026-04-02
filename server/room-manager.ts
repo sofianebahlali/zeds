@@ -185,6 +185,15 @@ export class RoomManager {
 
     player.isConnected = true;
     this.playerRooms.set(playerId, roomCode);
+
+    // Clean up any stale socket entries for this player (race condition:
+    // new socket may connect before old socket's disconnect event fires)
+    for (const [oldSocketId, pId] of this.socketPlayers) {
+      if (pId === playerId && oldSocketId !== socketId) {
+        this.socketPlayers.delete(oldSocketId);
+      }
+    }
+
     this.socketPlayers.set(socketId, playerId);
 
     console.log(`${player.name} reconnected to room ${roomCode}`);

@@ -13,38 +13,53 @@ import type { PokemonAttackQuestion, PokemonAttackHintData } from "@/types";
 // ATTACK NAME DISPLAY (first letter _ _ _ last letter)
 // ==========================================
 
-function AttackNameDisplay({ firstLetter, lastLetter, nameLength }: { firstLetter: string; lastLetter: string; nameLength: number }) {
-  // Build the display: first letter + blanks + last letter
-  // Handle multi-word names: we show first char, blanks for middle, last char
-  const cells: { char: string; revealed: boolean }[] = [];
+const SPECIAL_CHARS = new Set([" ", "'", "\u2019", "-"]);
 
-  for (let i = 0; i < nameLength; i++) {
-    if (i === 0) {
-      cells.push({ char: firstLetter.toUpperCase(), revealed: true });
-    } else if (i === nameLength - 1) {
-      cells.push({ char: lastLetter.toUpperCase(), revealed: true });
-    } else {
-      cells.push({ char: "_", revealed: false });
+function AttackNameDisplay({ nameMask, firstLetter, lastLetter, nameLength }: { nameMask?: string; firstLetter: string; lastLetter: string; nameLength: number }) {
+  // Use nameMask if available (reveals spaces, apostrophes, hyphens)
+  // Fallback to old behavior for backwards compat
+  const mask = nameMask || (() => {
+    let s = "";
+    for (let i = 0; i < nameLength; i++) {
+      if (i === 0) s += firstLetter;
+      else if (i === nameLength - 1) s += lastLetter;
+      else s += "_";
     }
-  }
+    return s;
+  })();
+
+  // Split mask into "word groups" separated by spaces for better wrapping
+  const cells: { char: string; revealed: boolean; isSpace: boolean }[] = mask.split("").map((ch, i) => {
+    const isSpace = ch === " ";
+    const isRevealed = ch !== "_";
+    return {
+      char: isSpace ? " " : ch.toUpperCase(),
+      revealed: isRevealed,
+      isSpace,
+    };
+  });
 
   return (
     <div className="flex flex-wrap items-center justify-center gap-1.5">
       {cells.map((cell, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.03, duration: 0.3 }}
-          className={cn(
-            "w-8 h-10 flex items-center justify-center rounded-lg text-lg font-display font-bold",
-            cell.revealed
-              ? "bg-brand-500/30 border-2 border-brand-500/50 text-brand-300"
-              : "bg-surface-800 border-2 border-surface-700 text-surface-500"
-          )}
-        >
-          {cell.char}
-        </motion.div>
+        cell.isSpace ? (
+          <div key={i} className="w-3" /> // Visual space between words
+        ) : (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.03, duration: 0.3 }}
+            className={cn(
+              "w-8 h-10 flex items-center justify-center rounded-lg text-lg font-display font-bold",
+              cell.revealed
+                ? "bg-brand-500/30 border-2 border-brand-500/50 text-brand-300"
+                : "bg-surface-800 border-2 border-surface-700 text-surface-500"
+            )}
+          >
+            {cell.char}
+          </motion.div>
+        )
       ))}
     </div>
   );
@@ -163,6 +178,7 @@ export function PokemonAttackGameScreen() {
   const firstLetter = q.firstLetter || "";
   const lastLetter = q.lastLetter || "";
   const nameLength = q.nameLength || 0;
+  const nameMask = q.nameMask || undefined;
 
   // Reset between rounds
   useEffect(() => {
@@ -239,12 +255,13 @@ export function PokemonAttackGameScreen() {
       {/* Attack name display */}
       <div className="flex-shrink-0 py-4">
         <AttackNameDisplay
+          nameMask={nameMask}
           firstLetter={firstLetter}
           lastLetter={lastLetter}
           nameLength={nameLength}
         />
         <p className="text-center text-xs text-surface-500 mt-2">
-          {nameLength} lettre{nameLength > 1 ? "s" : ""}
+          {nameLength} caractère{nameLength > 1 ? "s" : ""} (espaces et tirets visibles)
         </p>
       </div>
 
