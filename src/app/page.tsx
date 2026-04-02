@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
-import { useCurrentScreen, useConnectionStatus, useUIStore } from "@/stores";
+import { useCurrentScreen, useConnectionStatus } from "@/stores";
 import { useSocket } from "@/hooks";
 import {
   HomeScreen,
@@ -19,7 +18,6 @@ import { NotificationContainer, LoadingOverlay } from "@/components/layout";
 export default function Home() {
   const currentScreen = useCurrentScreen();
   const { isReconnecting } = useConnectionStatus();
-  const error = useUIStore((s) => s.error);
 
   // Initialize socket connection handlers
   useSocket();
@@ -35,16 +33,9 @@ export default function Home() {
     );
   }
 
-  // Handle error screen priority
-  if (error && currentScreen !== "home") {
-    return (
-      <>
-        <NotificationContainer />
-        <LoadingOverlay />
-        <ErrorScreen />
-      </>
-    );
-  }
+  // Errors are shown as notifications — no longer hijack the screen.
+  // ErrorScreen is accessible via currentScreen === "error" in the
+  // AnimatePresence below, so truly fatal errors can still use it.
 
   return (
     <>

@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { Button, Card, Avatar, Badge, StatusBadge, ScrollArea } from "@/components/ui";
 import { ScreenContainer } from "@/components/layout";
-import { useRoomStore, usePlayerStore, useUIStore } from "@/stores";
+import { useRoomStore, usePlayerStore, useUIStore, useConnectionStatus } from "@/stores";
 import { useSocket } from "@/hooks";
 import { GAME_MODES, GAME_MODE_CATEGORIES, DEFAULT_PLAYLIST } from "@/types";
 import type { GameModeConfig } from "@/types";
@@ -29,6 +29,7 @@ export function LobbyScreen() {
   const isHost = usePlayerStore((s) => s.isHost);
   const isReady = usePlayerStore((s) => s.isReady);
   const playerId = usePlayerStore((s) => s.playerId);
+  const { isConnected } = useConnectionStatus();
 
   const addNotification = useUIStore((s) => s.addNotification);
 
@@ -122,6 +123,23 @@ export function LobbyScreen() {
             </div>
           </Card>
         </motion.div>
+
+        {/* Connection lost banner */}
+        <AnimatePresence>
+          {!isConnected && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mb-4"
+            >
+              <div className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-300 text-sm">
+                <WifiOff className="w-4 h-4 shrink-0" />
+                <span>Connexion perdue, reconnexion en cours...</span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Playlist builder (host only) */}
         <AnimatePresence>

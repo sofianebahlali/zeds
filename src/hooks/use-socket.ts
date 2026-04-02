@@ -54,6 +54,8 @@ function setupSocketListeners() {
     console.log("Socket connected");
     useUIStore.getState().setConnected(true);
     useUIStore.getState().setReconnecting(false);
+    // Clear any stale error from a previous disconnect so the UI recovers.
+    useUIStore.getState().setError(null);
 
     // Re-join room on reconnection (handles mobile tab-switch race condition
     // where Socket.IO auto-reconnects before the visibility handler runs)
@@ -131,7 +133,18 @@ function setupSocketListeners() {
   });
 
   socket.on("room:error", (message: string) => {
-    useUIStore.getState().setError(message);
+    const screen = useUIStore.getState().currentScreen;
+    const isInRoom = screen === "lobby" || screen === "game" || screen === "scoreboard";
+    if (isInRoom) {
+      // Already in a room — show a notification but don't nuke the screen.
+      // This prevents transient errors (e.g. reconnect hiccup) from
+      // killing the lobby or game.
+      useUIStore.getState().addNotification({ type: "error", message, duration: 5000 });
+    } else {
+      // User was trying to create/join a room — show a blocking error so
+      // they know it failed.
+      useUIStore.getState().setError(message);
+    }
     useUIStore.getState().setLoading(false);
   });
 
@@ -459,6 +472,7 @@ function setupSocketListeners() {
     usePlayerStore.getState().setIsHost(player.isHost);
     useUIStore.getState().setReconnecting(false);
     useUIStore.getState().setConnected(true);
+    useUIStore.getState().setError(null);
 
     if (room.status === "playing") {
       useUIStore.getState().setScreen("game");

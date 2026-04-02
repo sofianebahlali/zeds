@@ -1,11 +1,38 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUIStore } from "@/stores";
+
+const LOADING_TIMEOUT_MS = 10_000;
 
 export function LoadingOverlay() {
   const isLoading = useUIStore((s) => s.isLoading);
   const loadingMessage = useUIStore((s) => s.loadingMessage);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Safety net: auto-dismiss loading after timeout so the UI never freezes.
+  useEffect(() => {
+    if (isLoading) {
+      timerRef.current = setTimeout(() => {
+        useUIStore.getState().setLoading(false);
+        useUIStore.getState().addNotification({
+          type: "error",
+          message: "La connexion a pris trop de temps. Réessaie.",
+          duration: 5000,
+        });
+      }, LOADING_TIMEOUT_MS);
+    } else if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [isLoading]);
 
   return (
     <AnimatePresence>
