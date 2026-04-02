@@ -11,7 +11,8 @@
       "Bourg Palette",
       "bourg palette",
       "Pallet Town",
-      "pallet town"
+      "pallet town",
+      "Biancavilla"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -31,7 +32,8 @@
       "jadielle",
       "Viridian City",
       "viridian city",
-      "Viridian"
+      "Viridian",
+      "Smeraldopoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -51,7 +53,8 @@
       "argenta",
       "Pewter City",
       "pewter city",
-      "Pewter"
+      "Pewter",
+      "Plumbeopoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -71,7 +74,8 @@
       "azuria",
       "Cerulean City",
       "cerulean city",
-      "Cerulean"
+      "Cerulean",
+      "Celestopoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -91,7 +95,8 @@
       "carmin sur mer",
       "Vermilion City",
       "vermilion city",
-      "Vermilion"
+      "Vermilion",
+      "Aranciopoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -111,7 +116,8 @@
       "celadopole",
       "Celadon City",
       "celadon city",
-      "Celadon"
+      "Celadon",
+      "Azzurropoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -131,7 +137,8 @@
       "parmanie",
       "Fuchsia City",
       "fuchsia city",
-      "Fuchsia"
+      "Fuchsia",
+      "Fucsiapoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -151,7 +158,8 @@
       "safrania",
       "Saffron City",
       "saffron city",
-      "Saffron"
+      "Saffron",
+      "Zafferanopoli"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -172,7 +180,8 @@
       "cramoisile",
       "Cinnabar Island",
       "cinnabar island",
-      "Cinnabar"
+      "Cinnabar",
+      "Isola Cannella"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -189,7 +198,8 @@
     "hint": "La toute première route entre Bourg Palette et Jadielle",
     "acceptedAnswers": [
       "Route 1",
-      "route 1"
+      "route 1",
+      "Percorso 1"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -208,7 +218,8 @@
       "Forêt de Jade",
       "foret de jade",
       "Viridian Forest",
-      "viridian forest"
+      "viridian forest",
+      "Bosco Smeraldo"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -229,7 +240,8 @@
       "Mont Selenite",
       "Mt. Moon",
       "mt moon",
-      "Mt Moon"
+      "Mt Moon",
+      "Monte Luna"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -248,7 +260,9 @@
       "S.S. Anne",
       "ss anne",
       "SS Anne",
-      "S.S Anne"
+      "S.S Anne",
+      "Motonave Anna",
+      "M/N Anna"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -269,7 +283,8 @@
       "Indigo Plateau",
       "indigo plateau",
       "Ligue Pokémon",
-      "ligue pokemon"
+      "ligue pokemon",
+      "Altopiano Blu"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -290,7 +305,9 @@
       "Tour Pokemon",
       "Pokemon Tower",
       "Pokémon Tower",
-      "Lavanville"
+      "Lavanville",
+      "Torre Pokémon",
+      "Lavandonia"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -309,7 +326,8 @@
       "Route Victoire",
       "route victoire",
       "Victory Road",
-      "victory road"
+      "victory road",
+      "Via Vittoria"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -328,7 +346,8 @@
       "Parc Safari",
       "parc safari",
       "Safari Zone",
-      "safari zone"
+      "safari zone",
+      "Zona Safari"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -347,7 +366,8 @@
       "Bourg Geon",
       "bourg geon",
       "New Bark Town",
-      "new bark town"
+      "new bark town",
+      "Borgo Foglianova"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -367,7 +387,8 @@
       "ville griotte",
       "Cherrygrove City",
       "cherrygrove city",
-      "Cherrygrove"
+      "Cherrygrove",
+      "Fiorpescopoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -387,7 +408,8 @@
       "mauville",
       "Violet City",
       "violet city",
-      "Violet"
+      "Violet",
+      "Violapoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -407,7 +429,8 @@
       "ecorcia",
       "Azalea Town",
       "azalea town",
-      "Azalea"
+      "Azalea",
+      "Azalina"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -427,7 +450,8 @@
       "doublonville",
       "Goldenrod City",
       "goldenrod city",
-      "Goldenrod"
+      "Goldenrod",
+      "Fiordoropoli"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -447,7 +471,8 @@
       "rosalia",
       "Ecruteak City",
       "ecruteak city",
-      "Ecruteak"
+      "Ecruteak",
+      "Amarantopoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -467,7 +492,8 @@
       "oliville",
       "Olivine City",
       "olivine city",
-      "Olivine"
+      "Olivine",
+      "Olivinopoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -487,7 +513,8 @@
       "irisia",
       "Cianwood City",
       "cianwood city",
-      "Cianwood"
+      "Cianwood",
+      "Fiorlisopoli"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -507,7 +534,8 @@
       "acajou",
       "Mahogany Town",
       "mahogany town",
-      "Mahogany"
+      "Mahogany",
+      "Mogania"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -527,7 +555,8 @@
       "ebenelle",
       "Blackthorn City",
       "blackthorn city",
-      "Blackthorn"
+      "Blackthorn",
+      "Ebanopoli"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -546,7 +575,8 @@
       "Lac Colère",
       "lac colere",
       "Lake of Rage",
-      "lake of rage"
+      "lake of rage",
+      "Lago d'Ira"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -566,7 +596,8 @@
       "tour cendrée",
       "tour cendree",
       "Burned Tower",
-      "burned tower"
+      "burned tower",
+      "Torre Bruciata"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -587,7 +618,8 @@
       "Bell Tower",
       "bell tower",
       "Tin Tower",
-      "tin tower"
+      "tin tower",
+      "Torre Campana"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -607,7 +639,8 @@
       "antre du dragon",
       "Dragon's Den",
       "dragons den",
-      "Dragon Den"
+      "Dragon Den",
+      "Tana del Drago"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -628,7 +661,8 @@
       "bourg en vol",
       "Littleroot Town",
       "littleroot town",
-      "Littleroot"
+      "Littleroot",
+      "Albanova"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -648,7 +682,8 @@
       "clementi-ville",
       "Petalburg City",
       "petalburg city",
-      "Petalburg"
+      "Petalburg",
+      "Petalipoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -668,7 +703,8 @@
       "mysdibior",
       "Dewford Town",
       "dewford town",
-      "Dewford"
+      "Dewford",
+      "Bluruvia"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -688,7 +724,8 @@
       "poivressel",
       "Slateport City",
       "slateport city",
-      "Slateport"
+      "Slateport",
+      "Porto Selcepoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -708,7 +745,8 @@
       "merouville",
       "Rustboro City",
       "rustboro city",
-      "Rustboro"
+      "Rustboro",
+      "Ferrugipoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -728,7 +766,8 @@
       "lavandia",
       "Mauville City",
       "mauville city",
-      "Mauville"
+      "Mauville",
+      "Ciclamipoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -748,7 +787,8 @@
       "vermilava",
       "Lavaridge Town",
       "lavaridge town",
-      "Lavaridge"
+      "Lavaridge",
+      "Cuordilava"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -768,7 +808,8 @@
       "cimetronelle",
       "Fortree City",
       "fortree city",
-      "Fortree"
+      "Fortree",
+      "Forestopoli"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -788,7 +829,8 @@
       "nenucrique",
       "Lilycove City",
       "lilycove city",
-      "Lilycove"
+      "Lilycove",
+      "Porto Alghepoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -808,7 +850,8 @@
       "algatia",
       "Mossdeep City",
       "mossdeep city",
-      "Mossdeep"
+      "Mossdeep",
+      "Verdeazzupoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -828,7 +871,8 @@
       "atalanopolis",
       "Sootopolis City",
       "sootopolis city",
-      "Sootopolis"
+      "Sootopolis",
+      "Ceneride"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -848,7 +892,8 @@
       "eternara",
       "Ever Grande City",
       "ever grande city",
-      "Ever Grande"
+      "Ever Grande",
+      "Iridopoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -867,7 +912,8 @@
       "Pilier Céleste",
       "pilier celeste",
       "Sky Pillar",
-      "sky pillar"
+      "sky pillar",
+      "Torre dei Cieli"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -887,7 +933,8 @@
       "bonaugure",
       "Twinleaf Town",
       "twinleaf town",
-      "Twinleaf"
+      "Twinleaf",
+      "Duefoglie"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -907,7 +954,8 @@
       "littorella",
       "Sandgem Town",
       "sandgem town",
-      "Sandgem"
+      "Sandgem",
+      "Sabbiafine"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -927,7 +975,8 @@
       "feli-cite",
       "Jubilife City",
       "jubilife city",
-      "Jubilife"
+      "Jubilife",
+      "Giubilopoli"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -947,7 +996,8 @@
       "charbourg",
       "Oreburgh City",
       "oreburgh city",
-      "Oreburgh"
+      "Oreburgh",
+      "Mineropoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -967,7 +1017,8 @@
       "vestigion",
       "Eterna City",
       "eterna city",
-      "Eterna"
+      "Eterna",
+      "Evopoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -987,7 +1038,8 @@
       "unionpolis",
       "Hearthome City",
       "hearthome city",
-      "Hearthome"
+      "Hearthome",
+      "Cuoripoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -1007,7 +1059,8 @@
       "voilaroc",
       "Veilstone City",
       "veilstone city",
-      "Veilstone"
+      "Veilstone",
+      "Rupepoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -1027,7 +1080,8 @@
       "verchamps",
       "Pastoria City",
       "pastoria city",
-      "Pastoria"
+      "Pastoria",
+      "Pratopoli"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1047,7 +1101,8 @@
       "joliberges",
       "Canalave City",
       "canalave city",
-      "Canalave"
+      "Canalave",
+      "Canalipoli"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1067,7 +1122,8 @@
       "frimapic",
       "Snowpoint City",
       "snowpoint city",
-      "Snowpoint"
+      "Snowpoint",
+      "Nevepoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -1087,7 +1143,8 @@
       "rivamar",
       "Sunyshore City",
       "sunyshore city",
-      "Sunyshore"
+      "Sunyshore",
+      "Arenipoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -1106,7 +1163,8 @@
       "Colonnes Lances",
       "colonnes lances",
       "Spear Pillar",
-      "spear pillar"
+      "spear pillar",
+      "Vetta Lancia"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1125,7 +1183,8 @@
       "Monde Distorsion",
       "monde distorsion",
       "Distortion World",
-      "distortion world"
+      "distortion world",
+      "Mondo Distorto"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -1144,7 +1203,8 @@
       "Lac Courage",
       "lac courage",
       "Lake Valor",
-      "lake valor"
+      "lake valor",
+      "Lago Valore"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1163,7 +1223,8 @@
       "Île de Fer",
       "ile de fer",
       "Iron Island",
-      "iron island"
+      "iron island",
+      "Isola Ferrosa"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1183,7 +1244,8 @@
       "renouet",
       "Nuvema Town",
       "nuvema town",
-      "Nuvema"
+      "Nuvema",
+      "Soffiolieve"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -1203,7 +1265,8 @@
       "arabelle",
       "Accumula Town",
       "accumula town",
-      "Accumula"
+      "Accumula",
+      "Quattroventi"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1223,7 +1286,8 @@
       "ogoesse",
       "Striaton City",
       "striaton city",
-      "Striaton"
+      "Striaton",
+      "Levantopoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -1243,7 +1307,8 @@
       "maillard",
       "Nacrene City",
       "nacrene city",
-      "Nacrene"
+      "Nacrene",
+      "Zefiropoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -1263,7 +1328,8 @@
       "volucite",
       "Castelia City",
       "castelia city",
-      "Castelia"
+      "Castelia",
+      "Austropoli"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -1283,7 +1349,8 @@
       "meanville",
       "Nimbasa City",
       "nimbasa city",
-      "Nimbasa"
+      "Nimbasa",
+      "Sciroccopoli"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -1303,7 +1370,8 @@
       "port yoneuve",
       "Driftveil City",
       "driftveil city",
-      "Driftveil"
+      "Driftveil",
+      "Libecciopoli"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1323,7 +1391,8 @@
       "parsemille",
       "Mistralton City",
       "mistralton city",
-      "Mistralton"
+      "Mistralton",
+      "Ponentopoli"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1343,7 +1412,8 @@
       "flocombe",
       "Icirrus City",
       "icirrus city",
-      "Icirrus"
+      "Icirrus",
+      "Mistralopoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -1363,7 +1433,8 @@
       "janusia",
       "Opelucid City",
       "opelucid city",
-      "Opelucid"
+      "Opelucid",
+      "Boreduopoli"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1383,7 +1454,8 @@
       "entrelasque",
       "Lacunosa Town",
       "lacunosa town",
-      "Lacunosa"
+      "Lacunosa",
+      "Fortebrezza"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1403,7 +1475,8 @@
       "ondea",
       "Undella Town",
       "undella town",
-      "Undella"
+      "Undella",
+      "Spiraria"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -1422,7 +1495,8 @@
       "Pont du Village",
       "pont du village",
       "Village Bridge",
-      "village bridge"
+      "village bridge",
+      "Ponte Villaggio"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1442,7 +1516,8 @@
       "bourg croquis",
       "Vaniville Town",
       "vaniville town",
-      "Vaniville"
+      "Vaniville",
+      "Borgo Bozzetto"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -1461,7 +1536,8 @@
       "Aquacorde",
       "aquacorde",
       "Aquacorde Town",
-      "aquacorde town"
+      "aquacorde town",
+      "Rio Acquerello"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -1481,7 +1557,8 @@
       "neuvartault",
       "Santalune City",
       "santalune city",
-      "Santalune"
+      "Santalune",
+      "Novartopoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -1501,7 +1578,8 @@
       "relifac-le-haut",
       "Cyllage City",
       "cyllage city",
-      "Cyllage"
+      "Cyllage",
+      "Altoripoli"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1521,7 +1599,8 @@
       "yantreizh",
       "Shalour City",
       "shalour city",
-      "Shalour"
+      "Shalour",
+      "Yantaropoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -1541,7 +1620,8 @@
       "port temperes",
       "Coumarine City",
       "coumarine city",
-      "Coumarine"
+      "Coumarine",
+      "Temperopoli"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1561,7 +1641,8 @@
       "romant-sous-bois",
       "Laverre City",
       "laverre city",
-      "Laverre"
+      "Laverre",
+      "Romantopoli"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -1581,7 +1662,8 @@
       "flusselles",
       "Anistar City",
       "anistar city",
-      "Anistar"
+      "Anistar",
+      "Fluxopoli"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1601,7 +1683,8 @@
       "auffrac-les-congeres",
       "Snowbelle City",
       "snowbelle city",
-      "Snowbelle"
+      "Snowbelle",
+      "Fractalopoli"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1621,7 +1704,8 @@
       "illumis",
       "Lumiose City",
       "lumiose city",
-      "Lumiose"
+      "Lumiose",
+      "Luminopoli"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -1641,7 +1725,8 @@
       "cromlach",
       "Geosenge Town",
       "geosenge town",
-      "Geosenge"
+      "Geosenge",
+      "Cromleburgo"
     ],
     "difficulty": "hard",
     "timeLimit": 30,
@@ -1660,7 +1745,8 @@
       "Tour de Maîtrise",
       "tour de maitrise",
       "Tower of Mastery",
-      "tower of mastery"
+      "tower of mastery",
+      "Torre Maestra"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -1681,7 +1767,8 @@
       "lili'i",
       "Iki Town",
       "iki town",
-      "Iki"
+      "Iki",
+      "Lili"
     ],
     "difficulty": "medium",
     "timeLimit": 30,
@@ -1757,7 +1844,8 @@
     "hint": "Le QG de la Team Skull",
     "acceptedAnswers": [
       "Po Town",
-      "po town"
+      "po town",
+      "Poh"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
@@ -1776,7 +1864,9 @@
       "Paradis Æther",
       "paradis aether",
       "Aether Paradise",
-      "aether paradise"
+      "aether paradise",
+      "Paradiso Æther",
+      "Paradiso Aether"
     ],
     "difficulty": "easy",
     "timeLimit": 30,
