@@ -9,7 +9,7 @@ import { useChatStore } from "@/stores/chat-store";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion, PokestatsRoundResult as PokestatsRoundResultType, DialedQuestion, PokedexNumberQuestion } from "@/types";
+import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion, PokestatsRoundResult as PokestatsRoundResultType, PokemonAttackRoundResult as PokemonAttackRoundResultType, DialedQuestion, PokedexNumberQuestion } from "@/types";
 
 const PETITBAC_CATEGORY_ICONS: Record<string, string> = {
   "Prénom": "👤",
@@ -70,6 +70,7 @@ export function RoundResult() {
   const petitBacValidationData = useGameStore((s) => s.petitBacValidationData);
   const petitBacValidatedAnswers = useGameStore((s) => s.petitBacValidatedAnswers);
   const pokestatsRoundResult = useGameStore((s) => s.pokestatsRoundResult);
+  const pokemonAttackRoundResult = useGameStore((s) => s.pokemonAttackRoundResult);
   const pokemonRoundResult = useGameStore((s) => s.pokemonRoundResult);
   const myPlayerId = usePlayerStore((s) => s.playerId);
 
@@ -86,6 +87,7 @@ export function RoundResult() {
   const isChrono = roundResult.question.type === "chrono";
   const isConsensus = roundResult.question.type === "consensus";
   const isPokestats = roundResult.question.type === "pokestats";
+  const isPokemonAttack = roundResult.question.type === "pokemonattack";
   const isDialed = roundResult.question.type === "dialed";
   const isPokedexNumber = roundResult.question.type === "pokedexnumber";
 
@@ -134,6 +136,15 @@ export function RoundResult() {
         isCorrect={!!isCorrect}
         petitBacValidationData={petitBacValidationData}
         petitBacValidatedAnswers={petitBacValidatedAnswers}
+      />
+    );
+  }
+
+  if (isPokemonAttack && pokemonAttackRoundResult) {
+    return (
+      <PokemonAttackRoundResultView
+        result={pokemonAttackRoundResult}
+        myPlayerId={myPlayerId}
       />
     );
   }
@@ -1198,6 +1209,177 @@ function PokestatsRoundResultView({
             </span>
           </motion.div>
         ))}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ==========================================
+// POKEMON ATTACK ROUND RESULT
+// ==========================================
+
+const ATTACK_TYPE_COLORS: Record<string, string> = {
+  Normal: "bg-gray-400",
+  Feu: "bg-orange-500",
+  Eau: "bg-blue-500",
+  "Électrik": "bg-yellow-400",
+  Plante: "bg-green-500",
+  Glace: "bg-cyan-300",
+  Combat: "bg-red-700",
+  Poison: "bg-purple-500",
+  Sol: "bg-amber-600",
+  Vol: "bg-indigo-300",
+  Psy: "bg-pink-500",
+  Insecte: "bg-lime-500",
+  Roche: "bg-yellow-700",
+  Spectre: "bg-purple-700",
+  Dragon: "bg-indigo-600",
+  "Ténèbres": "bg-stone-700",
+  Acier: "bg-slate-400",
+  "Fée": "bg-pink-300",
+};
+
+function PokemonAttackRoundResultView({
+  result,
+  myPlayerId,
+}: {
+  result: PokemonAttackRoundResultType;
+  myPlayerId: string;
+}) {
+  const players = useRoomStore((s) => s.players);
+  const myResult = result.playerResults.find((r) => r.playerId === myPlayerId);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex flex-col h-full px-4 pb-4 overflow-y-auto"
+    >
+      {/* Attack reveal */}
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        className="text-center pt-4 mb-4"
+      >
+        <motion.div
+          initial={{ y: -10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-4xl mb-2"
+        >
+          ⚔️
+        </motion.div>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="text-2xl font-display font-bold text-brand-300 mb-1"
+        >
+          {result.nameFr}
+        </motion.h2>
+        {result.nameFr !== result.nameEn && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="text-sm text-surface-400"
+          >
+            {result.nameEn}
+          </motion.p>
+        )}
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="flex flex-wrap items-center justify-center gap-2 mt-3"
+        >
+          <span
+            className={cn(
+              "text-xs font-bold px-2.5 py-0.5 rounded-full text-white",
+              ATTACK_TYPE_COLORS[result.attackType] || "bg-surface-600"
+            )}
+          >
+            {result.attackType}
+          </span>
+          <span className="text-xs text-surface-500">{result.category}</span>
+          {result.power && (
+            <span className="text-xs text-surface-500">
+              Puissance {result.power}
+            </span>
+          )}
+          <span className="text-xs text-surface-500">PP {result.pp}</span>
+        </motion.div>
+
+        {myResult && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className="mt-3"
+          >
+            {myResult.found ? (
+              <div className="flex items-center justify-center gap-2">
+                <Zap className="w-5 h-5 text-accent-400" />
+                <span className="text-xl font-display font-bold text-surface-100">
+                  +{myResult.points} pts
+                </span>
+              </div>
+            ) : (
+              <span className="text-surface-500">Pas trouvé</span>
+            )}
+          </motion.div>
+        )}
+      </motion.div>
+
+      {/* Player results */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7 }}
+        className="space-y-1.5"
+      >
+        {result.playerResults.map((pr, i) => {
+          const player = players.find((p) => p.id === pr.playerId);
+          return (
+            <motion.div
+              key={pr.playerId}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.8 + i * 0.1 }}
+              className={cn(
+                "flex items-center gap-2 px-3 py-2 rounded-xl border",
+                pr.found
+                  ? "bg-lime-500/10 border-lime-500/20"
+                  : "bg-surface-900/50 border-surface-800"
+              )}
+            >
+              <Avatar emoji={player?.avatar || "❓"} size="sm" />
+              <div className="flex-1 min-w-0">
+                <span className={cn(
+                  "text-sm font-medium truncate block",
+                  pr.playerId === myPlayerId ? "text-yellow-400" : "text-surface-200"
+                )}>
+                  {player?.name || "?"}
+                </span>
+                <span className="text-[10px] text-surface-500">
+                  {pr.found
+                    ? `${pr.hintsUsed} indice${pr.hintsUsed !== 1 ? "s" : ""}`
+                    : "Pas trouvé"}
+                </span>
+              </div>
+              <span className={cn(
+                "text-sm font-display font-bold",
+                pr.found ? "text-lime-400" : "text-surface-600"
+              )}>
+                +{pr.points}
+              </span>
+            </motion.div>
+          );
+        })}
       </motion.div>
     </motion.div>
   );

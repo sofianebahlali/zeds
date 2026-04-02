@@ -384,6 +384,29 @@ function setupSocketListeners() {
     useGameStore.getState().setPokestatsAbandoned(data);
   });
 
+  // Pokemon Attack events
+  socket.on("pokemonattack:guess_result", (result) => {
+    if (result.correct && result.points !== undefined) {
+      useGameStore.getState().setPokemonAttackFound(result.points);
+    }
+  });
+
+  socket.on("pokemonattack:hint", (data) => {
+    useGameStore.getState().addPokemonAttackHint(data);
+  });
+
+  socket.on("pokemonattack:player_found", (data) => {
+    useGameStore.getState().addPokemonAttackFoundPlayer(data.playerId, data.hintsUsed);
+  });
+
+  socket.on("pokemonattack:round_end", (result) => {
+    useGameStore.getState().setPokemonAttackRoundResult(result);
+  });
+
+  socket.on("pokemonattack:abandon_result", (data) => {
+    useGameStore.getState().setPokemonAttackAbandoned(data);
+  });
+
   // Pokemon Silhouette events
   socket.on("pokemon:guess_result", (result) => {
     if (result.correct && result.points !== undefined) {
@@ -690,6 +713,20 @@ export function useSocket() {
     socket.emit("pokestats:abandon");
   }, [socket]);
 
+  const submitPokemonAttackGuess = useCallback((guess: string) => {
+    if (useGameStore.getState().timeRemaining > 0 && !useGameStore.getState().pokemonAttackFound) {
+      socket.emit("game:submit_answer", guess);
+    }
+  }, [socket]);
+
+  const usePokemonAttackHint = useCallback(() => {
+    socket.emit("pokemonattack:use_hint");
+  }, [socket]);
+
+  const abandonPokemonAttack = useCallback(() => {
+    socket.emit("pokemonattack:abandon");
+  }, [socket]);
+
   const submitPokemonGuess = useCallback((guess: string) => {
     if (useGameStore.getState().timeRemaining > 0 && !useGameStore.getState().pokemonFound) {
       socket.emit("game:submit_answer", guess);
@@ -757,6 +794,9 @@ export function useSocket() {
     submitPokestatsGuess,
     usePokestatsHint,
     abandonPokestats,
+    submitPokemonAttackGuess,
+    usePokemonAttackHint,
+    abandonPokemonAttack,
     submitPokemonGuess,
     abandonPokemon,
     validatePokemonAnswer,

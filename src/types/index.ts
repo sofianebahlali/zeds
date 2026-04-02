@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon" | "dialed" | "pokegeo" | "pokemontranslate" | "pokedexnumber";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon" | "dialed" | "pokegeo" | "pokemontranslate" | "pokedexnumber" | "pokemonattack";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -48,6 +48,7 @@ export interface GameModeConfig {
   pokemonGenerations?: number[]; // Filter by generation(s) for pokemon silhouette mode
   pokemonTranslateGenerations?: number[]; // Filter by generation(s) for pokemon translate mode
   pokedexNumberGenerations?: number[]; // Filter by generation(s) for pokedex number mode
+  pokemonAttackGenerations?: number[]; // Filter by generation(s) for pokemon attack mode
 }
 
 export interface GameSettings {
@@ -771,6 +772,57 @@ export interface PokemonTranslateQuestion extends BaseQuestion {
   generation: number;
 }
 
+// ==========================================
+// POKEMON ATTACK MODE TYPES
+// ==========================================
+
+export interface PokemonAttackQuestion extends BaseQuestion {
+  type: "pokemonattack";
+  moveId: number;
+  nameFr: string;
+  nameEn: string;
+  attackType: string; // French type name (e.g. "Feu")
+  attackTypeEn: string; // English type name (e.g. "fire")
+  category: string; // French (e.g. "Physique", "Spéciale", "Statut")
+  categoryEn: string; // English (e.g. "physical", "special", "status")
+  power: number | null; // null for status moves
+  pp: number;
+  generation: number;
+}
+
+export interface PokemonAttackGuessResult {
+  correct: boolean;
+  hintsUsed: number;
+  points?: number;
+}
+
+export interface PokemonAttackHintData {
+  hintLevel: number;
+  hintType: "power" | "category" | "type";
+  value: string;
+  hintsRemaining: number;
+}
+
+export interface PokemonAttackRoundResult {
+  roundNumber: number;
+  moveId: number;
+  nameFr: string;
+  nameEn: string;
+  attackType: string;
+  category: string;
+  power: number | null;
+  pp: number;
+  playerResults: { playerId: string; hintsUsed: number; points: number; found: boolean }[];
+}
+
+export interface PokemonAttackAbandonResult {
+  nameFr: string;
+  nameEn: string;
+  attackType: string;
+  category: string;
+  power: number | null;
+}
+
 export interface LineupPlayer {
   pos: string;
   name: string;
@@ -809,7 +861,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion | DialedQuestion | PokeGeoQuestion | PokemonTranslateQuestion | PokedexNumberQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion | DialedQuestion | PokeGeoQuestion | PokemonTranslateQuestion | PokedexNumberQuestion | PokemonAttackQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -1024,6 +1076,13 @@ export interface ServerToClientEvents {
   "pokemon:validation_start": (data: PokemonValidationData) => void;
   "pokemon:answer_result": (data: { playerId: string; playerName: string; playerAvatar: string; answer: string; accepted: boolean }) => void;
 
+  // Pokemon Attack events
+  "pokemonattack:guess_result": (result: PokemonAttackGuessResult) => void;
+  "pokemonattack:hint": (data: PokemonAttackHintData) => void;
+  "pokemonattack:round_end": (result: PokemonAttackRoundResult) => void;
+  "pokemonattack:player_found": (data: { playerId: string; hintsUsed: number }) => void;
+  "pokemonattack:abandon_result": (data: PokemonAttackAbandonResult) => void;
+
   // Team events
   "game:team_round_start": (data: TeamRoundData) => void;
   "game:team_round_end": (result: TeamRoundResult) => void;
@@ -1106,6 +1165,10 @@ export interface ClientToServerEvents {
   // Pokemon Stats events
   "pokestats:use_hint": () => void;
   "pokestats:abandon": () => void;
+
+  // Pokemon Attack events
+  "pokemonattack:use_hint": () => void;
+  "pokemonattack:abandon": () => void;
 
   // Pokemon Silhouette events
   "pokemon:abandon": () => void;
@@ -1191,15 +1254,31 @@ export interface GameModeInfo {
   description: string;
   icon: string;
   color: string;
+  category: "culture" | "pokemon" | "football";
 }
 
+export interface GameModeCategory {
+  id: "culture" | "pokemon" | "football";
+  name: string;
+  icon: string;
+  gradient: string;
+}
+
+export const GAME_MODE_CATEGORIES: GameModeCategory[] = [
+  { id: "culture", name: "Culture G / Maths", icon: "🧠", gradient: "from-indigo-500 to-violet-600" },
+  { id: "pokemon", name: "Pokémon", icon: "⚡", gradient: "from-yellow-400 to-red-500" },
+  { id: "football", name: "Foot / FUT", icon: "⚽", gradient: "from-green-500 to-emerald-700" },
+];
+
 export const GAME_MODES: GameModeInfo[] = [
+  // ── Culture G / Maths ──
   {
     id: "dictation",
     name: "Dictée",
     description: "Écoute et écris ce que tu entends",
     icon: "🎧",
     color: "from-brand-500 to-brand-700",
+    category: "culture",
   },
   {
     id: "image",
@@ -1207,6 +1286,7 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Devine ce que représente l'image",
     icon: "🖼️",
     color: "from-accent-500 to-accent-700",
+    category: "culture",
   },
   {
     id: "qcm",
@@ -1214,6 +1294,7 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Choisis la bonne réponse parmi 4",
     icon: "📝",
     color: "from-success-500 to-success-700",
+    category: "culture",
   },
   {
     id: "open",
@@ -1221,6 +1302,7 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Réponds librement à la question",
     icon: "💬",
     color: "from-warning-500 to-warning-700",
+    category: "culture",
   },
   {
     id: "estimation",
@@ -1228,13 +1310,7 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Devine le prix de l'objet",
     icon: "💰",
     color: "from-emerald-500 to-emerald-700",
-  },
-  {
-    id: "parcours",
-    name: "Parcours",
-    description: "Devine le joueur à partir de ses clubs",
-    icon: "⚽",
-    color: "from-green-500 to-green-700",
+    category: "culture",
   },
   {
     id: "drawing",
@@ -1242,6 +1318,7 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Suggère, dessine et devine !",
     icon: "🎨",
     color: "from-purple-500 to-purple-700",
+    category: "culture",
   },
   {
     id: "petitbac",
@@ -1249,6 +1326,7 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Trouve des mots commençant par la lettre imposée",
     icon: "🔤",
     color: "from-cyan-500 to-cyan-700",
+    category: "culture",
   },
   {
     id: "geoquiz",
@@ -1256,6 +1334,7 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Reconnais le lieu et trouve la ville",
     icon: "🌍",
     color: "from-sky-500 to-sky-700",
+    category: "culture",
   },
   {
     id: "langue",
@@ -1263,6 +1342,7 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Devine la langue et la signification du mot",
     icon: "🗣️",
     color: "from-rose-500 to-rose-700",
+    category: "culture",
   },
   {
     id: "maths",
@@ -1270,6 +1350,7 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Résous le problème — attention aux pièges !",
     icon: "🧮",
     color: "from-indigo-500 to-indigo-700",
+    category: "culture",
   },
   {
     id: "guessgame",
@@ -1277,27 +1358,7 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Devine le jeu vidéo à partir du screenshot",
     icon: "🎮",
     color: "from-violet-500 to-violet-700",
-  },
-  {
-    id: "lineup",
-    name: "Compos",
-    description: "Retrouve les 22 joueurs d'un match mythique",
-    icon: "⚽",
-    color: "from-lime-500 to-lime-700",
-  },
-  {
-    id: "jerseynumber",
-    name: "Devine le Numéro",
-    description: "Quel est le numéro de maillot de ce joueur ?",
-    icon: "👕",
-    color: "from-teal-500 to-teal-700",
-  },
-  {
-    id: "futcard",
-    name: "Devine la Carte FUT",
-    description: "Devine le joueur à partir de sa carte FUT",
-    icon: "🃏",
-    color: "from-yellow-500 to-amber-700",
+    category: "culture",
   },
   {
     id: "chrono",
@@ -1305,6 +1366,7 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Mesure le temps sans regarder !",
     icon: "⏱️",
     color: "from-orange-500 to-red-700",
+    category: "culture",
   },
   {
     id: "consensus",
@@ -1312,6 +1374,7 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Pense comme les autres !",
     icon: "🤝",
     color: "from-pink-500 to-fuchsia-700",
+    category: "culture",
   },
   {
     id: "splitsteal",
@@ -1319,27 +1382,7 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Partage ou vole les points !",
     icon: "💎",
     color: "from-amber-500 to-red-700",
-  },
-  {
-    id: "liste",
-    name: "Liste Football",
-    description: "Nomme un max d'éléments de la liste !",
-    icon: "⚽",
-    color: "from-green-500 to-emerald-700",
-  },
-  {
-    id: "pokestats",
-    name: "Pokémon Stats",
-    description: "Devine le Pokémon à partir de ses stats !",
-    icon: "⚡",
-    color: "from-yellow-400 to-red-500",
-  },
-  {
-    id: "pokemon",
-    name: "Quel est ce Pokémon ?",
-    description: "Devine le Pokémon à partir de sa silhouette !",
-    icon: "❓",
-    color: "from-purple-500 to-indigo-700",
+    category: "culture",
   },
   {
     id: "dialed",
@@ -1347,6 +1390,24 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Mémorise la couleur puis reproduis-la avec les sliders !",
     icon: "🎨",
     color: "from-fuchsia-500 to-violet-700",
+    category: "culture",
+  },
+  // ── Pokémon ──
+  {
+    id: "pokemon",
+    name: "Quel est ce Pokémon ?",
+    description: "Devine le Pokémon à partir de sa silhouette !",
+    icon: "❓",
+    color: "from-purple-500 to-indigo-700",
+    category: "pokemon",
+  },
+  {
+    id: "pokestats",
+    name: "Pokémon Stats",
+    description: "Devine le Pokémon à partir de ses stats !",
+    icon: "⚡",
+    color: "from-yellow-400 to-red-500",
+    category: "pokemon",
   },
   {
     id: "pokegeo",
@@ -1354,6 +1415,7 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Reconnais le lieu dans le jeu Pokémon !",
     icon: "🗺️",
     color: "from-red-500 to-yellow-500",
+    category: "pokemon",
   },
   {
     id: "pokemontranslate",
@@ -1361,6 +1423,7 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Devine le nom français du Pokémon !",
     icon: "🌐",
     color: "from-blue-500 to-green-500",
+    category: "pokemon",
   },
   {
     id: "pokedexnumber",
@@ -1368,5 +1431,55 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Devine le numéro Pokédex du Pokémon !",
     icon: "🔢",
     color: "from-red-500 to-rose-700",
+    category: "pokemon",
+  },
+  {
+    id: "pokemonattack",
+    name: "Devine l'Attaque",
+    description: "Devine l'attaque Pokémon à partir de ses lettres !",
+    icon: "⚔️",
+    color: "from-orange-500 to-red-600",
+    category: "pokemon",
+  },
+  // ── Foot / FUT ──
+  {
+    id: "parcours",
+    name: "Parcours",
+    description: "Devine le joueur à partir de ses clubs",
+    icon: "⚽",
+    color: "from-green-500 to-green-700",
+    category: "football",
+  },
+  {
+    id: "lineup",
+    name: "Compos",
+    description: "Retrouve les 22 joueurs d'un match mythique",
+    icon: "⚽",
+    color: "from-lime-500 to-lime-700",
+    category: "football",
+  },
+  {
+    id: "jerseynumber",
+    name: "Devine le Numéro",
+    description: "Quel est le numéro de maillot de ce joueur ?",
+    icon: "👕",
+    color: "from-teal-500 to-teal-700",
+    category: "football",
+  },
+  {
+    id: "futcard",
+    name: "Devine la Carte FUT",
+    description: "Devine le joueur à partir de sa carte FUT",
+    icon: "🃏",
+    color: "from-yellow-500 to-amber-700",
+    category: "football",
+  },
+  {
+    id: "liste",
+    name: "Liste Football",
+    description: "Nomme un max d'éléments de la liste !",
+    icon: "⚽",
+    color: "from-green-500 to-emerald-700",
+    category: "football",
   },
 ];

@@ -22,6 +22,7 @@ import { SplitStealChoiceScreen } from "./splitsteal-choice-screen";
 import { SplitStealRevealScreen } from "./splitsteal-reveal-screen";
 import { ListeGameScreen } from "./liste-game-screen";
 import { PokestatsGameScreen } from "./pokestats-game-screen";
+import { PokemonAttackGameScreen } from "./pokemonattack-game-screen";
 import { PokemonGameScreen } from "./pokemon-game-screen";
 import { PokemonValidationScreen } from "./pokemon-validation-screen";
 import { PokeGeoValidationScreen } from "./pokegeo-validation-screen";
@@ -45,6 +46,7 @@ export function GameScreen() {
   const isLineup = currentGameMode === "lineup";
   const isListe = currentGameMode === "liste";
   const isPokestats = currentGameMode === "pokestats";
+  const isPokemonAttack = currentGameMode === "pokemonattack";
   const isPokemon = currentGameMode === "pokemon";
   const isPokeGeo = currentGameMode === "pokegeo";
   const currentModeInfo = GAME_MODES.find((m) => m.id === currentGameMode);
@@ -188,6 +190,7 @@ export function GameScreen() {
           {status === "countdown" && <CountdownOverlay key="countdown" />}
           {(status === "question" || status === "answering") && (
             isPokemon ? <PokemonGameScreen key={`pokemon-${currentRound}`} /> :
+            isPokemonAttack ? <PokemonAttackGameScreen key={`pokemonattack-${currentRound}`} /> :
             isPokestats ? <PokestatsGameScreen key={`pokestats-${currentRound}`} /> :
             isListe ? <ListeGameScreen key={`liste-${currentRound}`} /> :
             isLineup ? <LineupGameScreen key={`lineup-${currentRound}`} /> : <QuestionDisplay key={`question-${currentRound}`} />

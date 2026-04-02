@@ -19,7 +19,7 @@ import { Button, Card, Avatar, Badge, StatusBadge, ScrollArea } from "@/componen
 import { ScreenContainer } from "@/components/layout";
 import { useRoomStore, usePlayerStore, useUIStore } from "@/stores";
 import { useSocket } from "@/hooks";
-import { GAME_MODES, DEFAULT_PLAYLIST } from "@/types";
+import { GAME_MODES, GAME_MODE_CATEGORIES, DEFAULT_PLAYLIST } from "@/types";
 import type { GameModeConfig } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -402,22 +402,46 @@ function PlaylistBuilder({ playlist, onChange }: PlaylistBuilderProps) {
       {availableModes.length > 0 && (
         <div className="mt-3">
           {showAddMode ? (
-            <div className="grid grid-cols-3 gap-2">
-              {availableModes.map((mode) => (
-                <button
-                  key={mode.id}
-                  onClick={() => addSegment(mode.id)}
-                  className="p-2 rounded-lg text-center border border-surface-700 bg-surface-800 hover:border-brand-500 hover:bg-brand-500/10 transition-colors"
-                >
-                  <span className="text-lg block">{mode.icon}</span>
-                  <span className="text-[10px] font-medium text-surface-300">
-                    {mode.name}
-                  </span>
-                </button>
-              ))}
+            <div className="space-y-4">
+              {GAME_MODE_CATEGORIES.map((cat) => {
+                const modesInCat = availableModes.filter(
+                  (m) => m.category === cat.id
+                );
+                if (modesInCat.length === 0) return null;
+                return (
+                  <div key={cat.id}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-sm">{cat.icon}</span>
+                      <span
+                        className={cn(
+                          "text-xs font-bold uppercase tracking-wider bg-gradient-to-r bg-clip-text text-transparent",
+                          cat.gradient
+                        )}
+                      >
+                        {cat.name}
+                      </span>
+                      <div className="flex-1 h-px bg-surface-700" />
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {modesInCat.map((mode) => (
+                        <button
+                          key={mode.id}
+                          onClick={() => addSegment(mode.id)}
+                          className="p-2 rounded-lg text-center border border-surface-700 bg-surface-800 hover:border-brand-500 hover:bg-brand-500/10 transition-colors"
+                        >
+                          <span className="text-lg block">{mode.icon}</span>
+                          <span className="text-[10px] font-medium text-surface-300">
+                            {mode.name}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
               <button
                 onClick={() => setShowAddMode(false)}
-                className="p-2 rounded-lg text-center border border-surface-700 bg-surface-800 hover:border-surface-500 transition-colors text-xs text-surface-500"
+                className="w-full p-2 rounded-lg text-center border border-surface-700 bg-surface-800 hover:border-surface-500 transition-colors text-xs text-surface-500"
               >
                 Annuler
               </button>

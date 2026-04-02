@@ -486,6 +486,36 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     });
 
     // ==========================================
+    // POKEMON ATTACK EVENTS
+    // ==========================================
+
+    socket.on("pokemonattack:use_hint", () => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.usePokemonAttackHint(playerId);
+    });
+
+    socket.on("pokemonattack:abandon", () => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+
+      const gameEngine = gameEngines.get(room.code);
+      if (!gameEngine) return;
+
+      gameEngine.handlePokemonAttackAbandon(playerId);
+    });
+
+    // ==========================================
     // POKEMON SILHOUETTE EVENTS
     // ==========================================
 

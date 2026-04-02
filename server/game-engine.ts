@@ -70,6 +70,10 @@ import type {
   PokeGeoPlayerAnswerData,
   PokemonTranslateQuestion,
   PokedexNumberQuestion,
+  PokemonAttackQuestion,
+  PokemonAttackGuessResult,
+  PokemonAttackHintData,
+  PokemonAttackRoundResult,
 } from "../src/types";
 import { PETITBAC_ALL_CATEGORIES, PETITBAC_CATEGORIES_PER_ROUND } from "../src/types";
 import { getQuestions as getDbQuestions, getTotalCount as getDbTotalCount } from "./question-db";
@@ -281,6 +285,12 @@ export class GameEngine {
   private pokemonDecisions: Map<string, boolean> = new Map();
   private pokemonPlayerAnswers: { playerId: string; playerName: string; playerAvatar: string; answer: string }[] = [];
 
+  // Pokemon Attack mode state
+  private pokemonAttackFoundPlayers: Map<string, { hintsUsed: number; foundAt: number; points: number }> = new Map();
+  private pokemonAttackHintsUsed: Map<string, number> = new Map();
+  private pokemonAttackHintSequence: PokemonAttackHintData[] = [];
+  private pokemonAttackAbandonedPlayers: Set<string> = new Set();
+
   // Auto-advance timer (used by pokestats, liste, and standard rounds)
   private autoAdvanceTimer: NodeJS.Timeout | null = null;
   private autoAdvanceInnerTimer: NodeJS.Timeout | null = null;
@@ -381,6 +391,20 @@ export class GameEngine {
       return JSON.parse(raw);
     } catch {
       console.warn("No pokemon-translate data found at", filePath);
+      return [];
+    }
+  }
+
+  /**
+   * Load pokemon attack data from JSON file
+   */
+  private static loadPokemonAttackData(): { id: number; nameFr: string; nameEn: string; type: string; typeEn: string; category: string; categoryEn: string; power: number | null; pp: number; generation: number }[] {
+    const filePath = path.resolve(__dirname, "../data/questions/pokemon-attacks.json");
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(raw);
+    } catch {
+      console.warn("No pokemon-attacks data found at", filePath);
       return [];
     }
   }
@@ -889,6 +913,36 @@ export class GameEngine {
           points: 100,
         }));
       }
+      case "pokemonattack": {
+        const allAttacks = GameEngine.loadPokemonAttackData();
+        if (allAttacks.length === 0) return [...SAMPLE_QUESTIONS].slice(0, count);
+
+        const gens = config?.pokemonAttackGenerations?.length
+          ? config.pokemonAttackGenerations
+          : [1, 2, 3, 4, 5];
+        let filtered = allAttacks.filter(a => gens.includes(a.generation));
+        // Filter out very short names (2 chars or less) — too easy / no hidden letters
+        filtered = filtered.filter(a => a.nameFr.length >= 3);
+        if (filtered.length === 0) filtered = allAttacks.filter(a => a.nameFr.length >= 3);
+
+        const shuffled = filtered.sort(() => Math.random() - 0.5).slice(0, count);
+        return shuffled.map((a, i) => ({
+          id: `pokemonattack_${i + 1}`,
+          type: "pokemonattack" as const,
+          moveId: a.id,
+          nameFr: a.nameFr,
+          nameEn: a.nameEn,
+          attackType: a.type,
+          attackTypeEn: a.typeEn,
+          category: a.category,
+          categoryEn: a.categoryEn,
+          power: a.power,
+          pp: a.pp,
+          generation: a.generation,
+          timeLimit: 30,
+          points: 200,
+        }));
+      }
       case "dialed": {
         // Auto-generate random HSL colors
         const dialedQuestions: Question[] = [];
@@ -1071,6 +1125,14 @@ export class GameEngine {
       this.listeFinishedPlayers.clear();
     }
 
+    // Pokemon Attack mode: reset per-round tracking and build hint sequence
+    if (nextMode === "pokemonattack") {
+      this.pokemonAttackFoundPlayers.clear();
+      this.pokemonAttackHintsUsed.clear();
+      this.pokemonAttackAbandonedPlayers.clear();
+      this.pokemonAttackHintSequence = this.buildPokemonAttackHintSequence(nextQuestion as PokemonAttackQuestion);
+    }
+
     // Pokemon Stats mode: reset per-round tracking and build hint sequence
     if (nextMode === "pokestats") {
       this.pokestatsFoundPlayers.clear();
@@ -1233,6 +1295,19 @@ export class GameEngine {
         nameFr: "",
       };
     }
+    if (question.type === "pokemonattack") {
+      const q = question as PokemonAttackQuestion;
+      return Object.assign({}, question, {
+        nameFr: "",
+        nameEn: "",
+        attackType: "",
+        category: "",
+        power: null,
+        firstLetter: q.nameFr.charAt(0),
+        lastLetter: q.nameFr.charAt(q.nameFr.length - 1),
+        nameLength: q.nameFr.length,
+      });
+    }
     // petitbac: nothing to hide
     return question;
   }
@@ -1298,6 +1373,12 @@ export class GameEngine {
     // Liste mode: continuous multi-answer per round
     if (this.currentQuestion.type === "liste") {
       this.handleListeGuess(playerId, answerText);
+      return;
+    }
+
+    // Pokemon Attack mode: continuous guessing until correct
+    if (this.currentQuestion.type === "pokemonattack") {
+      this.handlePokemonAttackGuess(playerId, answerText);
       return;
     }
 
@@ -1429,6 +1510,12 @@ export class GameEngine {
     // Liste: calculate scores based on found items
     if (this.currentQuestion.type === "liste") {
       this.finalizeListeRound();
+      return;
+    }
+
+    // Pokemon Attack: calculate scores based on who found it
+    if (this.currentQuestion.type === "pokemonattack") {
+      this.finalizePokemonAttackRound();
       return;
     }
 
@@ -2143,6 +2230,10 @@ export class GameEngine {
         const q = this.currentQuestion as PokedexNumberQuestion;
         return `N°${q.correctNumber}`;
       }
+      case "pokemonattack": {
+        const q = this.currentQuestion as PokemonAttackQuestion;
+        return `${q.nameFr} / ${q.nameEn}`;
+      }
       case "dialed": {
         const q = this.currentQuestion as DialedQuestion;
         return `hsl(${q.targetH}, ${q.targetS}%, ${q.targetL}%)`;
@@ -2250,6 +2341,8 @@ export class GameEngine {
         return false; // Handled in handlePokemonGuess / host validation
       case "pokedexnumber":
         return false; // Handled in calculatePokedexNumberScores
+      case "pokemonattack":
+        return false; // Handled in handlePokemonAttackGuess
       case "dialed":
         return false; // Handled in calculateDialedScores
       default:
@@ -2888,6 +2981,211 @@ export class GameEngine {
     this.pokestatsAbandonedPlayers.clear();
 
     // Auto-proceed (store references so they can be canceled)
+    this.cancelAutoAdvance();
+    this.autoAdvanceTimer = setTimeout(() => {
+      this.autoAdvanceTimer = null;
+      const leaderboard = this.roomManager.getLeaderboard(this.room.code);
+      this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
+      this.autoAdvanceInnerTimer = setTimeout(() => {
+        this.autoAdvanceInnerTimer = null;
+        this.nextRound();
+      }, 2000);
+    }, 6000);
+  }
+
+  // ==========================================
+  // POKEMON ATTACK METHODS
+  // ==========================================
+
+  /**
+   * Build the hint sequence for a Pokémon Attack question.
+   * Sequence: Power → Category (Physique/Spéciale/Statut) → Type
+   */
+  private buildPokemonAttackHintSequence(q: PokemonAttackQuestion): PokemonAttackHintData[] {
+    const hints: PokemonAttackHintData[] = [];
+    hints.push({
+      hintLevel: 1,
+      hintType: "power",
+      value: q.power !== null ? String(q.power) : "—",
+      hintsRemaining: 2,
+    });
+    hints.push({
+      hintLevel: 2,
+      hintType: "category",
+      value: q.category,
+      hintsRemaining: 1,
+    });
+    hints.push({
+      hintLevel: 3,
+      hintType: "type",
+      value: q.attackType,
+      hintsRemaining: 0,
+    });
+    return hints;
+  }
+
+  /**
+   * Handle a Pokémon Attack guess (unlimited attempts, fuzzy match)
+   */
+  private handlePokemonAttackGuess(playerId: string, guess: string): void {
+    if (!this.currentQuestion || this.currentQuestion.type !== "pokemonattack") return;
+    if (this.pokemonAttackFoundPlayers.has(playerId)) return;
+    if (this.pokemonAttackAbandonedPlayers.has(playerId)) return;
+    if (this.timeRemaining <= 0) return;
+
+    const q = this.currentQuestion as PokemonAttackQuestion;
+    const isCorrect = GameEngine.fuzzyMatchAnswer(guess, [q.nameFr, q.nameEn]);
+
+    const socketId = this.roomManager.getSocketIdFromPlayerId(playerId);
+    if (!socketId) return;
+
+    if (isCorrect) {
+      const hintsUsed = this.pokemonAttackHintsUsed.get(playerId) || 0;
+
+      // Scoring: 200 base, -50 per hint used, + speed bonus
+      const basePointsByHints = [200, 150, 100, 50];
+      const basePoints = basePointsByHints[Math.min(hintsUsed, 3)];
+      const speedBonus = Math.round(50 * this.timeRemaining / q.timeLimit);
+      const totalPoints = basePoints + speedBonus;
+
+      this.pokemonAttackFoundPlayers.set(playerId, { hintsUsed, foundAt: Date.now(), points: totalPoints });
+      this.roomManager.updatePlayerScore(playerId, totalPoints);
+
+      this.io.to(socketId).emit("pokemonattack:guess_result", { correct: true, hintsUsed, points: totalPoints });
+      this.io.to(this.room.code).emit("pokemonattack:player_found", { playerId, hintsUsed });
+
+      // End round if all active players found or abandoned
+      const activePlayers = this.getActivePlayers();
+      const resolvedCount = this.pokemonAttackFoundPlayers.size + this.pokemonAttackAbandonedPlayers.size;
+      if (resolvedCount >= activePlayers.length) {
+        this.endRound();
+      }
+    } else {
+      this.io.to(socketId).emit("pokemonattack:guess_result", {
+        correct: false,
+        hintsUsed: this.pokemonAttackHintsUsed.get(playerId) || 0,
+      });
+    }
+  }
+
+  /**
+   * Player requests a hint for Pokémon Attack
+   */
+  public usePokemonAttackHint(playerId: string): void {
+    if (!this.currentQuestion || this.currentQuestion.type !== "pokemonattack") return;
+    if (this.pokemonAttackFoundPlayers.has(playerId)) return;
+    if (this.pokemonAttackAbandonedPlayers.has(playerId)) return;
+    if (this.timeRemaining <= 0) return;
+
+    const currentUsed = this.pokemonAttackHintsUsed.get(playerId) || 0;
+    if (currentUsed >= this.pokemonAttackHintSequence.length) return;
+
+    const hint = this.pokemonAttackHintSequence[currentUsed];
+    this.pokemonAttackHintsUsed.set(playerId, currentUsed + 1);
+
+    const socketId = this.roomManager.getSocketIdFromPlayerId(playerId);
+    if (socketId) {
+      this.io.to(socketId).emit("pokemonattack:hint", hint);
+    }
+  }
+
+  /**
+   * Player abandons the current Pokémon Attack round
+   */
+  public handlePokemonAttackAbandon(playerId: string): void {
+    if (!this.currentQuestion || this.currentQuestion.type !== "pokemonattack") return;
+    if (this.pokemonAttackFoundPlayers.has(playerId)) return;
+    if (this.pokemonAttackAbandonedPlayers.has(playerId)) return;
+
+    const q = this.currentQuestion as PokemonAttackQuestion;
+    this.pokemonAttackAbandonedPlayers.add(playerId);
+
+    const socketId = this.roomManager.getSocketIdFromPlayerId(playerId);
+    if (socketId) {
+      this.io.to(socketId).emit("pokemonattack:abandon_result", {
+        nameFr: q.nameFr,
+        nameEn: q.nameEn,
+        attackType: q.attackType,
+        category: q.category,
+        power: q.power,
+      });
+    }
+
+    this.io.to(this.room.code).emit("pokemonattack:player_found", { playerId, hintsUsed: -1 });
+
+    const activePlayers = this.getActivePlayers();
+    const resolvedCount = this.pokemonAttackFoundPlayers.size + this.pokemonAttackAbandonedPlayers.size;
+    if (resolvedCount >= activePlayers.length) {
+      this.endRound();
+    }
+  }
+
+  /**
+   * Finalize Pokémon Attack round — compute scores and emit results
+   */
+  private finalizePokemonAttackRound(): void {
+    this.stopTimer();
+    if (!this.currentQuestion || this.currentQuestion.type !== "pokemonattack") return;
+
+    const q = this.currentQuestion as PokemonAttackQuestion;
+
+    const playerResults: PokemonAttackRoundResult["playerResults"] = [];
+
+    for (const player of this.room.players) {
+      const foundData = this.pokemonAttackFoundPlayers.get(player.id);
+      const hintsUsed = this.pokemonAttackHintsUsed.get(player.id) || 0;
+
+      playerResults.push({
+        playerId: player.id,
+        found: !!foundData,
+        hintsUsed,
+        points: foundData?.points || 0,
+      });
+    }
+
+    playerResults.sort((a, b) => b.points - a.points);
+
+    const attackResult: PokemonAttackRoundResult = {
+      roundNumber: this.currentRound,
+      moveId: q.moveId,
+      nameFr: q.nameFr,
+      nameEn: q.nameEn,
+      attackType: q.attackType,
+      category: q.category,
+      power: q.power,
+      pp: q.pp,
+      playerResults,
+    };
+
+    const scores = playerResults.map(r => ({
+      playerId: r.playerId,
+      points: r.points,
+      total: this.room.players.find(p => p.id === r.playerId)?.score || 0,
+    }));
+
+    const roundResult: RoundResult = {
+      roundNumber: this.currentRound,
+      question: q,
+      answers: [],
+      correctAnswer: `${q.nameFr} / ${q.nameEn}`,
+      winner: playerResults[0] ? this.room.players.find(p => p.id === playerResults[0].playerId) : undefined,
+      scores,
+    };
+
+    this.updateLoseStreaks(roundResult);
+    this.roomManager.updateRoomStatus(this.room.code, "between_rounds");
+    this.io.to(this.room.code).emit("pokemonattack:round_end", attackResult);
+    this.io.to(this.room.code).emit("game:round_end", roundResult);
+
+    if (this.currentTeams) {
+      this.processTeamRoundEnd(scores);
+    }
+
+    this.pokemonAttackFoundPlayers.clear();
+    this.pokemonAttackHintsUsed.clear();
+    this.pokemonAttackHintSequence = [];
+    this.pokemonAttackAbandonedPlayers.clear();
+
     this.cancelAutoAdvance();
     this.autoAdvanceTimer = setTimeout(() => {
       this.autoAdvanceTimer = null;
@@ -5591,6 +5889,17 @@ export class GameEngine {
         this.resolveSplitSteal();
       }
       return;
+    }
+
+    // Pokemon Attack: check if all remaining active players have found/abandoned
+    if (!this.roundEnding && this.currentQuestion?.type === "pokemonattack" && activePlayers.length > 0) {
+      const resolvedCount = this.pokemonAttackFoundPlayers.size + this.pokemonAttackAbandonedPlayers.size;
+      const activeUnresolved = activePlayers.filter(
+        p => !this.pokemonAttackFoundPlayers.has(p.id) && !this.pokemonAttackAbandonedPlayers.has(p.id)
+      );
+      if (activeUnresolved.length === 0) {
+        this.endRound();
+      }
     }
 
     // Pokemon Stats / Liste: check if all remaining active players have found/abandoned/finished

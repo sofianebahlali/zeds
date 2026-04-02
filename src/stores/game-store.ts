@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ListeRoundResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult, PokemonRoundResult, PokemonAbandonResult, PokemonValidationData, PokeGeoValidationData, PokeGeoValidationSubmission, PokeGeoAnswerResultData } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ListeRoundResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult, PokemonRoundResult, PokemonAbandonResult, PokemonValidationData, PokeGeoValidationData, PokeGeoValidationSubmission, PokeGeoAnswerResultData, PokemonAttackHintData, PokemonAttackRoundResult, PokemonAttackAbandonResult } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
@@ -103,6 +103,15 @@ interface GameStoreState {
   pokestatsAbandoned: boolean;
   pokestatsAbandonData: PokestatsAbandonResult | null;
 
+  // Pokemon Attack mode
+  pokemonAttackHints: PokemonAttackHintData[];
+  pokemonAttackFound: boolean;
+  pokemonAttackMyPoints: number;
+  pokemonAttackFoundPlayers: { playerId: string; hintsUsed: number }[];
+  pokemonAttackRoundResult: PokemonAttackRoundResult | null;
+  pokemonAttackAbandoned: boolean;
+  pokemonAttackAbandonData: PokemonAttackAbandonResult | null;
+
   // Pokemon Silhouette mode
   pokemonFound: boolean;
   pokemonMyPoints: number;
@@ -187,6 +196,13 @@ interface GameStoreState {
   addListeFoundItem: (itemIndex: number, answer: string, foundByPlayerId: string) => void;
   addListeFinishedPlayer: (playerId: string) => void;
   setListeRoundResult: (result: ListeRoundResult) => void;
+
+  // Pokemon Attack actions
+  addPokemonAttackHint: (hint: PokemonAttackHintData) => void;
+  setPokemonAttackFound: (points: number) => void;
+  addPokemonAttackFoundPlayer: (playerId: string, hintsUsed: number) => void;
+  setPokemonAttackRoundResult: (result: PokemonAttackRoundResult) => void;
+  setPokemonAttackAbandoned: (data: PokemonAttackAbandonResult) => void;
 
   // Pokemon Stats actions
   addPokestatsHint: (hint: PokestatsHintData) => void;
@@ -288,6 +304,15 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   listeFinishedPlayers: [],
   listeRoundResult: null,
 
+  // Pokemon Attack initial state
+  pokemonAttackHints: [],
+  pokemonAttackFound: false,
+  pokemonAttackMyPoints: 0,
+  pokemonAttackFoundPlayers: [],
+  pokemonAttackRoundResult: null,
+  pokemonAttackAbandoned: false,
+  pokemonAttackAbandonData: null,
+
   // Pokemon Stats initial state
   pokestatsHints: [],
   pokestatsFound: false,
@@ -337,6 +362,13 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       listeMyFoundCount: 0,
       listeFinishedPlayers: [],
       listeRoundResult: null,
+      pokemonAttackHints: [],
+      pokemonAttackFound: false,
+      pokemonAttackMyPoints: 0,
+      pokemonAttackFoundPlayers: [],
+      pokemonAttackRoundResult: null,
+      pokemonAttackAbandoned: false,
+      pokemonAttackAbandonData: null,
       pokestatsHints: [],
       pokestatsFound: false,
       pokestatsMyPoints: 0,
@@ -451,6 +483,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       listeMyFoundCount: 0,
       listeFinishedPlayers: [],
       listeRoundResult: null,
+      pokemonAttackHints: [],
+      pokemonAttackFound: false,
+      pokemonAttackMyPoints: 0,
+      pokemonAttackFoundPlayers: [],
+      pokemonAttackRoundResult: null,
       pokestatsHints: [],
       pokestatsFound: false,
       pokestatsMyPoints: 0,
@@ -522,6 +559,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       listeMyFoundCount: 0,
       listeFinishedPlayers: [],
       listeRoundResult: null,
+      pokemonAttackHints: [],
+      pokemonAttackFound: false,
+      pokemonAttackMyPoints: 0,
+      pokemonAttackFoundPlayers: [],
+      pokemonAttackRoundResult: null,
       pokestatsHints: [],
       pokestatsFound: false,
       pokestatsMyPoints: 0,
@@ -744,6 +786,17 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         : [...state.listeFinishedPlayers, playerId],
     })),
   setListeRoundResult: (result) => set({ listeRoundResult: result }),
+
+  // Pokemon Attack actions
+  addPokemonAttackHint: (hint) => set((state) => ({
+    pokemonAttackHints: [...state.pokemonAttackHints, hint],
+  })),
+  setPokemonAttackFound: (points) => set({ pokemonAttackFound: true, pokemonAttackMyPoints: points }),
+  addPokemonAttackFoundPlayer: (playerId, hintsUsed) => set((state) => ({
+    pokemonAttackFoundPlayers: [...state.pokemonAttackFoundPlayers, { playerId, hintsUsed }],
+  })),
+  setPokemonAttackRoundResult: (result) => set({ pokemonAttackRoundResult: result }),
+  setPokemonAttackAbandoned: (data) => set({ pokemonAttackAbandoned: true, pokemonAttackAbandonData: data }),
 
   // Pokemon Stats actions
   addPokestatsHint: (hint) => set((state) => ({
