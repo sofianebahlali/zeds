@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon" | "dialed" | "pokegeo" | "pokemontranslate";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon" | "dialed" | "pokegeo" | "pokemontranslate" | "pokedexnumber";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -47,6 +47,7 @@ export interface GameModeConfig {
   pokestatsGenerations?: number[]; // Filter by generation(s) for pokestats mode
   pokemonGenerations?: number[]; // Filter by generation(s) for pokemon silhouette mode
   pokemonTranslateGenerations?: number[]; // Filter by generation(s) for pokemon translate mode
+  pokedexNumberGenerations?: number[]; // Filter by generation(s) for pokedex number mode
 }
 
 export interface GameSettings {
@@ -245,6 +246,7 @@ export interface PokeGeoQuestion extends BaseQuestion {
   type: "pokegeo";
   imageUrl: string;
   location: string; // e.g. "Bourg Palette", "Route 1"
+  locationEn?: string; // e.g. "Pallet Town", "Route 1"
   game: string; // e.g. "Pokémon Rouge/Bleu", "Pokémon Or/Argent"
   region: string; // e.g. "Kanto", "Johto"
   hint: string; // Usually the region or game, revealed on hint button
@@ -262,6 +264,7 @@ export interface PokeGeoPlayerAnswerData {
 
 export interface PokeGeoValidationData {
   location: string;
+  locationEn?: string;
   game: string;
   region: string;
   imageUrl: string;
@@ -748,6 +751,16 @@ export interface PokemonAbandonResult {
 // POKEMON TRANSLATE MODE TYPES
 // ==========================================
 
+export interface PokedexNumberQuestion extends BaseQuestion {
+  type: "pokedexnumber";
+  pokemonId: number;
+  imageUrl: string;
+  nameFr: string;
+  nameEn: string;
+  generation: number;
+  correctNumber: number;
+}
+
 export interface PokemonTranslateQuestion extends BaseQuestion {
   type: "pokemontranslate";
   pokemonId: number;
@@ -796,7 +809,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion | DialedQuestion | PokeGeoQuestion | PokemonTranslateQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion | DialedQuestion | PokeGeoQuestion | PokemonTranslateQuestion | PokedexNumberQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -1348,5 +1361,12 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Devine le nom français du Pokémon !",
     icon: "🌐",
     color: "from-blue-500 to-green-500",
+  },
+  {
+    id: "pokedexnumber",
+    name: "Numéro Pokédex",
+    description: "Devine le numéro Pokédex du Pokémon !",
+    icon: "🔢",
+    color: "from-red-500 to-rose-700",
   },
 ];

@@ -73,6 +73,9 @@ export function PokeGeoValidationScreen() {
               </span>
             </div>
           </div>
+          {validationData.locationEn && validationData.locationEn !== validationData.location && (
+            <p className="text-surface-400 text-xs font-medium">{validationData.locationEn}</p>
+          )}
           <p className="text-surface-500 text-xs">{validationData.game} — {validationData.region}</p>
         </div>
 
@@ -252,6 +255,9 @@ export function PokeGeoValidationScreen() {
             </span>
           </div>
         </div>
+        {validationData.locationEn && validationData.locationEn !== validationData.location && (
+          <p className="text-surface-400 text-xs font-medium">{validationData.locationEn}</p>
+        )}
         <p className="text-surface-500 text-xs">{validationData.game} — {validationData.region}</p>
       </div>
 

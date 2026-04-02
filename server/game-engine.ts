@@ -69,6 +69,7 @@ import type {
   PokeGeoValidationSubmission,
   PokeGeoPlayerAnswerData,
   PokemonTranslateQuestion,
+  PokedexNumberQuestion,
 } from "../src/types";
 import { PETITBAC_ALL_CATEGORIES, PETITBAC_CATEGORIES_PER_ROUND } from "../src/types";
 import { getQuestions as getDbQuestions, getTotalCount as getDbTotalCount } from "./question-db";
@@ -863,6 +864,31 @@ export class GameEngine {
           points: 100,
         }));
       }
+      case "pokedexnumber": {
+        const allPokemon = GameEngine.loadPokemonStatsData();
+        if (allPokemon.length === 0) return [...SAMPLE_QUESTIONS].slice(0, count);
+
+        // Default to gen 1-5 (Pokédex 1-649)
+        const gens = config?.pokedexNumberGenerations?.length
+          ? config.pokedexNumberGenerations
+          : [1, 2, 3, 4, 5];
+        let filtered = allPokemon.filter((p: { generation: number }) => gens.includes(p.generation));
+        if (filtered.length === 0) filtered = allPokemon;
+
+        const shuffledPoke = filtered.sort(() => Math.random() - 0.5).slice(0, count);
+        return shuffledPoke.map((p: { id: number; nameEn: string; nameFr: string; generation: number }, i: number) => ({
+          id: `pokedexnumber_${i + 1}`,
+          type: "pokedexnumber" as const,
+          pokemonId: p.id,
+          imageUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png`,
+          nameEn: p.nameEn,
+          nameFr: p.nameFr,
+          generation: p.generation,
+          correctNumber: p.id,
+          timeLimit: 15,
+          points: 100,
+        }));
+      }
       case "dialed": {
         // Auto-generate random HSL colors
         const dialedQuestions: Question[] = [];
@@ -1529,6 +1555,10 @@ export class GameEngine {
       return this.calculateConsensusScores(correctAnswer, scores);
     }
 
+    if (this.currentQuestion.type === "pokedexnumber") {
+      return this.calculatePokedexNumberScores(correctAnswer, scores);
+    }
+
     if (this.currentQuestion.type === "dialed") {
       return this.calculateDialedScores(correctAnswer, scores);
     }
@@ -1635,6 +1665,75 @@ export class GameEngine {
     }
 
     // Players who didn't answer
+    for (const player of this.room.players) {
+      if (!this.answers.has(player.id)) {
+        scores.push({ playerId: player.id, points: 0, total: player.score });
+      }
+    }
+
+    return {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion!,
+      answers: Array.from(this.answers.values()),
+      correctAnswer,
+      winner,
+      scores,
+    };
+  }
+
+  /**
+   * Calculate proximity scores for Pokédex number guessing
+   * Closest wins, exact match = double points
+   */
+  private calculatePokedexNumberScores(
+    correctAnswer: string,
+    scores: { playerId: string; points: number; total: number }[]
+  ): RoundResult {
+    const q = this.currentQuestion as PokedexNumberQuestion;
+    const correctNum = q.correctNumber;
+    const MAX_DEVIATION = 50; // Off by more than 50 = 0 points
+    let winner: Player | undefined;
+    let closestDeviation = Infinity;
+
+    for (const [playerId, answer] of this.answers) {
+      const guess = parseInt(answer.answer.replace(/[^\d]/g, ""), 10);
+
+      if (isNaN(guess)) {
+        answer.isCorrect = false;
+        answer.points = 0;
+        const updatedPlayer = this.roomManager.updatePlayerScore(playerId, 0);
+        if (updatedPlayer) {
+          scores.push({ playerId, points: 0, total: updatedPlayer.score });
+        }
+        continue;
+      }
+
+      const deviation = Math.abs(guess - correctNum);
+      const isExact = deviation === 0;
+
+      // Proximity scoring: linear falloff from 100% at exact to 0% at ±50
+      const proximityScore = deviation >= MAX_DEVIATION ? 0 : 1 - deviation / MAX_DEVIATION;
+      let points = Math.round(q.points * proximityScore);
+
+      // Double points for exact match
+      if (isExact) {
+        points = q.points * 2;
+      }
+
+      answer.isCorrect = isExact;
+      answer.points = points;
+
+      if (deviation < closestDeviation) {
+        closestDeviation = deviation;
+        winner = this.room.players.find((p) => p.id === playerId);
+      }
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);
+      if (updatedPlayer) {
+        scores.push({ playerId, points, total: updatedPlayer.score });
+      }
+    }
+
     for (const player of this.room.players) {
       if (!this.answers.has(player.id)) {
         scores.push({ playerId: player.id, points: 0, total: player.score });
@@ -2000,8 +2099,12 @@ export class GameEngine {
         return (this.currentQuestion as PetitBacQuestion).letter;
       case "geoquiz":
         return (this.currentQuestion as GeoQuizQuestion).city;
-      case "pokegeo":
-        return (this.currentQuestion as PokeGeoQuestion).location;
+      case "pokegeo": {
+        const q = this.currentQuestion as PokeGeoQuestion;
+        return q.locationEn && q.locationEn !== q.location
+          ? `${q.location} / ${q.locationEn}`
+          : q.location;
+      }
       case "langue": {
         const q = this.currentQuestion as LangueQuestion;
         return `${q.language} — ${q.meaning}`;
@@ -2035,6 +2138,10 @@ export class GameEngine {
       case "pokemontranslate": {
         const q = this.currentQuestion as PokemonTranslateQuestion;
         return q.nameFr;
+      }
+      case "pokedexnumber": {
+        const q = this.currentQuestion as PokedexNumberQuestion;
+        return `N°${q.correctNumber}`;
       }
       case "dialed": {
         const q = this.currentQuestion as DialedQuestion;
@@ -2141,6 +2248,8 @@ export class GameEngine {
         return false; // Handled in handleListeGuess
       case "pokemon":
         return false; // Handled in handlePokemonGuess / host validation
+      case "pokedexnumber":
+        return false; // Handled in calculatePokedexNumberScores
       case "dialed":
         return false; // Handled in calculateDialedScores
       default:
@@ -3283,6 +3392,7 @@ export class GameEngine {
 
     this.io.to(this.room.code).emit("pokegeo:validation_start", {
       location: q.location,
+      locationEn: q.locationEn,
       game: q.game,
       region: q.region,
       imageUrl: q.imageUrl,

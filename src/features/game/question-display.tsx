@@ -9,7 +9,7 @@ import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { getSocket } from "@/lib/socket";
 import { cn } from "@/lib/utils";
-import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion, FutCardQuestion, ChronoQuestion, ConsensusQuestion, DialedQuestion, PokeGeoQuestion, PokemonTranslateQuestion } from "@/types";
+import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion, FutCardQuestion, ChronoQuestion, ConsensusQuestion, DialedQuestion, PokeGeoQuestion, PokemonTranslateQuestion, PokedexNumberQuestion } from "@/types";
 
 export function QuestionDisplay() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
@@ -40,6 +40,7 @@ export function QuestionDisplay() {
   const [dialedS, setDialedS] = useState(50);
   const [dialedL, setDialedL] = useState(50);
   const [dialedSubmitted, setDialedSubmitted] = useState(false);
+  const [pokedexGuess, setPokedexGuess] = useState("");
 
   // Ref to access latest petitBac answers in the auto-submit effect
   const petitBacAnswersRef = useRef(petitBacAnswers);
@@ -82,6 +83,7 @@ export function QuestionDisplay() {
     setDialedS(50);
     setDialedL(50);
     setDialedSubmitted(false);
+    setPokedexGuess("");
   }, [currentQuestion?.id]);
 
   if (!currentQuestion) return null;
@@ -117,6 +119,8 @@ export function QuestionDisplay() {
       submitAnswer(translateAnswer.trim());
     } else if (currentQuestion.type === "consensus" && consensusAnswer.trim()) {
       submitAnswer(consensusAnswer.trim());
+    } else if (currentQuestion.type === "pokedexnumber" && pokedexGuess.trim()) {
+      submitAnswer(pokedexGuess.trim());
     } else if (currentQuestion.type === "dialed") {
       submitAnswer(JSON.stringify({ h: dialedH, s: dialedS, l: dialedL }));
       setDialedSubmitted(true);
@@ -315,6 +319,16 @@ export function QuestionDisplay() {
           />
         )}
 
+        {currentQuestion.type === "pokedexnumber" && (
+          <PokedexNumberQuestionView
+            question={currentQuestion as PokedexNumberQuestion}
+            guess={pokedexGuess}
+            hasAnswered={hasAnswered}
+            onChange={setPokedexGuess}
+            onSubmit={handleSubmit}
+          />
+        )}
+
         {(currentQuestion.type === "open" ||
           currentQuestion.type === "image") && (
           <OpenQuestionView
@@ -434,6 +448,112 @@ function QCMQuestionView({
           </motion.div>
         )}
       </AnimatePresence>
+    </>
+  );
+}
+
+// ==========================================
+// POKEDEX NUMBER QUESTION VIEW
+// ==========================================
+
+interface PokedexNumberQuestionViewProps {
+  question: PokedexNumberQuestion;
+  guess: string;
+  hasAnswered: boolean;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+}
+
+function PokedexNumberQuestionView({
+  question,
+  guess,
+  hasAnswered,
+  onChange,
+  onSubmit,
+}: PokedexNumberQuestionViewProps) {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSubmit();
+    }
+  };
+
+  return (
+    <>
+      {/* Pokémon image */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="flex justify-center mb-3"
+      >
+        <div className="w-40 h-40 rounded-2xl overflow-hidden bg-surface-800/50 flex items-center justify-center">
+          <img
+            src={question.imageUrl}
+            alt={question.nameFr}
+            className="w-full h-full object-contain p-2"
+          />
+        </div>
+      </motion.div>
+
+      {/* Pokémon name */}
+      <div className="mb-4 text-center">
+        <h2 className="text-xl font-display font-bold text-surface-100">
+          {question.nameFr}
+        </h2>
+        <p className="text-surface-500 text-sm">{question.nameEn}</p>
+        <p className="text-surface-400 text-sm mt-2">Quel est son numéro dans le Pokédex ?</p>
+      </div>
+
+      {/* Number input */}
+      <div className="flex-1 flex flex-col justify-end">
+        {hasAnswered ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center"
+          >
+            <Card className="inline-block">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-success-400" />
+                <div className="text-left">
+                  <p className="text-sm text-surface-400">Ton estimation :</p>
+                  <p className="text-2xl font-display font-bold text-surface-100">
+                    N°{guess}
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        ) : (
+          <div className="space-y-4">
+            <div className="relative">
+              <Input
+                value={guess}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/[^\d]/g, "");
+                  onChange(val);
+                }}
+                onKeyDown={handleKeyDown}
+                placeholder="N°..."
+                inputMode="numeric"
+                autoFocus
+                autoComplete="off"
+                className="text-center text-2xl font-display font-bold"
+              />
+            </div>
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onSubmit}
+              disabled={!guess.trim()}
+              rightIcon={<Send className="w-5 h-5" />}
+            >
+              Valider
+            </Button>
+          </div>
+        )}
+      </div>
     </>
   );
 }
