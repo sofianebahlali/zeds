@@ -948,6 +948,8 @@ function PetitBacQuestionView({
 }: PetitBacQuestionViewProps) {
   const petitBacStop = useGameStore((s) => s.petitBacStopTriggered);
   const [stopCountdown, setStopCountdown] = useState<number | null>(null);
+  const onSubmitRef = useRef(onSubmit);
+  onSubmitRef.current = onSubmit;
 
   // When stop is triggered, start visual countdown and auto-submit
   useEffect(() => {
@@ -958,14 +960,14 @@ function PetitBacQuestionView({
         if (prev === null || prev <= 1) {
           clearInterval(interval);
           // Auto-submit when countdown reaches 0
-          onSubmit();
+          onSubmitRef.current();
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [petitBacStop, hasAnswered, onSubmit]);
+  }, [petitBacStop, hasAnswered]);
 
   const handleCategoryChange = (category: string, value: string) => {
     onChange({ ...answers, [category]: value });

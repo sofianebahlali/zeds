@@ -2172,6 +2172,8 @@ export class GameEngine {
     if (normalizedGuess.length < 2) return; // Too short
 
     // Check against all 22 players
+    // Pass 1: exact match or last-name match (strict)
+    // Pass 2: fuzzy Levenshtein match (tolerant to typos)
     let matchedIndex = -1;
     for (let i = 0; i < allPlayers.length; i++) {
       if (found.has(i)) continue; // Already found by this player
@@ -2195,6 +2197,35 @@ export class GameEngine {
         }
       }
       if (matchedIndex >= 0) break;
+    }
+
+    // Pass 2: fuzzy match if strict match failed (tolerate typos like "Busquet" for "Busquets")
+    if (matchedIndex < 0 && normalizedGuess.length >= 3) {
+      let bestSimilarity = 0;
+      for (let i = 0; i < allPlayers.length; i++) {
+        if (found.has(i)) continue;
+        const p = allPlayers[i];
+        const allNames = [p.name, ...p.alt];
+        for (const name of allNames) {
+          const normalizedName = GameEngine.normalizeForComparison(name);
+          // Full name fuzzy match
+          const sim = GameEngine.levenshteinSimilarity(normalizedGuess, normalizedName);
+          if (sim >= 0.80 && sim > bestSimilarity) {
+            bestSimilarity = sim;
+            matchedIndex = i;
+          }
+          // Last-name fuzzy match: extract last name part and compare
+          const lastSpaceIdx = normalizedName.lastIndexOf(" ");
+          if (lastSpaceIdx >= 0) {
+            const lastName = normalizedName.substring(lastSpaceIdx + 1);
+            const lastNameSim = GameEngine.levenshteinSimilarity(normalizedGuess, lastName);
+            if (lastNameSim >= 0.80 && lastNameSim > bestSimilarity) {
+              bestSimilarity = lastNameSim;
+              matchedIndex = i;
+            }
+          }
+        }
+      }
     }
 
     if (matchedIndex >= 0) {
@@ -2346,6 +2377,8 @@ export class GameEngine {
     const playerFound = this.listeFoundItems.get(playerId)!;
 
     // Check against all items
+    // Pass 1: exact match or last-name match (strict)
+    // Pass 2: fuzzy Levenshtein match (tolerant to typos)
     let matchedIndex = -1;
     for (let i = 0; i < q.items.length; i++) {
       if (playerFound.has(i)) continue; // Already found by this player
@@ -2367,6 +2400,34 @@ export class GameEngine {
         }
       }
       if (matchedIndex >= 0) break;
+    }
+
+    // Pass 2: fuzzy match if strict match failed
+    if (matchedIndex < 0 && normalizedGuess.length >= 3) {
+      let bestSimilarity = 0;
+      for (let i = 0; i < q.items.length; i++) {
+        if (playerFound.has(i)) continue;
+        const item = q.items[i];
+        const allNames = [item.answer, ...item.aliases];
+        for (const name of allNames) {
+          const normalizedName = GameEngine.normalizeForComparison(name);
+          const sim = GameEngine.levenshteinSimilarity(normalizedGuess, normalizedName);
+          if (sim >= 0.80 && sim > bestSimilarity) {
+            bestSimilarity = sim;
+            matchedIndex = i;
+          }
+          // Last-name fuzzy match
+          const lastSpaceIdx = normalizedName.lastIndexOf(" ");
+          if (lastSpaceIdx >= 0) {
+            const lastName = normalizedName.substring(lastSpaceIdx + 1);
+            const lastNameSim = GameEngine.levenshteinSimilarity(normalizedGuess, lastName);
+            if (lastNameSim >= 0.80 && lastNameSim > bestSimilarity) {
+              bestSimilarity = lastNameSim;
+              matchedIndex = i;
+            }
+          }
+        }
+      }
     }
 
     if (matchedIndex >= 0) {

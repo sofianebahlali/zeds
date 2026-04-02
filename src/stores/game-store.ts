@@ -353,6 +353,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       pokemonAbandonData: null,
       pokemonValidationData: null,
       pokemonAnswerResults: [],
+      petitBacStopTriggered: null,
     })),
 
   setTimeRemaining: (time) => set({ timeRemaining: time }),

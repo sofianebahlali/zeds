@@ -119,7 +119,7 @@ export function PokemonGameScreen() {
       <TimerProgress timeRemaining={timeRemaining} totalTime={totalTime} />
 
       {/* Silhouette / Revealed image */}
-      <div className="flex-1 flex items-center justify-center min-h-0">
+      <div className="flex-1 flex items-center justify-center min-h-[180px]">
         <motion.div
           className="relative w-64 h-64 max-w-[70vw] max-h-[40vh]"
           initial={{ scale: 0.9, opacity: 0 }}
