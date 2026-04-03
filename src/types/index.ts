@@ -90,6 +90,64 @@ export const DEFAULT_PLAYLIST: GameModeConfig[] = [
   { mode: "parcours", rounds: 2 },
 ];
 
+// ==========================================
+// GAME PRESETS
+// ==========================================
+
+export interface GamePreset {
+  id: string;
+  name: string;
+  icon: string;
+  description: string;
+  gradient: string;
+  playlist: GameModeConfig[];
+}
+
+export const GAME_PRESETS: GamePreset[] = [
+  {
+    id: "football",
+    name: "Foot",
+    icon: "⚽",
+    description: "Parcours, compos, numéros, cartes FUT",
+    gradient: "from-green-500 to-emerald-700",
+    playlist: [
+      { mode: "parcours", rounds: 3 },
+      { mode: "lineup", rounds: 2 },
+      { mode: "jerseynumber", rounds: 3 },
+      { mode: "futcard", rounds: 2 },
+      { mode: "liste", rounds: 2 },
+    ],
+  },
+  {
+    id: "pokemon",
+    name: "Pokémon",
+    icon: "⚡",
+    description: "Silhouettes, stats, traductions, attaques",
+    gradient: "from-yellow-400 to-red-500",
+    playlist: [
+      { mode: "pokemon", rounds: 3 },
+      { mode: "pokestats", rounds: 2 },
+      { mode: "pokemontranslate", rounds: 2 },
+      { mode: "pokedexnumber", rounds: 2 },
+      { mode: "pokemonattack", rounds: 2 },
+    ],
+  },
+  {
+    id: "culture",
+    name: "Culture G",
+    icon: "🧠",
+    description: "QCM, estimation, géo, langues, consensus",
+    gradient: "from-indigo-500 to-violet-600",
+    playlist: [
+      { mode: "qcm", rounds: 3 },
+      { mode: "estimation", rounds: 3 },
+      { mode: "geoquiz", rounds: 2 },
+      { mode: "langue", rounds: 2 },
+      { mode: "consensus", rounds: 2 },
+    ],
+  },
+];
+
 export const DEFAULT_GAME_SETTINGS: GameSettings = {
   maxPlayers: 8,
   roundDuration: 30,

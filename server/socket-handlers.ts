@@ -154,10 +154,20 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
 
     socket.on("room:play_again", () => {
       const playerId = roomManager.getPlayerIdFromSocket(socket.id);
-      if (!playerId) return;
+      if (!playerId) {
+        socket.emit("room:error", "Session expirée, veuillez vous reconnecter");
+        return;
+      }
 
       const room = roomManager.getRoomByPlayerId(playerId);
-      if (!room || room.hostId !== playerId) return;
+      if (!room) {
+        socket.emit("room:error", "Room introuvable");
+        return;
+      }
+      if (room.hostId !== playerId) {
+        socket.emit("room:error", "Seul l'hôte peut relancer la partie");
+        return;
+      }
 
       // Clean up old game engine
       const oldEngine = gameEngines.get(room.code);

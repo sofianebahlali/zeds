@@ -19,7 +19,7 @@ import { Button, Card, Avatar, Badge, StatusBadge, ScrollArea } from "@/componen
 import { ScreenContainer } from "@/components/layout";
 import { useRoomStore, usePlayerStore, useUIStore, useConnectionStatus } from "@/stores";
 import { useSocket } from "@/hooks";
-import { GAME_MODES, GAME_MODE_CATEGORIES, DEFAULT_PLAYLIST } from "@/types";
+import { GAME_MODES, GAME_MODE_CATEGORIES, GAME_PRESETS, DEFAULT_PLAYLIST } from "@/types";
 import type { GameModeConfig } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -150,6 +150,38 @@ export function LobbyScreen() {
               exit={{ opacity: 0 }}
               className="mb-6 space-y-4"
             >
+              {/* Preset selector */}
+              <Card>
+                <h3 className="text-sm font-medium text-surface-400 mb-3">
+                  Presets
+                </h3>
+                <div className="grid grid-cols-3 gap-2">
+                  {GAME_PRESETS.map((preset) => {
+                    const isActive = JSON.stringify(playlist) === JSON.stringify(preset.playlist);
+                    return (
+                      <button
+                        key={preset.id}
+                        onClick={() => updateRoomSettings({ playlist: preset.playlist })}
+                        className={cn(
+                          "relative p-3 rounded-xl text-center border transition-all",
+                          isActive
+                            ? "border-brand-500 bg-brand-500/10 ring-1 ring-brand-500/30"
+                            : "border-surface-700 bg-surface-800 hover:border-surface-500"
+                        )}
+                      >
+                        <span className="text-2xl block mb-1">{preset.icon}</span>
+                        <span className="text-xs font-bold text-surface-100 block">
+                          {preset.name}
+                        </span>
+                        <span className="text-[10px] text-surface-500 block mt-0.5 leading-tight">
+                          {preset.description}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </Card>
+
               <PlaylistBuilder
                 playlist={playlist}
                 onChange={(newPlaylist) => {

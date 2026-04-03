@@ -342,16 +342,15 @@ export function ScoreboardScreen() {
                     Partager
                   </Button>
 
-                  {isHost && (
-                    <Button
-                      variant="primary"
-                      size="lg"
-                      onClick={handlePlayAgain}
-                      leftIcon={<RotateCcw className="w-5 h-5" />}
-                    >
-                      Rejouer
-                    </Button>
-                  )}
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    onClick={isHost ? handlePlayAgain : undefined}
+                    disabled={!isHost}
+                    leftIcon={<RotateCcw className="w-5 h-5" />}
+                  >
+                    {isHost ? "Rejouer" : "En attente..."}
+                  </Button>
                 </div>
 
                 <Button
