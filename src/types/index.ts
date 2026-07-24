@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon" | "dialed" | "pokegeo" | "pokemontranslate" | "pokedexnumber" | "pokemonattack";
+export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon" | "dialed" | "pokegeo" | "pokemontranslate" | "pokedexnumber" | "pokemonattack" | "flag" | "capital" | "countrylocate" | "citylocate";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -130,6 +130,20 @@ export const GAME_PRESETS: GamePreset[] = [
       { mode: "pokemontranslate", rounds: 2 },
       { mode: "pokedexnumber", rounds: 2 },
       { mode: "pokemonattack", rounds: 2 },
+    ],
+  },
+  {
+    id: "geo",
+    name: "Géographie",
+    icon: "🌍",
+    description: "Drapeaux, capitales, localisation, lieux",
+    gradient: "from-sky-500 to-teal-600",
+    playlist: [
+      { mode: "flag", rounds: 3 },
+      { mode: "capital", rounds: 3 },
+      { mode: "countrylocate", rounds: 3 },
+      { mode: "citylocate", rounds: 3 },
+      { mode: "geoquiz", rounds: 2 },
     ],
   },
   {
@@ -881,6 +895,96 @@ export interface PokemonAttackAbandonResult {
   power: number | null;
 }
 
+// ==========================================
+// GEOGRAPHY MODES (drapeau / capitale / localisation)
+// ==========================================
+
+export type GeoDifficulty = "easy" | "medium" | "hard";
+
+export const GEO_DIFFICULTY_LABELS: Record<GeoDifficulty, string> = {
+  easy: "Facile",
+  medium: "Moyen",
+  hard: "Difficile",
+};
+
+/** Devine le drapeau — a flag is shown, players name the country. */
+export interface FlagQuestion extends BaseQuestion {
+  type: "flag";
+  cca3: string;
+  flagUrl: string;
+  continent: string;
+  difficulty: GeoDifficulty;
+  countryName: string; // hidden until reveal
+  acceptedAnswers: string[]; // hidden until reveal
+}
+
+/** Devine la capitale — a country is shown, players name its capital. */
+export interface CapitalQuestion extends BaseQuestion {
+  type: "capital";
+  cca3: string;
+  countryName: string;
+  flagUrl: string;
+  continent: string;
+  difficulty: GeoDifficulty;
+  capital: string; // hidden until reveal
+  acceptedAnswers: string[]; // hidden until reveal
+}
+
+/** Localise le pays — a country is named, players tap it on the world map. */
+export interface CountryLocateQuestion extends BaseQuestion {
+  type: "countrylocate";
+  countryName: string;
+  flagUrl: string;
+  continent: string;
+  difficulty: GeoDifficulty;
+  cca3: string; // hidden until reveal (the client map is keyed by cca3)
+  lat: number; // hidden until reveal — label point of the country
+  lng: number;
+}
+
+/** Localise la ville — a city is named, players tap where it is on the world map. */
+export interface CityLocateQuestion extends BaseQuestion {
+  type: "citylocate";
+  cityName: string;
+  difficulty: GeoDifficulty;
+  /** Country shown as a hint during the round — null on the easy tier. */
+  countryHint: string | null;
+  cca3: string; // hidden until reveal
+  countryName: string; // hidden until reveal
+  flagUrl: string; // hidden until reveal
+  continent: string; // hidden until reveal
+  lat: number; // hidden until reveal
+  lng: number;
+}
+
+/** What the client sends for a `countrylocate` round (JSON-encoded). */
+export interface CountryLocateGuess {
+  lat: number;
+  lng: number;
+  /** Country the client believes was tapped — informational, the server re-checks. */
+  cca3?: string;
+}
+
+/** Per-player outcome, sent inside the round result so everyone can see the pins. */
+export interface CountryLocateResultEntry {
+  playerId: string;
+  playerName: string;
+  playerAvatar: string;
+  lat: number | null;
+  lng: number | null;
+  guessedCca3: string | null;
+  guessedName: string | null;
+  distanceKm: number | null;
+  correct: boolean;
+  points: number;
+}
+
+/** Per-player outcome of a `citylocate` round. `correct` means "bullseye", not "right country". */
+export interface CityLocateResultEntry extends CountryLocateResultEntry {
+  /** The pin landed in the city's own country. */
+  sameCountry: boolean;
+}
+
 export interface LineupPlayer {
   pos: string;
   name: string;
@@ -919,7 +1023,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion | DialedQuestion | PokeGeoQuestion | PokemonTranslateQuestion | PokedexNumberQuestion | PokemonAttackQuestion;
+export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion | DialedQuestion | PokeGeoQuestion | PokemonTranslateQuestion | PokedexNumberQuestion | PokemonAttackQuestion | FlagQuestion | CapitalQuestion | CountryLocateQuestion | CityLocateQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -946,6 +1050,10 @@ export interface RoundResult {
   correctAnswer: string;
   winner?: Player;
   scores: { playerId: string; points: number; total: number }[];
+  /** Only for `countrylocate` rounds — where everybody tapped. */
+  countryLocate?: CountryLocateResultEntry[];
+  /** Only for `citylocate` rounds — where everybody tapped. */
+  cityLocate?: CityLocateResultEntry[];
 }
 
 // ==========================================
@@ -1320,11 +1428,11 @@ export interface GameModeInfo {
   description: string;
   icon: string;
   color: string;
-  category: "culture" | "pokemon" | "football";
+  category: "culture" | "geo" | "pokemon" | "football";
 }
 
 export interface GameModeCategory {
-  id: "culture" | "pokemon" | "football";
+  id: "culture" | "geo" | "pokemon" | "football";
   name: string;
   icon: string;
   gradient: string;
@@ -1332,6 +1440,7 @@ export interface GameModeCategory {
 
 export const GAME_MODE_CATEGORIES: GameModeCategory[] = [
   { id: "culture", name: "Culture G / Maths", icon: "🧠", gradient: "from-indigo-500 to-violet-600" },
+  { id: "geo", name: "Géographie", icon: "🌍", gradient: "from-sky-500 to-teal-600" },
   { id: "pokemon", name: "Pokémon", icon: "⚡", gradient: "from-yellow-400 to-red-500" },
   { id: "football", name: "Foot / FUT", icon: "⚽", gradient: "from-green-500 to-emerald-700" },
 ];
@@ -1400,7 +1509,40 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Reconnais le lieu et trouve la ville",
     icon: "🌍",
     color: "from-sky-500 to-sky-700",
-    category: "culture",
+    category: "geo",
+  },
+  // ── Géographie ──
+  {
+    id: "flag",
+    name: "Devine le Drapeau",
+    description: "Quel pays se cache derrière ce drapeau ?",
+    icon: "🏳️",
+    color: "from-sky-500 to-blue-700",
+    category: "geo",
+  },
+  {
+    id: "capital",
+    name: "Devine la Capitale",
+    description: "Trouve la capitale du pays affiché",
+    icon: "🏛️",
+    color: "from-teal-500 to-cyan-700",
+    category: "geo",
+  },
+  {
+    id: "countrylocate",
+    name: "Localise le Pays",
+    description: "Place le pays sur la carte du monde",
+    icon: "📍",
+    color: "from-emerald-500 to-teal-700",
+    category: "geo",
+  },
+  {
+    id: "citylocate",
+    name: "Localise la Ville",
+    description: "Plante ton épingle sur la ville",
+    icon: "🏙️",
+    color: "from-sky-500 to-indigo-700",
+    category: "geo",
   },
   {
     id: "langue",

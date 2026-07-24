@@ -25,6 +25,9 @@ npm run start:prod     # node dist/server/production.js
 # Docker
 docker build -t quizz-arena .
 docker run -p 3000:3000 quizz-arena
+
+# Regenerate the geography dataset (countries, flags, world map) — needs network
+npm run build:countries
 ```
 
 No test framework is currently configured.
@@ -82,3 +85,25 @@ room:create → room:joined → room:ready → game:start → game:starting (cou
 | `server/socket-handlers.ts` | Socket event handlers |
 | `server/room-manager.ts` | Room and player management |
 | `data/questions/*.json` | Question banks loaded by game engine |
+| `server/countries.ts` | Country & city pools, tap→country hit-test and answer matching for the geography modes |
+| `src/lib/world-map.ts` | Client twin of the hit-test + Mercator projection for the world map |
+| `src/features/game/world-map.tsx` | Pan/pinch/tap SVG world map (used in-round and at reveal) |
+
+### Geography modes (`flag`, `capital`, `countrylocate`, `citylocate`)
+
+`scripts/build-countries.ts` regenerates everything they need from Natural Earth + flagcdn:
+`data/questions/countries.json` (197 countries: FR names, aliases, capitals, difficulty tier),
+`data/questions/cities.json` (602 cities for `citylocate`), `public/geo/world-countries.json`
+(simplified shapes, keyed by ISO-3) and `public/images/flags/`.
+The generated files are committed — the script only needs to run when the data changes.
+
+The map shapes are shared: `server/countries.ts` and `src/lib/world-map.ts` implement the same
+point-in-polygon test with the same tolerance, so the country highlighted under the player's
+finger is the one the server scores. Rounds ramp easy → medium → hard within a mode segment,
+and points scale with the tier.
+
+`citylocate` scores on distance alone (`cityProximityRatio`): full points within 75 km, decaying
+to nothing at ~1275 km, with a floor for landing in the right country. Its easy tier is a curated
+list of world cities (population is a poor proxy for fame); medium/hard are scored from Natural
+Earth flags (world city, capital, population) plus a bonus for having a French exonym, and the
+country is shown as a hint from the medium tier up.

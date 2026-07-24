@@ -2,14 +2,16 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle, Tag, Volume2, RotateCcw, MapPin, Eye, Gamepad2 } from "lucide-react";
+import { Send, CheckCircle, Tag, Volume2, RotateCcw, MapPin, Eye, Gamepad2, Flag as FlagIcon, Landmark, Globe2, Building2 } from "lucide-react";
 import Image from "next/image";
 import { Button, Card, Input, TimerProgress, Badge, Avatar } from "@/components/ui";
 import { useGameStore, useRoomStore } from "@/stores";
 import { useSocket } from "@/hooks";
 import { getSocket } from "@/lib/socket";
 import { cn } from "@/lib/utils";
-import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion, FutCardQuestion, ChronoQuestion, ConsensusQuestion, DialedQuestion, PokeGeoQuestion, PokemonTranslateQuestion, PokedexNumberQuestion } from "@/types";
+import { WorldMap } from "./world-map";
+import type { QCMQuestion, OpenQuestion, EstimationQuestion, DictationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion, FutCardQuestion, ChronoQuestion, ConsensusQuestion, DialedQuestion, PokeGeoQuestion, PokemonTranslateQuestion, PokedexNumberQuestion, FlagQuestion, CapitalQuestion, CountryLocateQuestion, CityLocateQuestion, GeoDifficulty } from "@/types";
+import { GEO_DIFFICULTY_LABELS } from "@/types";
 
 export function QuestionDisplay() {
   const currentQuestion = useGameStore((s) => s.currentQuestion);
@@ -41,6 +43,9 @@ export function QuestionDisplay() {
   const [dialedL, setDialedL] = useState(50);
   const [dialedSubmitted, setDialedSubmitted] = useState(false);
   const [pokedexGuess, setPokedexGuess] = useState("");
+  const [flagAnswer, setFlagAnswer] = useState("");
+  const [capitalAnswer, setCapitalAnswer] = useState("");
+  const [locatePick, setLocatePick] = useState<{ lat: number; lng: number; cca3: string | null; name: string | null } | null>(null);
 
   // Ref to access latest petitBac answers in the auto-submit effect
   const petitBacAnswersRef = useRef(petitBacAnswers);
@@ -84,6 +89,9 @@ export function QuestionDisplay() {
     setDialedL(50);
     setDialedSubmitted(false);
     setPokedexGuess("");
+    setFlagAnswer("");
+    setCapitalAnswer("");
+    setLocatePick(null);
   }, [currentQuestion?.id]);
 
   if (!currentQuestion) return null;
@@ -121,6 +129,12 @@ export function QuestionDisplay() {
       submitAnswer(consensusAnswer.trim());
     } else if (currentQuestion.type === "pokedexnumber" && pokedexGuess.trim()) {
       submitAnswer(pokedexGuess.trim());
+    } else if (currentQuestion.type === "flag" && flagAnswer.trim()) {
+      submitAnswer(flagAnswer.trim());
+    } else if (currentQuestion.type === "capital" && capitalAnswer.trim()) {
+      submitAnswer(capitalAnswer.trim());
+    } else if ((currentQuestion.type === "countrylocate" || currentQuestion.type === "citylocate") && locatePick) {
+      submitAnswer(JSON.stringify({ lat: locatePick.lat, lng: locatePick.lng, cca3: locatePick.cca3 }));
     } else if (currentQuestion.type === "dialed") {
       submitAnswer(JSON.stringify({ h: dialedH, s: dialedS, l: dialedL }));
       setDialedSubmitted(true);
@@ -325,6 +339,46 @@ export function QuestionDisplay() {
             guess={pokedexGuess}
             hasAnswered={hasAnswered}
             onChange={setPokedexGuess}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "flag" && (
+          <FlagQuestionView
+            question={currentQuestion as FlagQuestion}
+            answer={flagAnswer}
+            hasAnswered={hasAnswered}
+            onChange={setFlagAnswer}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "capital" && (
+          <CapitalQuestionView
+            question={currentQuestion as CapitalQuestion}
+            answer={capitalAnswer}
+            hasAnswered={hasAnswered}
+            onChange={setCapitalAnswer}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "countrylocate" && (
+          <CountryLocateQuestionView
+            question={currentQuestion as CountryLocateQuestion}
+            pick={locatePick}
+            hasAnswered={hasAnswered}
+            onPick={setLocatePick}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "citylocate" && (
+          <CityLocateQuestionView
+            question={currentQuestion as CityLocateQuestion}
+            pick={locatePick}
+            hasAnswered={hasAnswered}
+            onPick={setLocatePick}
             onSubmit={handleSubmit}
           />
         )}
@@ -2745,5 +2799,378 @@ function PokemonTranslateQuestionView({
         )}
       </div>
     </>
+  );
+}
+
+// ==========================================
+// GEOGRAPHY MODES
+// ==========================================
+
+function GeoDifficultyBadge({ difficulty, points }: { difficulty: GeoDifficulty; points: number }) {
+  return (
+    <div className="flex items-center justify-center gap-2">
+      <span
+        className={cn(
+          "px-2 py-0.5 rounded-full text-[11px] font-medium border",
+          difficulty === "easy"
+            ? "bg-success-500/10 border-success-500/30 text-success-400"
+            : difficulty === "medium"
+            ? "bg-accent-500/10 border-accent-500/30 text-accent-400"
+            : "bg-danger-500/10 border-danger-500/30 text-danger-400"
+        )}
+      >
+        {GEO_DIFFICULTY_LABELS[difficulty]}
+      </span>
+      <span className="text-[11px] text-surface-500">{points} pts</span>
+    </div>
+  );
+}
+
+interface FlagQuestionViewProps {
+  question: FlagQuestion;
+  answer: string;
+  hasAnswered: boolean;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+}
+
+function FlagQuestionView({ question, answer, hasAnswered, onChange, onSubmit }: FlagQuestionViewProps) {
+  const [imageError, setImageError] = useState(false);
+
+  useEffect(() => {
+    setImageError(false);
+  }, [question.flagUrl]);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSubmit();
+    }
+  };
+
+  return (
+    <>
+      <div className="mb-3 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-800 border border-surface-700 mb-2">
+          <FlagIcon className="w-3.5 h-3.5 text-sky-400" />
+          <span className="text-xs font-medium text-surface-300">Devine le drapeau</span>
+        </div>
+        <h2 className="text-lg sm:text-xl font-display font-bold text-surface-100 text-balance">
+          Quel est ce pays ?
+        </h2>
+      </div>
+
+      <motion.div
+        key={question.id}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="flex justify-center mb-3"
+      >
+        <div className="w-full max-w-xs aspect-[3/2] rounded-2xl overflow-hidden bg-surface-800 border border-surface-700 shadow-lg">
+          {imageError ? (
+            <div className="w-full h-full flex flex-col items-center justify-center text-surface-500 gap-2">
+              <FlagIcon className="w-8 h-8 text-surface-600" />
+              <span className="text-xs">Drapeau indisponible</span>
+            </div>
+          ) : (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={question.flagUrl}
+              alt="Drapeau à identifier"
+              className="w-full h-full object-cover"
+              onError={() => setImageError(true)}
+            />
+          )}
+        </div>
+      </motion.div>
+
+      <GeoDifficultyBadge difficulty={question.difficulty} points={question.points} />
+
+      <div className="flex-1 flex flex-col justify-end mt-4">
+        {hasAnswered ? (
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
+            <Card className="inline-block">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-success-400" />
+                <div className="text-left">
+                  <p className="text-sm text-surface-400">Ta réponse :</p>
+                  <p className="text-lg font-medium text-surface-100">{answer}</p>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        ) : (
+          <div className="space-y-3">
+            <Input
+              value={answer}
+              onChange={(e) => onChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Nom du pays..."
+              autoFocus
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="words"
+              spellCheck={false}
+            />
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onSubmit}
+              disabled={!answer.trim()}
+              rightIcon={<Send className="w-5 h-5" />}
+            >
+              Valider
+            </Button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+interface CapitalQuestionViewProps {
+  question: CapitalQuestion;
+  answer: string;
+  hasAnswered: boolean;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+}
+
+function CapitalQuestionView({ question, answer, hasAnswered, onChange, onSubmit }: CapitalQuestionViewProps) {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSubmit();
+    }
+  };
+
+  return (
+    <>
+      <div className="mb-4 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-800 border border-surface-700 mb-2">
+          <Landmark className="w-3.5 h-3.5 text-teal-400" />
+          <span className="text-xs font-medium text-surface-300">Devine la capitale</span>
+        </div>
+        <h2 className="text-lg sm:text-xl font-display font-bold text-surface-100 text-balance">
+          Quelle est la capitale de…
+        </h2>
+      </div>
+
+      <motion.div
+        key={question.id}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col items-center gap-3 mb-3"
+      >
+        <div className="w-28 aspect-[3/2] rounded-xl overflow-hidden border border-surface-700 shadow-lg bg-surface-800">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={question.flagUrl} alt="" className="w-full h-full object-cover" />
+        </div>
+        <p className="text-2xl sm:text-3xl font-display font-bold text-surface-100 text-center text-balance">
+          {question.countryName}
+        </p>
+        <span className="text-xs text-surface-500">{question.continent}</span>
+      </motion.div>
+
+      <GeoDifficultyBadge difficulty={question.difficulty} points={question.points} />
+
+      <div className="flex-1 flex flex-col justify-end mt-4">
+        {hasAnswered ? (
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
+            <Card className="inline-block">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-success-400" />
+                <div className="text-left">
+                  <p className="text-sm text-surface-400">Ta réponse :</p>
+                  <p className="text-lg font-medium text-surface-100">{answer}</p>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        ) : (
+          <div className="space-y-3">
+            <Input
+              value={answer}
+              onChange={(e) => onChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Nom de la capitale..."
+              autoFocus
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="words"
+              spellCheck={false}
+            />
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onSubmit}
+              disabled={!answer.trim()}
+              rightIcon={<Send className="w-5 h-5" />}
+            >
+              Valider
+            </Button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+interface CityLocateQuestionViewProps {
+  question: CityLocateQuestion;
+  pick: { lat: number; lng: number; cca3: string | null; name: string | null } | null;
+  hasAnswered: boolean;
+  onPick: (pick: { lat: number; lng: number; cca3: string | null; name: string | null }) => void;
+  onSubmit: () => void;
+}
+
+function CityLocateQuestionView({ question, pick, hasAnswered, onPick, onSubmit }: CityLocateQuestionViewProps) {
+  return (
+    <div className="flex flex-col flex-1 min-h-0">
+      <div className="mb-2 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-800 border border-surface-700 mb-1.5">
+          <Building2 className="w-3.5 h-3.5 text-sky-400" />
+          <span className="text-xs font-medium text-surface-300">Localise la ville</span>
+        </div>
+        <h2 className="text-xl sm:text-2xl font-display font-bold text-surface-100 text-balance">
+          {question.cityName}
+        </h2>
+        {question.countryHint && (
+          <p className="text-xs text-surface-500 mt-0.5">{question.countryHint}</p>
+        )}
+        <div className="mt-1">
+          <GeoDifficultyBadge difficulty={question.difficulty} points={question.points} />
+        </div>
+      </div>
+
+      {/* Same aspect box as the country mode: the whole world stays visible on a phone. */}
+      <div className="flex-1 min-h-0 flex items-center justify-center">
+        <div className="w-full aspect-[360/216] max-h-full">
+          <WorldMap
+            className="h-full"
+            selectedCca3={pick?.cca3 ?? null}
+            pins={pick ? [{ lat: pick.lat, lng: pick.lng, highlight: true }] : []}
+            onPick={hasAnswered ? undefined : onPick}
+          />
+        </div>
+      </div>
+
+      <div className="mt-2 space-y-2">
+        <div
+          className={cn(
+            "flex items-center justify-center gap-2 h-9 px-3 rounded-xl border text-sm",
+            pick
+              ? "bg-surface-800 border-surface-700 text-surface-100"
+              : "bg-surface-900 border-dashed border-surface-700 text-surface-500"
+          )}
+        >
+          <MapPin className="w-4 h-4 shrink-0" />
+          <span className="truncate">
+            {pick
+              ? pick.name ?? "En pleine mer…"
+              : "Zoome et touche l'endroit exact"}
+          </span>
+        </div>
+
+        {hasAnswered ? (
+          <div className="flex items-center justify-center gap-2 text-success-400 h-12">
+            <CheckCircle className="w-5 h-5" />
+            <span className="font-medium">Épingle plantée</span>
+          </div>
+        ) : (
+          <Button
+            variant="primary"
+            size="lg"
+            fullWidth
+            onClick={onSubmit}
+            disabled={!pick}
+            rightIcon={<Send className="w-5 h-5" />}
+          >
+            Valider mon épingle
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+interface CountryLocateQuestionViewProps {
+  question: CountryLocateQuestion;
+  pick: { lat: number; lng: number; cca3: string | null; name: string | null } | null;
+  hasAnswered: boolean;
+  onPick: (pick: { lat: number; lng: number; cca3: string | null; name: string | null }) => void;
+  onSubmit: () => void;
+}
+
+function CountryLocateQuestionView({ question, pick, hasAnswered, onPick, onSubmit }: CountryLocateQuestionViewProps) {
+  return (
+    <div className="flex flex-col flex-1 min-h-0">
+      <div className="mb-2 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-800 border border-surface-700 mb-1.5">
+          <Globe2 className="w-3.5 h-3.5 text-emerald-400" />
+          <span className="text-xs font-medium text-surface-300">Localise le pays</span>
+        </div>
+        <div className="flex items-center justify-center gap-2">
+          <div className="w-8 aspect-[3/2] rounded overflow-hidden border border-surface-700 shrink-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={question.flagUrl} alt="" className="w-full h-full object-cover" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-display font-bold text-surface-100 text-balance">
+            {question.countryName}
+          </h2>
+        </div>
+        <div className="mt-1">
+          <GeoDifficultyBadge difficulty={question.difficulty} points={question.points} />
+        </div>
+      </div>
+
+      {/* The map keeps the world's aspect ratio so no space is wasted on letterboxing. */}
+      <div className="flex-1 min-h-0 flex items-center justify-center">
+        <div className="w-full aspect-[360/216] max-h-full">
+          <WorldMap
+            className="h-full"
+            selectedCca3={pick?.cca3 ?? null}
+            pins={pick ? [{ lat: pick.lat, lng: pick.lng, highlight: true }] : []}
+            onPick={hasAnswered ? undefined : onPick}
+          />
+        </div>
+      </div>
+
+      <div className="mt-2 space-y-2">
+        <div
+          className={cn(
+            "flex items-center justify-center gap-2 h-9 px-3 rounded-xl border text-sm",
+            pick
+              ? "bg-surface-800 border-surface-700 text-surface-100"
+              : "bg-surface-900 border-dashed border-surface-700 text-surface-500"
+          )}
+        >
+          <MapPin className="w-4 h-4 shrink-0" />
+          <span className="truncate">
+            {pick ? pick.name ?? "En pleine mer…" : "Touche la carte pour placer ton point"}
+          </span>
+        </div>
+
+        {hasAnswered ? (
+          <div className="flex items-center justify-center gap-2 text-success-400 h-12">
+            <CheckCircle className="w-5 h-5" />
+            <span className="font-medium">Position envoyée</span>
+          </div>
+        ) : (
+          <Button
+            variant="primary"
+            size="lg"
+            fullWidth
+            onClick={onSubmit}
+            disabled={!pick}
+            rightIcon={<Send className="w-5 h-5" />}
+          >
+            Valider ma position
+          </Button>
+        )}
+      </div>
+    </div>
   );
 }

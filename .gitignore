@@ -19,6 +19,9 @@
 .DS_Store
 *.pem
 
+# raw sources downloaded by scripts/build-countries.ts (generated output is committed)
+/.cache
+
 # debug
 npm-debug.log*
 yarn-debug.log*

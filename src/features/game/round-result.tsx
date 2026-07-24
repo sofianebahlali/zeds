@@ -8,7 +8,8 @@ import { useGameStore, useRoomStore, usePlayerStore } from "@/stores";
 import { useChatStore } from "@/stores/chat-store";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
-import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion, PokestatsRoundResult as PokestatsRoundResultType, PokemonAttackRoundResult as PokemonAttackRoundResultType, DialedQuestion, PokedexNumberQuestion } from "@/types";
+import { WorldMap } from "./world-map";
+import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion, PokestatsRoundResult as PokestatsRoundResultType, PokemonAttackRoundResult as PokemonAttackRoundResultType, DialedQuestion, PokedexNumberQuestion, FlagQuestion, CapitalQuestion, CountryLocateQuestion, CityLocateQuestion } from "@/types";
 
 const PETITBAC_CATEGORY_ICONS: Record<string, string> = {
   "Prénom": "👤",
@@ -89,6 +90,28 @@ export function RoundResult() {
   const isPokemonAttack = roundResult.question.type === "pokemonattack";
   const isDialed = roundResult.question.type === "dialed";
   const isPokedexNumber = roundResult.question.type === "pokedexnumber";
+  const isFlag = roundResult.question.type === "flag";
+  const isCapital = roundResult.question.type === "capital";
+
+  if (roundResult.question.type === "citylocate") {
+    return (
+      <CityLocateRoundResult
+        roundResult={roundResult}
+        myPlayerId={myPlayerId}
+        myResult={myResult}
+      />
+    );
+  }
+
+  if (roundResult.question.type === "countrylocate") {
+    return (
+      <CountryLocateRoundResult
+        roundResult={roundResult}
+        myPlayerId={myPlayerId}
+        myResult={myResult}
+      />
+    );
+  }
 
   if (isDialed) {
     return (
@@ -221,6 +244,14 @@ export function RoundResult() {
             ? isCorrect
               ? "Dans le consensus !"
               : "Pas dans la majorité !"
+            : isFlag
+            ? isCorrect
+              ? "Drapeau reconnu !"
+              : "Raté !"
+            : isCapital
+            ? isCorrect
+              ? "Bien joué !"
+              : "Raté !"
             : isCorrect
             ? "Bonne réponse !"
             : "Raté !"}
@@ -272,8 +303,24 @@ export function RoundResult() {
                 ? "Le vrai numéro Pokédex :"
                 : isConsensus
                 ? "Réponse la plus populaire :"
+                : isFlag
+                ? "Le pays était :"
+                : isCapital
+                ? "La capitale était :"
                 : "La bonne réponse était :"}
             </p>
+            {(isFlag || isCapital) && (
+              <div className="flex justify-center mb-2">
+                <div className="w-20 aspect-[3/2] rounded-lg overflow-hidden border border-surface-700">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={(roundResult.question as FlagQuestion | CapitalQuestion).flagUrl}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            )}
             <p
               className={cn(
                 "font-display font-bold text-surface-100",
@@ -290,6 +337,11 @@ export function RoundResult() {
             {isPokedexNumber && (
               <p className="text-xs text-surface-500 mt-1">
                 {(roundResult.question as PokedexNumberQuestion).nameFr}
+              </p>
+            )}
+            {(isFlag || isCapital) && (
+              <p className="text-xs text-surface-500 mt-1">
+                {(roundResult.question as FlagQuestion | CapitalQuestion).continent}
               </p>
             )}
           </div>
@@ -445,6 +497,252 @@ export function RoundResult() {
             })}
         </div>
       </motion.div>
+    </motion.div>
+  );
+}
+
+// ==========================================
+// COUNTRY LOCATE ROUND RESULT
+// ==========================================
+
+interface CountryLocateRoundResultProps {
+  roundResult: NonNullable<ReturnType<typeof useGameStore.getState>["roundResult"]>;
+  myPlayerId: string;
+  myResult: { playerId: string; points: number; total: number } | undefined;
+}
+
+function CountryLocateRoundResult({ roundResult, myPlayerId, myResult }: CountryLocateRoundResultProps) {
+  const q = roundResult.question as CountryLocateQuestion;
+  const entries = useMemo(
+    () => [...(roundResult.countryLocate ?? [])].sort((a, b) => b.points - a.points),
+    [roundResult.countryLocate]
+  );
+  const mine = entries.find((e) => e.playerId === myPlayerId);
+  const isCorrect = !!mine?.correct;
+
+  const pins = useMemo(
+    () =>
+      entries
+        .filter((e) => e.lat !== null && e.lng !== null)
+        .map((e) => ({
+          lat: e.lat as number,
+          lng: e.lng as number,
+          emoji: e.playerAvatar,
+          correct: e.correct,
+          highlight: e.playerId === myPlayerId,
+        })),
+    [entries, myPlayerId]
+  );
+
+  // Zoom wide enough to show near misses around the answer.
+  const focus = useMemo(() => ({ lat: q.lat, lng: q.lng, span: 90 }), [q.lat, q.lng]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex flex-col h-full px-5 pb-4 overflow-y-auto"
+    >
+      <div className="text-center pt-4 mb-3">
+        <div className="flex items-center justify-center gap-2 mb-1">
+          <div className="w-8 aspect-[3/2] rounded overflow-hidden border border-surface-700">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={q.flagUrl} alt="" className="w-full h-full object-cover" />
+          </div>
+          <h2 className="text-xl font-display font-bold text-surface-100">{q.countryName}</h2>
+        </div>
+        <p className={cn("text-sm font-medium", isCorrect ? "text-success-400" : "text-danger-400")}>
+          {isCorrect ? "Pile dessus !" : mine && mine.points > 0 ? "Pas loin !" : "Complètement à côté !"}
+          {myResult && (
+            <span className="text-surface-400 font-normal"> · +{myResult.points} pts</span>
+          )}
+        </p>
+      </div>
+
+      <WorldMap
+        className="h-64 shrink-0"
+        correctCca3={q.cca3}
+        pins={pins}
+        focus={focus}
+      />
+
+      <div className="mt-4">
+        <h3 className="text-sm font-medium text-surface-400 mb-2">Résultats de la manche</h3>
+        <div className="space-y-2">
+          {entries.map((entry, index) => (
+            <motion.div
+              key={entry.playerId}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 + index * 0.08 }}
+              className={cn(
+                "flex items-center gap-3 p-3 rounded-xl bg-surface-900 border border-surface-800",
+                entry.playerId === myPlayerId && "border-brand-500/40"
+              )}
+            >
+              <Avatar emoji={entry.playerAvatar} size="sm" />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-surface-100 truncate">{entry.playerName}</span>
+                  {entry.correct && <CheckCircle className="w-4 h-4 text-success-400 shrink-0" />}
+                </div>
+                <p className={cn("text-sm truncate", entry.correct ? "text-success-400" : "text-surface-500")}>
+                  {entry.lat === null
+                    ? "Pas de réponse"
+                    : entry.correct
+                    ? "Dans le bon pays"
+                    : `${entry.guessedName ?? "En pleine mer"} · ${entry.distanceKm?.toLocaleString("fr-FR")} km`}
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                {!entry.correct && entry.lat !== null && (
+                  <LaughButton
+                    targetPlayerId={entry.playerId}
+                    roundNumber={roundResult.roundNumber}
+                    myPlayerId={myPlayerId}
+                  />
+                )}
+                <span className={cn("font-display font-bold", entry.points > 0 ? "text-success-400" : "text-surface-500")}>
+                  +{entry.points}
+                </span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ==========================================
+// CITY LOCATE ROUND RESULT
+// ==========================================
+
+interface CityLocateRoundResultProps {
+  roundResult: NonNullable<ReturnType<typeof useGameStore.getState>["roundResult"]>;
+  myPlayerId: string;
+  myResult: { playerId: string; points: number; total: number } | undefined;
+}
+
+function CityLocateRoundResult({ roundResult, myPlayerId, myResult }: CityLocateRoundResultProps) {
+  const q = roundResult.question as CityLocateQuestion;
+  const entries = useMemo(
+    () => [...(roundResult.cityLocate ?? [])].sort((a, b) => b.points - a.points),
+    [roundResult.cityLocate]
+  );
+  const mine = entries.find((e) => e.playerId === myPlayerId);
+
+  // The answer is drawn last so it sits on top of the players' pins.
+  const pins = useMemo(
+    () => [
+      ...entries
+        .filter((e) => e.lat !== null && e.lng !== null)
+        .map((e) => ({
+          lat: e.lat as number,
+          lng: e.lng as number,
+          emoji: e.playerAvatar,
+          correct: e.correct,
+          highlight: e.playerId === myPlayerId,
+        })),
+      { lat: q.lat, lng: q.lng, target: true },
+    ],
+    [entries, myPlayerId, q.lat, q.lng]
+  );
+
+  // Centred on the answer, zoomed out just enough to keep your own pin in frame —
+  // seeing how far off you were is half the fun.
+  const focus = useMemo(() => {
+    const dLng = mine?.lng != null ? Math.abs(mine.lng - q.lng) : 0;
+    const dLat = mine?.lat != null ? Math.abs(mine.lat - q.lat) : 0;
+    return {
+      lat: q.lat,
+      lng: q.lng,
+      span: Math.min(200, Math.max(40, Math.max(dLng, dLat * 1.6) * 2.4)),
+    };
+  }, [mine, q.lat, q.lng]);
+
+  const verdict = !mine || mine.lat === null
+    ? "Pas de réponse"
+    : mine.correct
+    ? "Pile dessus !"
+    : mine.sameCountry
+    ? "Le bon pays !"
+    : mine.points > 0
+    ? "Pas loin !"
+    : "Complètement à côté !";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex flex-col h-full px-5 pb-4 overflow-y-auto"
+    >
+      <div className="text-center pt-4 mb-3">
+        <div className="flex items-center justify-center gap-2 mb-1">
+          <div className="w-8 aspect-[3/2] rounded overflow-hidden border border-surface-700">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={q.flagUrl} alt="" className="w-full h-full object-cover" />
+          </div>
+          <h2 className="text-xl font-display font-bold text-surface-100">{q.cityName}</h2>
+        </div>
+        <p className="text-xs text-surface-500 mb-1">{q.countryName}</p>
+        <p className={cn("text-sm font-medium", mine?.points ? "text-success-400" : "text-danger-400")}>
+          {verdict}
+          {mine?.distanceKm !== null && mine?.distanceKm !== undefined && (
+            <span className="text-surface-400 font-normal"> · à {mine.distanceKm.toLocaleString("fr-FR")} km</span>
+          )}
+          {myResult && <span className="text-surface-400 font-normal"> · +{myResult.points} pts</span>}
+        </p>
+      </div>
+
+      <WorldMap className="h-64 shrink-0" correctCca3={q.cca3} pins={pins} focus={focus} />
+
+      <div className="mt-4">
+        <h3 className="text-sm font-medium text-surface-400 mb-2">Résultats de la manche</h3>
+        <div className="space-y-2">
+          {entries.map((entry, index) => (
+            <motion.div
+              key={entry.playerId}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 + index * 0.08 }}
+              className={cn(
+                "flex items-center gap-3 p-3 rounded-xl bg-surface-900 border border-surface-800",
+                entry.playerId === myPlayerId && "border-brand-500/40"
+              )}
+            >
+              <Avatar emoji={entry.playerAvatar} size="sm" />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-surface-100 truncate">{entry.playerName}</span>
+                  {entry.correct && <CheckCircle className="w-4 h-4 text-success-400 shrink-0" />}
+                </div>
+                <p className={cn("text-sm truncate", entry.correct ? "text-success-400" : "text-surface-500")}>
+                  {entry.lat === null
+                    ? "Pas de réponse"
+                    : `${entry.distanceKm?.toLocaleString("fr-FR")} km${
+                        entry.sameCountry ? " · dans le bon pays" : entry.guessedName ? ` · ${entry.guessedName}` : " · en pleine mer"
+                      }`}
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                {!entry.correct && entry.lat !== null && (
+                  <LaughButton
+                    targetPlayerId={entry.playerId}
+                    roundNumber={roundResult.roundNumber}
+                    myPlayerId={myPlayerId}
+                  />
+                )}
+                <span className={cn("font-display font-bold", entry.points > 0 ? "text-success-400" : "text-surface-500")}>
+                  +{entry.points}
+                </span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
     </motion.div>
   );
 }

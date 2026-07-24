@@ -13,7 +13,8 @@
     "start:backend": "tsx server/index.ts",
     "start:prod": "node dist/server/production.js",
     "lint": "next lint",
-    "seed:questions": "tsx scripts/seed-questions.ts"
+    "seed:questions": "tsx scripts/seed-questions.ts",
+    "build:countries": "tsx scripts/build-countries.ts"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.0.4",

@@ -74,8 +74,30 @@ import type {
   PokemonAttackGuessResult,
   PokemonAttackHintData,
   PokemonAttackRoundResult,
+  FlagQuestion,
+  CapitalQuestion,
+  CountryLocateQuestion,
+  CountryLocateGuess,
+  CountryLocateResultEntry,
+  CityLocateQuestion,
+  CityLocateResultEntry,
 } from "../src/types";
 import { PETITBAC_ALL_CATEGORIES, PETITBAC_CATEGORIES_PER_ROUND } from "../src/types";
+import {
+  loadCountries,
+  loadLocatableCountries,
+  loadCities,
+  pickByDifficultyRamp,
+  countryAt,
+  haversineKm,
+  matchesCountryName,
+  matchesCapitalName,
+  cityProximityRatio,
+  CITY_PERFECT_KM,
+  GEO_POINTS,
+  LOCATE_POINTS,
+  CITY_POINTS,
+} from "./countries";
 import { getQuestions as getDbQuestions, getTotalCount as getDbTotalCount } from "./question-db";
 
 type TypedIO = Server<ClientToServerEvents, ServerToClientEvents>;
@@ -946,6 +968,79 @@ export class GameEngine {
           points: 200,
         }));
       }
+      case "flag": {
+        const countries = loadCountries();
+        if (countries.length === 0) return [...SAMPLE_QUESTIONS].slice(0, count);
+        return pickByDifficultyRamp(countries, count, (c) => c.difficulty, (c) => c.cca3).map((c, i) => ({
+          id: `flag_${i + 1}`,
+          type: "flag" as const,
+          cca3: c.cca3,
+          flagUrl: `/images/flags/${c.flagFile}`,
+          continent: c.continent,
+          difficulty: c.difficulty,
+          countryName: c.nameFr,
+          acceptedAnswers: [c.nameFr, c.nameEn, ...c.aliases],
+          timeLimit: 20,
+          points: GEO_POINTS[c.difficulty],
+        }));
+      }
+      case "capital": {
+        const countries = loadCountries().filter((c) => c.capital);
+        if (countries.length === 0) return [...SAMPLE_QUESTIONS].slice(0, count);
+        return pickByDifficultyRamp(countries, count, (c) => c.difficulty, (c) => c.cca3).map((c, i) => ({
+          id: `capital_${i + 1}`,
+          type: "capital" as const,
+          cca3: c.cca3,
+          countryName: c.nameFr,
+          flagUrl: `/images/flags/${c.flagFile}`,
+          continent: c.continent,
+          difficulty: c.difficulty,
+          capital: c.capital,
+          acceptedAnswers: [c.capital, ...c.capitalAliases],
+          timeLimit: 20,
+          points: GEO_POINTS[c.difficulty],
+        }));
+      }
+      case "countrylocate": {
+        const countries = loadLocatableCountries();
+        if (countries.length === 0) return [...SAMPLE_QUESTIONS].slice(0, count);
+        return pickByDifficultyRamp(countries, count, (c) => c.locateDifficulty, (c) => c.cca3).map((c, i) => {
+          const difficulty = c.locateDifficulty || "medium";
+          return {
+            id: `countrylocate_${i + 1}`,
+            type: "countrylocate" as const,
+            countryName: c.nameFr,
+            flagUrl: `/images/flags/${c.flagFile}`,
+            continent: c.continent,
+            difficulty,
+            cca3: c.cca3,
+            lat: c.lat,
+            lng: c.lng,
+            timeLimit: 30,
+            points: LOCATE_POINTS[difficulty],
+          };
+        });
+      }
+      case "citylocate": {
+        const cities = loadCities();
+        if (cities.length === 0) return [...SAMPLE_QUESTIONS].slice(0, count);
+        return pickByDifficultyRamp(cities, count, (c) => c.difficulty, (c) => c.name).map((c, i) => ({
+          id: `citylocate_${i + 1}`,
+          type: "citylocate" as const,
+          cityName: c.name,
+          difficulty: c.difficulty,
+          // Everybody knows where Tokyo is; nobody places Louxor without knowing it is in Egypt.
+          countryHint: c.difficulty === "easy" ? null : c.countryName,
+          cca3: c.cca3,
+          countryName: c.countryName,
+          flagUrl: `/images/flags/${c.flagFile}`,
+          continent: c.continent,
+          lat: c.lat,
+          lng: c.lng,
+          timeLimit: 30,
+          points: CITY_POINTS[c.difficulty],
+        }));
+      }
       case "dialed": {
         // Auto-generate random HSL colors
         const dialedQuestions: Question[] = [];
@@ -1319,6 +1414,41 @@ export class GameEngine {
         nameMask,
       });
     }
+    if (question.type === "flag") {
+      return {
+        ...question,
+        countryName: "",
+        acceptedAnswers: [],
+      };
+    }
+    if (question.type === "capital") {
+      return {
+        ...question,
+        capital: "",
+        acceptedAnswers: [],
+      };
+    }
+    if (question.type === "countrylocate") {
+      // The country name is the question; its identity on the map is the answer.
+      return {
+        ...question,
+        cca3: "",
+        lat: 0,
+        lng: 0,
+      };
+    }
+    if (question.type === "citylocate") {
+      // Only the hint is public — the flag alone would give the answer away.
+      return {
+        ...question,
+        cca3: "",
+        countryName: question.countryHint ?? "",
+        flagUrl: "",
+        continent: "",
+        lat: 0,
+        lng: 0,
+      };
+    }
     // petitbac: nothing to hide
     return question;
   }
@@ -1659,6 +1789,14 @@ export class GameEngine {
 
     if (this.currentQuestion.type === "dialed") {
       return this.calculateDialedScores(correctAnswer, scores);
+    }
+
+    if (this.currentQuestion.type === "countrylocate") {
+      return this.calculateCountryLocateScores(correctAnswer, scores);
+    }
+
+    if (this.currentQuestion.type === "citylocate") {
+      return this.calculateCityLocateScores(correctAnswer, scores);
     }
 
     let fastestCorrectTime = Infinity;
@@ -2060,6 +2198,180 @@ export class GameEngine {
    * Uses CIE76 Delta-E in Lab color space for perceptual accuracy.
    * Score is out of 100 (proximity note).
    */
+  /**
+   * "Localise le pays": a tap inside the right country scores full marks, a miss
+   * scores on proximity (a neighbouring country still earns something).
+   */
+  private calculateCountryLocateScores(
+    correctAnswer: string,
+    scores: { playerId: string; points: number; total: number }[]
+  ): RoundResult {
+    const q = this.currentQuestion as CountryLocateQuestion;
+    const entries: CountryLocateResultEntry[] = [];
+    let winner: Player | undefined;
+    /** Lower is better: an exact hit always beats a near miss, ties broken by speed. */
+    let bestRank = Infinity;
+
+    // Beyond this a guess is worth nothing; a near-miss keeps up to PARTIAL_MAX.
+    const MAX_DISTANCE_KM = 3000;
+    const PARTIAL_MAX = 0.6;
+
+    for (const player of this.room.players) {
+      const answer = this.answers.get(player.id);
+      let lat: number | null = null;
+      let lng: number | null = null;
+      if (answer) {
+        try {
+          const parsed = JSON.parse(answer.answer) as CountryLocateGuess;
+          if (typeof parsed.lat === "number" && typeof parsed.lng === "number") {
+            lat = parsed.lat;
+            lng = parsed.lng;
+          }
+        } catch {
+          // Malformed payload → treated as no answer
+        }
+      }
+
+      let points = 0;
+      let correct = false;
+      let distanceKm: number | null = null;
+      let hit: { cca3: string; name: string } | null = null;
+
+      if (lat !== null && lng !== null) {
+        // The server re-resolves the tap: the client's own guess is never trusted.
+        hit = countryAt(lat, lng);
+        correct = hit?.cca3 === q.cca3;
+        distanceKm = Math.round(haversineKm(lat, lng, q.lat, q.lng));
+        if (correct) {
+          points = q.points;
+        } else {
+          const proximity = Math.max(0, 1 - distanceKm / MAX_DISTANCE_KM);
+          points = Math.round(q.points * proximity * PARTIAL_MAX);
+        }
+
+        const rank = correct ? -1_000_000 + (answer?.responseTime ?? 0) : distanceKm;
+        if (rank < bestRank) {
+          bestRank = rank;
+          winner = player;
+        }
+      }
+
+      if (answer) {
+        answer.isCorrect = correct;
+        answer.points = points;
+      }
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, points);
+      scores.push({ playerId: player.id, points, total: updatedPlayer?.score ?? player.score });
+
+      entries.push({
+        playerId: player.id,
+        playerName: player.name,
+        playerAvatar: player.avatar,
+        lat,
+        lng,
+        guessedCca3: hit?.cca3 ?? null,
+        guessedName: hit?.name ?? null,
+        distanceKm,
+        correct,
+        points,
+      });
+    }
+
+    return {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion!,
+      answers: Array.from(this.answers.values()),
+      correctAnswer,
+      winner,
+      scores,
+      countryLocate: entries,
+    };
+  }
+
+  /**
+   * "Localise la ville": pure proximity. A pin within CITY_PERFECT_KM is a bullseye,
+   * further away the score decays, and landing in the right country keeps a floor.
+   */
+  private calculateCityLocateScores(
+    correctAnswer: string,
+    scores: { playerId: string; points: number; total: number }[]
+  ): RoundResult {
+    const q = this.currentQuestion as CityLocateQuestion;
+    const entries: CityLocateResultEntry[] = [];
+    let winner: Player | undefined;
+    let bestDistance = Infinity;
+
+    for (const player of this.room.players) {
+      const answer = this.answers.get(player.id);
+      let lat: number | null = null;
+      let lng: number | null = null;
+      if (answer) {
+        try {
+          const parsed = JSON.parse(answer.answer) as CountryLocateGuess;
+          if (typeof parsed.lat === "number" && typeof parsed.lng === "number") {
+            lat = parsed.lat;
+            lng = parsed.lng;
+          }
+        } catch {
+          // Malformed payload → treated as no answer
+        }
+      }
+
+      let points = 0;
+      let correct = false;
+      let sameCountry = false;
+      let distanceKm: number | null = null;
+      let hit: { cca3: string; name: string } | null = null;
+
+      if (lat !== null && lng !== null) {
+        // The client's own hit-test is never trusted: the server re-resolves the tap.
+        hit = countryAt(lat, lng);
+        sameCountry = hit?.cca3 === q.cca3;
+        distanceKm = Math.round(haversineKm(lat, lng, q.lat, q.lng));
+        correct = distanceKm <= CITY_PERFECT_KM;
+        points = Math.round(q.points * cityProximityRatio(distanceKm, sameCountry));
+
+        if (distanceKm < bestDistance) {
+          bestDistance = distanceKm;
+          winner = player;
+        }
+      }
+
+      if (answer) {
+        answer.isCorrect = correct;
+        answer.points = points;
+      }
+
+      const updatedPlayer = this.roomManager.updatePlayerScore(player.id, points);
+      scores.push({ playerId: player.id, points, total: updatedPlayer?.score ?? player.score });
+
+      entries.push({
+        playerId: player.id,
+        playerName: player.name,
+        playerAvatar: player.avatar,
+        lat,
+        lng,
+        guessedCca3: hit?.cca3 ?? null,
+        guessedName: hit?.name ?? null,
+        distanceKm,
+        correct,
+        sameCountry,
+        points,
+      });
+    }
+
+    return {
+      roundNumber: this.currentRound,
+      question: this.currentQuestion!,
+      answers: Array.from(this.answers.values()),
+      correctAnswer,
+      winner,
+      scores,
+      cityLocate: entries,
+    };
+  }
+
   private calculateDialedScores(
     correctAnswer: string,
     scores: { playerId: string; points: number; total: number }[]
@@ -2249,6 +2561,18 @@ export class GameEngine {
         const q = this.currentQuestion as DialedQuestion;
         return `hsl(${q.targetH}, ${q.targetS}%, ${q.targetL}%)`;
       }
+      case "flag":
+        return (this.currentQuestion as FlagQuestion).countryName;
+      case "capital": {
+        const q = this.currentQuestion as CapitalQuestion;
+        return `${q.capital} (${q.countryName})`;
+      }
+      case "countrylocate":
+        return (this.currentQuestion as CountryLocateQuestion).countryName;
+      case "citylocate": {
+        const q = this.currentQuestion as CityLocateQuestion;
+        return `${q.cityName} (${q.countryName})`;
+      }
       default:
         return "";
     }
@@ -2356,6 +2680,18 @@ export class GameEngine {
         return false; // Handled in handlePokemonAttackGuess
       case "dialed":
         return false; // Handled in calculateDialedScores
+      case "flag": {
+        const q = this.currentQuestion as FlagQuestion;
+        return matchesCountryName(answer, q.cca3, q.acceptedAnswers);
+      }
+      case "capital": {
+        const q = this.currentQuestion as CapitalQuestion;
+        return matchesCapitalName(answer, q.cca3, q.acceptedAnswers);
+      }
+      case "countrylocate":
+        return false; // Handled in calculateCountryLocateScores
+      case "citylocate":
+        return false; // Handled in calculateCityLocateScores
       default:
         return false;
     }
