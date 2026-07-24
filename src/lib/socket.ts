@@ -42,6 +42,25 @@ type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 let socket: TypedSocket | null = null;
 
 /**
+ * Identity sent with every connection attempt (including reconnections), so
+ * the server can re-attach the socket to its player before processing any
+ * packet. Kept outside the store to avoid a dependency cycle — `use-socket`
+ * keeps it in sync.
+ */
+let handshakeAuth: { playerId?: string; roomCode?: string } = {};
+
+export function setSocketAuth(auth: { playerId?: string; roomCode?: string }): void {
+  handshakeAuth = auth;
+  if (socket) {
+    socket.auth = { ...auth };
+  }
+}
+
+export function getSocketAuth(): { playerId?: string; roomCode?: string } {
+  return handshakeAuth;
+}
+
+/**
  * Get or create the socket instance
  */
 export function getSocket(): TypedSocket {
@@ -52,8 +71,15 @@ export function getSocket(): TypedSocket {
       reconnectionAttempts: Infinity,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
+      randomizationFactor: 0.5,
       timeout: 20000,
-      transports: ["websocket", "polling"],
+      // Default order on purpose: HTTP long-polling first, then upgrade to
+      // WebSocket. Going websocket-first fails outright on mobile networks and
+      // captive proxies that block the upgrade, and every failed attempt
+      // surfaces as a connect_error.
+      transports: ["polling", "websocket"],
+      // Re-evaluated on every (re)connection attempt.
+      auth: (cb: (data: Record<string, unknown>) => void) => cb({ ...handshakeAuth }),
     }) as TypedSocket;
   }
   return socket;

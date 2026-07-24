@@ -1,43 +1,83 @@
 "use client";
 
 import { useEffect, useCallback } from "react";
-import { getSocket, connectSocket, disconnectSocket } from "@/lib/socket";
+import { getSocket, connectSocket, disconnectSocket, setSocketAuth, getSocketAuth } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction, SplitStealStartData, SplitStealRevealData, ListeRoundResult, ListeProgressData, PokestatsGuessResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult, PokeGeoValidationData, PokeGeoValidationSubmission, PokeGeoAnswerResultData } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction, SplitStealStartData, SplitStealRevealData, ListeRoundResult, ListeProgressData, PokestatsGuessResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult, PokeGeoValidationData, PokeGeoValidationSubmission, PokeGeoAnswerResultData, ReconnectFailureReason } from "@/types";
 import { useChatStore } from "@/stores/chat-store";
 
 // Module-level flag: listeners are attached ONCE across all component instances
 let listenersAttached = false;
 
+// Failed handshakes in a row before we replace the room screen with the
+// full-screen "Reconnexion…" UI.
+const CONNECT_ERRORS_BEFORE_RECONNECTING_UI = 3;
+let consecutiveConnectErrors = 0;
+
+// Screens where losing the socket actually matters
+const ROOM_SCREENS = ["lobby", "game", "scoreboard"];
+
+function isInRoomScreen(): boolean {
+  return ROOM_SCREENS.includes(useUIStore.getState().currentScreen);
+}
+
+/**
+ * Push the current identity into the socket handshake so that any (re)connect
+ * — including the automatic ones we never see — re-attaches this socket to its
+ * player server-side before a single packet is processed.
+ */
+function syncSocketAuth() {
+  setSocketAuth({
+    playerId: usePlayerStore.getState().playerId,
+    roomCode: useRoomStore.getState().room?.code,
+  });
+}
+
+/**
+ * Ask the server to put us back in our room. Only needed when the handshake
+ * couldn't do it — otherwise the server has already re-attached this socket
+ * and answered with connection:reconnected, and a second request would just
+ * produce a duplicate "Reconnecté !".
+ */
+function requestRejoinIfHandshakeDidNot() {
+  const socket = getSocket();
+  const room = useRoomStore.getState().room;
+  const playerId = usePlayerStore.getState().playerId;
+  if (!room || !playerId || !socket.connected) return;
+  if (getSocketAuth().roomCode === room.code) return;
+  socket.emit("connection:reconnect", room.code, playerId);
+}
+
+function resumeConnection(source: string) {
+  // Already connected → nothing to do. Socket.IO's own heartbeat detects a
+  // zombie transport and triggers a real reconnect, which re-attaches us via
+  // the handshake.
+  if (getSocket().connected) return;
+  console.log(`Resuming socket connection (${source})`);
+  syncSocketAuth();
+  connectSocket();
+}
+
 function setupVisibilityHandler() {
   if (typeof document === "undefined") return;
 
-  let wasConnected = false;
-
   document.addEventListener("visibilitychange", () => {
-    const socket = getSocket();
+    if (document.visibilityState !== "visible") return;
+    // Always try to resume when coming back to the foreground: on mobile the
+    // socket is usually already dead by then, and tracking "was it connected
+    // when we left" misses the bfcache case entirely.
+    resumeConnection("visibilitychange");
+  });
 
-    if (document.visibilityState === "hidden") {
-      // Tab going to background — remember connection state
-      wasConnected = socket.connected;
-    } else if (document.visibilityState === "visible") {
-      // Tab coming back to foreground — reconnect if needed
-      if (wasConnected && !socket.connected) {
-        console.log("Tab visible again, reconnecting socket...");
-        connectSocket();
-        // Try app-level reconnect if we were in a room
-        const room = useRoomStore.getState().room;
-        const playerStore = usePlayerStore.getState();
-        if (room && playerStore.playerId) {
-          setTimeout(() => {
-            if (socket.connected) {
-              socket.emit("connection:reconnect", room.code, playerStore.playerId!);
-            }
-          }, 500);
-        }
-      }
+  // iOS Safari restores the page from the back/forward cache without ever
+  // firing visibilitychange, leaving a silently dead socket behind.
+  window.addEventListener("pageshow", (event) => {
+    if ((event as PageTransitionEvent).persisted) {
+      resumeConnection("pageshow");
     }
   });
+
+  window.addEventListener("online", () => resumeConnection("online"));
 }
 
 function setupSocketListeners() {
@@ -46,38 +86,55 @@ function setupSocketListeners() {
 
   const socket = getSocket();
 
+  // Keep the handshake identity current so every automatic reconnection
+  // re-attaches to the right room without a round-trip.
+  syncSocketAuth();
+  useRoomStore.subscribe(syncSocketAuth);
+  usePlayerStore.subscribe(syncSocketAuth);
+
   // Visibility handler to prevent tab-switch disconnects
   setupVisibilityHandler();
 
   // Connection events
   socket.on("connect", () => {
     console.log("Socket connected");
+    consecutiveConnectErrors = 0;
     useUIStore.getState().setConnected(true);
     useUIStore.getState().setReconnecting(false);
+    useUIStore.getState().resetReconnectAttempts();
     // Clear any stale error from a previous disconnect so the UI recovers.
     useUIStore.getState().setError(null);
 
-    // Re-join room on reconnection (handles mobile tab-switch race condition
-    // where Socket.IO auto-reconnects before the visibility handler runs)
-    const room = useRoomStore.getState().room;
-    const playerId = usePlayerStore.getState().playerId;
-    if (room && playerId) {
-      socket.emit("connection:reconnect", room.code, playerId);
-    }
+    // Fallback for the case where the socket connected without a room code in
+    // its handshake (e.g. it was opened before we joined a room).
+    requestRejoinIfHandshakeDidNot();
   });
 
   socket.on("disconnect", (reason) => {
     console.log("Socket disconnected:", reason);
     useUIStore.getState().setConnected(false);
-    // If server disconnected us (transport close from tab switch), try to reconnect immediately
-    if (reason === "transport close" || reason === "ping timeout") {
-      socket.connect();
+
+    // Only "io server disconnect" and an explicit client disconnect stop the
+    // built-in reconnection manager. For everything else (transport close,
+    // ping timeout, …) Socket.IO is already retrying — calling connect() here
+    // races its scheduler and produces spurious connect_errors.
+    if (reason === "io server disconnect") {
+      syncSocketAuth();
+      connectSocket();
     }
   });
 
   socket.on("connect_error", (error) => {
     console.error("Socket connection error:", error);
-    useUIStore.getState().setReconnecting(true);
+    consecutiveConnectErrors += 1;
+    useUIStore.getState().incrementReconnectAttempts();
+    // Don't tear the room screen down on the first hiccup. A single failed
+    // handshake is routine on mobile (network switch, tunnel, screen lock) and
+    // Socket.IO retries on its own; only escalate to the full-screen
+    // "Reconnexion" once it's clearly not coming back.
+    if (consecutiveConnectErrors >= CONNECT_ERRORS_BEFORE_RECONNECTING_UI || !isInRoomScreen()) {
+      useUIStore.getState().setReconnecting(true);
+    }
   });
 
   // Room events
@@ -473,6 +530,7 @@ function setupSocketListeners() {
     useUIStore.getState().setReconnecting(false);
     useUIStore.getState().setConnected(true);
     useUIStore.getState().setError(null);
+    useUIStore.getState().setLoading(false);
 
     if (room.status === "playing") {
       useUIStore.getState().setScreen("game");
@@ -485,6 +543,35 @@ function setupSocketListeners() {
     useUIStore.getState().addNotification({
       type: "success",
       message: "Reconnecté !",
+    });
+  });
+
+  socket.on("connection:reconnect_failed", (reason: ReconnectFailureReason) => {
+    const room = useRoomStore.getState().room;
+    const player = usePlayerStore.getState();
+
+    // The room is still alive, we were just dropped from it → walk back in
+    // rather than stranding the player in a lobby the server knows nothing
+    // about (where every button silently does nothing).
+    if (reason === "player_removed" && room && player.playerName) {
+      socket.emit("room:join", room.code, player.playerName, player.avatar, player.playerId);
+      return;
+    }
+
+    useRoomStore.getState().resetRoom();
+    useGameStore.getState().resetGame();
+    useChatStore.getState().reset();
+    usePlayerStore.getState().resetSession();
+    useUIStore.getState().setReconnecting(false);
+    useUIStore.getState().setLoading(false);
+    useUIStore.getState().setScreen("home");
+    useUIStore.getState().addNotification({
+      type: "error",
+      message:
+        reason === "room_gone"
+          ? "Cette partie n'existe plus."
+          : "Impossible de rejoindre la partie.",
+      duration: 6000,
     });
   });
 
@@ -536,8 +623,15 @@ export function useSocket() {
   }, []);
 
   const createRoom = useCallback((playerName: string, avatar: string) => {
+    // A double tap used to create two rooms and leave the first orphaned with
+    // a ghost player in it.
+    if (useUIStore.getState().isLoading) return;
     useUIStore.getState().setLoading(true, "Création de la room...");
     const playerId = usePlayerStore.getState().playerId;
+
+    // Creating a room means abandoning any previous one — don't let a stale
+    // room code ride along in the handshake.
+    useRoomStore.getState().resetRoom();
 
     if (socket.connected) {
       socket.emit("room:create", playerName, avatar, playerId);
@@ -550,6 +644,7 @@ export function useSocket() {
   }, [socket]);
 
   const joinRoom = useCallback((roomCode: string, playerName: string, avatar: string) => {
+    if (useUIStore.getState().isLoading) return;
     useUIStore.getState().setLoading(true, "Connexion à la room...");
     const playerId = usePlayerStore.getState().playerId;
 

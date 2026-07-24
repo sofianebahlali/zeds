@@ -1039,6 +1039,13 @@ export interface GameState {
 // SOCKET EVENT TYPES
 // ==========================================
 
+/**
+ * Why a `connection:reconnect` attempt failed. The client needs to tell these
+ * apart: a vanished room means "go home", a removed player means "try to
+ * re-join the room that is still alive".
+ */
+export type ReconnectFailureReason = "room_gone" | "player_removed" | "unknown";
+
 export interface ServerToClientEvents {
   // Room events
   "room:joined": (room: Room, player: Player) => void;
@@ -1150,6 +1157,7 @@ export interface ServerToClientEvents {
 
   // Connection events
   "connection:reconnected": (room: Room, player: Player) => void;
+  "connection:reconnect_failed": (reason: ReconnectFailureReason) => void;
   "connection:player_disconnected": (playerId: string) => void;
   "connection:player_reconnected": (playerId: string) => void;
 

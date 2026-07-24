@@ -20,9 +20,28 @@ const gameEngines = new Map<string, GameEngine>();
 // Store disconnect timeouts per player so they can be cancelled on reconnection
 const disconnectTimeouts = new Map<string, NodeJS.Timeout>();
 
+/**
+ * Grace period before a disconnected player is dropped from their room.
+ * Mobile browsers kill the socket as soon as the app is backgrounded, so this
+ * has to cover "took a phone call / answered a message", not just a page
+ * refresh. Only ever applies when other players remain in the room.
+ */
+const DISCONNECT_GRACE_MS = 120_000;
+
 export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
   io.on("connection", (socket: TypedSocket) => {
     console.log(`Client connected: ${socket.id}`);
+
+    // Re-attach the socket to its player *synchronously*, from the handshake,
+    // before any client packet can be processed.
+    //
+    // Without this, a reconnecting client's buffered emits (socket.io flushes
+    // its send buffer before firing "connect", so before the client can emit
+    // connection:reconnect) arrive on a socket the server cannot map to a
+    // player — every handler bails out at `if (!playerId) return` and the
+    // actions are silently swallowed. That is what makes a room feel dead
+    // after coming back from the background.
+    reattachFromHandshake(socket, roomManager);
 
     // ==========================================
     // ROOM EVENTS
@@ -30,6 +49,10 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
 
     socket.on("room:create", (playerName: string, avatar: string, playerId: string) => {
       try {
+        // Drop out of any previous room first, otherwise the old room keeps a
+        // ghost player that counts toward maxPlayers and blocks its start.
+        evictFromPreviousRoom(socket, io, roomManager, playerId);
+
         const player: Player = {
           id: playerId,
           name: playerName.trim(),
@@ -61,8 +84,14 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
         const existingRoom = roomManager.getRoom(code);
 
         if (!existingRoom) {
-          socket.emit("room:error", "Room not found");
+          socket.emit("room:error", "Room introuvable");
           return;
+        }
+
+        // Leave any previous room, unless this *is* the room we're already in
+        // (a re-join after a dropped connection).
+        if (roomManager.getCurrentRoomCode(playerId) !== code) {
+          evictFromPreviousRoom(socket, io, roomManager, playerId);
         }
 
         const player: Player = {
@@ -85,13 +114,21 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
 
         roomManager.mapSocketToPlayer(socket.id, player.id);
         socket.join(room.code);
+        clearDisconnectTimeout(player.id);
 
         // Get the actual player from room (might be reconnection)
         const actualPlayer = room.players.find((p) => p.id === player.id);
-        socket.emit("room:joined", room, actualPlayer || player);
 
-        // Notify others
-        socket.to(room.code).emit("room:player_joined", actualPlayer || player);
+        // Re-joining a game already in progress: route the client to the game
+        // screen instead of the lobby, and tell the engine we're back.
+        if (room.status !== "waiting") {
+          gameEngines.get(room.code)?.handlePlayerReconnect(player.id);
+          socket.emit("connection:reconnected", room, actualPlayer || player);
+          socket.to(room.code).emit("connection:player_reconnected", player.id);
+        } else {
+          socket.emit("room:joined", room, actualPlayer || player);
+          socket.to(room.code).emit("room:player_joined", actualPlayer || player);
+        }
 
         console.log(`${playerName} joined room ${code}`);
       } catch (error) {
@@ -725,19 +762,20 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     socket.on("connection:reconnect", (roomCode: string, playerId: string) => {
       const result = roomManager.reconnectPlayer(roomCode, playerId, socket.id);
       if (!result) {
-        socket.emit("room:error", "Failed to reconnect");
+        // Tell the client *why* it failed. A generic room:error left the app
+        // sitting in a lobby whose room no longer exists server-side, where
+        // every button silently did nothing.
+        const roomStillExists = Boolean(roomManager.getRoom(roomCode));
+        socket.emit(
+          "connection:reconnect_failed",
+          roomStillExists ? "player_removed" : "room_gone"
+        );
         return;
       }
 
       const { room, player } = result;
       socket.join(room.code);
-
-      // Cancel pending disconnect timeout
-      const timeout = disconnectTimeouts.get(player.id);
-      if (timeout) {
-        clearTimeout(timeout);
-        disconnectTimeouts.delete(player.id);
-      }
+      clearDisconnectTimeout(player.id);
 
       // Notify game engine so it removes the player from disconnectedPlayers set
       const gameEngine = gameEngines.get(room.code);
@@ -756,6 +794,90 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
   });
 }
 
+function clearDisconnectTimeout(playerId: string) {
+  const timeout = disconnectTimeouts.get(playerId);
+  if (timeout) {
+    clearTimeout(timeout);
+    disconnectTimeouts.delete(playerId);
+  }
+}
+
+/**
+ * Restore the socket ↔ player mapping from the handshake auth payload.
+ *
+ * The client re-sends `{ playerId, roomCode }` on every connection attempt, so
+ * a reconnecting socket is usable the instant it lands — no round-trip, and no
+ * window where buffered client events get dropped for lack of a mapping.
+ */
+function reattachFromHandshake(socket: TypedSocket, roomManager: RoomManager) {
+  const auth = (socket.handshake.auth ?? {}) as { playerId?: unknown; roomCode?: unknown };
+  const playerId = typeof auth.playerId === "string" ? auth.playerId : undefined;
+  const roomCode = typeof auth.roomCode === "string" ? auth.roomCode : undefined;
+  if (!playerId || !roomCode) return;
+
+  const result = roomManager.reconnectPlayer(roomCode, playerId, socket.id);
+  if (!result) {
+    // The client believes it is in a room the server no longer has it in.
+    // Say so, so it can recover instead of sitting in a dead lobby.
+    socket.emit(
+      "connection:reconnect_failed",
+      roomManager.getRoom(roomCode) ? "player_removed" : "room_gone"
+    );
+    return;
+  }
+
+  const { room, player } = result;
+  socket.join(room.code);
+  clearDisconnectTimeout(player.id);
+  gameEngines.get(room.code)?.handlePlayerReconnect(player.id);
+
+  socket.emit("connection:reconnected", room, player);
+  socket.to(room.code).emit("connection:player_reconnected", player.id);
+  console.log(`${player.name} re-attached to room ${room.code} from handshake`);
+}
+
+/**
+ * Remove a player from whatever room they were still registered in before they
+ * create or join another one.
+ */
+function evictFromPreviousRoom(
+  socket: TypedSocket,
+  io: TypedIO,
+  roomManager: RoomManager,
+  playerId: string
+) {
+  const previousCode = roomManager.getCurrentRoomCode(playerId);
+  if (!previousCode) return;
+
+  clearDisconnectTimeout(playerId);
+  const result = roomManager.leaveRoom(playerId);
+  if (!result) return;
+
+  socket.leave(previousCode);
+  io.to(previousCode).emit("room:player_left", playerId);
+  if (result.newHostId) {
+    io.to(previousCode).emit("room:host_changed", result.newHostId);
+  }
+  if (result.room.players.length === 0) {
+    gameEngines.get(previousCode)?.destroy();
+    gameEngines.delete(previousCode);
+  }
+}
+
+/**
+ * Periodic room reaper. Lives here (rather than in the server entrypoints) so
+ * it can also tear down the game engines of the rooms it removes — otherwise
+ * their per-second timers keep running for the lifetime of the process.
+ */
+export function startRoomCleanup(roomManager: RoomManager): NodeJS.Timeout {
+  return setInterval(() => {
+    for (const code of roomManager.cleanupInactiveRooms()) {
+      gameEngines.get(code)?.destroy();
+      gameEngines.delete(code);
+    }
+  }, 60000);
+}
+
 function handlePlayerLeave(
   socket: TypedSocket,
   io: TypedIO,
@@ -770,6 +892,7 @@ function handlePlayerLeave(
   const { room, wasHost, newHostId } = result;
 
   socket.leave(room.code);
+  clearDisconnectTimeout(playerId);
   io.to(room.code).emit("room:player_left", playerId);
 
   if (newHostId) {
@@ -778,6 +901,7 @@ function handlePlayerLeave(
 
   // Cleanup game engine if room is empty
   if (room.players.length === 0) {
+    gameEngines.get(room.code)?.destroy();
     gameEngines.delete(room.code);
   }
 }
@@ -799,7 +923,9 @@ function handlePlayerDisconnect(
     gameEngine.handlePlayerDisconnect(player.id);
   }
 
-  // Schedule removal after timeout (30 seconds) — cancellable on reconnection
+  // Schedule removal after the grace period — cancellable on reconnection.
+  // Replace any timer already armed for this player so it can't fire later.
+  clearDisconnectTimeout(player.id);
   const timeout = setTimeout(() => {
     disconnectTimeouts.delete(player.id);
     const currentRoom = roomManager.getRoom(room.code);
@@ -807,8 +933,10 @@ function handlePlayerDisconnect(
 
     const currentPlayer = currentRoom.players.find((p) => p.id === player.id);
     if (currentPlayer && !currentPlayer.isConnected) {
-      // Player didn't reconnect, remove them
-      const leaveResult = roomManager.leaveRoom(player.id);
+      // Player didn't come back. removeTimedOutPlayer() refuses to remove the
+      // last player of a room — that would delete the room out from under
+      // someone who merely backgrounded their phone.
+      const leaveResult = roomManager.removeTimedOutPlayer(player.id);
       if (leaveResult) {
         io.to(room.code).emit("room:player_left", player.id);
         if (leaveResult.newHostId) {
@@ -816,6 +944,6 @@ function handlePlayerDisconnect(
         }
       }
     }
-  }, 30000);
+  }, DISCONNECT_GRACE_MS);
   disconnectTimeouts.set(player.id, timeout);
 }

@@ -3,7 +3,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 import { RoomManager } from "./room-manager";
-import { setupSocketHandlers } from "./socket-handlers";
+import { setupSocketHandlers, startRoomCleanup } from "./socket-handlers";
 import type { ClientToServerEvents, ServerToClientEvents } from "../src/types";
 
 const app = express();
@@ -47,9 +47,16 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents>(httpServer, {
     },
     methods: ["GET", "POST"],
   },
-  pingTimeout: 60000,
-  pingInterval: 25000,
+  // Detect dead mobile sockets in ~45s instead of ~85s, so a backgrounded
+  // player is marked disconnected (and their teammates told) promptly.
+  pingInterval: 20000,
+  pingTimeout: 25000,
   maxHttpBufferSize: 2e6, // 2MB for base64 drawing images
+  // Replay packets missed during a short drop and keep the socket's rooms.
+  connectionStateRecovery: {
+    maxDisconnectionDuration: 2 * 60 * 1000,
+    skipMiddlewares: true,
+  },
 });
 
 // Initialize room manager
@@ -82,10 +89,8 @@ app.get("/api/rooms/:code", (req, res) => {
 // Setup socket handlers
 setupSocketHandlers(io, roomManager);
 
-// Cleanup interval - remove inactive rooms
-setInterval(() => {
-  roomManager.cleanupInactiveRooms();
-}, 60000); // Every minute
+// Cleanup interval - remove inactive rooms (and their game engines)
+startRoomCleanup(roomManager);
 
 const PORT = process.env.PORT || 3001;
 

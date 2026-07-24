@@ -17,10 +17,20 @@ const DEFAULT_SETTINGS: GameSettings = {
   shufflePlaylist: false,
 };
 
+/**
+ * How long a room may stay fully abandoned (zero connected players) before it
+ * is reaped. Generous on purpose: a mobile player who takes a phone call must
+ * still find their room when they come back.
+ */
+const ABANDONED_ROOM_TTL_MS = 15 * 60 * 1000;
+
 export class RoomManager {
   private rooms: Map<string, Room> = new Map();
   private playerRooms: Map<string, string> = new Map(); // playerId -> roomCode
   private socketPlayers: Map<string, string> = new Map(); // socketId -> playerId
+  // roomCode -> timestamp at which the room lost its last connected player.
+  // Cleared as soon as anybody reconnects.
+  private abandonedSince: Map<string, number> = new Map();
 
   /**
    * Generate a unique room code
@@ -56,9 +66,20 @@ export class RoomManager {
 
     this.rooms.set(code, room);
     this.playerRooms.set(player.id, code);
+    this.abandonedSince.delete(code);
 
     console.log(`Room ${code} created by ${player.name}`);
     return room;
+  }
+
+  /**
+   * Room this player is currently registered in, if any. Used to evict a
+   * player from a stale room before they create or join another one —
+   * otherwise the old room keeps a ghost player that counts toward maxPlayers
+   * and blocks its "everyone ready" check forever.
+   */
+  getCurrentRoomCode(playerId: string): string | undefined {
+    return this.playerRooms.get(playerId);
   }
 
   /**
@@ -70,22 +91,25 @@ export class RoomManager {
       return null;
     }
 
-    // Check if room is full
-    if (room.players.length >= room.settings.maxPlayers) {
-      throw new Error("Room is full");
-    }
-
-    // Check if game already started
-    if (room.status !== "waiting") {
-      throw new Error("Game already in progress");
-    }
-
-    // Check if player already in room (reconnection)
+    // Player already in the room → treat as a reconnection. Checked *before*
+    // the "full" / "already started" guards so that someone who dropped out
+    // mid-game can always get back in via the join screen.
     const existingPlayer = room.players.find((p) => p.id === player.id);
     if (existingPlayer) {
       existingPlayer.isConnected = true;
       this.playerRooms.set(player.id, code);
+      this.abandonedSince.delete(room.code);
       return room;
+    }
+
+    // Check if room is full
+    if (room.players.length >= room.settings.maxPlayers) {
+      throw new Error("La room est pleine");
+    }
+
+    // Check if game already started
+    if (room.status !== "waiting") {
+      throw new Error("La partie a déjà commencé");
     }
 
     // Add new player
@@ -128,6 +152,7 @@ export class RoomManager {
     // If room is empty, delete it
     if (room.players.length === 0) {
       this.rooms.delete(roomCode);
+      this.abandonedSince.delete(roomCode);
       console.log(`Room ${roomCode} deleted (empty)`);
       return { room, wasHost };
     }
@@ -165,8 +190,35 @@ export class RoomManager {
     player.isConnected = false;
     this.socketPlayers.delete(socketId);
 
+    // Start the abandonment clock once nobody is left connected
+    if (!room.players.some((p) => p.isConnected) && !this.abandonedSince.has(roomCode)) {
+      this.abandonedSince.set(roomCode, Date.now());
+    }
+
     console.log(`${player.name} disconnected from room ${roomCode}`);
     return { room, player };
+  }
+
+  /**
+   * Remove a player who never came back after the disconnect grace period.
+   *
+   * Never removes the last player standing: an empty room gets deleted, and
+   * deleting the room of a player who is merely backgrounded on mobile is what
+   * makes a room "die" under them. Abandoned rooms are reaped by
+   * cleanupInactiveRooms() instead, on a much longer clock.
+   */
+  removeTimedOutPlayer(
+    playerId: string
+  ): { room: Room; wasHost: boolean; newHostId?: string } | null {
+    const roomCode = this.playerRooms.get(playerId);
+    if (!roomCode) return null;
+
+    const room = this.rooms.get(roomCode);
+    if (!room) return null;
+
+    if (room.players.length <= 1) return null;
+
+    return this.leaveRoom(playerId);
   }
 
   /**
@@ -184,7 +236,8 @@ export class RoomManager {
     if (!player) return null;
 
     player.isConnected = true;
-    this.playerRooms.set(playerId, roomCode);
+    this.playerRooms.set(playerId, room.code);
+    this.abandonedSince.delete(room.code);
 
     // Clean up any stale socket entries for this player (race condition:
     // new socket may connect before old socket's disconnect event fires)
@@ -383,27 +436,55 @@ export class RoomManager {
   }
 
   /**
-   * Cleanup inactive rooms (older than 1 hour)
+   * Cleanup inactive rooms. Returns the codes that were removed so the caller
+   * can tear down the matching game engines (their timers would otherwise run
+   * forever).
+   *
+   * Two rules:
+   *  - abandoned: nobody connected for ABANDONED_ROOM_TTL_MS, whatever the
+   *    room status (a room stuck in "playing" used to leak forever)
+   *  - stale: still in the lobby more than an hour after creation
    */
-  cleanupInactiveRooms(): void {
-    const oneHourAgo = Date.now() - 60 * 60 * 1000;
+  cleanupInactiveRooms(): string[] {
+    const now = Date.now();
+    const oneHourAgo = now - 60 * 60 * 1000;
+    const removed: string[] = [];
 
     for (const [code, room] of this.rooms.entries()) {
-      if (room.createdAt < oneHourAgo && room.status === "waiting") {
-        // Remove all player and socket mappings
-        room.players.forEach((p) => {
-          this.playerRooms.delete(p.id);
-          // Clean up socket→player mappings for this player
-          for (const [socketId, playerId] of this.socketPlayers) {
-            if (playerId === p.id) {
-              this.socketPlayers.delete(socketId);
-            }
-          }
-        });
-        this.rooms.delete(code);
-        console.log(`Room ${code} cleaned up (inactive)`);
+      const abandonedAt = this.abandonedSince.get(code);
+      const hasConnectedPlayer = room.players.some((p) => p.isConnected);
+
+      // Self-heal the bookkeeping if it drifted
+      if (hasConnectedPlayer && abandonedAt !== undefined) {
+        this.abandonedSince.delete(code);
+        continue;
       }
+      if (!hasConnectedPlayer && abandonedAt === undefined) {
+        this.abandonedSince.set(code, now);
+        continue;
+      }
+
+      const isAbandoned = abandonedAt !== undefined && now - abandonedAt > ABANDONED_ROOM_TTL_MS;
+      const isStale = room.createdAt < oneHourAgo && room.status === "waiting";
+      if (!isAbandoned && !isStale) continue;
+
+      // Remove all player and socket mappings
+      room.players.forEach((p) => {
+        this.playerRooms.delete(p.id);
+        // Clean up socket→player mappings for this player
+        for (const [socketId, playerId] of this.socketPlayers) {
+          if (playerId === p.id) {
+            this.socketPlayers.delete(socketId);
+          }
+        }
+      });
+      this.rooms.delete(code);
+      this.abandonedSince.delete(code);
+      removed.push(code);
+      console.log(`Room ${code} cleaned up (${isAbandoned ? "abandoned" : "stale"})`);
     }
+
+    return removed;
   }
 
   /**

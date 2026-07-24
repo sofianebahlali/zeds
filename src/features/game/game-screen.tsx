@@ -147,6 +147,10 @@ export function GameScreen() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
+            // Purely decorative: never let this full-screen layer eat taps,
+            // including while its exit animation is still running (or stalled,
+            // which happens when a mobile browser pauses rAF).
+            style={{ pointerEvents: "none" }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-surface-950/90 backdrop-blur-sm"
           >
             <motion.div
