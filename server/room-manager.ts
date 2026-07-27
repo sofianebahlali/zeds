@@ -57,7 +57,7 @@ export class RoomManager {
       hostId: player.id,
       players: [{ ...player, isHost: true, isReady: false }],
       status: "waiting",
-      gameMode: "qcm",
+      gameMode: "open",
       settings: { ...DEFAULT_SETTINGS },
       currentRound: 0,
       totalRounds: DEFAULT_SETTINGS.totalRounds,
@@ -148,6 +148,7 @@ export class RoomManager {
     // Remove player from room
     room.players = room.players.filter((p) => p.id !== playerId);
     this.playerRooms.delete(playerId);
+    this.unmapPlayerSockets(playerId);
 
     // If room is empty, delete it
     if (room.players.length === 0) {
@@ -239,25 +240,41 @@ export class RoomManager {
     this.playerRooms.set(playerId, room.code);
     this.abandonedSince.delete(room.code);
 
-    // Clean up any stale socket entries for this player (race condition:
-    // new socket may connect before old socket's disconnect event fires)
-    for (const [oldSocketId, pId] of this.socketPlayers) {
-      if (pId === playerId && oldSocketId !== socketId) {
-        this.socketPlayers.delete(oldSocketId);
-      }
-    }
-
-    this.socketPlayers.set(socketId, playerId);
+    // Also clears any stale socket entry for this player (race condition: the
+    // new socket may connect before the old one's disconnect event fires).
+    this.mapSocketToPlayer(socketId, playerId);
 
     console.log(`${player.name} reconnected to room ${roomCode}`);
     return { room, player };
   }
 
   /**
-   * Map socket ID to player ID
+   * Map socket ID to player ID.
+   *
+   * A player owns exactly one socket: any earlier entry is dropped first,
+   * otherwise getSocketIdFromPlayerId() can hand out a dead socket and the
+   * per-player emits (hints, guess results, drawing prompts) go nowhere.
    */
   mapSocketToPlayer(socketId: string, playerId: string): void {
+    for (const [oldSocketId, pId] of this.socketPlayers) {
+      if (pId === playerId && oldSocketId !== socketId) {
+        this.socketPlayers.delete(oldSocketId);
+      }
+    }
     this.socketPlayers.set(socketId, playerId);
+  }
+
+  /**
+   * Forget every socket bound to this player. Called when the player really
+   * leaves (quit, kicked, reaped) so their old sockets can't keep issuing
+   * commands on a room they are no longer in.
+   */
+  unmapPlayerSockets(playerId: string): void {
+    for (const [socketId, pId] of this.socketPlayers) {
+      if (pId === playerId) {
+        this.socketPlayers.delete(socketId);
+      }
+    }
   }
 
   /**
@@ -412,6 +429,7 @@ export class RoomManager {
 
     room.players.splice(playerIndex, 1);
     this.playerRooms.delete(playerId);
+    this.unmapPlayerSockets(playerId);
     return true;
   }
 
@@ -445,10 +463,10 @@ export class RoomManager {
    *    room status (a room stuck in "playing" used to leak forever)
    *  - stale: still in the lobby more than an hour after creation
    */
-  cleanupInactiveRooms(): string[] {
+  cleanupInactiveRooms(): { code: string; playerIds: string[] }[] {
     const now = Date.now();
     const oneHourAgo = now - 60 * 60 * 1000;
-    const removed: string[] = [];
+    const removed: { code: string; playerIds: string[] }[] = [];
 
     for (const [code, room] of this.rooms.entries()) {
       const abandonedAt = this.abandonedSince.get(code);
@@ -469,18 +487,14 @@ export class RoomManager {
       if (!isAbandoned && !isStale) continue;
 
       // Remove all player and socket mappings
-      room.players.forEach((p) => {
-        this.playerRooms.delete(p.id);
-        // Clean up socket→player mappings for this player
-        for (const [socketId, playerId] of this.socketPlayers) {
-          if (playerId === p.id) {
-            this.socketPlayers.delete(socketId);
-          }
-        }
+      const playerIds = room.players.map((p) => p.id);
+      playerIds.forEach((playerId) => {
+        this.playerRooms.delete(playerId);
+        this.unmapPlayerSockets(playerId);
       });
       this.rooms.delete(code);
       this.abandonedSince.delete(code);
-      removed.push(code);
+      removed.push({ code, playerIds });
       console.log(`Room ${code} cleaned up (${isAbandoned ? "abandoned" : "stale"})`);
     }
 

@@ -1,7 +1,7 @@
 import Database from "better-sqlite3";
 import * as path from "path";
 import * as fs from "fs";
-import type { QCMQuestion, OpenQuestion, Question } from "../src/types";
+import type { OpenQuestion } from "../src/types";
 
 // ==========================================
 // THEME CONSTANTS
@@ -76,7 +76,7 @@ export interface QueryOptions {
 /**
  * Get random questions from the database, with optional filtering
  */
-export function getQuestions(options: QueryOptions): Question[] {
+export function getQuestions(options: QueryOptions): OpenQuestion[] {
   const database = getDb();
   if (!database) return [];
 
@@ -156,32 +156,23 @@ export function getTotalCount(): number {
 // ROW CONVERSION
 // ==========================================
 
-function rowToQuestion(row: DbRow): Question {
-  if (row.type === "qcm") {
-    const options: string[] = JSON.parse(row.options);
-    const correctIndex = options.indexOf(row.correct_answer);
+/**
+ * Every row becomes an open question. The bank still stores multiple-choice
+ * rows (`type = 'qcm'`) — for those we keep the question and its
+ * `correct_answer` and simply drop the distractor options.
+ */
+function rowToQuestion(row: DbRow): OpenQuestion {
+  const isMultipleChoiceRow = row.type === "qcm";
 
-    return {
-      id: `db_${row.id}`,
-      type: "qcm",
-      question: row.question,
-      options,
-      correctIndex: correctIndex >= 0 ? correctIndex : 0,
-      timeLimit: row.difficulty === "hard" ? 15 : 20,
-      points: row.difficulty === "hard" ? 150 : 100,
-    } as QCMQuestion;
-  }
-
-  // Open question: correct_answer is the main answer
   return {
     id: `db_${row.id}`,
     type: "open",
     question: row.question,
     answers: [row.correct_answer],
     caseSensitive: false,
-    timeLimit: 20,
-    points: 150,
-  } as OpenQuestion;
+    timeLimit: isMultipleChoiceRow && row.difficulty === "hard" ? 15 : 20,
+    points: isMultipleChoiceRow && row.difficulty !== "hard" ? 100 : 150,
+  };
 }
 
 /**

@@ -9,7 +9,7 @@ import { useChatStore } from "@/stores/chat-store";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { WorldMap } from "./world-map";
-import type { EstimationQuestion, PetitBacQuestion, QCMQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion, PokestatsRoundResult as PokestatsRoundResultType, PokemonAttackRoundResult as PokemonAttackRoundResultType, DialedQuestion, PokedexNumberQuestion, FlagQuestion, CapitalQuestion, CountryLocateQuestion, CityLocateQuestion } from "@/types";
+import type { EstimationQuestion, PetitBacQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion, PokestatsRoundResult as PokestatsRoundResultType, PokemonAttackRoundResult as PokemonAttackRoundResultType, DialedQuestion, PokedexNumberQuestion, FlagQuestion, CapitalQuestion, CountryLocateQuestion, CityLocateQuestion } from "@/types";
 
 const PETITBAC_CATEGORY_ICONS: Record<string, string> = {
   "Prénom": "👤",
@@ -78,7 +78,6 @@ export function RoundResult() {
   const myResult = roundResult.scores.find((s) => s.playerId === myPlayerId);
   const isCorrect = myResult && myResult.points > 0;
   const isEstimation = roundResult.question.type === "estimation";
-  const isDictation = roundResult.question.type === "dictation";
   const isParcours = roundResult.question.type === "parcours";
   const isPetitBac = roundResult.question.type === "petitbac";
   const isGeoQuiz = roundResult.question.type === "geoquiz";
@@ -222,10 +221,6 @@ export function RoundResult() {
             ? isCorrect
               ? "Bien estimé !"
               : "Pas facile !"
-            : isDictation
-            ? isCorrect
-              ? "Bien écrit !"
-              : "Piégé !"
             : isParcours
             ? isCorrect
               ? "Bien trouvé !"
@@ -289,8 +284,6 @@ export function RoundResult() {
             <p className="text-sm text-surface-400 mb-2">
               {isEstimation
                 ? "Le vrai prix :"
-                : isDictation
-                ? "La phrase correcte :"
                 : isParcours
                 ? "Le joueur était :"
                 : isGeoQuiz
@@ -321,12 +314,7 @@ export function RoundResult() {
                 </div>
               </div>
             )}
-            <p
-              className={cn(
-                "font-display font-bold text-surface-100",
-                isDictation ? "text-base leading-relaxed" : "text-2xl"
-              )}
-            >
+            <p className="text-2xl font-display font-bold text-surface-100">
               {roundResult.correctAnswer}
             </p>
             {isEstimation && (
@@ -380,8 +368,6 @@ export function RoundResult() {
               <Badge variant="warning" size="sm">
                 {isEstimation || isPokedexNumber
                   ? "Le plus proche !"
-                  : isDictation
-                  ? "Le plus précis !"
                   : isGeoQuiz
                   ? "Globe-trotteur !"
                   : isChrono
@@ -463,10 +449,10 @@ export function RoundResult() {
                               const dev = Math.round(Math.abs(guess - real) / real * 100);
                               return `${guess.toLocaleString("fr-FR")} ${unit} (${dev}% d'écart)`;
                             })()
-                          : (roundResult.question.type === "qcm" || roundResult.question.type === "maths")
+                          : roundResult.question.type === "maths"
                           ? (() => {
                               const idx = parseInt(answer.answer, 10);
-                              const opts = (roundResult.question as QCMQuestion | MathsQuestion).options;
+                              const opts = (roundResult.question as MathsQuestion).options;
                               return (!isNaN(idx) && opts && opts[idx]) ? opts[idx] : (answer.answer || "Pas de réponse");
                             })()
                           : isJerseyNumber || isPokedexNumber

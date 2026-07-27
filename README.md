@@ -135,10 +135,8 @@ npm run build
 
 ## Modes de Jeu (Architecture)
 
-1. **QCM** (`qcm`) - Questions à choix multiples
-2. **Question ouverte** (`open`) - Réponse texte libre
-3. **Image** (`image`) - Deviner l'image (à implémenter)
-4. **Dictée** (`dictation`) - Audio vers texte (à implémenter)
+Les modes disponibles sont déclarés dans `GAME_MODES` (`src/types/index.ts`), regroupés
+en quatre catégories : Culture G / Maths, Géographie, Pokémon et Foot / FUT.
 
 Chaque mode implémente la même interface `Question` et réutilise les composants UI génériques.
 

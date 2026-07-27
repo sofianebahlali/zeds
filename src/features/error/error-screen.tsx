@@ -5,6 +5,7 @@ import { AlertTriangle, RefreshCw, Home } from "lucide-react";
 import { Button } from "@/components/ui";
 import { ScreenContainer } from "@/components/layout";
 import { useUIStore, useGameStore, useRoomStore } from "@/stores";
+import { clearSessionRoom } from "@/lib/session";
 
 export function ErrorScreen() {
   const error = useUIStore((s) => s.error);
@@ -20,6 +21,7 @@ export function ErrorScreen() {
 
   const handleGoHome = () => {
     setError(null);
+    clearSessionRoom();
     resetGame();
     resetRoom();
     setScreen("home");

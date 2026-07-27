@@ -39,7 +39,7 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "dictation" | "image" | "qcm" | "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon" | "dialed" | "pokegeo" | "pokemontranslate" | "pokedexnumber" | "pokemonattack" | "flag" | "capital" | "countrylocate" | "citylocate";
+export type GameMode = "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon" | "dialed" | "pokegeo" | "pokemontranslate" | "pokedexnumber" | "pokemonattack" | "flag" | "capital" | "countrylocate" | "citylocate";
 
 export interface GameModeConfig {
   mode: GameMode;
@@ -84,7 +84,7 @@ export interface TeamRoundResult {
 }
 
 export const DEFAULT_PLAYLIST: GameModeConfig[] = [
-  { mode: "qcm", rounds: 3 },
+  { mode: "open", rounds: 3 },
   { mode: "petitbac", rounds: 2 },
   { mode: "estimation", rounds: 3 },
   { mode: "parcours", rounds: 2 },
@@ -150,10 +150,10 @@ export const GAME_PRESETS: GamePreset[] = [
     id: "culture",
     name: "Culture G",
     icon: "🧠",
-    description: "QCM, estimation, géo, langues, consensus",
+    description: "Questions, estimation, géo, langues, consensus",
     gradient: "from-indigo-500 to-violet-600",
     playlist: [
-      { mode: "qcm", rounds: 3 },
+      { mode: "open", rounds: 3 },
       { mode: "estimation", rounds: 3 },
       { mode: "geoquiz", rounds: 2 },
       { mode: "langue", rounds: 2 },
@@ -183,29 +183,6 @@ export interface BaseQuestion {
   type: GameMode;
   timeLimit: number;
   points: number;
-}
-
-export interface DictationQuestion extends BaseQuestion {
-  type: "dictation";
-  text: string;
-  audioFile: string;
-  audioText?: string;
-  traps?: string[];
-  difficulty?: "easy" | "medium" | "hard";
-}
-
-export interface ImageQuestion extends BaseQuestion {
-  type: "image";
-  imageUrl: string;
-  answer: string;
-  hint?: string;
-}
-
-export interface QCMQuestion extends BaseQuestion {
-  type: "qcm";
-  question: string;
-  options: string[];
-  correctIndex: number;
 }
 
 export interface OpenQuestion extends BaseQuestion {
@@ -1023,7 +1000,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = DictationQuestion | ImageQuestion | QCMQuestion | OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion | DialedQuestion | PokeGeoQuestion | PokemonTranslateQuestion | PokedexNumberQuestion | PokemonAttackQuestion | FlagQuestion | CapitalQuestion | CountryLocateQuestion | CityLocateQuestion;
+export type Question = OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion | DialedQuestion | PokeGeoQuestion | PokemonTranslateQuestion | PokedexNumberQuestion | PokemonAttackQuestion | FlagQuestion | CapitalQuestion | CountryLocateQuestion | CityLocateQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -1154,6 +1131,21 @@ export interface GameState {
  */
 export type ReconnectFailureReason = "room_gone" | "player_removed" | "unknown";
 
+/**
+ * Snapshot of the round in flight, sent to a single player who just came back.
+ * Their client restarted with an empty game store and missed the
+ * `game:round_start` broadcast, so it has to be replayed to them alone.
+ */
+export interface GameResyncData {
+  round: number;
+  totalRounds: number;
+  question: Question;
+  timeRemaining: number;
+  answeredPlayerIds: string[];
+  /** The answer this player already submitted this round, if any. */
+  myAnswer: string | null;
+}
+
 export interface ServerToClientEvents {
   // Room events
   "room:joined": (room: Room, player: Player) => void;
@@ -1163,6 +1155,8 @@ export interface ServerToClientEvents {
   "room:settings_updated": (settings: GameSettings) => void;
   "room:host_changed": (newHostId: string) => void;
   "room:error": (message: string) => void;
+  /** Sent to the kicked player only — everybody else gets room:player_left. */
+  "room:kicked": () => void;
 
   // Game events
   "game:mode_changed": (mode: GameMode) => void;
@@ -1173,6 +1167,7 @@ export interface ServerToClientEvents {
   "game:round_end": (result: RoundResult) => void;
   "game:leaderboard": (players: Player[]) => void;
   "game:finished": (finalScores: Player[]) => void;
+  "game:resync": (data: GameResyncData) => void;
 
   // Drawing events
   "drawing:phase_start": (phase: DrawingPhase, data: DrawingPhaseData) => void;
@@ -1266,6 +1261,12 @@ export interface ServerToClientEvents {
   // Connection events
   "connection:reconnected": (room: Room, player: Player) => void;
   "connection:reconnect_failed": (reason: ReconnectFailureReason) => void;
+  /**
+   * Another live socket claimed this player's identity (a second tab). The
+   * loser is told before being disconnected, so it can bow out instead of
+   * fighting the winner for the server-side socket↔player mapping.
+   */
+  "connection:superseded": () => void;
   "connection:player_disconnected": (playerId: string) => void;
   "connection:player_reconnected": (playerId: string) => void;
 
@@ -1447,30 +1448,6 @@ export const GAME_MODE_CATEGORIES: GameModeCategory[] = [
 
 export const GAME_MODES: GameModeInfo[] = [
   // ── Culture G / Maths ──
-  {
-    id: "dictation",
-    name: "Dictée",
-    description: "Écoute et écris ce que tu entends",
-    icon: "🎧",
-    color: "from-brand-500 to-brand-700",
-    category: "culture",
-  },
-  {
-    id: "image",
-    name: "Image",
-    description: "Devine ce que représente l'image",
-    icon: "🖼️",
-    color: "from-accent-500 to-accent-700",
-    category: "culture",
-  },
-  {
-    id: "qcm",
-    name: "QCM",
-    description: "Choisis la bonne réponse parmi 4",
-    icon: "📝",
-    color: "from-success-500 to-success-700",
-    category: "culture",
-  },
   {
     id: "open",
     name: "Question ouverte",

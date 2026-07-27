@@ -6,10 +6,7 @@ import type {
   Room,
   Player,
   Question,
-  QCMQuestion,
   OpenQuestion,
-  ImageQuestion,
-  DictationQuestion,
   EstimationQuestion,
   ParcoursQuestion,
   DrawingQuestion,
@@ -106,28 +103,28 @@ type TypedIO = Server<ClientToServerEvents, ServerToClientEvents>;
 const SAMPLE_QUESTIONS: Question[] = [
   {
     id: "q1",
-    type: "qcm",
+    type: "open",
     question: "Combien de joueurs composent une équipe de football ?",
-    options: ["9", "10", "11", "12"],
-    correctIndex: 2,
+    answers: ["11", "onze"],
+    caseSensitive: false,
     timeLimit: 15,
     points: 100,
   },
   {
     id: "q2",
-    type: "qcm",
+    type: "open",
     question: "Quel pays a remporté la Coupe du Monde 2022 ?",
-    options: ["Brésil", "France", "Argentine", "Croatie"],
-    correctIndex: 2,
+    answers: ["argentine", "l'argentine"],
+    caseSensitive: false,
     timeLimit: 20,
     points: 100,
   },
   {
     id: "q3",
-    type: "qcm",
+    type: "open",
     question: "Dans quel jeu vidéo incarne-t-on Link ?",
-    options: ["Mario", "Zelda", "Metroid", "Pokémon"],
-    correctIndex: 1,
+    answers: ["zelda", "the legend of zelda"],
+    caseSensitive: false,
     timeLimit: 15,
     points: 100,
   },
@@ -142,19 +139,19 @@ const SAMPLE_QUESTIONS: Question[] = [
   },
   {
     id: "q5",
-    type: "qcm",
+    type: "open",
     question: "Combien de Grand Chelem Rafael Nadal a-t-il remportés ?",
-    options: ["18", "20", "22", "24"],
-    correctIndex: 2,
+    answers: ["22", "vingt-deux"],
+    caseSensitive: false,
     timeLimit: 20,
     points: 100,
   },
   {
     id: "q6",
-    type: "qcm",
+    type: "open",
     question: "Quel personnage de manga possède le Gear 5 ?",
-    options: ["Naruto", "Goku", "Luffy", "Ichigo"],
-    correctIndex: 2,
+    answers: ["luffy", "monkey d luffy", "monkey d. luffy"],
+    caseSensitive: false,
     timeLimit: 15,
     points: 100,
   },
@@ -169,19 +166,19 @@ const SAMPLE_QUESTIONS: Question[] = [
   },
   {
     id: "q8",
-    type: "qcm",
+    type: "open",
     question: "Quel est le jeu le plus vendu de tous les temps ?",
-    options: ["GTA V", "Minecraft", "Tetris", "Wii Sports"],
-    correctIndex: 1,
+    answers: ["minecraft"],
+    caseSensitive: false,
     timeLimit: 20,
     points: 100,
   },
   {
     id: "q9",
-    type: "qcm",
+    type: "open",
     question: "Dans Dragon Ball, quelle est la transformation ultime de Goku ?",
-    options: ["Super Saiyan 3", "Super Saiyan God", "Ultra Instinct", "Super Saiyan Blue"],
-    correctIndex: 2,
+    answers: ["ultra instinct", "ultra-instinct"],
+    caseSensitive: false,
     timeLimit: 15,
     points: 100,
   },
@@ -207,6 +204,8 @@ export class GameEngine {
   private answers: Map<string, Answer> = new Map();
   private timerInterval: NodeJS.Timeout | null = null;
   private timeRemaining: number = 0;
+  // Round frozen because the room has nobody connected (see pauseTimerIfRoomEmpty)
+  private timerPaused: boolean = false;
   private roundEnding: boolean = false; // Guard against double endRound() calls
   private roundStarting: boolean = false; // Guard against double startRound() calls
   private questions: Question[] = [];
@@ -343,20 +342,6 @@ export class GameEngine {
       return JSON.parse(raw) as EstimationQuestion[];
     } catch {
       console.warn("No estimation questions found at", filePath);
-      return [];
-    }
-  }
-
-  /**
-   * Load dictation questions from JSON file
-   */
-  private static loadDictationQuestions(): Question[] {
-    const filePath = path.resolve(__dirname, "../data/questions/dictation.json");
-    try {
-      const raw = fs.readFileSync(filePath, "utf-8");
-      return JSON.parse(raw) as DictationQuestion[];
-    } catch {
-      console.warn("No dictation questions found at", filePath);
       return [];
     }
   }
@@ -598,43 +583,9 @@ export class GameEngine {
   }
 
   /**
-   * Normalize text for dictation comparison (strip punctuation, lowercase, keep accents)
+   * Load open questions from the SQLite bank, with session-level deduplication.
    */
-  private static normalizeDictationText(text: string): string[] {
-    return text
-      .toLowerCase()
-      .replace(/[.,;:!?'"«»()…\[\]{}]/g, "")
-      .replace(/\s+/g, " ")
-      .trim()
-      .split(" ")
-      .filter((w) => w.length > 0);
-  }
-
-  /**
-   * Longest common subsequence (word-level) for tolerant dictation scoring
-   */
-  private static wordLCS(a: string[], b: string[]): number {
-    const m = a.length;
-    const n = b.length;
-    const dp: number[][] = Array(m + 1)
-      .fill(0)
-      .map(() => Array(n + 1).fill(0));
-    for (let i = 1; i <= m; i++) {
-      for (let j = 1; j <= n; j++) {
-        if (a[i - 1] === b[j - 1]) {
-          dp[i][j] = dp[i - 1][j - 1] + 1;
-        } else {
-          dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
-        }
-      }
-    }
-    return dp[m][n];
-  }
-
-  /**
-   * Load QCM/Open questions from SQLite database, with session-level deduplication
-   */
-  private loadQuestionsFromDb(mode: "qcm" | "open", count: number): Question[] {
+  private loadQuestionsFromDb(count: number): OpenQuestion[] {
     const dbTotal = getDbTotalCount();
     if (dbTotal === 0) return [];
 
@@ -649,25 +600,6 @@ export class GameEngine {
       if (!isNaN(numId)) this.usedQuestionDbIds.add(numId);
     }
 
-    // Override type if specifically requesting "open" mode
-    if (mode === "open") {
-      return questions.map((q) => {
-        if (q.type === "qcm") {
-          const qcm = q as QCMQuestion;
-          return {
-            id: qcm.id,
-            type: "open" as const,
-            question: qcm.question,
-            answers: [qcm.options[qcm.correctIndex]],
-            caseSensitive: false,
-            timeLimit: 20,
-            points: 100,
-          } as OpenQuestion;
-        }
-        return q;
-      });
-    }
-
     return questions;
   }
 
@@ -678,29 +610,15 @@ export class GameEngine {
     let pool: Question[];
 
     switch (mode) {
-      case "qcm": {
-        // Try SQLite database first
-        const dbQuestions = this.loadQuestionsFromDb("qcm", count);
-        if (dbQuestions.length >= count) return dbQuestions;
-        // Fallback: pad with sample questions if DB doesn't have enough
-        pool = [...dbQuestions, ...SAMPLE_QUESTIONS.filter((q) => q.type === "qcm")];
-        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
-        break;
-      }
       case "open": {
-        // Try SQLite database first (converts QCM to Open)
-        const dbQuestions = this.loadQuestionsFromDb("open", count);
+        // Try SQLite database first
+        const dbQuestions = this.loadQuestionsFromDb(count);
         if (dbQuestions.length >= count) return dbQuestions;
-        pool = [...dbQuestions, ...SAMPLE_QUESTIONS.filter((q) => q.type === "open")];
-        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
+        pool = [...dbQuestions, ...SAMPLE_QUESTIONS];
         break;
       }
       case "estimation":
         pool = GameEngine.loadEstimationQuestions();
-        if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
-        break;
-      case "dictation":
-        pool = GameEngine.loadDictationQuestions();
         if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
         break;
       case "parcours":
@@ -1283,13 +1201,6 @@ export class GameEngine {
         correctValue: 0, // Hide the real price
       };
     }
-    if (question.type === "dictation") {
-      return {
-        ...question,
-        text: "", // Hide the correct text
-        audioText: undefined, // Don't send audioText to client
-      };
-    }
     if (question.type === "parcours") {
       return {
         ...question,
@@ -1459,6 +1370,13 @@ export class GameEngine {
   private startTimer(): void {
     // Safety: stop any existing timer to prevent leaked intervals
     this.stopTimer();
+    this.timerPaused = false;
+    // Nobody is around to play this round — don't burn it down on an empty
+    // room (see pauseTimerIfRoomEmpty).
+    if (this.countConnectedPlayers() === 0) {
+      this.timerPaused = true;
+      return;
+    }
     this.timerInterval = setInterval(() => {
       this.timeRemaining--;
       this.io.to(this.room.code).emit("game:time_update", this.timeRemaining);
@@ -1482,6 +1400,45 @@ export class GameEngine {
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
       this.timerInterval = null;
+    }
+  }
+
+  /**
+   * Players currently holding a live socket.
+   */
+  private countConnectedPlayers(): number {
+    return this.room.players.filter(
+      (p) => p.isConnected && !this.disconnectedPlayers.has(p.id)
+    ).length;
+  }
+
+  /**
+   * Freeze the round while the room has nobody connected.
+   *
+   * Mobile browsers kill the socket the moment the app is backgrounded, so
+   * "everybody dropped" is usually "everybody looked at a notification". The
+   * game used to be declared finished right there; now the clock simply stops
+   * and picks up where it left off when someone comes back.
+   */
+  private pauseTimerIfRoomEmpty(): void {
+    if (this.timerPaused) return;
+    if (this.countConnectedPlayers() > 0) return;
+    this.stopTimer();
+    this.timerPaused = true;
+    console.log(`Room ${this.room.code}: round paused (nobody connected)`);
+  }
+
+  /**
+   * Resume a round frozen by pauseTimerIfRoomEmpty().
+   */
+  private resumeTimerIfPaused(): void {
+    if (!this.timerPaused) return;
+    if (this.countConnectedPlayers() === 0) return;
+    this.timerPaused = false;
+    // Only rounds that are actually still running have a clock to restart.
+    if (this.currentQuestion && !this.roundEnding && this.timeRemaining > 0) {
+      this.startTimer();
+      console.log(`Room ${this.room.code}: round resumed`);
     }
   }
 
@@ -1771,10 +1728,6 @@ export class GameEngine {
       return this.calculateEstimationScores(correctAnswer, scores);
     }
 
-    if (this.currentQuestion.type === "dictation") {
-      return this.calculateDictationScores(correctAnswer, scores);
-    }
-
     if (this.currentQuestion.type === "chrono") {
       return this.calculateChronoScores(correctAnswer, scores);
     }
@@ -1970,56 +1923,6 @@ export class GameEngine {
       }
     }
 
-    for (const player of this.room.players) {
-      if (!this.answers.has(player.id)) {
-        scores.push({ playerId: player.id, points: 0, total: player.score });
-      }
-    }
-
-    return {
-      roundNumber: this.currentRound,
-      question: this.currentQuestion!,
-      answers: Array.from(this.answers.values()),
-      correctAnswer,
-      winner,
-      scores,
-    };
-  }
-
-  /**
-   * Calculate proportional scores for dictation questions
-   */
-  private calculateDictationScores(
-    correctAnswer: string,
-    scores: { playerId: string; points: number; total: number }[]
-  ): RoundResult {
-    const q = this.currentQuestion as DictationQuestion;
-    const correctWords = GameEngine.normalizeDictationText(q.text);
-    let winner: Player | undefined;
-    let bestAccuracy = 0;
-
-    for (const [playerId, answer] of this.answers) {
-      const playerWords = GameEngine.normalizeDictationText(answer.answer);
-      const lcsLen = GameEngine.wordLCS(playerWords, correctWords);
-      const accuracy = correctWords.length > 0 ? lcsLen / correctWords.length : 0;
-
-      const points = Math.round(q.points * accuracy);
-      answer.isCorrect = accuracy >= 0.85;
-      answer.points = points;
-
-      // Track best accuracy for winner
-      if (accuracy > bestAccuracy) {
-        bestAccuracy = accuracy;
-        winner = this.room.players.find((p) => p.id === playerId);
-      }
-
-      const updatedPlayer = this.roomManager.updatePlayerScore(playerId, points);
-      if (updatedPlayer) {
-        scores.push({ playerId, points, total: updatedPlayer.score });
-      }
-    }
-
-    // Players who didn't answer
     for (const player of this.room.players) {
       if (!this.answers.has(player.id)) {
         scores.push({ playerId: player.id, points: 0, total: player.score });
@@ -2489,16 +2392,8 @@ export class GameEngine {
     if (!this.currentQuestion) return "";
 
     switch (this.currentQuestion.type) {
-      case "qcm":
-        return (this.currentQuestion as QCMQuestion).options[
-          (this.currentQuestion as QCMQuestion).correctIndex
-        ];
       case "open":
         return (this.currentQuestion as OpenQuestion).answers[0];
-      case "image":
-        return (this.currentQuestion as ImageQuestion).answer;
-      case "dictation":
-        return (this.currentQuestion as DictationQuestion).text;
       case "estimation": {
         const q = this.currentQuestion as EstimationQuestion;
         return `${q.correctValue.toLocaleString("fr-FR")} ${q.unit}`;
@@ -2587,15 +2482,6 @@ export class GameEngine {
     const normalizedAnswer = answer.trim().toLowerCase();
 
     switch (this.currentQuestion.type) {
-      case "qcm": {
-        const q = this.currentQuestion as QCMQuestion;
-        const correctOption = q.options[q.correctIndex].toLowerCase();
-        // Accept both the option text and the index
-        return (
-          normalizedAnswer === correctOption ||
-          normalizedAnswer === String(q.correctIndex)
-        );
-      }
       case "open": {
         const q = this.currentQuestion as OpenQuestion;
         const validAnswers = q.answers.map((a) =>
@@ -2603,19 +2489,6 @@ export class GameEngine {
         );
         const userAnswer = q.caseSensitive ? answer.trim() : normalizedAnswer;
         return validAnswers.includes(userAnswer);
-      }
-      case "image": {
-        const q = this.currentQuestion as ImageQuestion;
-        return normalizedAnswer === q.answer.toLowerCase();
-      }
-      case "dictation": {
-        // Dictation uses proportional scoring, handled in calculateDictationScores
-        const q = this.currentQuestion as DictationQuestion;
-        const playerWords = GameEngine.normalizeDictationText(answer);
-        const correctWords = GameEngine.normalizeDictationText(q.text);
-        const lcsLen = GameEngine.wordLCS(playerWords, correctWords);
-        const accuracy = correctWords.length > 0 ? lcsLen / correctWords.length : 0;
-        return accuracy >= 0.85;
       }
       case "estimation":
         // Estimation scoring is handled in calculateEstimationScores
@@ -6235,6 +6108,7 @@ export class GameEngine {
       if (this.splitStealChoices.size >= totalPlayers && activePlayers.length > 0) {
         this.resolveSplitSteal();
       }
+      this.pauseTimerIfRoomEmpty();
       return;
     }
 
@@ -6263,17 +6137,50 @@ export class GameEngine {
       this.endRound();
     }
 
-    // If no players left, end the game
+    // Nobody connected: freeze the round instead of ending the game. The room
+    // reaper tears the engine down if they never come back.
     if (activePlayers.length <= 0) {
-      this.finishGame();
+      this.pauseTimerIfRoomEmpty();
     }
   }
 
   /**
-   * Handle player reconnect
+   * Handle player reconnect: unfreeze the round and push the current state to
+   * the returning player, whose client came back with an empty game store.
    */
   handlePlayerReconnect(playerId: string): void {
     this.disconnectedPlayers.delete(playerId);
+    this.resumeTimerIfPaused();
+    this.resyncPlayer(playerId);
+  }
+
+  /**
+   * Re-send the in-flight round to a single player.
+   *
+   * Without this, a player who backgrounded their phone mid-round is put back
+   * on the game screen with nothing on it — the client only ever learns about
+   * a question from the `game:round_start` broadcast it missed while away.
+   *
+   * Multi-phase modes (drawing, split-or-steal) and the host-validation phases
+   * have per-player state that can't be replayed safely; those players pick
+   * back up at the next round.
+   */
+  private resyncPlayer(playerId: string): void {
+    const socketId = this.roomManager.getSocketIdFromPlayerId(playerId);
+    if (!socketId) return;
+
+    if (!this.currentQuestion || this.roundEnding) return;
+    if (this.currentQuestion.type === "drawing" || this.currentQuestion.type === "splitsteal") return;
+
+    const myAnswer = this.answers.get(playerId);
+    this.io.to(socketId).emit("game:resync", {
+      round: this.currentRound,
+      totalRounds: this.questions.length,
+      question: this.sanitizeQuestionForClient(this.currentQuestion),
+      timeRemaining: this.timeRemaining,
+      answeredPlayerIds: Array.from(this.answers.keys()),
+      myAnswer: myAnswer ? myAnswer.answer : null,
+    });
   }
 
   /**
@@ -6281,6 +6188,7 @@ export class GameEngine {
    */
   destroy(): void {
     this.stopTimer();
+    this.timerPaused = false;
     this.cancelAutoAdvance();
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval);

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Quizz Arena — a real-time multiplayer quiz game built with Next.js 14 (App Router) + Express + Socket.IO. Full-stack TypeScript monorepo (~3K LOC). Supports 5 game modes: QCM (multiple choice), Open (free text), Dictation (French audio transcription), Image (identification), and Estimation ("Juste Prix" proportional scoring).
+Quizz Arena — a real-time multiplayer quiz game built with Next.js 14 (App Router) + Express + Socket.IO. Full-stack TypeScript monorepo. The playable modes are declared in `GAME_MODES` (`src/types/index.ts`) across four categories — Culture G / Maths, Géographie, Pokémon and Foot / FUT — and a game is a *playlist* of mode segments (see `GameSettings.playlist` and `GAME_PRESETS`).
 
 ## Commands
 
@@ -52,7 +52,7 @@ Four stores manage all client state:
 ### Server (`server/`)
 - **room-manager.ts** — Room lifecycle, player tracking, socket↔player mapping. Rooms use 4-char alphanumeric codes.
 - **socket-handlers.ts** — All Socket.IO event handlers (room:create, game:start, etc.)
-- **game-engine.ts** — Per-room game logic: question loading from `data/questions/` JSON files with in-code fallbacks, timer management (1s intervals), answer validation, scoring (base + speed bonus + streak bonus). Dictation uses word-level LCS with 85% threshold. Estimation uses proportional scoring within 15% tolerance.
+- **game-engine.ts** — Per-room game logic: question loading from `data/questions/` JSON files with in-code fallbacks, timer management (1s intervals), answer validation, scoring (base + speed bonus + streak bonus). Estimation uses proportional scoring within 15% tolerance.
 
 ### TypeScript Configuration
 - Frontend: `tsconfig.json` — ES2020, strict, path alias `@/*` → `./src/*`

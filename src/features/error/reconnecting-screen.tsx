@@ -7,6 +7,7 @@ import { ScreenContainer } from "@/components/layout";
 import { cn } from "@/lib/utils";
 import { useUIStore, useConnectionStatus, useRoomStore, usePlayerStore, useGameStore } from "@/stores";
 import { useSocket } from "@/hooks";
+import { clearSessionRoom } from "@/lib/session";
 
 export function ReconnectingScreen() {
   const { isReconnecting, reconnectAttempts } = useConnectionStatus();
@@ -24,6 +25,9 @@ export function ReconnectingScreen() {
   };
 
   const handleGoHome = () => {
+    // Forget the room *before* dropping the socket, otherwise the persisted
+    // session would silently walk us back into it on the next page load.
+    clearSessionRoom();
     disconnect();
     resetGame();
     resetRoom();

@@ -41,7 +41,7 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     // player — every handler bails out at `if (!playerId) return` and the
     // actions are silently swallowed. That is what makes a room feel dead
     // after coming back from the background.
-    reattachFromHandshake(socket, roomManager);
+    reattachFromHandshake(socket, io, roomManager);
 
     // ==========================================
     // ROOM EVENTS
@@ -49,6 +49,9 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
 
     socket.on("room:create", (playerName: string, avatar: string, playerId: string) => {
       try {
+        // This identity now plays here — retire any other live socket using it.
+        supersedeOtherSocket(socket, io, roomManager, playerId);
+
         // Drop out of any previous room first, otherwise the old room keeps a
         // ghost player that counts toward maxPlayers and blocks its start.
         evictFromPreviousRoom(socket, io, roomManager, playerId);
@@ -87,6 +90,8 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
           socket.emit("room:error", "Room introuvable");
           return;
         }
+
+        supersedeOtherSocket(socket, io, roomManager, playerId);
 
         // Leave any previous room, unless this *is* the room we're already in
         // (a re-join after a dropped connection).
@@ -183,10 +188,26 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
       const room = roomManager.getRoomByPlayerId(playerId);
       if (!room) return;
 
+      // Resolve the victim's socket *before* kicking — kickPlayer drops the
+      // socket↔player mapping we need to reach them.
+      const kickedSocketId = roomManager.getSocketIdFromPlayerId(targetPlayerId);
+
       const kicked = roomManager.kickPlayer(room.code, targetPlayerId, playerId);
-      if (kicked) {
-        io.to(room.code).emit("room:player_left", targetPlayerId);
+      if (!kicked) return;
+
+      clearDisconnectTimeout(targetPlayerId);
+
+      // Tell the kicked player *and* pull their socket out of the room, so they
+      // land back on the home screen instead of sitting in a lobby where every
+      // button silently does nothing. Done before the broadcast so they don't
+      // also get a "X a quitté la partie" about themselves.
+      const kickedSocket = kickedSocketId ? io.sockets.sockets.get(kickedSocketId) : undefined;
+      if (kickedSocket) {
+        kickedSocket.leave(room.code);
+        kickedSocket.emit("room:kicked");
       }
+
+      io.to(room.code).emit("room:player_left", targetPlayerId);
     });
 
     socket.on("room:play_again", () => {
@@ -760,6 +781,8 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
     // ==========================================
 
     socket.on("connection:reconnect", (roomCode: string, playerId: string) => {
+      supersedeOtherSocket(socket, io, roomManager, playerId);
+
       const result = roomManager.reconnectPlayer(roomCode, playerId, socket.id);
       if (!result) {
         // Tell the client *why* it failed. A generic room:error left the app
@@ -809,11 +832,13 @@ function clearDisconnectTimeout(playerId: string) {
  * a reconnecting socket is usable the instant it lands — no round-trip, and no
  * window where buffered client events get dropped for lack of a mapping.
  */
-function reattachFromHandshake(socket: TypedSocket, roomManager: RoomManager) {
+function reattachFromHandshake(socket: TypedSocket, io: TypedIO, roomManager: RoomManager) {
   const auth = (socket.handshake.auth ?? {}) as { playerId?: unknown; roomCode?: unknown };
   const playerId = typeof auth.playerId === "string" ? auth.playerId : undefined;
   const roomCode = typeof auth.roomCode === "string" ? auth.roomCode : undefined;
   if (!playerId || !roomCode) return;
+
+  supersedeOtherSocket(socket, io, roomManager, playerId);
 
   const result = roomManager.reconnectPlayer(roomCode, playerId, socket.id);
   if (!result) {
@@ -834,6 +859,35 @@ function reattachFromHandshake(socket: TypedSocket, roomManager: RoomManager) {
   socket.emit("connection:reconnected", room, player);
   socket.to(room.code).emit("connection:player_reconnected", player.id);
   console.log(`${player.name} re-attached to room ${room.code} from handshake`);
+}
+
+/**
+ * A player identity maps to exactly one socket. When a second *live* socket
+ * shows up for the same playerId (the player opened the game in another tab —
+ * both share the playerId in localStorage), the newcomer wins and the old one
+ * is retired explicitly.
+ *
+ * Without this the two sockets take turns owning the server-side mapping, and
+ * whichever one loses the race goes quietly dead: every handler bails out at
+ * `if (!playerId) return` and the room looks frozen from that tab.
+ */
+function supersedeOtherSocket(
+  socket: TypedSocket,
+  io: TypedIO,
+  roomManager: RoomManager,
+  playerId: string
+) {
+  const previousSocketId = roomManager.getSocketIdFromPlayerId(playerId);
+  if (!previousSocketId || previousSocketId === socket.id) return;
+
+  const previousSocket = io.sockets.sockets.get(previousSocketId);
+  // A merely stale mapping (the old socket is already gone) needs no eviction —
+  // reconnectPlayer() cleans those up on its own.
+  if (!previousSocket?.connected) return;
+
+  previousSocket.emit("connection:superseded");
+  previousSocket.disconnect(true);
+  console.log(`Socket ${previousSocketId} superseded by ${socket.id} for player ${playerId}`);
 }
 
 /**
@@ -871,9 +925,11 @@ function evictFromPreviousRoom(
  */
 export function startRoomCleanup(roomManager: RoomManager): NodeJS.Timeout {
   return setInterval(() => {
-    for (const code of roomManager.cleanupInactiveRooms()) {
+    for (const { code, playerIds } of roomManager.cleanupInactiveRooms()) {
       gameEngines.get(code)?.destroy();
       gameEngines.delete(code);
+      // The grace timers of a reaped room have nothing left to remove.
+      playerIds.forEach(clearDisconnectTimeout);
     }
   }, 60000);
 }
