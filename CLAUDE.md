@@ -28,9 +28,46 @@ docker run -p 3000:3000 quizz-arena
 
 # Regenerate the geography dataset (countries, flags, world map) — needs network
 npm run build:countries
+
+# Tests (Vitest)
+npm test                # everything
+npm run test:watch      # watch mode
+npm run test:unit       # pure logic + datasets (node)
+npm run test:integration # real Socket.IO server, end to end (node)
+npm run test:client     # stores and React components (jsdom)
+npm run test:coverage
+npm run typecheck       # both tsconfigs, tests included
 ```
 
-No test framework is currently configured.
+## Tests
+
+`vitest.config.ts` declares two projects, because the code lives in two worlds:
+
+| Project | Environment | Files | What it covers |
+|---------|-------------|-------|----------------|
+| `node`  | node  | `tests/unit`, `tests/integration` | server logic, datasets, and the real Socket.IO stack |
+| `dom`   | jsdom | `tests/client` | Zustand stores, `src/lib`, React components |
+
+The integration tests boot a **real** Express + Socket.IO server on an ephemeral
+port (`tests/helpers/test-server.ts`) and drive it with real `socket.io-client`
+sockets — room manager, game engine and socket handlers only make sense
+together, so nothing in that path is mocked. Rounds are advanced with
+`game:request_next_round` rather than waiting out the 8s auto-advance, and
+`getGameEngine(code)` (a read-only test seam exported from `socket-handlers.ts`)
+lets a test compare what the server dealt against what it sent the client.
+
+Two notes on what tests deliberately assert:
+- `tests/unit/world-map.test.ts` checks that `server/countries.ts` and
+  `src/lib/world-map.ts` resolve a tap to the *same* country, across every
+  capital, every city in the pool and a global grid. That equivalence is the
+  contract that makes the geo modes scoreable.
+- `tests/unit/game-modes.test.ts` builds a real `GameEngine` per entry in
+  `GAME_MODES` and asserts it can deal a full segment — a mode whose data file
+  goes missing fails there rather than in front of players.
+
+CI (`.github/workflows/ci.yml`) runs typecheck, the three test groups, the
+Next.js + server build, and finally builds the Docker image and curls `/health`
+inside it.
 
 ## Architecture
 

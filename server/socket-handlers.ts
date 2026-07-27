@@ -17,6 +17,15 @@ type TypedSocket = Socket<ClientToServerEvents, ServerToClientEvents>;
 
 // Store game engines per room
 const gameEngines = new Map<string, GameEngine>();
+
+/**
+ * The engine of a live room. Only used by the integration tests, which need to
+ * check what the server dealt against what it sent the client — deliberately a
+ * read-only lookup rather than an exported map.
+ */
+export function getGameEngine(roomCode: string): GameEngine | undefined {
+  return gameEngines.get(roomCode);
+}
 // Store disconnect timeouts per player so they can be cancelled on reconnection
 const disconnectTimeouts = new Map<string, NodeJS.Timeout>();
 

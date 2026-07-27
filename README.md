@@ -133,6 +133,27 @@ npm run dev:backend
 npm run build
 ```
 
+## Tests & CI
+
+```bash
+npm test                 # toute la suite (Vitest)
+npm run test:watch       # mode watch
+npm run test:unit        # logique pure, jeux de données, catalogue de modes
+npm run test:integration # vrai serveur Socket.IO, de bout en bout
+npm run test:client      # stores Zustand et composants React (jsdom)
+npm run test:coverage
+npm run typecheck        # les deux tsconfig, tests inclus
+```
+
+Les tests d'intégration démarrent un **vrai** serveur Express + Socket.IO sur un
+port éphémère et le pilotent avec de vrais clients : room manager, moteur de jeu
+et handlers ne se comprennent qu'ensemble, donc rien n'est mocké sur ce chemin.
+
+La CI (`.github/workflows/ci.yml`) enchaîne typecheck → tests → build Next.js +
+serveur → build de l'image Docker et vérification de `/health` dans le conteneur.
+`deploy.yml` déclenche un deploy hook Render si le secret `RENDER_DEPLOY_HOOK`
+est défini (sinon Render auto-déploie de son côté et le job passe sans rien faire).
+
 ## Modes de Jeu (Architecture)
 
 Les modes disponibles sont déclarés dans `GAME_MODES` (`src/types/index.ts`), regroupés

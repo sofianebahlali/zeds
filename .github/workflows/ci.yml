@@ -1,0 +1,116 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  # A new push supersedes an in-flight run for the same branch.
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # The image runs on node:20-alpine; CI matches so native modules
+  # (better-sqlite3) are built against the same ABI.
+  NODE_VERSION: "20"
+  # Puppeteer is a dependency of the data-building scripts only, and its
+  # download is ~150 MB that CI never uses.
+  PUPPETEER_SKIP_DOWNLOAD: "true"
+
+jobs:
+  typecheck:
+    name: Types
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Typecheck frontend and server
+        run: npm run typecheck
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+
+      - name: Unit tests
+        run: npm run test:unit
+
+      - name: Client tests (stores, components)
+        run: npm run test:client
+
+      - name: Integration tests (Socket.IO end to end)
+        run: npm run test:integration
+
+      - name: Coverage
+        run: npm run test:coverage
+        continue-on-error: true
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Next.js build + server compile
+        run: npm run build:all
+
+  docker:
+    name: Docker image
+    runs-on: ubuntu-latest
+    # The image is what actually ships, so it only needs proving once the
+    # cheaper checks agree.
+    needs: [typecheck, test, build]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build the production image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          load: true
+          tags: quizz-arena:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Boot it and check /health
+        run: |
+          docker run -d --name quizz -p 3000:3000 quizz-arena:ci
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:3000/health > /tmp/health.json; then
+              echo "healthy after ${i}s:"; cat /tmp/health.json; exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::the container never became healthy"
+          docker logs quizz
+          exit 1
+
+      - name: Container logs
+        if: always()
+        run: docker logs quizz || true

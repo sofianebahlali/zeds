@@ -1,0 +1,31 @@
+name: Deploy
+
+# Render auto-deploys from the default branch on its own. This workflow exists
+# for the case where auto-deploy is turned off and a deploy hook is used
+# instead: set the RENDER_DEPLOY_HOOK secret and pushes will trigger it once CI
+# is green. Without the secret the job skips, so the workflow is harmless as is.
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [claude/mobile-multiplayer-realtime-GUeFu, main, master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Trigger Render deploy
+    runs-on: ubuntu-latest
+    # Never deploy off a red build.
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Call the Render deploy hook
+        env:
+          HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "RENDER_DEPLOY_HOOK is not set — relying on Render auto-deploy."
+            exit 0
+          fi
+          curl -fsS -X POST "$HOOK" && echo "Deploy triggered."

@@ -1525,14 +1525,24 @@ export class GameEngine {
       return;
     }
 
-    // Check if everyone has answered
+    // Check if everyone still in the room has answered. Counting answers
+    // against a head count is not the same thing: a player who answers and
+    // then drops used to satisfy the check on behalf of someone who had not
+    // answered yet, ending the round under them.
+    if (this.everyActivePlayerAnswered()) {
+      this.endRound();
+    }
+  }
+
+  /**
+   * True when no connected player is still owed a chance to answer.
+   */
+  private everyActivePlayerAnswered(): boolean {
     const activePlayers = this.room.players.filter(
       (p) => p.isConnected && !this.disconnectedPlayers.has(p.id)
     );
-
-    if (this.answers.size >= activePlayers.length) {
-      this.endRound();
-    }
+    if (activePlayers.length === 0) return false;
+    return activePlayers.every((p) => this.answers.has(p.id));
   }
 
   /**
@@ -1765,8 +1775,8 @@ export class GameEngine {
         answer.points = points;
 
         // Track fastest correct answer for winner
-        if ((answer.responseTime || Infinity) < fastestCorrectTime) {
-          fastestCorrectTime = answer.responseTime || Infinity;
+        if ((answer.responseTime ?? Infinity) < fastestCorrectTime) {
+          fastestCorrectTime = answer.responseTime ?? Infinity;
           winner = this.room.players.find((p) => p.id === playerId);
         }
       }
@@ -2069,8 +2079,8 @@ export class GameEngine {
       answer.points = points;
 
       // Track fastest winner
-      if (isWinner && (answer.responseTime || Infinity) < earliestWinnerTime) {
-        earliestWinnerTime = answer.responseTime || Infinity;
+      if (isWinner && (answer.responseTime ?? Infinity) < earliestWinnerTime) {
+        earliestWinnerTime = answer.responseTime ?? Infinity;
         winner = this.room.players.find((p) => p.id === playerId);
       }
 
@@ -4899,8 +4909,8 @@ export class GameEngine {
       answer.isCorrect = isWinner;
       answer.points = points;
 
-      if (isWinner && (answer.responseTime || Infinity) < earliestWinnerTime) {
-        earliestWinnerTime = answer.responseTime || Infinity;
+      if (isWinner && (answer.responseTime ?? Infinity) < earliestWinnerTime) {
+        earliestWinnerTime = answer.responseTime ?? Infinity;
         winner = this.room.players.find((p) => p.id === playerId);
       }
 
@@ -5191,8 +5201,8 @@ export class GameEngine {
     for (const [pid, accepted] of this.pokemonDecisions) {
       if (!accepted) continue;
       const answer = this.answers.get(pid);
-      if (answer && (answer.responseTime || Infinity) < earliestTime) {
-        earliestTime = answer.responseTime || Infinity;
+      if (answer && (answer.responseTime ?? Infinity) < earliestTime) {
+        earliestTime = answer.responseTime ?? Infinity;
         firstPlayerId = pid;
       }
     }
@@ -6133,7 +6143,7 @@ export class GameEngine {
       if (activeUnresolved.length === 0) {
         this.endRound();
       }
-    } else if (!this.roundEnding && this.answers.size >= activePlayers.length && activePlayers.length > 0) {
+    } else if (!this.roundEnding && this.everyActivePlayerAnswered()) {
       this.endRound();
     }
 
