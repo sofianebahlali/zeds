@@ -1,8 +1,13 @@
 services:
   - type: web
     name: quizz-arena
+    repo: https://github.com/sofianebahlali/zeds
+    branch: claude/mobile-multiplayer-realtime-GUeFu
     runtime: docker
     plan: free
+    # Keep this explicit: Render retains the previous dashboard value when the
+    # field is omitted, which can silently leave auto-deploy disabled.
+    autoDeployTrigger: commit
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV

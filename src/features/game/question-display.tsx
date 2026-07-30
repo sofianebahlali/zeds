@@ -251,8 +251,10 @@ export function QuestionDisplay() {
             question={currentQuestion as MissingClubQuestion}
             answer={missingClubAnswer}
             hasAnswered={hasAnswered}
-            onChange={setMissingClubAnswer}
-            onSubmit={handleSubmit}
+            onSelect={(option) => {
+              setMissingClubAnswer(option);
+              submitAnswer(option);
+            }}
           />
         )}
 
@@ -561,6 +563,14 @@ function FootballConnectionQuestionView({
         ))}
       </div>
 
+      {question.answerHint && (
+        <div className="mb-4 flex items-center justify-center gap-2 rounded-xl border border-amber-500/25 bg-amber-500/10 px-3 py-2 text-sm">
+          <Eye className="w-4 h-4 text-amber-400" />
+          <span className="text-surface-400">Une réponse connue commence par</span>
+          <strong className="tracking-widest text-amber-300">{question.answerHint}</strong>
+        </div>
+      )}
+
       <AnimatePresence mode="wait">
         {hasAnswered ? (
           <motion.div
@@ -686,8 +696,14 @@ function MysteryCareerQuestionView({
           À qui appartient cette carrière ?
         </h2>
         <p className="text-xs text-surface-500 mt-1">
-          Un nouveau club apparaît toutes les {question.revealInterval} secondes
+          Les clubs les plus parlants sont révélés en premier
         </p>
+        {question.sportingCountry && (
+          <div className="mt-2 inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 text-sm text-emerald-300">
+            <Globe2 className="w-4 h-4" />
+            Nationalité : <strong>{question.sportingCountry}</strong>
+          </div>
+        )}
       </div>
 
       <div className="flex-1 min-h-0 overflow-y-auto mb-4 pr-1">
@@ -808,14 +824,12 @@ function MissingClubQuestionView({
   question,
   answer,
   hasAnswered,
-  onChange,
-  onSubmit,
+  onSelect,
 }: {
   question: MissingClubQuestion;
   answer: string;
   hasAnswered: boolean;
-  onChange: (value: string) => void;
-  onSubmit: () => void;
+  onSelect: (value: string) => void;
 }) {
   const difficultyLabel = {
     easy: "Accessible",
@@ -902,28 +916,23 @@ function MissingClubQuestionView({
           <p className="font-bold text-surface-100">{answer}</p>
         </motion.div>
       ) : (
-        <div className="flex gap-2">
-          <Input
-            value={answer}
-            onChange={(event) => onChange(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                event.preventDefault();
-                onSubmit();
-              }
-            }}
-            placeholder="Nom du club…"
-            autoComplete="off"
-            autoFocus
-          />
-          <Button
-            size="icon-lg"
-            onClick={onSubmit}
-            disabled={!answer.trim()}
-            aria-label="Valider ce club"
-          >
-            <Send className="w-5 h-5" />
-          </Button>
+        <div>
+          <p className="mb-2 text-center text-xs font-medium text-surface-400">
+            Choisis parmi ces quatre clubs
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {question.options.map((option, index) => (
+              <button
+                key={option}
+                type="button"
+                onClick={() => onSelect(option)}
+                className="min-h-14 rounded-xl border border-surface-700 bg-surface-800 px-3 py-2 text-sm font-semibold text-surface-100 transition-colors hover:border-cyan-500/60 hover:bg-cyan-500/10 active:scale-[0.98]"
+              >
+                <span className="mr-1.5 text-cyan-400">{String.fromCharCode(65 + index)}.</span>
+                {option}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>
@@ -3390,7 +3399,7 @@ interface CityLocateQuestionViewProps {
 function CityLocateQuestionView({ question, pick, hasAnswered, onPick, onSubmit }: CityLocateQuestionViewProps) {
   return (
     <div className="flex flex-col flex-1 min-h-0">
-      <div className="mb-2 text-center">
+      <div className="mb-3 text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-800 border border-surface-700 mb-1.5">
           <Building2 className="w-3.5 h-3.5 text-sky-400" />
           <span className="text-xs font-medium text-surface-300">Localise la ville</span>
@@ -3406,32 +3415,54 @@ function CityLocateQuestionView({ question, pick, hasAnswered, onPick, onSubmit 
         </div>
       </div>
 
-      {/* Same aspect box as the country mode: the whole world stays visible on a phone. */}
+      <div className="mb-2 grid grid-cols-3 gap-1.5 text-[10px] sm:text-xs">
+        {["Zoome", "Place l’épingle", "Valide"].map((step, index) => (
+          <div
+            key={step}
+            className={cn(
+              "flex items-center justify-center gap-1 rounded-lg border px-1.5 py-1.5",
+              index === 1 && pick
+                ? "border-sky-500/40 bg-sky-500/10 text-sky-300"
+                : "border-surface-800 bg-surface-900 text-surface-400"
+            )}
+          >
+            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-surface-700 text-[9px] font-bold text-surface-200">
+              {index + 1}
+            </span>
+            {step}
+          </div>
+        ))}
+      </div>
+
       <div className="flex-1 min-h-0 flex items-center justify-center">
-        <div className="w-full aspect-[360/216] max-h-full">
+        <div className="relative w-full aspect-[360/216] max-h-full rounded-2xl bg-gradient-to-br from-sky-500/40 via-surface-700 to-emerald-500/30 p-px shadow-[0_16px_50px_rgba(2,132,199,0.12)]">
           <WorldMap
-            className="h-full"
-            selectedCca3={pick?.cca3 ?? null}
+            className="h-full border-0"
             pins={pick ? [{ lat: pick.lat, lng: pick.lng, highlight: true }] : []}
             onPick={hasAnswered ? undefined : onPick}
           />
+          {!pick && (
+            <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-surface-950/80 px-3 py-1.5 text-[11px] font-medium text-surface-200 shadow-lg backdrop-blur">
+              Pince ou utilise + pour zoomer
+            </div>
+          )}
         </div>
       </div>
 
       <div className="mt-2 space-y-2">
         <div
           className={cn(
-            "flex items-center justify-center gap-2 h-9 px-3 rounded-xl border text-sm",
+            "flex items-center justify-center gap-2 min-h-11 px-3 rounded-xl border text-sm",
             pick
-              ? "bg-surface-800 border-surface-700 text-surface-100"
+              ? "bg-sky-500/10 border-sky-500/30 text-sky-200"
               : "bg-surface-900 border-dashed border-surface-700 text-surface-500"
           )}
         >
           <MapPin className="w-4 h-4 shrink-0" />
-          <span className="truncate">
+          <span className="text-center">
             {pick
-              ? pick.name ?? "En pleine mer…"
-              : "Zoome et touche l'endroit exact"}
+              ? "Épingle placée — touche ailleurs pour l’ajuster"
+              : "Touche la carte à l’endroit de la ville"}
           </span>
         </div>
 
@@ -3468,7 +3499,7 @@ interface CountryLocateQuestionViewProps {
 function CountryLocateQuestionView({ question, pick, hasAnswered, onPick, onSubmit }: CountryLocateQuestionViewProps) {
   return (
     <div className="flex flex-col flex-1 min-h-0">
-      <div className="mb-2 text-center">
+      <div className="mb-3 text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-800 border border-surface-700 mb-1.5">
           <Globe2 className="w-3.5 h-3.5 text-emerald-400" />
           <span className="text-xs font-medium text-surface-300">Localise le pays</span>
@@ -3487,30 +3518,54 @@ function CountryLocateQuestionView({ question, pick, hasAnswered, onPick, onSubm
         </div>
       </div>
 
-      {/* The map keeps the world's aspect ratio so no space is wasted on letterboxing. */}
+      <div className="mb-2 grid grid-cols-3 gap-1.5 text-[10px] sm:text-xs">
+        {["Zoome", "Place l’épingle", "Valide"].map((step, index) => (
+          <div
+            key={step}
+            className={cn(
+              "flex items-center justify-center gap-1 rounded-lg border px-1.5 py-1.5",
+              index === 1 && pick
+                ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300"
+                : "border-surface-800 bg-surface-900 text-surface-400"
+            )}
+          >
+            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-surface-700 text-[9px] font-bold text-surface-200">
+              {index + 1}
+            </span>
+            {step}
+          </div>
+        ))}
+      </div>
+
       <div className="flex-1 min-h-0 flex items-center justify-center">
-        <div className="w-full aspect-[360/216] max-h-full">
+        <div className="relative w-full aspect-[360/216] max-h-full rounded-2xl bg-gradient-to-br from-emerald-500/40 via-surface-700 to-cyan-500/30 p-px shadow-[0_16px_50px_rgba(16,185,129,0.12)]">
           <WorldMap
-            className="h-full"
-            selectedCca3={pick?.cca3 ?? null}
+            className="h-full border-0"
             pins={pick ? [{ lat: pick.lat, lng: pick.lng, highlight: true }] : []}
             onPick={hasAnswered ? undefined : onPick}
           />
+          {!pick && (
+            <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-surface-950/80 px-3 py-1.5 text-[11px] font-medium text-surface-200 shadow-lg backdrop-blur">
+              Le pays sous ton doigt reste secret
+            </div>
+          )}
         </div>
       </div>
 
       <div className="mt-2 space-y-2">
         <div
           className={cn(
-            "flex items-center justify-center gap-2 h-9 px-3 rounded-xl border text-sm",
+            "flex items-center justify-center gap-2 min-h-11 px-3 rounded-xl border text-sm",
             pick
-              ? "bg-surface-800 border-surface-700 text-surface-100"
+              ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-200"
               : "bg-surface-900 border-dashed border-surface-700 text-surface-500"
           )}
         >
           <MapPin className="w-4 h-4 shrink-0" />
-          <span className="truncate">
-            {pick ? pick.name ?? "En pleine mer…" : "Touche la carte pour placer ton point"}
+          <span className="text-center">
+            {pick
+              ? "Position enregistrée — touche ailleurs pour la déplacer"
+              : "Touche la carte là où se trouve le pays"}
           </span>
         </div>
 

@@ -17,6 +17,25 @@ vi.mock("../../src/hooks", () => ({
   useSocket: () => ({ submitAnswer, submitFootballConnectionGuess, submitMysteryCareerGuess }),
 }));
 
+vi.mock("../../src/features/game/world-map", () => ({
+  WorldMap: ({
+    onPick,
+    selectedCca3,
+  }: {
+    onPick?: (pick: { lat: number; lng: number; cca3: string; name: string }) => void;
+    selectedCca3?: string | null;
+  }) => (
+    <button
+      type="button"
+      data-testid="world-map"
+      data-selected-country={selectedCca3 ?? ""}
+      onClick={() => onPick?.({ lat: 48.85, lng: 2.35, cca3: "FRA", name: "France" })}
+    >
+      Carte interactive
+    </button>
+  ),
+}));
+
 const player = (id: string): Player => ({
   id,
   name: id.toUpperCase(),
@@ -187,6 +206,7 @@ describe("<QuestionDisplay />", () => {
       right: { id: 2, label: "Allemagne", kind: "country" },
       difficulty: "easy",
       answerCount: 1,
+      answerHint: "B. S.",
       answers: [],
       timeLimit: 15,
       points: 100,
@@ -198,6 +218,7 @@ describe("<QuestionDisplay />", () => {
 
       expect(screen.getByText("Manchester United")).toBeInTheDocument();
       expect(screen.getByText("Allemagne")).toBeInTheDocument();
+      expect(screen.getByText("B. S.")).toBeInTheDocument();
       const input = screen.getByPlaceholderText("Prénom et/ou nom du joueur");
       await user.type(input, "Kroos{Enter}");
       expect(submitFootballConnectionGuess).toHaveBeenCalledWith("Kroos");
@@ -235,7 +256,7 @@ describe("<QuestionDisplay />", () => {
       playerId: 0,
       playerName: "",
       aliases: [],
-      sportingCountry: null,
+      sportingCountry: "Portugal",
       clubs: [{
         teamId: 1,
         name: "Sporting CP",
@@ -257,6 +278,7 @@ describe("<QuestionDisplay />", () => {
       showQuestion(mysteryCareerQuestion);
 
       expect(screen.getByText("Sporting CP")).toBeInTheDocument();
+      expect(screen.getByText("Portugal")).toBeInTheDocument();
       expect(screen.getByText("3 clubs encore masqués")).toBeInTheDocument();
       expect(screen.getByText("160 points disponibles")).toBeInTheDocument();
 
@@ -315,6 +337,7 @@ describe("<QuestionDisplay />", () => {
       missingIndex: 1,
       missingClubName: "",
       acceptedAnswers: [],
+      options: ["Manchester United", "Bayern Munich", "Chelsea", "AC Milan"],
       difficulty: "easy",
       timeLimit: 20,
       points: 100,
@@ -328,21 +351,53 @@ describe("<QuestionDisplay />", () => {
       expect(screen.getByText("CLUB MANQUANT")).toBeInTheDocument();
       expect(screen.getByText("Sporting CP")).toBeInTheDocument();
       expect(screen.getByText("Real Madrid")).toBeInTheDocument();
-      expect(screen.queryByText("Manchester United")).not.toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /Manchester United/ })).toBeInTheDocument();
 
-      await user.type(screen.getByPlaceholderText("Nom du club…"), "Manchester United{Enter}");
+      await user.click(screen.getByRole("button", { name: /Manchester United/ }));
       expect(submitAnswer).toHaveBeenCalledWith("Manchester United");
     });
 
     it("locks and displays the submitted answer", async () => {
       const user = userEvent.setup();
       showQuestion(missingClubQuestion);
-      await user.type(screen.getByPlaceholderText("Nom du club…"), "Manchester United");
+      await user.click(screen.getByRole("button", { name: /Manchester United/ }));
       act(() => useGameStore.getState().submitAnswer("Manchester United"));
 
       expect(screen.getByText("Réponse verrouillée")).toBeInTheDocument();
       expect(screen.getByText("Manchester United")).toBeInTheDocument();
-      expect(screen.queryByPlaceholderText("Nom du club…")).not.toBeInTheDocument();
+      expect(screen.queryByText("Choisis parmi ces quatre clubs")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("localisation interactive", () => {
+    it("does not reveal or highlight the country under the pin before validation", async () => {
+      const user = userEvent.setup();
+      showQuestion({
+        id: "country-locate-test",
+        type: "countrylocate",
+        countryName: "Belgique",
+        flagUrl: "/images/flags/be.svg",
+        continent: "Europe",
+        difficulty: "easy",
+        cca3: "",
+        lat: 0,
+        lng: 0,
+        timeLimit: 25,
+        points: 100,
+      });
+
+      await user.click(screen.getByTestId("world-map"));
+
+      expect(screen.queryByText("France")).not.toBeInTheDocument();
+      expect(screen.getByTestId("world-map")).toHaveAttribute("data-selected-country", "");
+      expect(screen.getByText(/Position enregistrée/)).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "Valider ma position" }));
+      expect(submitAnswer).toHaveBeenCalledWith(JSON.stringify({
+        lat: 48.85,
+        lng: 2.35,
+        cca3: "FRA",
+      }));
     });
   });
 

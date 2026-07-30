@@ -89,7 +89,7 @@ describe("game flow", () => {
       "footballconnection:guess_result"
     );
     host.emit("footballconnection:submit_guess", "Personne Introuvable");
-    expect((await wrongResult)[0]).toMatchObject({ correct: false, attemptsRemaining: 2 });
+    expect((await wrongResult)[0]).toMatchObject({ correct: false, attemptsRemaining: 4 });
 
     await new Promise((resolve) => setTimeout(resolve, 1050));
     const guessResult = waitFor<[{ correct: boolean; points?: number }]>(
@@ -123,24 +123,26 @@ describe("game flow", () => {
     expect(publicQuestion.playerName).toBe("");
     expect(publicQuestion.aliases).toEqual([]);
     expect(publicQuestion.playerId).toBe(0);
-    expect(publicQuestion.clubs).toHaveLength(1);
+    expect(publicQuestion.clubs).toHaveLength(Math.min(3, publicQuestion.totalClubs));
     expect(publicQuestion.totalClubs).toBeGreaterThanOrEqual(3);
 
     const truth = loadedQuestion(server, code, question.id) as MysteryCareerQuestion;
+    expect(publicQuestion.sportingCountry).toBe(truth.sportingCountry);
+    const initiallyVisibleOrders = publicQuestion.clubs.map((club) => club.order);
     const nextClue = waitFor<[MysteryCareerQuestion["clubs"][number]]>(
       host,
       "mysterycareer:clue_revealed",
       3000
     );
     setRemainingTime(code, truth.timeLimit - truth.revealInterval);
-    expect((await nextClue)[0]).toMatchObject({ order: 1 });
+    expect(initiallyVisibleOrders).not.toContain((await nextClue)[0].order);
 
     const wrongResult = waitFor<[{ correct: boolean; attemptsRemaining: number }]>(
       host,
       "mysterycareer:guess_result"
     );
     host.emit("mysterycareer:submit_guess", "Joueur Imaginaire");
-    expect((await wrongResult)[0]).toMatchObject({ correct: false, attemptsRemaining: 2 });
+    expect((await wrongResult)[0]).toMatchObject({ correct: false, attemptsRemaining: 4 });
 
     await new Promise((resolve) => setTimeout(resolve, 950));
     const guessResult = waitFor<[{ correct: boolean; normalizedPlayerName?: string; points?: number }]>(

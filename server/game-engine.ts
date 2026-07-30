@@ -11,6 +11,7 @@ import type {
   ParcoursQuestion,
   FootballConnectionQuestion,
   FootballConnectionGuessResult,
+  MysteryCareerClub,
   MysteryCareerQuestion,
   MysteryCareerGuessResult,
   MissingClubQuestion,
@@ -212,6 +213,7 @@ const FOOTBALL_CONNECTION_FALLBACK: FootballConnectionQuestion[] = [
     right: { id: null, label: "Real Madrid", kind: "club" },
     difficulty: "easy",
     answerCount: 1,
+    answerHint: "C. R.",
     answers: [{
       playerId: -1,
       playerName: "Cristiano Ronaldo",
@@ -230,6 +232,7 @@ const FOOTBALL_CONNECTION_FALLBACK: FootballConnectionQuestion[] = [
     right: { id: null, label: "Allemagne", kind: "country" },
     difficulty: "easy",
     answerCount: 1,
+    answerHint: "B. S.",
     answers: [{
       playerId: -2,
       playerName: "Bastian Schweinsteiger",
@@ -248,6 +251,7 @@ const FOOTBALL_CONNECTION_FALLBACK: FootballConnectionQuestion[] = [
     right: { id: null, label: "M", kind: "initial" },
     difficulty: "easy",
     answerCount: 1,
+    answerHint: "L. M.",
     answers: [{
       playerId: -3,
       playerName: "Lionel Messi",
@@ -291,10 +295,15 @@ const MISSING_CLUB_FALLBACK: MissingClubQuestion[] = [{
   missingIndex: 2,
   missingClubName: "Real Madrid",
   acceptedAnswers: ["Real Madrid", "Real", "Madrid"],
+  options: ["Real Madrid", "FC Barcelone", "Bayern Munich", "Paris Saint-Germain"],
   difficulty: "easy",
   timeLimit: 20,
   points: 100,
 }];
+
+const FOOTBALL_GUESS_LIMIT = 5;
+const MYSTERY_CAREER_GUESS_LIMIT = 5;
+const MYSTERY_CAREER_STARTING_CLUES = 3;
 
 const PETITBAC_LETTERS = "ABCDEFGHJKLMNOPRSTV".split("");
 
@@ -327,7 +336,7 @@ export class GameEngine {
   private mysteryCareerLastAttemptAt: Map<string, number> = new Map();
   private mysteryCareerFirstFinder: string | null = null;
   private mysteryCareerGraceTimer: NodeJS.Timeout | null = null;
-  private mysteryCareerRevealedClues: number = 1;
+  private mysteryCareerRevealedClues: number = MYSTERY_CAREER_STARTING_CLUES;
 
   // Playlist mode tracking
   private currentMode: string = "";
@@ -727,7 +736,7 @@ export class GameEngine {
     const requestedFormats = config?.footballConnectionFormats?.length
       ? config.footballConnectionFormats
       : ["club_club", "club_country", "initials"] as const;
-    const difficulty = config?.footballConnectionDifficulty ?? "mixed";
+    const difficulty = config?.footballConnectionDifficulty ?? "easy";
     const fullPool = getFootballConnectionCandidates({
       formats: requestedFormats,
       preferredDifficulty: difficulty,
@@ -736,9 +745,16 @@ export class GameEngine {
     const source = fullPool.length > 0 ? fullPool : FOOTBALL_CONNECTION_FALLBACK;
     const requestedFormatPool = source.filter((question) => requestedFormats.includes(question.format));
     const formatPool = requestedFormatPool.length > 0 ? requestedFormatPool : source;
-    const exactPool = formatPool.filter(
-      (question) => difficulty === "mixed" || question.difficulty === difficulty
-    );
+    const exactPool = formatPool.filter((question) => {
+      const bestKnownAnswer = Math.max(
+        0,
+        ...question.answers.map((answer) => answer.fameScore ?? 0)
+      );
+      if (difficulty === "easy") return bestKnownAnswer >= 98;
+      if (difficulty === "medium") return bestKnownAnswer >= 94;
+      if (difficulty === "mixed") return bestKnownAnswer >= 94;
+      return question.difficulty === "hard";
+    });
     // Keep the requested formats strict. If a narrow bucket cannot fill the
     // whole segment (e.g. ten "initiales faciles"), complete it with adjacent
     // difficulties rather than silently dealing fewer rounds or another format.
@@ -759,8 +775,8 @@ export class GameEngine {
       "club_country", "club_club", "club_country", "club_club", "initials",
     ] as const;
     const difficultyPattern = [
-      "easy", "medium", "medium", "hard", "medium",
-      "easy", "medium", "hard", "medium", "hard",
+      "easy", "easy", "medium", "easy", "medium",
+      "easy", "easy", "medium", "easy", "medium",
     ] as const;
     const selected: FootballConnectionQuestion[] = [];
 
@@ -815,14 +831,16 @@ export class GameEngine {
     count: number,
     config?: GameModeConfig
   ): MysteryCareerQuestion[] {
-    const difficulty = config?.mysteryCareerDifficulty ?? "mixed";
+    const difficulty = config?.mysteryCareerDifficulty ?? "easy";
     const candidates = getMysteryCareerCandidates({
       preferredDifficulty: difficulty,
       limit: Math.max(300, count * 80),
     });
     const source = candidates.length > 0 ? candidates : MYSTERY_CAREER_FALLBACK;
-    const exact = source.filter(
-      (question) => difficulty === "mixed" || question.difficulty === difficulty
+    const exact = source.filter((question) =>
+      difficulty === "mixed"
+        ? question.difficulty !== "hard"
+        : question.difficulty === difficulty
     );
     const pool = exact.length >= count
       ? exact
@@ -843,14 +861,16 @@ export class GameEngine {
     count: number,
     config?: GameModeConfig
   ): MissingClubQuestion[] {
-    const difficulty = config?.missingClubDifficulty ?? "mixed";
+    const difficulty = config?.missingClubDifficulty ?? "easy";
     const candidates = getMissingClubCandidates({
       preferredDifficulty: difficulty,
       limit: Math.max(300, count * 80),
     });
     const source = candidates.length > 0 ? candidates : MISSING_CLUB_FALLBACK;
-    const exact = source.filter(
-      (question) => difficulty === "mixed" || question.difficulty === difficulty
+    const exact = source.filter((question) =>
+      difficulty === "mixed"
+        ? question.difficulty !== "hard"
+        : question.difficulty === difficulty
     );
     const pool = exact.length >= count
       ? exact
@@ -1228,8 +1248,9 @@ export class GameEngine {
           type: "citylocate" as const,
           cityName: c.name,
           difficulty: c.difficulty,
-          // Everybody knows where Tokyo is; nobody places Louxor without knowing it is in Egypt.
-          countryHint: c.difficulty === "easy" ? null : c.countryName,
+          // City placement is already a precision challenge: always give the
+          // country so the round tests geography rather than obscure recall.
+          countryHint: c.countryName,
           cca3: c.cca3,
           countryName: c.countryName,
           flagUrl: `/images/flags/${c.flagFile}`,
@@ -1364,7 +1385,7 @@ export class GameEngine {
     this.mysteryCareerAttempts.clear();
     this.mysteryCareerLastAttemptAt.clear();
     this.mysteryCareerFirstFinder = null;
-    this.mysteryCareerRevealedClues = 1;
+    this.mysteryCareerRevealedClues = MYSTERY_CAREER_STARTING_CLUES;
     this.roomManager.resetRoundScores(this.room.code);
 
     if (this.currentRound > this.questions.length) {
@@ -1512,13 +1533,15 @@ export class GameEngine {
       };
     }
     if (question.type === "mysterycareer") {
+      const visibleClubs = this.getMysteryCareerRevealSequence(question)
+        .slice(0, MYSTERY_CAREER_STARTING_CLUES)
+        .sort((left, right) => left.order - right.order);
       return {
         ...question,
         playerId: 0,
         playerName: "",
         aliases: [],
-        sportingCountry: null,
-        clubs: question.clubs.slice(0, 1),
+        clubs: visibleClubs,
       };
     }
     if (question.type === "missingclub") {
@@ -1695,6 +1718,16 @@ export class GameEngine {
     return question;
   }
 
+  private getMysteryCareerRevealSequence(
+    question: MysteryCareerQuestion
+  ): MysteryCareerClub[] {
+    return [...question.clubs].sort((left, right) =>
+      (right.fameScore ?? 0) - (left.fameScore ?? 0)
+      || (right.appearances ?? 0) - (left.appearances ?? 0)
+      || left.order - right.order
+    );
+  }
+
   /**
    * Start the round timer
    */
@@ -1718,12 +1751,14 @@ export class GameEngine {
 
       if (this.currentQuestion?.type === "mysterycareer") {
         const elapsed = this.currentQuestion.timeLimit - this.timeRemaining;
+        const revealSequence = this.getMysteryCareerRevealSequence(this.currentQuestion);
         const targetCount = Math.min(
           this.currentQuestion.clubs.length,
-          1 + Math.floor(elapsed / this.currentQuestion.revealInterval)
+          MYSTERY_CAREER_STARTING_CLUES
+            + Math.floor(elapsed / this.currentQuestion.revealInterval)
         );
         while (this.mysteryCareerRevealedClues < targetCount) {
-          const clue = this.currentQuestion.clubs[this.mysteryCareerRevealedClues];
+          const clue = revealSequence[this.mysteryCareerRevealedClues];
           this.mysteryCareerRevealedClues++;
           if (clue) {
             this.io.to(this.room.code).emit("mysterycareer:clue_revealed", clue);
@@ -1910,7 +1945,7 @@ export class GameEngine {
       const answer = this.answers.get(playerId)!;
       this.io.to(socketId).emit("footballconnection:guess_result", {
         correct: true,
-        attemptsRemaining: Math.max(0, 3 - (this.footballConnectionAttempts.get(playerId)?.length ?? 0)),
+        attemptsRemaining: Math.max(0, FOOTBALL_GUESS_LIMIT - (this.footballConnectionAttempts.get(playerId)?.length ?? 0)),
         cooldownMs: 0,
         normalizedPlayerName: answer.answer,
         points: answer.points,
@@ -1921,7 +1956,7 @@ export class GameEngine {
     const guess = rawGuess.trim().slice(0, 80);
     if (!guess) return;
     const attempts = this.footballConnectionAttempts.get(playerId) ?? [];
-    if (attempts.length >= 3) {
+    if (attempts.length >= FOOTBALL_GUESS_LIMIT) {
       this.io.to(socketId).emit("footballconnection:guess_result", {
         correct: false,
         attemptsRemaining: 0,
@@ -1936,7 +1971,7 @@ export class GameEngine {
     if (cooldownRemaining > 0) {
       this.io.to(socketId).emit("footballconnection:guess_result", {
         correct: false,
-        attemptsRemaining: 3 - attempts.length,
+        attemptsRemaining: FOOTBALL_GUESS_LIMIT - attempts.length,
         cooldownMs: cooldownRemaining,
       });
       return;
@@ -1952,8 +1987,8 @@ export class GameEngine {
     if (!matched) {
       const result: FootballConnectionGuessResult = {
         correct: false,
-        attemptsRemaining: 3 - attempts.length,
-        cooldownMs: attempts.length < 3 ? 1000 : 0,
+        attemptsRemaining: FOOTBALL_GUESS_LIMIT - attempts.length,
+        cooldownMs: attempts.length < FOOTBALL_GUESS_LIMIT ? 1000 : 0,
       };
       this.io.to(socketId).emit("footballconnection:guess_result", result);
       if (this.everyActiveFootballConnectionPlayerFinished()) this.endRound();
@@ -1977,7 +2012,7 @@ export class GameEngine {
 
     this.io.to(socketId).emit("footballconnection:guess_result", {
       correct: true,
-      attemptsRemaining: 3 - attempts.length,
+      attemptsRemaining: FOOTBALL_GUESS_LIMIT - attempts.length,
       cooldownMs: 0,
       normalizedPlayerName: matched.playerName,
       points,
@@ -2000,7 +2035,7 @@ export class GameEngine {
       this.footballConnectionGraceTimer = setTimeout(() => {
         this.footballConnectionGraceTimer = null;
         this.endRound();
-      }, 3000);
+      }, 5000);
     }
   }
 
@@ -2008,7 +2043,7 @@ export class GameEngine {
     const activePlayers = this.getActivePlayers();
     return activePlayers.length > 0 && activePlayers.every((active) =>
       this.answers.has(active.id)
-      || (this.footballConnectionAttempts.get(active.id)?.length ?? 0) >= 3
+      || (this.footballConnectionAttempts.get(active.id)?.length ?? 0) >= FOOTBALL_GUESS_LIMIT
     );
   }
 
@@ -2029,14 +2064,14 @@ export class GameEngine {
       const answer = this.answers.get(playerId)!;
       this.io.to(socketId).emit("mysterycareer:guess_result", {
         correct: true,
-        attemptsRemaining: Math.max(0, 3 - attempts.length),
+        attemptsRemaining: Math.max(0, MYSTERY_CAREER_GUESS_LIMIT - attempts.length),
         cooldownMs: 0,
         normalizedPlayerName: answer.answer,
         points: answer.points,
       });
       return;
     }
-    if (attempts.length >= 3 || !rawGuess.trim()) return;
+    if (attempts.length >= MYSTERY_CAREER_GUESS_LIMIT || !rawGuess.trim()) return;
 
     const now = Date.now();
     const previousAttemptAt = this.mysteryCareerLastAttemptAt.get(playerId) ?? 0;
@@ -2044,7 +2079,7 @@ export class GameEngine {
     if (cooldownMs > 0) {
       this.io.to(socketId).emit("mysterycareer:guess_result", {
         correct: false,
-        attemptsRemaining: 3 - attempts.length,
+        attemptsRemaining: MYSTERY_CAREER_GUESS_LIMIT - attempts.length,
         cooldownMs,
       });
       return;
@@ -2059,8 +2094,8 @@ export class GameEngine {
     if (!correct) {
       this.io.to(socketId).emit("mysterycareer:guess_result", {
         correct: false,
-        attemptsRemaining: 3 - attempts.length,
-        cooldownMs: attempts.length < 3 ? 900 : 0,
+        attemptsRemaining: MYSTERY_CAREER_GUESS_LIMIT - attempts.length,
+        cooldownMs: attempts.length < MYSTERY_CAREER_GUESS_LIMIT ? 900 : 0,
       });
       if (this.everyActiveMysteryCareerPlayerFinished()) this.endRound();
       return;
@@ -2081,7 +2116,7 @@ export class GameEngine {
     });
     this.io.to(socketId).emit("mysterycareer:guess_result", {
       correct: true,
-      attemptsRemaining: 3 - attempts.length,
+      attemptsRemaining: MYSTERY_CAREER_GUESS_LIMIT - attempts.length,
       cooldownMs: 0,
       normalizedPlayerName: question.playerName,
       points,
@@ -2111,7 +2146,7 @@ export class GameEngine {
     const activePlayers = this.getActivePlayers();
     return activePlayers.length > 0 && activePlayers.every((active) =>
       this.answers.has(active.id)
-      || (this.mysteryCareerAttempts.get(active.id)?.length ?? 0) >= 3
+      || (this.mysteryCareerAttempts.get(active.id)?.length ?? 0) >= MYSTERY_CAREER_GUESS_LIMIT
     );
   }
 
@@ -6996,7 +7031,9 @@ export class GameEngine {
     ) {
       publicQuestion = {
         ...publicQuestion,
-        clubs: this.currentQuestion.clubs.slice(0, this.mysteryCareerRevealedClues),
+        clubs: this.getMysteryCareerRevealSequence(this.currentQuestion)
+          .slice(0, this.mysteryCareerRevealedClues)
+          .sort((left, right) => left.order - right.order),
       };
     }
     this.io.to(socketId).emit("game:resync", {
@@ -7012,7 +7049,7 @@ export class GameEngine {
       const attempts = this.footballConnectionAttempts.get(playerId) ?? [];
       this.io.to(socketId).emit("footballconnection:guess_result", {
         correct: Boolean(myAnswer?.isCorrect),
-        attemptsRemaining: Math.max(0, 3 - attempts.length),
+        attemptsRemaining: Math.max(0, FOOTBALL_GUESS_LIMIT - attempts.length),
         cooldownMs: 0,
         normalizedPlayerName: myAnswer?.isCorrect ? myAnswer.answer : undefined,
         points: myAnswer?.isCorrect ? myAnswer.points : undefined,
@@ -7022,7 +7059,7 @@ export class GameEngine {
       const attempts = this.mysteryCareerAttempts.get(playerId) ?? [];
       this.io.to(socketId).emit("mysterycareer:guess_result", {
         correct: Boolean(myAnswer?.isCorrect),
-        attemptsRemaining: Math.max(0, 3 - attempts.length),
+        attemptsRemaining: Math.max(0, MYSTERY_CAREER_GUESS_LIMIT - attempts.length),
         cooldownMs: 0,
         normalizedPlayerName: myAnswer?.isCorrect ? myAnswer.answer : undefined,
         points: myAnswer?.isCorrect ? myAnswer.points : undefined,

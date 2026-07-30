@@ -38,6 +38,7 @@ interface AnswerRow {
   display_name: string;
   left_detail: string | null;
   right_detail: string | null;
+  fame_score: number;
 }
 
 interface MysteryCareerPlayerRow {
@@ -56,6 +57,7 @@ interface MysteryCareerClubRow {
   last_date: string | null;
   appearances: number | null;
   goals: number | null;
+  fame_score: number;
 }
 
 export interface FootballDatabaseSummary {
@@ -135,7 +137,23 @@ export function getFootballConnectionCandidates(options: {
   const difficultyOrder = options.preferredDifficulty === "mixed"
     ? ""
     : "CASE WHEN difficulty = ? THEN 0 ELSE 1 END,";
+  const accessibilityThreshold =
+    options.preferredDifficulty === "easy"
+      ? 98
+      : options.preferredDifficulty === "medium" || options.preferredDifficulty === "mixed"
+      ? 94
+      : null;
+  const accessibilityFilter = accessibilityThreshold === null
+    ? ""
+    : `AND EXISTS (
+        SELECT 1
+        FROM football_connection_answers accessible_answer
+        JOIN players accessible_player ON accessible_player.id = accessible_answer.player_id
+        WHERE accessible_answer.question_id = football_connection_questions.id
+          AND accessible_player.fame_score >= ?
+      )`;
   const parameters: (string | number)[] = [...formats];
+  if (accessibilityThreshold !== null) parameters.push(accessibilityThreshold);
   if (options.preferredDifficulty !== "mixed") {
     parameters.push(options.preferredDifficulty);
   }
@@ -146,6 +164,7 @@ export function getFootballConnectionCandidates(options: {
            left_kind, right_kind, difficulty, time_limit, points, answer_count
     FROM football_connection_questions
     WHERE format IN (${placeholders})
+      ${accessibilityFilter}
     ORDER BY ${difficultyOrder} RANDOM()
     LIMIT ?
   `).all(...parameters) as ConnectionRow[];
@@ -217,18 +236,20 @@ export function getMysteryCareerCandidates(options: {
         COUNT(*) AS club_count,
         SUM(CASE WHEN career_clubs.club_fame >= 65 THEN 1 ELSE 0 END) AS notable_clubs,
         CASE
-          WHEN p.fame_score >= 82 THEN 'easy'
-          WHEN p.fame_score >= 65 THEN 'medium'
+          WHEN p.fame_score >= 98 THEN 'easy'
+          WHEN p.fame_score >= 94 THEN 'medium'
           ELSE 'hard'
         END AS difficulty
       FROM players p
       JOIN career_clubs ON career_clubs.player_id = p.id
       LEFT JOIN countries country ON country.id = p.sporting_country_id
       WHERE p.game_eligible = 1
+        AND p.fame_score >= 82
         AND TRIM(p.display_name) <> ''
       GROUP BY p.id
       HAVING COUNT(*) BETWEEN 3 AND 12
-         AND MAX(career_clubs.appearances) >= 3
+         AND MAX(career_clubs.appearances) >= 10
+         AND SUM(CASE WHEN career_clubs.club_fame >= 60 THEN 1 ELSE 0 END) >= 2
     )
     SELECT player_id, display_name, sporting_country, fame_score, difficulty
     FROM candidates
@@ -248,7 +269,8 @@ export function getMysteryCareerCandidates(options: {
       MIN(se.start_date) AS first_date,
       MAX(se.end_date) AS last_date,
       SUM(COALESCE(ps.appearances, 0)) AS appearances,
-      SUM(COALESCE(ps.goals, 0)) AS goals
+      SUM(COALESCE(ps.goals, 0)) AS goals,
+      MAX(t.fame_score) AS fame_score
     FROM player_season_stats ps
     JOIN teams t ON t.id = ps.team_id AND t.team_type = 'club'
       AND LOWER(t.canonical_name) NOT LIKE '% primavera%'
@@ -301,6 +323,7 @@ export function getMysteryCareerCandidates(options: {
         appearances: row.appearances,
         goals: row.goals,
         order: clubs.length,
+        fameScore: row.fame_score,
       });
     }
     clubsByPlayer.set(row.player_id, clubs);
@@ -339,7 +362,11 @@ function sampleMysteryCareers(
   limit: number
 ): MysteryCareerQuestion[] {
   const shuffled = [...pool].sort(() => Math.random() - 0.5);
-  if (preferred === "mixed") return shuffled.slice(0, limit);
+  if (preferred === "mixed") {
+    return shuffled
+      .sort((left, right) => difficultyRank(left.difficulty) - difficultyRank(right.difficulty))
+      .slice(0, limit);
+  }
   return shuffled
     .sort((left, right) =>
       Number(right.difficulty === preferred) - Number(left.difficulty === preferred)
@@ -371,10 +398,28 @@ export function getMissingClubCandidates(options: {
     if (teamIds.length === 0) return [];
     const placeholders = teamIds.map(() => "?").join(", ");
     const teamRows = database.prepare(`
-      SELECT id, fame_score
+      SELECT id, canonical_name, country_id, fame_score
       FROM teams
       WHERE id IN (${placeholders})
-    `).all(...teamIds) as { id: number; fame_score: number }[];
+    `).all(...teamIds) as {
+      id: number;
+      canonical_name: string;
+      country_id: number | null;
+      fame_score: number;
+    }[];
+    const famousTeams = database.prepare(`
+      SELECT id, canonical_name, country_id, fame_score
+      FROM teams
+      WHERE team_type = 'club'
+        AND fame_score >= 65
+        AND TRIM(canonical_name) <> ''
+      ORDER BY fame_score DESC, canonical_name
+    `).all() as {
+      id: number;
+      canonical_name: string;
+      country_id: number | null;
+      fame_score: number;
+    }[];
     const playerIds = careers.map((career) => career.playerId);
     const playerPlaceholders = playerIds.map(() => "?").join(", ");
     const playerRows = database.prepare(`
@@ -389,6 +434,7 @@ export function getMissingClubCandidates(options: {
       ORDER BY team_id, alias
     `).all(...teamIds) as { team_id: number; alias: string }[];
     const fameByTeam = new Map(teamRows.map((row) => [row.id, row.fame_score]));
+    const teamById = new Map(teamRows.map((row) => [row.id, row]));
     const fameByPlayer = new Map(playerRows.map((row) => [row.id, row.fame_score]));
     const aliasesByTeam = new Map<number, string[]>();
     for (const row of aliasRows) {
@@ -404,11 +450,36 @@ export function getMissingClubCandidates(options: {
         const clubFame = fameByTeam.get(club.teamId) ?? 0;
         const playerFame = fameByPlayer.get(career.playerId) ?? 0;
         const difficulty: "easy" | "medium" | "hard" =
-          clubFame >= 70 && playerFame >= 96
+          clubFame >= 75 && playerFame >= 98
             ? "easy"
-            : clubFame >= 45 && playerFame >= 84
+            : clubFame >= 65 && playerFame >= 94
             ? "medium"
             : "hard";
+        if (difficulty === "hard") return [];
+        const hiddenTeam = teamById.get(club.teamId);
+        const distractors = famousTeams
+          .filter((team) =>
+            team.id !== club.teamId
+            && !career.clubs.some((careerClub) => careerClub.teamId === team.id)
+          )
+          .sort((left, right) => {
+            const countryDifference =
+              Number(right.country_id === hiddenTeam?.country_id)
+              - Number(left.country_id === hiddenTeam?.country_id);
+            if (countryDifference !== 0) return countryDifference;
+            return Math.abs(left.fame_score - clubFame) - Math.abs(right.fame_score - clubFame);
+          });
+        const optionSeed = hashString(`${career.playerId}-${club.teamId}-${missingIndex}`);
+        const options = seededShuffle(
+          [
+            club.name,
+            ...seededShuffle(distractors.slice(0, 10), optionSeed)
+              .slice(0, 3)
+              .map((team) => team.canonical_name),
+          ],
+          optionSeed + 17
+        );
+        if (options.length < 4) return [];
         return [{
           id: `missing-${career.playerId}-${club.teamId}-${missingIndex}`,
           type: "missingclub" as const,
@@ -422,6 +493,7 @@ export function getMissingClubCandidates(options: {
             club.name,
             ...(aliasesByTeam.get(club.teamId) ?? []),
           ])),
+          options,
           difficulty,
           timeLimit: 20,
           points: 100,
@@ -431,7 +503,11 @@ export function getMissingClubCandidates(options: {
   }
 
   const shuffled = [...missingClubCache].sort(() => Math.random() - 0.5);
-  if (options.preferredDifficulty === "mixed") return shuffled.slice(0, safeLimit);
+  if (options.preferredDifficulty === "mixed") {
+    return shuffled
+      .sort((left, right) => difficultyRank(left.difficulty) - difficultyRank(right.difficulty))
+      .slice(0, safeLimit);
+  }
   return shuffled
     .sort((left, right) =>
       Number(right.difficulty === options.preferredDifficulty)
@@ -464,6 +540,30 @@ function normalizeClubIdentity(value: string): string {
     .trim();
 }
 
+function difficultyRank(value: "easy" | "medium" | "hard"): number {
+  return value === "easy" ? 0 : value === "medium" ? 1 : 2;
+}
+
+function hashString(value: string): number {
+  let hash = 2166136261;
+  for (const character of value) {
+    hash ^= character.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+function seededShuffle<T>(values: readonly T[], seed: number): T[] {
+  const result = [...values];
+  let state = seed || 1;
+  for (let index = result.length - 1; index > 0; index--) {
+    state = Math.imul(state ^ (state >>> 15), 1 | state);
+    const picked = Math.abs(state) % (index + 1);
+    [result[index], result[picked]] = [result[picked], result[index]];
+  }
+  return result;
+}
+
 function hydrateConnectionRows(
   database: Database.Database,
   rows: ConnectionRow[]
@@ -472,7 +572,8 @@ function hydrateConnectionRows(
 
   const questionPlaceholders = rows.map(() => "?").join(", ");
   const answerRows = database.prepare(`
-    SELECT a.question_id, a.player_id, p.display_name, a.left_detail, a.right_detail
+    SELECT a.question_id, a.player_id, p.display_name, a.left_detail, a.right_detail,
+           p.fame_score
     FROM football_connection_answers a
     JOIN players p ON p.id = a.player_id
     WHERE a.question_id IN (${questionPlaceholders})
@@ -506,30 +607,44 @@ function hydrateConnectionRows(
       ])),
       leftDetail: row.left_detail ?? undefined,
       rightDetail: row.right_detail ?? undefined,
+      fameScore: row.fame_score,
     });
     answersByQuestion.set(row.question_id, answers);
   }
 
-  return rows.map((row) => ({
-    id: row.id,
-    type: "footballconnection",
-    format: row.format,
-    left: {
-      id: row.left_team_id,
-      label: row.left_label,
-      kind: row.left_kind,
-    },
-    right: {
-      id: row.right_team_id,
-      label: row.right_label,
-      kind: row.right_kind,
-    },
-    difficulty: row.difficulty,
-    answerCount: row.answer_count,
-    answers: answersByQuestion.get(row.id) ?? [],
-    timeLimit: row.time_limit,
-    points: row.points,
-  }));
+  return rows.map((row) => {
+    const answers = answersByQuestion.get(row.id) ?? [];
+    return {
+      id: row.id,
+      type: "footballconnection",
+      format: row.format,
+      left: {
+        id: row.left_team_id,
+        label: row.left_label,
+        kind: row.left_kind,
+      },
+      right: {
+        id: row.right_team_id,
+        label: row.right_label,
+        kind: row.right_kind,
+      },
+      difficulty: row.difficulty,
+      answerCount: row.answer_count,
+      answerHint: initialsOf(answers[0]?.playerName ?? ""),
+      answers,
+      timeLimit: Math.max(row.time_limit, row.difficulty === "easy" ? 22 : 18),
+      points: row.points,
+    };
+  });
+}
+
+function initialsOf(name: string): string {
+  return name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((part) => `${part[0]?.toLocaleUpperCase("fr")}.`)
+    .join(" ");
 }
 
 export function getFootballDatabaseSummary(): FootballDatabaseSummary {

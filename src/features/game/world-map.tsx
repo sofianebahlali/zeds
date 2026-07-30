@@ -297,6 +297,8 @@ export function WorldMap({
 
       <svg
         ref={svgRef}
+        role="img"
+        aria-label={onPick ? "Carte du monde interactive" : "Carte du monde des résultats"}
         viewBox={`${WORLD_VIEW.x} ${WORLD_VIEW.y} ${WORLD_VIEW.width} ${WORLD_VIEW.height}`}
         preserveAspectRatio="xMidYMid meet"
         className={cn("w-full h-full select-none", onPick && "cursor-crosshair")}
@@ -324,6 +326,17 @@ export function WorldMap({
                   </>
                 ) : (
                   <>
+                    {pin.highlight && pin.correct === undefined && (
+                      <circle
+                        cy={-11}
+                        r={13}
+                        fill="none"
+                        stroke="#38BDF8"
+                        strokeWidth={1.5}
+                        opacity={0.7}
+                        className="animate-pulse"
+                      />
+                    )}
                     <path
                       d="M 0 1 L -3.5 -5 L 3.5 -5 Z"
                       className={

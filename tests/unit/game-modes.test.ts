@@ -182,10 +182,14 @@ describe("every advertised mode can actually deal questions", () => {
     const questions = dealFor("footballconnection", 10, {
       footballConnectionDifficulty: "easy",
       footballConnectionFormats: ["initials"],
-    }) as unknown as { id: string; format: string }[];
+    }) as unknown as FootballConnectionQuestion[];
 
     expect(questions).toHaveLength(10);
     expect(questions.every((question) => question.format === "initials")).toBe(true);
+    expect(questions.every((question) => question.answerHint.length > 0)).toBe(true);
+    expect(questions.every((question) =>
+      question.answers.some((answer) => (answer.fameScore ?? 0) >= 98)
+    )).toBe(true);
     expect(new Set(questions.map((question) => question.id)).size).toBe(10);
   });
 
@@ -277,14 +281,18 @@ describe("Carrière mystère engine", () => {
     expect(publicQuestion.playerName).toBe("");
     expect(publicQuestion.playerId).toBe(0);
     expect(publicQuestion.aliases).toEqual([]);
-    expect(publicQuestion.clubs).toEqual([truth.clubs[0]]);
+    expect(publicQuestion.sportingCountry).toBe(truth.sportingCountry);
+    expect(publicQuestion.clubs).toHaveLength(Math.min(3, truth.clubs.length));
+    expect(publicQuestion.clubs.map((club) => club.order)).toEqual(
+      [...publicQuestion.clubs].map((club) => club.order).sort((a, b) => a - b)
+    );
 
     internals.currentQuestion = truth;
     internals.currentRound = 1;
     internals.timeRemaining = truth.timeLimit;
     engine.submitMysteryCareerGuess("p1", "réponse impossible");
     expect(emitted.find((entry) => entry.event === "mysterycareer:guess_result")?.args[0])
-      .toMatchObject({ correct: false, attemptsRemaining: 2 });
+      .toMatchObject({ correct: false, attemptsRemaining: 4 });
 
     internals.mysteryCareerLastAttemptAt.set("p1", 0);
     engine.submitMysteryCareerGuess("p1", truth.aliases[0]);
@@ -348,6 +356,8 @@ describe("Club manquant engine", () => {
 
     expect(publicQuestion.missingClubName).toBe("");
     expect(publicQuestion.acceptedAnswers).toEqual([]);
+    expect(publicQuestion.options).toHaveLength(4);
+    expect(publicQuestion.options).toContain(truth.missingClubName);
     expect(hidden).toMatchObject({ teamId: 0, name: "", appearances: null, goals: null });
     expect(hidden.fromYear).toBe(truth.clubs[truth.missingIndex].fromYear);
 

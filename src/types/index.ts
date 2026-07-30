@@ -129,11 +129,11 @@ export const GAME_PRESETS: GamePreset[] = [
       {
         mode: "footballconnection",
         rounds: 3,
-        footballConnectionDifficulty: "mixed",
+        footballConnectionDifficulty: "easy",
         footballConnectionFormats: ["club_club", "club_country", "initials"],
       },
-      { mode: "mysterycareer", rounds: 3, mysteryCareerDifficulty: "mixed" },
-      { mode: "missingclub", rounds: 2, missingClubDifficulty: "mixed" },
+      { mode: "mysterycareer", rounds: 3, mysteryCareerDifficulty: "easy" },
+      { mode: "missingclub", rounds: 2, missingClubDifficulty: "easy" },
       { mode: "parcours", rounds: 3 },
       { mode: "lineup", rounds: 2 },
       { mode: "jerseynumber", rounds: 3 },
@@ -253,6 +253,8 @@ export interface FootballConnectionAnswer {
   aliases: string[];
   leftDetail?: string;
   rightDetail?: string;
+  /** Internal popularity signal used to keep accessible rounds recognizable. */
+  fameScore?: number;
 }
 
 export interface FootballConnectionQuestion extends BaseQuestion {
@@ -262,6 +264,8 @@ export interface FootballConnectionQuestion extends BaseQuestion {
   right: FootballConnectionClue;
   difficulty: "easy" | "medium" | "hard";
   answerCount: number;
+  /** Initials of a well-known valid answer, shown as an accessibility hint. */
+  answerHint: string;
   /** Hidden during play, populated in server truth and the round reveal. */
   answers: FootballConnectionAnswer[];
 }
@@ -282,6 +286,8 @@ export interface MysteryCareerClub {
   appearances: number | null;
   goals: number | null;
   order: number;
+  /** Internal accessibility signal used to reveal recognizable clubs first. */
+  fameScore?: number;
 }
 
 export interface MysteryCareerQuestion extends BaseQuestion {
@@ -315,6 +321,8 @@ export interface MissingClubQuestion extends BaseQuestion {
   /** Hidden during play and restored in the round reveal. */
   missingClubName: string;
   acceptedAnswers: string[];
+  /** Public multiple-choice answers. Always contains the missing club. */
+  options: string[];
   difficulty: "easy" | "medium" | "hard";
 }
 
@@ -1024,7 +1032,7 @@ export interface CityLocateQuestion extends BaseQuestion {
   type: "citylocate";
   cityName: string;
   difficulty: GeoDifficulty;
-  /** Country shown as a hint during the round — null on the easy tier. */
+  /** Country shown during the round so the challenge stays about map placement. */
   countryHint: string | null;
   cca3: string; // hidden until reveal
   countryName: string; // hidden until reveal

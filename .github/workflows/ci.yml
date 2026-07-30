@@ -12,9 +12,9 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # The image runs on node:20-alpine; CI matches so native modules
+  # The image runs on node:22-alpine; CI matches so native modules
   # (better-sqlite3) are built against the same ABI.
-  NODE_VERSION: "20"
+  NODE_VERSION: "22"
   # Puppeteer is a dependency of the data-building scripts only, and its
   # download is ~150 MB that CI never uses.
   PUPPETEER_SKIP_DOWNLOAD: "true"
@@ -43,6 +43,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - run: npm ci
+      - name: Restore the committed football database
+        run: npm run football:ensure
 
       - name: Unit tests
         run: npm run test:unit

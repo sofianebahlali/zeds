@@ -410,20 +410,20 @@ function PlaylistBuilder({ playlist, onChange }: PlaylistBuilderProps) {
         ? {
             mode: "footballconnection",
             rounds: 2,
-            footballConnectionDifficulty: "mixed",
+            footballConnectionDifficulty: "easy",
             footballConnectionFormats: ["club_club", "club_country", "initials"],
           }
         : modeId === "mysterycareer"
         ? {
             mode: "mysterycareer",
             rounds: 2,
-            mysteryCareerDifficulty: "mixed",
+            mysteryCareerDifficulty: "easy",
           }
         : modeId === "missingclub"
         ? {
             mode: "missingclub",
             rounds: 2,
-            missingClubDifficulty: "mixed",
+            missingClubDifficulty: "easy",
           }
         : { mode: modeId as GameModeConfig["mode"], rounds: 2 },
     ]);
