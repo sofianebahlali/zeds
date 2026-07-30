@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle, Tag, MapPin, Eye, Gamepad2, Flag as FlagIcon, Landmark, Globe2, Building2 } from "lucide-react";
+import { Send, CheckCircle, Tag, MapPin, Eye, Gamepad2, Flag as FlagIcon, Landmark, Globe2, Building2, Link2, XCircle, LockKeyhole } from "lucide-react";
 import Image from "next/image";
 import { Button, Card, Input, TimerProgress, Badge, Avatar } from "@/components/ui";
 import { useGameStore, useRoomStore } from "@/stores";
@@ -10,7 +10,7 @@ import { useSocket } from "@/hooks";
 import { getSocket } from "@/lib/socket";
 import { cn } from "@/lib/utils";
 import { WorldMap } from "./world-map";
-import type { OpenQuestion, EstimationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion, FutCardQuestion, ChronoQuestion, ConsensusQuestion, DialedQuestion, PokeGeoQuestion, PokemonTranslateQuestion, PokedexNumberQuestion, FlagQuestion, CapitalQuestion, CountryLocateQuestion, CityLocateQuestion, GeoDifficulty } from "@/types";
+import type { OpenQuestion, EstimationQuestion, ParcoursQuestion, PetitBacQuestion, GeoQuizQuestion, LangueQuestion, MathsQuestion, GuessGameQuestion, JerseyNumberQuestion, FutCardQuestion, ChronoQuestion, ConsensusQuestion, DialedQuestion, PokeGeoQuestion, PokemonTranslateQuestion, PokedexNumberQuestion, FlagQuestion, CapitalQuestion, CountryLocateQuestion, CityLocateQuestion, GeoDifficulty, FootballConnectionQuestion, MysteryCareerQuestion, MissingClubQuestion } from "@/types";
 import { GEO_DIFFICULTY_LABELS } from "@/types";
 
 export function QuestionDisplay() {
@@ -18,8 +18,16 @@ export function QuestionDisplay() {
   const timeRemaining = useGameStore((s) => s.timeRemaining);
   const hasAnswered = useGameStore((s) => s.hasAnswered);
   const answeredPlayers = useGameStore((s) => s.answeredPlayers);
+  const footballConnectionGuessResult = useGameStore((s) => s.footballConnectionGuessResult);
+  const footballConnectionAttemptsRemaining = useGameStore((s) => s.footballConnectionAttemptsRemaining);
+  const footballConnectionCooldownUntil = useGameStore((s) => s.footballConnectionCooldownUntil);
+  const footballConnectionFoundPlayers = useGameStore((s) => s.footballConnectionFoundPlayers);
+  const mysteryCareerGuessResult = useGameStore((s) => s.mysteryCareerGuessResult);
+  const mysteryCareerAttemptsRemaining = useGameStore((s) => s.mysteryCareerAttemptsRemaining);
+  const mysteryCareerCooldownUntil = useGameStore((s) => s.mysteryCareerCooldownUntil);
+  const mysteryCareerFoundPlayers = useGameStore((s) => s.mysteryCareerFoundPlayers);
   const players = useRoomStore((s) => s.players);
-  const { submitAnswer } = useSocket();
+  const { submitAnswer, submitFootballConnectionGuess, submitMysteryCareerGuess } = useSocket();
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [textAnswer, setTextAnswer] = useState("");
@@ -44,6 +52,9 @@ export function QuestionDisplay() {
   const [pokedexGuess, setPokedexGuess] = useState("");
   const [flagAnswer, setFlagAnswer] = useState("");
   const [capitalAnswer, setCapitalAnswer] = useState("");
+  const [footballConnectionGuess, setFootballConnectionGuess] = useState("");
+  const [mysteryCareerGuess, setMysteryCareerGuess] = useState("");
+  const [missingClubAnswer, setMissingClubAnswer] = useState("");
   const [locatePick, setLocatePick] = useState<{ lat: number; lng: number; cca3: string | null; name: string | null } | null>(null);
 
   // Ref to access latest petitBac answers in the auto-submit effect
@@ -89,6 +100,9 @@ export function QuestionDisplay() {
     setPokedexGuess("");
     setFlagAnswer("");
     setCapitalAnswer("");
+    setFootballConnectionGuess("");
+    setMysteryCareerGuess("");
+    setMissingClubAnswer("");
     setLocatePick(null);
   }, [currentQuestion?.id]);
 
@@ -119,6 +133,8 @@ export function QuestionDisplay() {
       submitAnswer(jerseyGuess.trim());
     } else if (currentQuestion.type === "futcard" && futCardAnswer.trim()) {
       submitAnswer(futCardAnswer.trim());
+    } else if (currentQuestion.type === "missingclub" && missingClubAnswer.trim()) {
+      submitAnswer(missingClubAnswer.trim());
     } else if (currentQuestion.type === "pokemontranslate" && translateAnswer.trim()) {
       submitAnswer(translateAnswer.trim());
     } else if (currentQuestion.type === "consensus" && consensusAnswer.trim()) {
@@ -190,6 +206,52 @@ export function QuestionDisplay() {
             answer={parcoursAnswer}
             hasAnswered={hasAnswered}
             onChange={setParcoursAnswer}
+            onSubmit={handleSubmit}
+          />
+        )}
+
+        {currentQuestion.type === "footballconnection" && (
+          <FootballConnectionQuestionView
+            question={currentQuestion as FootballConnectionQuestion}
+            guess={footballConnectionGuess}
+            hasAnswered={hasAnswered}
+            attemptsRemaining={footballConnectionAttemptsRemaining}
+            cooldownUntil={footballConnectionCooldownUntil}
+            result={footballConnectionGuessResult}
+            foundPlayers={footballConnectionFoundPlayers}
+            onChange={setFootballConnectionGuess}
+            onSubmit={() => {
+              if (submitFootballConnectionGuess(footballConnectionGuess)) {
+                setFootballConnectionGuess("");
+              }
+            }}
+          />
+        )}
+
+        {currentQuestion.type === "mysterycareer" && (
+          <MysteryCareerQuestionView
+            question={currentQuestion as MysteryCareerQuestion}
+            guess={mysteryCareerGuess}
+            hasAnswered={hasAnswered}
+            attemptsRemaining={mysteryCareerAttemptsRemaining}
+            cooldownUntil={mysteryCareerCooldownUntil}
+            result={mysteryCareerGuessResult}
+            foundPlayers={mysteryCareerFoundPlayers}
+            onChange={setMysteryCareerGuess}
+            onSubmit={() => {
+              if (submitMysteryCareerGuess(mysteryCareerGuess)) {
+                setMysteryCareerGuess("");
+              }
+            }}
+          />
+        )}
+
+        {currentQuestion.type === "missingclub" && (
+          <MissingClubQuestionView
+            question={currentQuestion as MissingClubQuestion}
+            answer={missingClubAnswer}
+            hasAnswered={hasAnswered}
+            onChange={setMissingClubAnswer}
             onSubmit={handleSubmit}
           />
         )}
@@ -405,10 +467,466 @@ export function QuestionDisplay() {
           })}
         </div>
         <p className="text-center text-xs text-surface-500 mt-2">
-          {answeredPlayers.length}/{players.length} ont répondu
+          {currentQuestion.type === "footballconnection" || currentQuestion.type === "mysterycareer"
+            ? `${answeredPlayers.length}/${players.length} ont trouvé`
+            : `${answeredPlayers.length}/${players.length} ont répondu`}
         </p>
       </div>
     </motion.div>
+  );
+}
+
+function FootballConnectionQuestionView({
+  question,
+  guess,
+  hasAnswered,
+  attemptsRemaining,
+  cooldownUntil,
+  result,
+  foundPlayers,
+  onChange,
+  onSubmit,
+}: {
+  question: FootballConnectionQuestion;
+  guess: string;
+  hasAnswered: boolean;
+  attemptsRemaining: number;
+  cooldownUntil: number;
+  result: ReturnType<typeof useGameStore.getState>["footballConnectionGuessResult"];
+  foundPlayers: ReturnType<typeof useGameStore.getState>["footballConnectionFoundPlayers"];
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+}) {
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    if (cooldownUntil <= Date.now()) return;
+    const interval = window.setInterval(() => setNow(Date.now()), 100);
+    return () => window.clearInterval(interval);
+  }, [cooldownUntil]);
+
+  const coolingDown = cooldownUntil > now;
+  const difficultyLabel = {
+    easy: "Accessible",
+    medium: "Connaisseur",
+    hard: "Expert",
+  }[question.difficulty];
+
+  const clueIcon = (kind: FootballConnectionQuestion["left"]["kind"]) => {
+    if (kind === "club") return <Building2 className="w-6 h-6" />;
+    if (kind === "country") return <Globe2 className="w-6 h-6" />;
+    return <span className="text-lg font-black">Aa</span>;
+  };
+
+  return (
+    <div className="flex-1 flex flex-col">
+      <div className="text-center mb-5">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <Badge variant="primary" size="sm">{difficultyLabel}</Badge>
+          <span className="text-xs text-surface-500">
+            {question.answerCount > 1
+              ? `${question.answerCount} réponses possibles`
+              : "1 réponse possible"}
+          </span>
+        </div>
+        <h2 className="text-xl sm:text-2xl font-display font-bold text-surface-100">
+          Trouve le joueur qui fait la connexion
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-2 sm:gap-4 mb-5">
+        {[question.left, question.right].map((clue, index) => (
+          <div key={`${clue.kind}-${clue.label}`} className="contents">
+            {index === 1 && (
+              <div className="flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-brand-500/15 border border-brand-500/30 flex items-center justify-center">
+                  <Link2 className="w-5 h-5 text-brand-400" />
+                </div>
+              </div>
+            )}
+            <Card className="min-w-0">
+              <div className="h-full min-h-28 flex flex-col items-center justify-center text-center gap-3">
+                <div className="w-11 h-11 rounded-xl bg-surface-800 text-brand-400 flex items-center justify-center">
+                  {clueIcon(clue.kind)}
+                </div>
+                <p className={cn(
+                  "font-display font-bold text-surface-100 break-words max-w-full",
+                  clue.kind === "initial" ? "text-3xl tracking-[0.15em]" : "text-base sm:text-lg"
+                )}>
+                  {clue.label}
+                </p>
+              </div>
+            </Card>
+          </div>
+        ))}
+      </div>
+
+      <AnimatePresence mode="wait">
+        {hasAnswered ? (
+          <motion.div
+            key="found"
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="rounded-xl border border-success-500/40 bg-success-500/10 p-4 text-center mb-4"
+          >
+            <CheckCircle className="w-7 h-7 text-success-400 mx-auto mb-2" />
+            <p className="font-bold text-success-300">
+              {result?.normalizedPlayerName ?? "Connexion trouvée !"}
+            </p>
+            {result?.points !== undefined && (
+              <p className="text-sm text-success-400 mt-1">+{result.points} points</p>
+            )}
+          </motion.div>
+        ) : (
+          <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-auto">
+            {result && !result.correct && (
+              <div className="flex items-center justify-center gap-2 text-danger-400 text-sm mb-3">
+                <XCircle className="w-4 h-4" />
+                {attemptsRemaining > 0 ? "Pas ce joueur. Réessaie !" : "Plus d’essais disponibles"}
+              </div>
+            )}
+            <div className="flex gap-2">
+              <Input
+                value={guess}
+                onChange={(event) => onChange(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    onSubmit();
+                  }
+                }}
+                placeholder="Prénom et/ou nom du joueur"
+                autoComplete="off"
+                disabled={attemptsRemaining <= 0}
+              />
+              <Button
+                size="icon-lg"
+                onClick={onSubmit}
+                disabled={!guess.trim() || attemptsRemaining <= 0 || coolingDown}
+                aria-label="Proposer ce joueur"
+              >
+                <Send className="w-5 h-5" />
+              </Button>
+            </div>
+            <div className="flex items-center justify-between text-xs text-surface-500 mt-2 px-1">
+              <span>{attemptsRemaining} essai{attemptsRemaining > 1 ? "s" : ""}</span>
+              {coolingDown && <span>Prochain essai dans un instant…</span>}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {foundPlayers.length > 0 && (
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
+          {foundPlayers.map((entry) => (
+            <Badge key={entry.playerId} variant={entry.isFirst ? "warning" : "success"} size="sm">
+              {entry.isFirst ? "⚡ " : "✓ "}{entry.playerName}
+            </Badge>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MysteryCareerQuestionView({
+  question,
+  guess,
+  hasAnswered,
+  attemptsRemaining,
+  cooldownUntil,
+  result,
+  foundPlayers,
+  onChange,
+  onSubmit,
+}: {
+  question: MysteryCareerQuestion;
+  guess: string;
+  hasAnswered: boolean;
+  attemptsRemaining: number;
+  cooldownUntil: number;
+  result: ReturnType<typeof useGameStore.getState>["mysteryCareerGuessResult"];
+  foundPlayers: ReturnType<typeof useGameStore.getState>["mysteryCareerFoundPlayers"];
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+}) {
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    if (cooldownUntil <= Date.now()) return;
+    const interval = window.setInterval(() => setNow(Date.now()), 100);
+    return () => window.clearInterval(interval);
+  }, [cooldownUntil]);
+
+  const coolingDown = cooldownUntil > now;
+  const remainingClues = Math.max(0, question.totalClubs - question.clubs.length);
+  const availablePoints = question.points + Math.min(150, remainingClues * 20);
+  const difficultyLabel = {
+    easy: "Accessible",
+    medium: "Connaisseur",
+    hard: "Expert",
+  }[question.difficulty];
+
+  const years = (from: string | null, to: string | null) => {
+    if (!from && !to) return "Dates inconnues";
+    if (from === to || !to) return from ?? to ?? "";
+    return `${from}–${to}`;
+  };
+
+  return (
+    <div className="flex-1 flex flex-col min-h-0">
+      <div className="text-center mb-4">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <Badge variant="warning" size="sm">{difficultyLabel}</Badge>
+          <span className="text-xs font-semibold text-accent-400">
+            {availablePoints} points disponibles
+          </span>
+        </div>
+        <h2 className="text-xl sm:text-2xl font-display font-bold text-surface-100">
+          À qui appartient cette carrière ?
+        </h2>
+        <p className="text-xs text-surface-500 mt-1">
+          Un nouveau club apparaît toutes les {question.revealInterval} secondes
+        </p>
+      </div>
+
+      <div className="flex-1 min-h-0 overflow-y-auto mb-4 pr-1">
+        <div className="relative pl-7">
+          <div className="absolute left-[11px] top-4 bottom-4 w-0.5 bg-gradient-to-b from-amber-500 via-emerald-500 to-surface-700" />
+          <AnimatePresence initial={false}>
+            {question.clubs.map((club, index) => (
+              <motion.div
+                key={`${club.teamId}-${club.order}`}
+                initial={{ opacity: 0, x: -16, height: 0 }}
+                animate={{ opacity: 1, x: 0, height: "auto" }}
+                className="relative mb-2"
+              >
+                <div className="absolute -left-[21px] top-4 w-3 h-3 rounded-full bg-amber-400 border-2 border-amber-200 shadow-[0_0_12px_rgba(251,191,36,0.5)]" />
+                <div className="rounded-xl border border-surface-700 bg-surface-900 px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="min-w-0 flex items-center gap-2">
+                      <Building2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <span className="font-semibold text-surface-100 truncate">{club.name}</span>
+                    </div>
+                    <span className="text-xs font-mono text-surface-400 shrink-0">
+                      {years(club.fromYear, club.toYear)}
+                    </span>
+                  </div>
+                  {(club.appearances !== null || club.goals !== null) && (
+                    <p className="text-[11px] text-surface-500 mt-1 pl-6">
+                      {club.appearances !== null ? `${club.appearances} apparitions` : ""}
+                      {club.appearances !== null && club.goals !== null ? " • " : ""}
+                      {club.goals !== null ? `${club.goals} buts` : ""}
+                    </p>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+          {remainingClues > 0 && (
+            <div className="relative">
+              <div className="absolute -left-[22px] top-3 w-4 h-4 rounded-full bg-surface-800 border border-surface-600" />
+              <div className="rounded-xl border border-dashed border-surface-700 bg-surface-900/40 px-3 py-2 text-xs text-surface-500 flex items-center gap-2">
+                <LockKeyhole className="w-4 h-4" />
+                {remainingClues} club{remainingClues > 1 ? "s" : ""} encore masqué{remainingClues > 1 ? "s" : ""}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <AnimatePresence mode="wait">
+        {hasAnswered ? (
+          <motion.div
+            key="found"
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="rounded-xl border border-success-500/40 bg-success-500/10 p-3 text-center"
+          >
+            <CheckCircle className="w-6 h-6 text-success-400 mx-auto mb-1" />
+            <p className="font-bold text-success-300">
+              {result?.normalizedPlayerName ?? "Joueur trouvé !"}
+            </p>
+            {result?.points !== undefined && (
+              <p className="text-sm text-success-400">+{result.points} points</p>
+            )}
+          </motion.div>
+        ) : (
+          <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            {result && !result.correct && (
+              <div className="flex items-center justify-center gap-2 text-danger-400 text-sm mb-2">
+                <XCircle className="w-4 h-4" />
+                {attemptsRemaining > 0 ? "Pas ce joueur. Réessaie !" : "Plus d’essais disponibles"}
+              </div>
+            )}
+            <div className="flex gap-2">
+              <Input
+                value={guess}
+                onChange={(event) => onChange(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    onSubmit();
+                  }
+                }}
+                placeholder="Nom du joueur…"
+                autoComplete="off"
+                autoFocus
+                disabled={attemptsRemaining <= 0}
+              />
+              <Button
+                size="icon-lg"
+                onClick={onSubmit}
+                disabled={!guess.trim() || attemptsRemaining <= 0 || coolingDown}
+                aria-label="Proposer ce joueur"
+              >
+                <Send className="w-5 h-5" />
+              </Button>
+            </div>
+            <div className="flex items-center justify-between text-xs text-surface-500 mt-2 px-1">
+              <span>{attemptsRemaining} essai{attemptsRemaining > 1 ? "s" : ""}</span>
+              {coolingDown && <span>Prochain essai dans un instant…</span>}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {foundPlayers.length > 0 && (
+        <div className="mt-3 flex flex-wrap justify-center gap-2">
+          {foundPlayers.map((entry) => (
+            <Badge key={entry.playerId} variant={entry.isFirst ? "warning" : "success"} size="sm">
+              {entry.isFirst ? "⚡ " : "✓ "}{entry.playerName}
+            </Badge>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MissingClubQuestionView({
+  question,
+  answer,
+  hasAnswered,
+  onChange,
+  onSubmit,
+}: {
+  question: MissingClubQuestion;
+  answer: string;
+  hasAnswered: boolean;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+}) {
+  const difficultyLabel = {
+    easy: "Accessible",
+    medium: "Connaisseur",
+    hard: "Expert",
+  }[question.difficulty];
+  const years = (from: string | null, to: string | null) => {
+    if (!from && !to) return "Dates inconnues";
+    if (from === to || !to) return from ?? to ?? "";
+    return `${from}–${to}`;
+  };
+
+  return (
+    <div className="flex-1 flex flex-col min-h-0">
+      <div className="text-center mb-4">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <Badge variant="primary" size="sm">{difficultyLabel}</Badge>
+          {question.sportingCountry && (
+            <Badge variant="default" size="sm">{question.sportingCountry}</Badge>
+          )}
+        </div>
+        <h2 className="text-xl sm:text-2xl font-display font-bold text-surface-100">
+          Quel club manque dans la carrière de
+        </h2>
+        <p className="text-2xl font-display font-black text-cyan-400 mt-1">
+          {question.playerName} ?
+        </p>
+      </div>
+
+      <div className="flex-1 min-h-0 overflow-y-auto mb-4 pr-1">
+        <div className="relative pl-7">
+          <div className="absolute left-[11px] top-4 bottom-4 w-0.5 bg-surface-700" />
+          {question.clubs.map((club, index) => {
+            const hidden = index === question.missingIndex;
+            return (
+              <motion.div
+                key={`${club.teamId}-${club.order}-${index}`}
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.06 }}
+                className="relative mb-2"
+              >
+                <div className={cn(
+                  "absolute -left-[21px] top-4 w-3 h-3 rounded-full border-2",
+                  hidden
+                    ? "bg-cyan-400 border-cyan-200 shadow-[0_0_12px_rgba(34,211,238,0.6)]"
+                    : "bg-surface-600 border-surface-500"
+                )} />
+                <div className={cn(
+                  "rounded-xl px-3 py-2.5 flex items-center justify-between gap-3",
+                  hidden
+                    ? "border-2 border-dashed border-cyan-500/60 bg-cyan-500/10"
+                    : "border border-surface-700 bg-surface-900"
+                )}>
+                  <div className="min-w-0 flex items-center gap-2">
+                    {hidden
+                      ? <LockKeyhole className="w-4 h-4 text-cyan-400 shrink-0" />
+                      : <Building2 className="w-4 h-4 text-surface-500 shrink-0" />}
+                    <span className={cn(
+                      "font-semibold truncate",
+                      hidden ? "text-cyan-300 tracking-wider" : "text-surface-100"
+                    )}>
+                      {hidden ? "CLUB MANQUANT" : club.name}
+                    </span>
+                  </div>
+                  <span className="text-xs font-mono text-surface-400 shrink-0">
+                    {years(club.fromYear, club.toYear)}
+                  </span>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+
+      {hasAnswered ? (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="rounded-xl border border-brand-500/30 bg-brand-500/10 p-3 text-center"
+        >
+          <CheckCircle className="w-6 h-6 text-brand-400 mx-auto mb-1" />
+          <p className="text-xs text-surface-400">Réponse verrouillée</p>
+          <p className="font-bold text-surface-100">{answer}</p>
+        </motion.div>
+      ) : (
+        <div className="flex gap-2">
+          <Input
+            value={answer}
+            onChange={(event) => onChange(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                onSubmit();
+              }
+            }}
+            placeholder="Nom du club…"
+            autoComplete="off"
+            autoFocus
+          />
+          <Button
+            size="icon-lg"
+            onClick={onSubmit}
+            disabled={!answer.trim()}
+            aria-label="Valider ce club"
+          >
+            <Send className="w-5 h-5" />
+          </Button>
+        </div>
+      )}
+    </div>
   );
 }
 

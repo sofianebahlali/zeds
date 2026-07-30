@@ -20,7 +20,7 @@ import { ScreenContainer } from "@/components/layout";
 import { useRoomStore, usePlayerStore, useUIStore, useConnectionStatus } from "@/stores";
 import { useSocket } from "@/hooks";
 import { GAME_MODES, GAME_MODE_CATEGORIES, GAME_PRESETS, DEFAULT_PLAYLIST } from "@/types";
-import type { GameModeConfig } from "@/types";
+import type { GameModeConfig, FootballConnectionDifficulty, FootballConnectionFormat } from "@/types";
 import { cn } from "@/lib/utils";
 
 export function LobbyScreen() {
@@ -382,6 +382,21 @@ function PlaylistBuilder({ playlist, onChange }: PlaylistBuilderProps) {
     onChange(newPlaylist);
   };
 
+  const updateSegment = (index: number, patch: Partial<GameModeConfig>) => {
+    const newPlaylist = [...playlist];
+    newPlaylist[index] = { ...newPlaylist[index], ...patch };
+    onChange(newPlaylist);
+  };
+
+  const toggleFootballFormat = (index: number, format: FootballConnectionFormat) => {
+    const selected = playlist[index].footballConnectionFormats
+      ?? ["club_club", "club_country", "initials"];
+    const next = selected.includes(format)
+      ? selected.filter((candidate) => candidate !== format)
+      : [...selected, format];
+    if (next.length > 0) updateSegment(index, { footballConnectionFormats: next });
+  };
+
   const removeSegment = (index: number) => {
     if (playlist.length <= 1) return;
     const newPlaylist = playlist.filter((_, i) => i !== index);
@@ -389,7 +404,29 @@ function PlaylistBuilder({ playlist, onChange }: PlaylistBuilderProps) {
   };
 
   const addSegment = (modeId: string) => {
-    onChange([...playlist, { mode: modeId as GameModeConfig["mode"], rounds: 2 }]);
+    onChange([
+      ...playlist,
+      modeId === "footballconnection"
+        ? {
+            mode: "footballconnection",
+            rounds: 2,
+            footballConnectionDifficulty: "mixed",
+            footballConnectionFormats: ["club_club", "club_country", "initials"],
+          }
+        : modeId === "mysterycareer"
+        ? {
+            mode: "mysterycareer",
+            rounds: 2,
+            mysteryCareerDifficulty: "mixed",
+          }
+        : modeId === "missingclub"
+        ? {
+            mode: "missingclub",
+            rounds: 2,
+            missingClubDifficulty: "mixed",
+          }
+        : { mode: modeId as GameModeConfig["mode"], rounds: 2 },
+    ]);
     setShowAddMode(false);
   };
 
@@ -409,40 +446,158 @@ function PlaylistBuilder({ playlist, onChange }: PlaylistBuilderProps) {
           return (
             <div
               key={`${seg.mode}-${i}`}
-              className="flex items-center gap-2 p-2 rounded-lg bg-surface-800 border border-surface-700"
+              className="p-2 rounded-lg bg-surface-800 border border-surface-700"
             >
-              <span className="text-xl">{mode.icon}</span>
-              <span className="text-sm font-medium text-surface-100 flex-1 truncate">
-                {mode.name}
-              </span>
-
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => updateRounds(i, -1)}
-                  disabled={seg.rounds <= 1}
-                  className="p-1 rounded-md text-surface-400 hover:text-surface-100 hover:bg-surface-700 disabled:opacity-30 disabled:cursor-not-allowed"
-                >
-                  <Minus className="w-3.5 h-3.5" />
-                </button>
-                <span className="text-sm font-mono font-bold text-surface-100 w-5 text-center">
-                  {seg.rounds}
+              <div className="flex items-center gap-2">
+                <span className="text-xl">{mode.icon}</span>
+                <span className="text-sm font-medium text-surface-100 flex-1 truncate">
+                  {mode.name}
                 </span>
+
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => updateRounds(i, -1)}
+                    disabled={seg.rounds <= 1}
+                    className="p-1 rounded-md text-surface-400 hover:text-surface-100 hover:bg-surface-700 disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    <Minus className="w-3.5 h-3.5" />
+                  </button>
+                  <span className="text-sm font-mono font-bold text-surface-100 w-5 text-center">
+                    {seg.rounds}
+                  </span>
+                  <button
+                    onClick={() => updateRounds(i, 1)}
+                    disabled={seg.rounds >= 10}
+                    className="p-1 rounded-md text-surface-400 hover:text-surface-100 hover:bg-surface-700 disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
                 <button
-                  onClick={() => updateRounds(i, 1)}
-                  disabled={seg.rounds >= 10}
-                  className="p-1 rounded-md text-surface-400 hover:text-surface-100 hover:bg-surface-700 disabled:opacity-30 disabled:cursor-not-allowed"
+                  onClick={() => removeSegment(i)}
+                  disabled={playlist.length <= 1}
+                  className="p-1 rounded-md text-surface-500 hover:text-red-400 hover:bg-surface-700 disabled:opacity-30 disabled:cursor-not-allowed ml-1"
                 >
-                  <Plus className="w-3.5 h-3.5" />
+                  <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>
 
-              <button
-                onClick={() => removeSegment(i)}
-                disabled={playlist.length <= 1}
-                className="p-1 rounded-md text-surface-500 hover:text-red-400 hover:bg-surface-700 disabled:opacity-30 disabled:cursor-not-allowed ml-1"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
+              {seg.mode === "footballconnection" && (
+                <div className="mt-3 pt-3 border-t border-surface-700 space-y-3">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-surface-500 mb-1.5">
+                      Difficulté
+                    </p>
+                    <div className="grid grid-cols-4 gap-1">
+                      {([
+                        ["mixed", "Mixte"],
+                        ["easy", "Facile"],
+                        ["medium", "Moyen"],
+                        ["hard", "Expert"],
+                      ] as [FootballConnectionDifficulty, string][]).map(([value, label]) => (
+                        <button
+                          key={value}
+                          onClick={() => updateSegment(i, { footballConnectionDifficulty: value })}
+                          className={cn(
+                            "rounded-md px-1 py-1.5 text-[10px] border transition-colors",
+                            (seg.footballConnectionDifficulty ?? "mixed") === value
+                              ? "border-brand-500 bg-brand-500/15 text-brand-300"
+                              : "border-surface-700 text-surface-400 hover:border-surface-500"
+                          )}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-surface-500 mb-1.5">
+                      Formats
+                    </p>
+                    <div className="grid grid-cols-3 gap-1">
+                      {([
+                        ["club_club", "Club ↔ Club"],
+                        ["club_country", "Club ↔ Pays"],
+                        ["initials", "Initiales"],
+                      ] as [FootballConnectionFormat, string][]).map(([value, label]) => {
+                        const selected = (seg.footballConnectionFormats
+                          ?? ["club_club", "club_country", "initials"]).includes(value);
+                        return (
+                          <button
+                            key={value}
+                            onClick={() => toggleFootballFormat(i, value)}
+                            className={cn(
+                              "rounded-md px-1 py-1.5 text-[10px] border transition-colors",
+                              selected
+                                ? "border-success-500/50 bg-success-500/10 text-success-300"
+                                : "border-surface-700 text-surface-500"
+                            )}
+                          >
+                            {selected ? "✓ " : ""}{label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {seg.mode === "mysterycareer" && (
+                <div className="mt-3 pt-3 border-t border-surface-700">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-surface-500 mb-1.5">
+                    Difficulté
+                  </p>
+                  <div className="grid grid-cols-4 gap-1">
+                    {([
+                      ["mixed", "Mixte"],
+                      ["easy", "Facile"],
+                      ["medium", "Moyen"],
+                      ["hard", "Expert"],
+                    ] as [FootballConnectionDifficulty, string][]).map(([value, label]) => (
+                      <button
+                        key={value}
+                        onClick={() => updateSegment(i, { mysteryCareerDifficulty: value })}
+                        className={cn(
+                          "rounded-md px-1 py-1.5 text-[10px] border transition-colors",
+                          (seg.mysteryCareerDifficulty ?? "mixed") === value
+                            ? "border-amber-500 bg-amber-500/15 text-amber-300"
+                            : "border-surface-700 text-surface-400 hover:border-surface-500"
+                        )}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {seg.mode === "missingclub" && (
+                <div className="mt-3 pt-3 border-t border-surface-700">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-surface-500 mb-1.5">
+                    Difficulté
+                  </p>
+                  <div className="grid grid-cols-4 gap-1">
+                    {([
+                      ["mixed", "Mixte"],
+                      ["easy", "Facile"],
+                      ["medium", "Moyen"],
+                      ["hard", "Expert"],
+                    ] as [FootballConnectionDifficulty, string][]).map(([value, label]) => (
+                      <button
+                        key={value}
+                        onClick={() => updateSegment(i, { missingClubDifficulty: value })}
+                        className={cn(
+                          "rounded-md px-1 py-1.5 text-[10px] border transition-colors",
+                          (seg.missingClubDifficulty ?? "mixed") === value
+                            ? "border-cyan-500 bg-cyan-500/15 text-cyan-300"
+                            : "border-surface-700 text-surface-400 hover:border-surface-500"
+                        )}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}

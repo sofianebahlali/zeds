@@ -9,5 +9,7 @@ dist
 *.md
 .claude
 .vscode
+.cache
+data/football.db
 Dockerfile
 .dockerignore

@@ -6,6 +6,10 @@ import {
   DEFAULT_PLAYLIST,
   DEFAULT_GAME_SETTINGS,
   type GameMode,
+  type GameModeConfig,
+  type MysteryCareerQuestion,
+  type MissingClubQuestion,
+  type RoundResult,
 } from "../../src/types";
 import { GameEngine } from "../../server/game-engine";
 import { RoomManager } from "../../server/room-manager";
@@ -102,7 +106,11 @@ describe("every advertised mode can actually deal questions", () => {
    * another. This builds a real engine per mode and checks it dealt the rounds
    * it was asked for, with a question of the right type.
    */
-  const dealFor = (mode: GameMode, rounds: number) => {
+  const dealFor = (
+    mode: GameMode,
+    rounds: number,
+    config: Partial<GameModeConfig> = {}
+  ) => {
     const roomManager = new RoomManager();
     const room: Room = {
       code: "TEST",
@@ -124,7 +132,7 @@ describe("every advertised mode can actually deal questions", () => {
       gameMode: mode,
       settings: {
         ...DEFAULT_GAME_SETTINGS,
-        playlist: [{ mode, rounds }],
+        playlist: [{ mode, rounds, ...config }],
         totalRounds: rounds,
       },
       currentRound: 0,
@@ -170,6 +178,17 @@ describe("every advertised mode can actually deal questions", () => {
     }
   });
 
+  it("keeps a requested Connexion Foot format while completing a narrow difficulty bucket", () => {
+    const questions = dealFor("footballconnection", 10, {
+      footballConnectionDifficulty: "easy",
+      footballConnectionFormats: ["initials"],
+    }) as unknown as { id: string; format: string }[];
+
+    expect(questions).toHaveLength(10);
+    expect(questions.every((question) => question.format === "initials")).toBe(true);
+    expect(new Set(questions.map((question) => question.id)).size).toBe(10);
+  });
+
   it("plays a mixed playlist in the order it was given", () => {
     const roomManager = new RoomManager();
     const playlist = [
@@ -208,5 +227,141 @@ describe("every advertised mode can actually deal questions", () => {
     expect(types).toEqual(["open", "open", "flag", "flag", "estimation"]);
     // …and the room's round count is corrected to what was actually dealt.
     expect(room.totalRounds).toBe(5);
+  });
+});
+
+describe("Carrière mystère engine", () => {
+  it("hides the identity, accepts aliases and awards the early-clue bonus", () => {
+    const roomManager = new RoomManager();
+    const room = roomManager.createRoom({
+      id: "p1",
+      name: "P1",
+      avatar: "🦊",
+      isHost: true,
+      isReady: true,
+      isConnected: true,
+      score: 0,
+      roundScore: 0,
+      loseStreak: 0,
+    });
+    room.settings.playlist = [{
+      mode: "mysterycareer",
+      rounds: 1,
+      mysteryCareerDifficulty: "easy",
+    }];
+    room.settings.totalRounds = 1;
+    room.totalRounds = 1;
+    room.gameMode = "mysterycareer";
+    roomManager.mapSocketToPlayer("socket-p1", "p1");
+
+    const emitted: { target: string; event: string; args: unknown[] }[] = [];
+    const io = {
+      to: (target: string) => ({
+        emit: (event: string, ...args: unknown[]) => {
+          emitted.push({ target, event, args });
+        },
+      }),
+    } as never;
+    const engine = new GameEngine(room, io, roomManager);
+    const internals = engine as unknown as {
+      questions: MysteryCareerQuestion[];
+      currentQuestion: MysteryCareerQuestion | null;
+      currentRound: number;
+      timeRemaining: number;
+      mysteryCareerLastAttemptAt: Map<string, number>;
+      sanitizeQuestionForClient: (question: MysteryCareerQuestion) => MysteryCareerQuestion;
+    };
+    const truth = internals.questions[0];
+    const publicQuestion = internals.sanitizeQuestionForClient(truth);
+
+    expect(publicQuestion.playerName).toBe("");
+    expect(publicQuestion.playerId).toBe(0);
+    expect(publicQuestion.aliases).toEqual([]);
+    expect(publicQuestion.clubs).toEqual([truth.clubs[0]]);
+
+    internals.currentQuestion = truth;
+    internals.currentRound = 1;
+    internals.timeRemaining = truth.timeLimit;
+    engine.submitMysteryCareerGuess("p1", "réponse impossible");
+    expect(emitted.find((entry) => entry.event === "mysterycareer:guess_result")?.args[0])
+      .toMatchObject({ correct: false, attemptsRemaining: 2 });
+
+    internals.mysteryCareerLastAttemptAt.set("p1", 0);
+    engine.submitMysteryCareerGuess("p1", truth.aliases[0]);
+    const correct = emitted
+      .filter((entry) => entry.event === "mysterycareer:guess_result")
+      .at(-1)?.args[0];
+    expect(correct).toMatchObject({
+      correct: true,
+      normalizedPlayerName: truth.playerName,
+    });
+    const result = emitted.find((entry) => entry.event === "game:round_end")
+      ?.args[0] as RoundResult;
+    expect(result.correctAnswer).toBe(truth.playerName);
+    expect(result.question).toBe(truth);
+    expect(result.scores[0].points).toBeGreaterThan(truth.points);
+
+    engine.destroy();
+  });
+});
+
+describe("Club manquant engine", () => {
+  it("redacts the gap and fuzzy-scores a valid club with a speed bonus", () => {
+    const roomManager = new RoomManager();
+    const room = roomManager.createRoom({
+      id: "p1",
+      name: "P1",
+      avatar: "🦊",
+      isHost: true,
+      isReady: true,
+      isConnected: true,
+      score: 0,
+      roundScore: 0,
+      loseStreak: 0,
+    });
+    room.settings.playlist = [{
+      mode: "missingclub",
+      rounds: 1,
+      missingClubDifficulty: "easy",
+    }];
+    room.settings.totalRounds = 1;
+    room.totalRounds = 1;
+    room.gameMode = "missingclub";
+
+    const emitted: { event: string; args: unknown[] }[] = [];
+    const io = {
+      to: () => ({
+        emit: (event: string, ...args: unknown[]) => emitted.push({ event, args }),
+      }),
+    } as never;
+    const engine = new GameEngine(room, io, roomManager);
+    const internals = engine as unknown as {
+      questions: MissingClubQuestion[];
+      currentQuestion: MissingClubQuestion | null;
+      currentRound: number;
+      timeRemaining: number;
+      sanitizeQuestionForClient: (question: MissingClubQuestion) => MissingClubQuestion;
+    };
+    const truth = internals.questions[0];
+    const publicQuestion = internals.sanitizeQuestionForClient(truth);
+    const hidden = publicQuestion.clubs[publicQuestion.missingIndex];
+
+    expect(publicQuestion.missingClubName).toBe("");
+    expect(publicQuestion.acceptedAnswers).toEqual([]);
+    expect(hidden).toMatchObject({ teamId: 0, name: "", appearances: null, goals: null });
+    expect(hidden.fromYear).toBe(truth.clubs[truth.missingIndex].fromYear);
+
+    internals.currentQuestion = truth;
+    internals.currentRound = 1;
+    internals.timeRemaining = truth.timeLimit;
+    engine.submitAnswer("p1", truth.acceptedAnswers[0]);
+
+    const result = emitted.find((entry) => entry.event === "game:round_end")
+      ?.args[0] as RoundResult;
+    expect(result.correctAnswer).toBe(truth.missingClubName);
+    expect(result.answers[0].isCorrect).toBe(true);
+    expect(result.scores[0].points).toBe(150);
+
+    engine.destroy();
   });
 });

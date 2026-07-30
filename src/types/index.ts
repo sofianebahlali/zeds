@@ -31,6 +31,14 @@ export interface Room {
   currentRound: number;
   totalRounds: number;
   createdAt: number;
+  /** Preserved when the room replays, preventing repeat links across games. */
+  recentFootballConnectionIds?: string[];
+  /** Preserved when the room replays, preventing repeat mystery players. */
+  recentMysteryCareerPlayerIds?: number[];
+  /** Preserved when the room replays, preventing repeat missing-club cards. */
+  recentMissingClubQuestionIds?: string[];
+  /** Prevents the same career returning with a different gap too soon. */
+  recentMissingClubPlayerIds?: number[];
 }
 
 export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" | "finished";
@@ -39,11 +47,18 @@ export type RoomStatus = "waiting" | "starting" | "playing" | "between_rounds" |
 // GAME TYPES
 // ==========================================
 
-export type GameMode = "open" | "estimation" | "parcours" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon" | "dialed" | "pokegeo" | "pokemontranslate" | "pokedexnumber" | "pokemonattack" | "flag" | "capital" | "countrylocate" | "citylocate";
+export type GameMode = "open" | "estimation" | "parcours" | "footballconnection" | "mysterycareer" | "missingclub" | "drawing" | "petitbac" | "geoquiz" | "langue" | "maths" | "guessgame" | "lineup" | "jerseynumber" | "futcard" | "chrono" | "consensus" | "splitsteal" | "liste" | "pokestats" | "pokemon" | "dialed" | "pokegeo" | "pokemontranslate" | "pokedexnumber" | "pokemonattack" | "flag" | "capital" | "countrylocate" | "citylocate";
+
+export type FootballConnectionFormat = "club_club" | "club_country" | "initials";
+export type FootballConnectionDifficulty = "mixed" | "easy" | "medium" | "hard";
 
 export interface GameModeConfig {
   mode: GameMode;
   rounds: number;
+  footballConnectionDifficulty?: FootballConnectionDifficulty;
+  footballConnectionFormats?: FootballConnectionFormat[];
+  mysteryCareerDifficulty?: FootballConnectionDifficulty;
+  missingClubDifficulty?: FootballConnectionDifficulty;
   pokestatsGenerations?: number[]; // Filter by generation(s) for pokestats mode
   pokemonGenerations?: number[]; // Filter by generation(s) for pokemon silhouette mode
   pokemonTranslateGenerations?: number[]; // Filter by generation(s) for pokemon translate mode
@@ -108,9 +123,17 @@ export const GAME_PRESETS: GamePreset[] = [
     id: "football",
     name: "Foot",
     icon: "⚽",
-    description: "Parcours, compos, numéros, cartes FUT",
+    description: "Connexions, carrières, compos, numéros, cartes FUT",
     gradient: "from-green-500 to-emerald-700",
     playlist: [
+      {
+        mode: "footballconnection",
+        rounds: 3,
+        footballConnectionDifficulty: "mixed",
+        footballConnectionFormats: ["club_club", "club_country", "initials"],
+      },
+      { mode: "mysterycareer", rounds: 3, mysteryCareerDifficulty: "mixed" },
+      { mode: "missingclub", rounds: 2, missingClubDifficulty: "mixed" },
       { mode: "parcours", rounds: 3 },
       { mode: "lineup", rounds: 2 },
       { mode: "jerseynumber", rounds: 3 },
@@ -216,6 +239,83 @@ export interface ParcoursQuestion extends BaseQuestion {
   acceptedAnswers: string[];
   difficulty: "easy" | "medium" | "hard";
   nationality?: string;
+}
+
+export interface FootballConnectionClue {
+  id: number | null;
+  label: string;
+  kind: "club" | "country" | "initial";
+}
+
+export interface FootballConnectionAnswer {
+  playerId: number;
+  playerName: string;
+  aliases: string[];
+  leftDetail?: string;
+  rightDetail?: string;
+}
+
+export interface FootballConnectionQuestion extends BaseQuestion {
+  type: "footballconnection";
+  format: FootballConnectionFormat;
+  left: FootballConnectionClue;
+  right: FootballConnectionClue;
+  difficulty: "easy" | "medium" | "hard";
+  answerCount: number;
+  /** Hidden during play, populated in server truth and the round reveal. */
+  answers: FootballConnectionAnswer[];
+}
+
+export interface FootballConnectionGuessResult {
+  correct: boolean;
+  attemptsRemaining: number;
+  cooldownMs: number;
+  normalizedPlayerName?: string;
+  points?: number;
+}
+
+export interface MysteryCareerClub {
+  teamId: number;
+  name: string;
+  fromYear: string | null;
+  toYear: string | null;
+  appearances: number | null;
+  goals: number | null;
+  order: number;
+}
+
+export interface MysteryCareerQuestion extends BaseQuestion {
+  type: "mysterycareer";
+  /** Hidden during play and restored in the round reveal. */
+  playerId: number;
+  playerName: string;
+  aliases: string[];
+  sportingCountry: string | null;
+  clubs: MysteryCareerClub[];
+  totalClubs: number;
+  revealInterval: number;
+  difficulty: "easy" | "medium" | "hard";
+}
+
+export interface MysteryCareerGuessResult {
+  correct: boolean;
+  attemptsRemaining: number;
+  cooldownMs: number;
+  normalizedPlayerName?: string;
+  points?: number;
+}
+
+export interface MissingClubQuestion extends BaseQuestion {
+  type: "missingclub";
+  playerId: number;
+  playerName: string;
+  sportingCountry: string | null;
+  clubs: MysteryCareerClub[];
+  missingIndex: number;
+  /** Hidden during play and restored in the round reveal. */
+  missingClubName: string;
+  acceptedAnswers: string[];
+  difficulty: "easy" | "medium" | "hard";
 }
 
 export interface DrawingQuestion extends BaseQuestion {
@@ -1000,7 +1100,7 @@ export interface LineupGuessResult {
   totalPlayers: number;
 }
 
-export type Question = OpenQuestion | EstimationQuestion | ParcoursQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion | DialedQuestion | PokeGeoQuestion | PokemonTranslateQuestion | PokedexNumberQuestion | PokemonAttackQuestion | FlagQuestion | CapitalQuestion | CountryLocateQuestion | CityLocateQuestion;
+export type Question = OpenQuestion | EstimationQuestion | ParcoursQuestion | FootballConnectionQuestion | MysteryCareerQuestion | MissingClubQuestion | DrawingQuestion | PetitBacQuestion | GeoQuizQuestion | LangueQuestion | MathsQuestion | GuessGameQuestion | LineupQuestion | JerseyNumberQuestion | FutCardQuestion | ChronoQuestion | ConsensusQuestion | SplitStealQuestion | ListeQuestion | PokemonStatsQuestion | PokemonSilhouetteQuestion | DialedQuestion | PokeGeoQuestion | PokemonTranslateQuestion | PokedexNumberQuestion | PokemonAttackQuestion | FlagQuestion | CapitalQuestion | CountryLocateQuestion | CityLocateQuestion;
 
 // ==========================================
 // ANSWER TYPES
@@ -1169,6 +1269,25 @@ export interface ServerToClientEvents {
   "game:finished": (finalScores: Player[]) => void;
   "game:resync": (data: GameResyncData) => void;
 
+  // Connexion Foot events
+  "footballconnection:guess_result": (result: FootballConnectionGuessResult) => void;
+  "footballconnection:player_found": (data: {
+    playerId: string;
+    playerName: string;
+    points: number;
+    isFirst: boolean;
+  }) => void;
+
+  // Carrière mystère events
+  "mysterycareer:clue_revealed": (clue: MysteryCareerClub) => void;
+  "mysterycareer:guess_result": (result: MysteryCareerGuessResult) => void;
+  "mysterycareer:player_found": (data: {
+    playerId: string;
+    playerName: string;
+    points: number;
+    isFirst: boolean;
+  }) => void;
+
   // Drawing events
   "drawing:phase_start": (phase: DrawingPhase, data: DrawingPhaseData) => void;
   "drawing:your_phrase": (phrase: string, questionId: string) => void;
@@ -1292,6 +1411,8 @@ export interface ClientToServerEvents {
   "game:start": () => void;
   "game:submit_answer": (answer: string) => void;
   "game:request_next_round": () => void;
+  "footballconnection:submit_guess": (guess: string) => void;
+  "mysterycareer:submit_guess": (guess: string) => void;
 
   // Drawing events
   "drawing:submit_suggestion": (suggestion: string) => void;
@@ -1633,6 +1754,30 @@ export const GAME_MODES: GameModeInfo[] = [
     description: "Devine le joueur à partir de ses clubs",
     icon: "⚽",
     color: "from-green-500 to-green-700",
+    category: "football",
+  },
+  {
+    id: "footballconnection",
+    name: "Connexion Foot",
+    description: "Trouve le joueur qui relie les deux indices",
+    icon: "🔗",
+    color: "from-emerald-500 to-cyan-700",
+    category: "football",
+  },
+  {
+    id: "mysterycareer",
+    name: "Carrière mystère",
+    description: "Devine le joueur avant que toute sa carrière soit révélée",
+    icon: "🕵️",
+    color: "from-amber-500 to-emerald-700",
+    category: "football",
+  },
+  {
+    id: "missingclub",
+    name: "Club manquant",
+    description: "Retrouve le trou dans la carrière du joueur",
+    icon: "❓",
+    color: "from-cyan-500 to-green-700",
     category: "football",
   },
   {

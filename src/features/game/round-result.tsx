@@ -9,7 +9,7 @@ import { useChatStore } from "@/stores/chat-store";
 import { useSocket } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { WorldMap } from "./world-map";
-import type { EstimationQuestion, PetitBacQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion, PokestatsRoundResult as PokestatsRoundResultType, PokemonAttackRoundResult as PokemonAttackRoundResultType, DialedQuestion, PokedexNumberQuestion, FlagQuestion, CapitalQuestion, CountryLocateQuestion, CityLocateQuestion } from "@/types";
+import type { EstimationQuestion, PetitBacQuestion, MathsQuestion, ChronoQuestion, ConsensusQuestion, PokestatsRoundResult as PokestatsRoundResultType, PokemonAttackRoundResult as PokemonAttackRoundResultType, DialedQuestion, PokedexNumberQuestion, FlagQuestion, CapitalQuestion, CountryLocateQuestion, CityLocateQuestion, FootballConnectionQuestion, MysteryCareerQuestion, MissingClubQuestion } from "@/types";
 
 const PETITBAC_CATEGORY_ICONS: Record<string, string> = {
   "Prénom": "👤",
@@ -91,6 +91,9 @@ export function RoundResult() {
   const isPokedexNumber = roundResult.question.type === "pokedexnumber";
   const isFlag = roundResult.question.type === "flag";
   const isCapital = roundResult.question.type === "capital";
+  const isFootballConnection = roundResult.question.type === "footballconnection";
+  const isMysteryCareer = roundResult.question.type === "mysterycareer";
+  const isMissingClub = roundResult.question.type === "missingclub";
 
   if (roundResult.question.type === "citylocate") {
     return (
@@ -247,6 +250,18 @@ export function RoundResult() {
             ? isCorrect
               ? "Bien joué !"
               : "Raté !"
+            : isFootballConnection
+            ? isCorrect
+              ? "Connexion trouvée !"
+              : "Connexion manquée !"
+            : isMysteryCareer
+            ? isCorrect
+              ? "Carrière démasquée !"
+              : "Mystère non résolu !"
+            : isMissingClub
+            ? isCorrect
+              ? "Trou comblé !"
+              : "Mauvais club !"
             : isCorrect
             ? "Bonne réponse !"
             : "Raté !"}
@@ -300,6 +315,12 @@ export function RoundResult() {
                 ? "Le pays était :"
                 : isCapital
                 ? "La capitale était :"
+                : isFootballConnection
+                ? "Réponses possibles :"
+                : isMysteryCareer
+                ? "Le joueur mystère était :"
+                : isMissingClub
+                ? "Le club manquant était :"
                 : "La bonne réponse était :"}
             </p>
             {(isFlag || isCapital) && (
@@ -317,6 +338,99 @@ export function RoundResult() {
             <p className="text-2xl font-display font-bold text-surface-100">
               {roundResult.correctAnswer}
             </p>
+            {isFootballConnection && (
+              <div className="mt-4 space-y-2 text-left">
+                {(roundResult.question as FootballConnectionQuestion).answers
+                  .slice(0, 8)
+                  .map((answer) => (
+                    <div
+                      key={answer.playerId}
+                      className="rounded-lg border border-surface-700 bg-surface-800/70 px-3 py-2"
+                    >
+                      <p className="font-semibold text-surface-100">{answer.playerName}</p>
+                      {(answer.leftDetail || answer.rightDetail) && (
+                        <p className="text-xs text-surface-400 mt-1">
+                          {[answer.leftDetail, answer.rightDetail].filter(Boolean).join(" • ")}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                {(roundResult.question as FootballConnectionQuestion).answers.length > 8 && (
+                  <p className="text-xs text-center text-surface-500">
+                    +{(roundResult.question as FootballConnectionQuestion).answers.length - 8} autres réponses
+                  </p>
+                )}
+              </div>
+            )}
+            {isMysteryCareer && (
+              <div className="mt-4 text-left">
+                <div className="flex flex-wrap justify-center gap-2 mb-3">
+                  {(roundResult.question as MysteryCareerQuestion).sportingCountry && (
+                    <Badge variant="primary" size="sm">
+                      {(roundResult.question as MysteryCareerQuestion).sportingCountry}
+                    </Badge>
+                  )}
+                  <Badge variant="warning" size="sm">
+                    {(roundResult.question as MysteryCareerQuestion).difficulty === "easy"
+                      ? "Accessible"
+                      : (roundResult.question as MysteryCareerQuestion).difficulty === "medium"
+                      ? "Connaisseur"
+                      : "Expert"}
+                  </Badge>
+                </div>
+                <div className="space-y-1.5">
+                  {(roundResult.question as MysteryCareerQuestion).clubs.map((club) => (
+                    <div
+                      key={`${club.teamId}-${club.order}`}
+                      className="flex items-center justify-between gap-3 rounded-lg border border-surface-700 bg-surface-800/70 px-3 py-2"
+                    >
+                      <span className="font-semibold text-sm text-surface-100 truncate">
+                        {club.name}
+                      </span>
+                      <span className="text-xs font-mono text-surface-400 shrink-0">
+                        {club.fromYear && club.toYear && club.fromYear !== club.toYear
+                          ? `${club.fromYear}–${club.toYear}`
+                          : club.fromYear ?? club.toYear ?? "—"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {isMissingClub && (
+              <div className="mt-4 text-left">
+                <p className="text-xs text-center text-surface-500 mb-3">
+                  Carrière de {(roundResult.question as MissingClubQuestion).playerName}
+                </p>
+                <div className="space-y-1.5">
+                  {(roundResult.question as MissingClubQuestion).clubs.map((club, index) => (
+                    <div
+                      key={`${club.teamId}-${club.order}`}
+                      className={cn(
+                        "flex items-center justify-between gap-3 rounded-lg border px-3 py-2",
+                        index === (roundResult.question as MissingClubQuestion).missingIndex
+                          ? "border-cyan-500/50 bg-cyan-500/10"
+                          : "border-surface-700 bg-surface-800/70"
+                      )}
+                    >
+                      <span className={cn(
+                        "font-semibold text-sm truncate",
+                        index === (roundResult.question as MissingClubQuestion).missingIndex
+                          ? "text-cyan-300"
+                          : "text-surface-100"
+                      )}>
+                        {club.name}
+                      </span>
+                      <span className="text-xs font-mono text-surface-400 shrink-0">
+                        {club.fromYear && club.toYear && club.fromYear !== club.toYear
+                          ? `${club.fromYear}–${club.toYear}`
+                          : club.fromYear ?? club.toYear ?? "—"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             {isEstimation && (
               <p className="text-xs text-surface-500 mt-1">
                 {(roundResult.question as EstimationQuestion).productName}

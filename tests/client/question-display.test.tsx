@@ -8,11 +8,13 @@ import type { Player, Question, Room } from "../../src/types";
 import { DEFAULT_GAME_SETTINGS } from "../../src/types";
 
 const submitAnswer = vi.fn();
+const submitFootballConnectionGuess = vi.fn(() => true);
+const submitMysteryCareerGuess = vi.fn(() => true);
 
 // The component only needs a way to send an answer; a live socket would just
 // add flakiness.
 vi.mock("../../src/hooks", () => ({
-  useSocket: () => ({ submitAnswer }),
+  useSocket: () => ({ submitAnswer, submitFootballConnectionGuess, submitMysteryCareerGuess }),
 }));
 
 const player = (id: string): Player => ({
@@ -81,6 +83,8 @@ const flagQuestion = {
 describe("<QuestionDisplay />", () => {
   beforeEach(() => {
     submitAnswer.mockClear();
+    submitFootballConnectionGuess.mockClear();
+    submitMysteryCareerGuess.mockClear();
     useGameStore.getState().resetGame();
     useRoomStore.getState().resetRoom();
   });
@@ -171,6 +175,174 @@ describe("<QuestionDisplay />", () => {
       submitAnswer.mockClear();
       await user.click(screen.getByText("5").closest("button")!);
       expect(submitAnswer).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("Connexion Foot", () => {
+    const connectionQuestion = {
+      id: "fc-test",
+      type: "footballconnection",
+      format: "club_country",
+      left: { id: 1, label: "Manchester United", kind: "club" },
+      right: { id: 2, label: "Allemagne", kind: "country" },
+      difficulty: "easy",
+      answerCount: 1,
+      answers: [],
+      timeLimit: 15,
+      points: 100,
+    } as Question;
+
+    it("shows both clues and keeps the field open after a wrong guess", async () => {
+      const user = userEvent.setup();
+      showQuestion(connectionQuestion);
+
+      expect(screen.getByText("Manchester United")).toBeInTheDocument();
+      expect(screen.getByText("Allemagne")).toBeInTheDocument();
+      const input = screen.getByPlaceholderText("Prénom et/ou nom du joueur");
+      await user.type(input, "Kroos{Enter}");
+      expect(submitFootballConnectionGuess).toHaveBeenCalledWith("Kroos");
+
+      act(() => useGameStore.getState().setFootballConnectionGuessResult({
+        correct: false,
+        attemptsRemaining: 2,
+        cooldownMs: 0,
+      }));
+      expect(screen.getByText("Pas ce joueur. Réessaie !")).toBeInTheDocument();
+      expect(screen.getByText("2 essais")).toBeInTheDocument();
+      expect(input).toBeInTheDocument();
+    });
+
+    it("shows the accepted canonical player and points", () => {
+      showQuestion(connectionQuestion);
+      act(() => useGameStore.getState().setFootballConnectionGuessResult({
+        correct: true,
+        attemptsRemaining: 2,
+        cooldownMs: 0,
+        normalizedPlayerName: "Bastian Schweinsteiger",
+        points: 145,
+      }));
+
+      expect(screen.getByText("Bastian Schweinsteiger")).toBeInTheDocument();
+      expect(screen.getByText("+145 points")).toBeInTheDocument();
+      expect(screen.queryByPlaceholderText("Prénom et/ou nom du joueur")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("Carrière mystère", () => {
+    const mysteryCareerQuestion = {
+      id: "mc-test",
+      type: "mysterycareer",
+      playerId: 0,
+      playerName: "",
+      aliases: [],
+      sportingCountry: null,
+      clubs: [{
+        teamId: 1,
+        name: "Sporting CP",
+        fromYear: "2002",
+        toYear: "2003",
+        appearances: 31,
+        goals: 5,
+        order: 0,
+      }],
+      totalClubs: 4,
+      revealInterval: 3,
+      difficulty: "easy",
+      timeLimit: 24,
+      points: 100,
+    } as Question;
+
+    it("shows only the revealed clubs and sends guesses without closing the field", async () => {
+      const user = userEvent.setup();
+      showQuestion(mysteryCareerQuestion);
+
+      expect(screen.getByText("Sporting CP")).toBeInTheDocument();
+      expect(screen.getByText("3 clubs encore masqués")).toBeInTheDocument();
+      expect(screen.getByText("160 points disponibles")).toBeInTheDocument();
+
+      const input = screen.getByPlaceholderText("Nom du joueur…");
+      await user.type(input, "Cristiano{Enter}");
+      expect(submitMysteryCareerGuess).toHaveBeenCalledWith("Cristiano");
+
+      act(() => useGameStore.getState().setMysteryCareerGuessResult({
+        correct: false,
+        attemptsRemaining: 2,
+        cooldownMs: 0,
+      }));
+      expect(screen.getByText("Pas ce joueur. Réessaie !")).toBeInTheDocument();
+      expect(input).toBeInTheDocument();
+    });
+
+    it("adds a server-revealed club and displays the accepted player", () => {
+      showQuestion(mysteryCareerQuestion);
+      act(() => useGameStore.getState().addMysteryCareerClue({
+        teamId: 2,
+        name: "Manchester United",
+        fromYear: "2003",
+        toYear: "2009",
+        appearances: 292,
+        goals: 118,
+        order: 1,
+      }));
+      expect(screen.getByText("Manchester United")).toBeInTheDocument();
+      expect(screen.getByText("2 clubs encore masqués")).toBeInTheDocument();
+
+      act(() => useGameStore.getState().setMysteryCareerGuessResult({
+        correct: true,
+        attemptsRemaining: 2,
+        cooldownMs: 0,
+        normalizedPlayerName: "Cristiano Ronaldo",
+        points: 140,
+      }));
+      expect(screen.getByText("Cristiano Ronaldo")).toBeInTheDocument();
+      expect(screen.getByText("+140 points")).toBeInTheDocument();
+    });
+  });
+
+  describe("Club manquant", () => {
+    const missingClubQuestion = {
+      id: "missing-test",
+      type: "missingclub",
+      playerId: 1,
+      playerName: "Cristiano Ronaldo",
+      sportingCountry: "Portugal",
+      clubs: [
+        { teamId: 1, name: "Sporting CP", fromYear: "2002", toYear: "2003", appearances: 31, goals: 5, order: 0 },
+        { teamId: 0, name: "", fromYear: "2003", toYear: "2009", appearances: null, goals: null, order: 1 },
+        { teamId: 3, name: "Real Madrid", fromYear: "2009", toYear: "2018", appearances: 438, goals: 450, order: 2 },
+        { teamId: 4, name: "Juventus", fromYear: "2018", toYear: "2021", appearances: 134, goals: 101, order: 3 },
+      ],
+      missingIndex: 1,
+      missingClubName: "",
+      acceptedAnswers: [],
+      difficulty: "easy",
+      timeLimit: 20,
+      points: 100,
+    } as Question;
+
+    it("shows the player and chronology without leaking the missing club", async () => {
+      const user = userEvent.setup();
+      showQuestion(missingClubQuestion);
+
+      expect(screen.getByText("Cristiano Ronaldo ?")).toBeInTheDocument();
+      expect(screen.getByText("CLUB MANQUANT")).toBeInTheDocument();
+      expect(screen.getByText("Sporting CP")).toBeInTheDocument();
+      expect(screen.getByText("Real Madrid")).toBeInTheDocument();
+      expect(screen.queryByText("Manchester United")).not.toBeInTheDocument();
+
+      await user.type(screen.getByPlaceholderText("Nom du club…"), "Manchester United{Enter}");
+      expect(submitAnswer).toHaveBeenCalledWith("Manchester United");
+    });
+
+    it("locks and displays the submitted answer", async () => {
+      const user = userEvent.setup();
+      showQuestion(missingClubQuestion);
+      await user.type(screen.getByPlaceholderText("Nom du club…"), "Manchester United");
+      act(() => useGameStore.getState().submitAnswer("Manchester United"));
+
+      expect(screen.getByText("Réponse verrouillée")).toBeInTheDocument();
+      expect(screen.getByText("Manchester United")).toBeInTheDocument();
+      expect(screen.queryByPlaceholderText("Nom du club…")).not.toBeInTheDocument();
     });
   });
 

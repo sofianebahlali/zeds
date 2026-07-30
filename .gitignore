@@ -22,6 +22,12 @@
 # raw sources downloaded by scripts/build-countries.ts (generated output is committed)
 /.cache
 
+# generated from the committed compressed football artifact
+/data/football.db
+/data/football.db-shm
+/data/football.db-wal
+/data/football.db.*-import
+
 # debug
 npm-debug.log*
 yarn-debug.log*

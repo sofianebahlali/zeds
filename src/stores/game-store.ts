@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ListeRoundResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult, PokemonRoundResult, PokemonAbandonResult, PokemonValidationData, PokeGeoValidationData, PokeGeoValidationSubmission, PokeGeoAnswerResultData, PokemonAttackHintData, PokemonAttackRoundResult, PokemonAttackAbandonResult } from "@/types";
+import type { Question, Answer, RoundResult, GameState, DrawingPhase, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursAnswerResultData, GuessGameValidationData, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, GameMode, SplitStealStartData, SplitStealRevealData, ListeRoundResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult, PokemonRoundResult, PokemonAbandonResult, PokemonValidationData, PokeGeoValidationData, PokeGeoValidationSubmission, PokeGeoAnswerResultData, PokemonAttackHintData, PokemonAttackRoundResult, PokemonAttackAbandonResult, FootballConnectionGuessResult, MysteryCareerClub, MysteryCareerGuessResult } from "@/types";
 
 type GameStatus = "idle" | "countdown" | "question" | "answering" | "revealing" | "leaderboard" | "finished"
   | "suggesting" | "drawing" | "guessing" | "drawing_reveal"
@@ -30,6 +30,28 @@ interface GameStoreState {
   answeredPlayers: string[];
   roundResult: RoundResult | null;
   allResults: RoundResult[];
+
+  // Connexion Foot mode
+  footballConnectionGuessResult: FootballConnectionGuessResult | null;
+  footballConnectionAttemptsRemaining: number;
+  footballConnectionCooldownUntil: number;
+  footballConnectionFoundPlayers: {
+    playerId: string;
+    playerName: string;
+    points: number;
+    isFirst: boolean;
+  }[];
+
+  // Carrière mystère mode
+  mysteryCareerGuessResult: MysteryCareerGuessResult | null;
+  mysteryCareerAttemptsRemaining: number;
+  mysteryCareerCooldownUntil: number;
+  mysteryCareerFoundPlayers: {
+    playerId: string;
+    playerName: string;
+    points: number;
+    isFirst: boolean;
+  }[];
 
   // Drawing mode
   drawingPhrase: string | null;
@@ -140,6 +162,21 @@ interface GameStoreState {
   resetGame: () => void;
   startGame: (totalRounds: number) => void;
   finishGame: () => void;
+  setFootballConnectionGuessResult: (result: FootballConnectionGuessResult) => void;
+  addFootballConnectionFoundPlayer: (data: {
+    playerId: string;
+    playerName: string;
+    points: number;
+    isFirst: boolean;
+  }) => void;
+  addMysteryCareerClue: (clue: MysteryCareerClub) => void;
+  setMysteryCareerGuessResult: (result: MysteryCareerGuessResult) => void;
+  addMysteryCareerFoundPlayer: (data: {
+    playerId: string;
+    playerName: string;
+    points: number;
+    isFirst: boolean;
+  }) => void;
 
   // Drawing actions
   setDrawingPhrase: (phrase: string) => void;
@@ -244,6 +281,14 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   answeredPlayers: [],
   roundResult: null,
   allResults: [],
+  footballConnectionGuessResult: null,
+  footballConnectionAttemptsRemaining: 3,
+  footballConnectionCooldownUntil: 0,
+  footballConnectionFoundPlayers: [],
+  mysteryCareerGuessResult: null,
+  mysteryCareerAttemptsRemaining: 3,
+  mysteryCareerCooldownUntil: 0,
+  mysteryCareerFoundPlayers: [],
 
   // Drawing initial state
   drawingPhrase: null,
@@ -352,6 +397,14 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       hasAnswered: false,
       answeredPlayers: [],
       roundResult: null,
+      footballConnectionGuessResult: null,
+      footballConnectionAttemptsRemaining: 3,
+      footballConnectionCooldownUntil: 0,
+      footballConnectionFoundPlayers: [],
+      mysteryCareerGuessResult: null,
+      mysteryCareerAttemptsRemaining: 3,
+      mysteryCareerCooldownUntil: 0,
+      mysteryCareerFoundPlayers: [],
       status: "question",
       geoQuizHint: null,
       lineupFoundPlayers: [],
@@ -447,6 +500,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       answeredPlayers: [],
       roundResult: null,
       allResults: [],
+      footballConnectionGuessResult: null,
+      footballConnectionAttemptsRemaining: 3,
+      footballConnectionCooldownUntil: 0,
+      footballConnectionFoundPlayers: [],
       drawingPhrase: null,
       drawingToGuess: null,
       drawingRevealState: null,
@@ -509,6 +566,64 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   finishGame: () => set({ status: "finished" }),
 
+  setFootballConnectionGuessResult: (result) =>
+    set({
+      footballConnectionGuessResult: result,
+      footballConnectionAttemptsRemaining: result.attemptsRemaining,
+      footballConnectionCooldownUntil: Date.now() + result.cooldownMs,
+      ...(result.correct
+        ? {
+            hasAnswered: true,
+            myAnswer: result.normalizedPlayerName ?? null,
+            status: "answering" as const,
+          }
+        : {}),
+    }),
+
+  addFootballConnectionFoundPlayer: (data) =>
+    set((state) => ({
+      footballConnectionFoundPlayers: state.footballConnectionFoundPlayers.some(
+        (entry) => entry.playerId === data.playerId
+      )
+        ? state.footballConnectionFoundPlayers
+        : [...state.footballConnectionFoundPlayers, data],
+    })),
+
+  addMysteryCareerClue: (clue) =>
+    set((state) => {
+      if (state.currentQuestion?.type !== "mysterycareer") return state;
+      if (state.currentQuestion.clubs.some((club) => club.order === clue.order)) return state;
+      return {
+        currentQuestion: {
+          ...state.currentQuestion,
+          clubs: [...state.currentQuestion.clubs, clue].sort((a, b) => a.order - b.order),
+        },
+      };
+    }),
+
+  setMysteryCareerGuessResult: (result) =>
+    set({
+      mysteryCareerGuessResult: result,
+      mysteryCareerAttemptsRemaining: result.attemptsRemaining,
+      mysteryCareerCooldownUntil: Date.now() + result.cooldownMs,
+      ...(result.correct
+        ? {
+            hasAnswered: true,
+            myAnswer: result.normalizedPlayerName ?? null,
+            status: "answering" as const,
+          }
+        : {}),
+    }),
+
+  addMysteryCareerFoundPlayer: (data) =>
+    set((state) => ({
+      mysteryCareerFoundPlayers: state.mysteryCareerFoundPlayers.some(
+        (entry) => entry.playerId === data.playerId
+      )
+        ? state.mysteryCareerFoundPlayers
+        : [...state.mysteryCareerFoundPlayers, data],
+    })),
+
   resetGame: () =>
     set({
       status: "idle",
@@ -522,6 +637,14 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       answeredPlayers: [],
       roundResult: null,
       allResults: [],
+      footballConnectionGuessResult: null,
+      footballConnectionAttemptsRemaining: 3,
+      footballConnectionCooldownUntil: 0,
+      footballConnectionFoundPlayers: [],
+      mysteryCareerGuessResult: null,
+      mysteryCareerAttemptsRemaining: 3,
+      mysteryCareerCooldownUntil: 0,
+      mysteryCareerFoundPlayers: [],
       drawingPhrase: null,
       drawingToGuess: null,
       drawingRevealState: null,

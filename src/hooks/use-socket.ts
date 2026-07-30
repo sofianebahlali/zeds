@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { getSocket, connectSocket, disconnectSocket, setSocketAuth, getSocketAuth } from "@/lib/socket";
 import { usePlayerStore, useRoomStore, useGameStore, useUIStore } from "@/stores";
-import type { Room, Player, GameSettings, GameMode, Question, GameResyncData, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction, SplitStealStartData, SplitStealRevealData, ListeRoundResult, ListeProgressData, PokestatsGuessResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult, PokeGeoValidationData, PokeGeoValidationSubmission, PokeGeoAnswerResultData, ReconnectFailureReason } from "@/types";
+import type { Room, Player, GameSettings, GameMode, Question, GameResyncData, RoundResult, DrawingPhase, DrawingPhaseData, DrawingRevealState, DrawingRoundResult, PetitBacValidationData, PetitBacValidationSubmission, GeoQuizValidationData, GeoQuizValidationSubmission, GeoQuizAnswerResultData, LangueValidationData, LangueValidationSubmission, LangueAnswerResultData, ParcoursValidationData, ParcoursValidationSubmission, ParcoursAnswerResultData, GuessGameValidationData, GuessGameValidationSubmission, GuessGameAnswerResultData, ConsensusValidationData, ConsensusAnswerResultData, TeamRoundData, TeamRoundResult, LineupGuessResult, LineupMatch, ChatMessage, AnswerReaction, SplitStealStartData, SplitStealRevealData, ListeRoundResult, ListeProgressData, PokestatsGuessResult, PokestatsHintData, PokestatsRoundResult, PokestatsAbandonResult, PokeGeoValidationData, PokeGeoValidationSubmission, PokeGeoAnswerResultData, ReconnectFailureReason, FootballConnectionGuessResult, MysteryCareerGuessResult } from "@/types";
 import { useChatStore } from "@/stores/chat-store";
 import { saveSessionRoom, clearSessionRoom, loadSessionRoom } from "@/lib/session";
 
@@ -396,6 +396,26 @@ function setupSocketListeners() {
       status: data.myAnswer !== null ? "answering" : "question",
     });
     useUIStore.getState().setScreen("game");
+  });
+
+  socket.on("footballconnection:guess_result", (result: FootballConnectionGuessResult) => {
+    useGameStore.getState().setFootballConnectionGuessResult(result);
+  });
+
+  socket.on("footballconnection:player_found", (data) => {
+    useGameStore.getState().addFootballConnectionFoundPlayer(data);
+  });
+
+  socket.on("mysterycareer:clue_revealed", (clue) => {
+    useGameStore.getState().addMysteryCareerClue(clue);
+  });
+
+  socket.on("mysterycareer:guess_result", (result: MysteryCareerGuessResult) => {
+    useGameStore.getState().setMysteryCareerGuessResult(result);
+  });
+
+  socket.on("mysterycareer:player_found", (data) => {
+    useGameStore.getState().addMysteryCareerFoundPlayer(data);
   });
 
   // Drawing events
@@ -834,6 +854,40 @@ export function useSocket() {
     }
   }, [socket]);
 
+  const submitFootballConnectionGuess = useCallback((guess: string) => {
+    const state = useGameStore.getState();
+    if (
+      state.currentQuestion?.type !== "footballconnection"
+      || state.timeRemaining <= 0
+      || state.hasAnswered
+      || state.footballConnectionAttemptsRemaining <= 0
+      || Date.now() < state.footballConnectionCooldownUntil
+      || !guess.trim()
+    ) {
+      return false;
+    }
+
+    socket.emit("footballconnection:submit_guess", guess.trim());
+    return true;
+  }, [socket]);
+
+  const submitMysteryCareerGuess = useCallback((guess: string) => {
+    const state = useGameStore.getState();
+    if (
+      state.currentQuestion?.type !== "mysterycareer"
+      || state.timeRemaining <= 0
+      || state.hasAnswered
+      || state.mysteryCareerAttemptsRemaining <= 0
+      || Date.now() < state.mysteryCareerCooldownUntil
+      || !guess.trim()
+    ) {
+      return false;
+    }
+
+    socket.emit("mysterycareer:submit_guess", guess.trim());
+    return true;
+  }, [socket]);
+
   const requestNextRound = useCallback(() => {
     socket.emit("game:request_next_round");
   }, [socket]);
@@ -1013,6 +1067,8 @@ export function useSocket() {
     kickPlayer,
     startGame: startGameAction,
     submitAnswer,
+    submitFootballConnectionGuess,
+    submitMysteryCareerGuess,
     requestNextRound,
     reconnect,
     submitDrawingSuggestion,

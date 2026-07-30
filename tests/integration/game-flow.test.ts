@@ -10,7 +10,7 @@ import {
   type TestClient,
 } from "../helpers/test-server";
 import { getGameEngine } from "../../server/socket-handlers";
-import type { OpenQuestion, Player, Question, RoundResult } from "../../src/types";
+import type { FootballConnectionQuestion, MissingClubQuestion, MysteryCareerQuestion, OpenQuestion, Player, Question, RoundResult } from "../../src/types";
 
 /**
  * These drive the real GameEngine end to end. Rounds are advanced with
@@ -65,6 +65,134 @@ describe("game flow", () => {
 
     const { question } = await startGame(host);
     expect((question as OpenQuestion).answers).toEqual([]);
+  });
+
+  it("plays Connexion Foot with retries, speed points and a full reveal", async () => {
+    const { host, code } = await createRoom(server, {
+      playlist: [{
+        mode: "footballconnection",
+        rounds: 1,
+        footballConnectionDifficulty: "mixed",
+        footballConnectionFormats: ["club_club", "club_country", "initials"],
+      }],
+    });
+    track(host);
+
+    const { question } = await startGame(host);
+    expect(question.type).toBe("footballconnection");
+    expect((question as FootballConnectionQuestion).answers).toEqual([]);
+    expect((question as FootballConnectionQuestion).answerCount).toBeGreaterThan(0);
+
+    const truth = loadedQuestion(server, code, question.id) as FootballConnectionQuestion;
+    const wrongResult = waitFor<[{ correct: boolean; attemptsRemaining: number }]>(
+      host,
+      "footballconnection:guess_result"
+    );
+    host.emit("footballconnection:submit_guess", "Personne Introuvable");
+    expect((await wrongResult)[0]).toMatchObject({ correct: false, attemptsRemaining: 2 });
+
+    await new Promise((resolve) => setTimeout(resolve, 1050));
+    const guessResult = waitFor<[{ correct: boolean; points?: number }]>(
+      host,
+      "footballconnection:guess_result"
+    );
+    const roundEnd = waitFor<[RoundResult]>(host, "game:round_end");
+    host.emit("footballconnection:submit_guess", truth.answers[0].playerName);
+
+    expect((await guessResult)[0]).toMatchObject({ correct: true });
+    const [result] = await roundEnd;
+    expect(result.question.type).toBe("footballconnection");
+    expect((result.question as FootballConnectionQuestion).answers.length).toBeGreaterThan(0);
+    expect(result.scores[0].points).toBeGreaterThanOrEqual(question.points);
+    expect(result.correctAnswer).toContain(truth.answers[0].playerName);
+  });
+
+  it("plays Carrière mystère with server-side progressive clues and a full reveal", async () => {
+    const { host, code } = await createRoom(server, {
+      playlist: [{
+        mode: "mysterycareer",
+        rounds: 1,
+        mysteryCareerDifficulty: "mixed",
+      }],
+    });
+    track(host);
+
+    const { question } = await startGame(host);
+    expect(question.type).toBe("mysterycareer");
+    const publicQuestion = question as MysteryCareerQuestion;
+    expect(publicQuestion.playerName).toBe("");
+    expect(publicQuestion.aliases).toEqual([]);
+    expect(publicQuestion.playerId).toBe(0);
+    expect(publicQuestion.clubs).toHaveLength(1);
+    expect(publicQuestion.totalClubs).toBeGreaterThanOrEqual(3);
+
+    const truth = loadedQuestion(server, code, question.id) as MysteryCareerQuestion;
+    const nextClue = waitFor<[MysteryCareerQuestion["clubs"][number]]>(
+      host,
+      "mysterycareer:clue_revealed",
+      3000
+    );
+    setRemainingTime(code, truth.timeLimit - truth.revealInterval);
+    expect((await nextClue)[0]).toMatchObject({ order: 1 });
+
+    const wrongResult = waitFor<[{ correct: boolean; attemptsRemaining: number }]>(
+      host,
+      "mysterycareer:guess_result"
+    );
+    host.emit("mysterycareer:submit_guess", "Joueur Imaginaire");
+    expect((await wrongResult)[0]).toMatchObject({ correct: false, attemptsRemaining: 2 });
+
+    await new Promise((resolve) => setTimeout(resolve, 950));
+    const guessResult = waitFor<[{ correct: boolean; normalizedPlayerName?: string; points?: number }]>(
+      host,
+      "mysterycareer:guess_result"
+    );
+    const roundEnd = waitFor<[RoundResult]>(host, "game:round_end");
+    host.emit("mysterycareer:submit_guess", truth.playerName);
+
+    expect((await guessResult)[0]).toMatchObject({
+      correct: true,
+      normalizedPlayerName: truth.playerName,
+    });
+    const [result] = await roundEnd;
+    expect(result.question.type).toBe("mysterycareer");
+    expect((result.question as MysteryCareerQuestion).clubs).toHaveLength(truth.clubs.length);
+    expect(result.correctAnswer).toBe(truth.playerName);
+    expect(result.scores[0].points).toBeGreaterThanOrEqual(question.points);
+  });
+
+  it("plays Club manquant without leaking the gap and reveals the full career", async () => {
+    const { host, code } = await createRoom(server, {
+      playlist: [{
+        mode: "missingclub",
+        rounds: 1,
+        missingClubDifficulty: "mixed",
+      }],
+    });
+    track(host);
+
+    const { question } = await startGame(host);
+    expect(question.type).toBe("missingclub");
+    const publicQuestion = question as MissingClubQuestion;
+    expect(publicQuestion.missingClubName).toBe("");
+    expect(publicQuestion.acceptedAnswers).toEqual([]);
+    expect(publicQuestion.clubs[publicQuestion.missingIndex]).toMatchObject({
+      teamId: 0,
+      name: "",
+      appearances: null,
+      goals: null,
+    });
+
+    const truth = loadedQuestion(server, code, question.id) as MissingClubQuestion;
+    const roundEnd = waitFor<[RoundResult]>(host, "game:round_end");
+    host.emit("game:submit_answer", truth.acceptedAnswers[0]);
+    const [result] = await roundEnd;
+
+    expect(result.correctAnswer).toBe(truth.missingClubName);
+    expect((result.question as MissingClubQuestion).clubs[truth.missingIndex].name)
+      .toBe(truth.missingClubName);
+    expect(result.answers[0].isCorrect).toBe(true);
+    expect(result.scores[0].points).toBeGreaterThan(question.points);
   });
 
   it("ends the round as soon as everyone has answered, and scores it", async () => {

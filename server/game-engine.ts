@@ -9,6 +9,11 @@ import type {
   OpenQuestion,
   EstimationQuestion,
   ParcoursQuestion,
+  FootballConnectionQuestion,
+  FootballConnectionGuessResult,
+  MysteryCareerQuestion,
+  MysteryCareerGuessResult,
+  MissingClubQuestion,
   DrawingQuestion,
   PetitBacQuestion,
   PetitBacValidationSubmission,
@@ -96,6 +101,11 @@ import {
   CITY_POINTS,
 } from "./countries";
 import { getQuestions as getDbQuestions, getTotalCount as getDbTotalCount } from "./question-db";
+import {
+  getFootballConnectionCandidates,
+  getMissingClubCandidates,
+  getMysteryCareerCandidates,
+} from "./football-db";
 
 type TypedIO = Server<ClientToServerEvents, ServerToClientEvents>;
 
@@ -193,6 +203,99 @@ const SAMPLE_QUESTIONS: Question[] = [
   },
 ];
 
+const FOOTBALL_CONNECTION_FALLBACK: FootballConnectionQuestion[] = [
+  {
+    id: "fc-fallback-ronaldo",
+    type: "footballconnection",
+    format: "club_club",
+    left: { id: null, label: "Manchester United", kind: "club" },
+    right: { id: null, label: "Real Madrid", kind: "club" },
+    difficulty: "easy",
+    answerCount: 1,
+    answers: [{
+      playerId: -1,
+      playerName: "Cristiano Ronaldo",
+      aliases: ["Cristiano Ronaldo", "Cristiano", "Ronaldo", "CR7"],
+      leftDetail: "2003–2009, 2021–2022",
+      rightDetail: "2009–2018",
+    }],
+    timeLimit: 12,
+    points: 100,
+  },
+  {
+    id: "fc-fallback-schweinsteiger",
+    type: "footballconnection",
+    format: "club_country",
+    left: { id: null, label: "Manchester United", kind: "club" },
+    right: { id: null, label: "Allemagne", kind: "country" },
+    difficulty: "easy",
+    answerCount: 1,
+    answers: [{
+      playerId: -2,
+      playerName: "Bastian Schweinsteiger",
+      aliases: ["Bastian Schweinsteiger", "Schweinsteiger", "Schweini"],
+      leftDetail: "2015–2017",
+      rightDetail: "Sélection nationale senior",
+    }],
+    timeLimit: 12,
+    points: 100,
+  },
+  {
+    id: "fc-fallback-messi",
+    type: "footballconnection",
+    format: "initials",
+    left: { id: null, label: "L", kind: "initial" },
+    right: { id: null, label: "M", kind: "initial" },
+    difficulty: "easy",
+    answerCount: 1,
+    answers: [{
+      playerId: -3,
+      playerName: "Lionel Messi",
+      aliases: ["Lionel Messi", "Messi", "Leo Messi"],
+    }],
+    timeLimit: 12,
+    points: 100,
+  },
+];
+
+const MYSTERY_CAREER_FALLBACK: MysteryCareerQuestion[] = [
+  {
+    id: "mc-fallback-ronaldo",
+    type: "mysterycareer",
+    playerId: -1,
+    playerName: "Cristiano Ronaldo",
+    aliases: ["Cristiano Ronaldo", "Cristiano", "Ronaldo", "CR7"],
+    sportingCountry: "Portugal",
+    clubs: [
+      { teamId: -1, name: "Sporting CP", fromYear: "2002", toYear: "2003", appearances: 31, goals: 5, order: 0 },
+      { teamId: -2, name: "Manchester United", fromYear: "2003", toYear: "2022", appearances: 346, goals: 145, order: 1 },
+      { teamId: -3, name: "Real Madrid", fromYear: "2009", toYear: "2018", appearances: 442, goals: 452, order: 2 },
+      { teamId: -4, name: "Juventus", fromYear: "2018", toYear: "2021", appearances: 134, goals: 101, order: 3 },
+      { teamId: -5, name: "Al-Nassr", fromYear: "2023", toYear: null, appearances: null, goals: null, order: 4 },
+    ],
+    totalClubs: 5,
+    revealInterval: 3,
+    difficulty: "easy",
+    timeLimit: 24,
+    points: 100,
+  },
+];
+
+const MISSING_CLUB_FALLBACK: MissingClubQuestion[] = [{
+  id: "missing-fallback-ronaldo-real",
+  type: "missingclub",
+  playerId: -1,
+  playerName: "Cristiano Ronaldo",
+  sportingCountry: "Portugal",
+  clubs: MYSTERY_CAREER_FALLBACK[0].clubs,
+  missingIndex: 2,
+  missingClubName: "Real Madrid",
+  acceptedAnswers: ["Real Madrid", "Real", "Madrid"],
+  difficulty: "easy",
+  timeLimit: 20,
+  points: 100,
+}];
+
 const PETITBAC_LETTERS = "ABCDEFGHJKLMNOPRSTV".split("");
 
 export class GameEngine {
@@ -211,6 +314,20 @@ export class GameEngine {
   private questions: Question[] = [];
   private disconnectedPlayers: Set<string> = new Set();
   private usedQuestionDbIds: Set<number> = new Set(); // Track used SQLite question IDs per session
+  private roundStartedAtMs: number = 0;
+
+  // Connexion Foot state
+  private footballConnectionAttempts: Map<string, string[]> = new Map();
+  private footballConnectionLastAttemptAt: Map<string, number> = new Map();
+  private footballConnectionFirstFinder: string | null = null;
+  private footballConnectionGraceTimer: NodeJS.Timeout | null = null;
+
+  // Carrière mystère state
+  private mysteryCareerAttempts: Map<string, string[]> = new Map();
+  private mysteryCareerLastAttemptAt: Map<string, number> = new Map();
+  private mysteryCareerFirstFinder: string | null = null;
+  private mysteryCareerGraceTimer: NodeJS.Timeout | null = null;
+  private mysteryCareerRevealedClues: number = 1;
 
   // Playlist mode tracking
   private currentMode: string = "";
@@ -603,6 +720,164 @@ export class GameEngine {
     return questions;
   }
 
+  private selectFootballConnectionQuestions(
+    count: number,
+    config?: GameModeConfig
+  ): FootballConnectionQuestion[] {
+    const requestedFormats = config?.footballConnectionFormats?.length
+      ? config.footballConnectionFormats
+      : ["club_club", "club_country", "initials"] as const;
+    const difficulty = config?.footballConnectionDifficulty ?? "mixed";
+    const fullPool = getFootballConnectionCandidates({
+      formats: requestedFormats,
+      preferredDifficulty: difficulty,
+      limit: Math.max(2_000, count * 400),
+    });
+    const source = fullPool.length > 0 ? fullPool : FOOTBALL_CONNECTION_FALLBACK;
+    const requestedFormatPool = source.filter((question) => requestedFormats.includes(question.format));
+    const formatPool = requestedFormatPool.length > 0 ? requestedFormatPool : source;
+    const exactPool = formatPool.filter(
+      (question) => difficulty === "mixed" || question.difficulty === difficulty
+    );
+    // Keep the requested formats strict. If a narrow bucket cannot fill the
+    // whole segment (e.g. ten "initiales faciles"), complete it with adjacent
+    // difficulties rather than silently dealing fewer rounds or another format.
+    const pool = exactPool.length >= count
+      ? exactPool
+      : [...exactPool, ...formatPool.filter((question) => !exactPool.includes(question))];
+
+    const recentIds = new Set(this.room.recentFootballConnectionIds ?? []);
+    let available = pool.filter((question) => !recentIds.has(question.id));
+    if (available.length < count) {
+      // A very long-running room eventually exhausts a bucket. Re-open the
+      // oldest history while still preventing duplicates inside this segment.
+      available = [...pool];
+    }
+
+    const formatPattern = [
+      "club_club", "club_country", "club_club", "initials", "club_club",
+      "club_country", "club_club", "club_country", "club_club", "initials",
+    ] as const;
+    const difficultyPattern = [
+      "easy", "medium", "medium", "hard", "medium",
+      "easy", "medium", "hard", "medium", "hard",
+    ] as const;
+    const selected: FootballConnectionQuestion[] = [];
+
+    for (let index = 0; index < count && selected.length < available.length; index++) {
+      const targetFormat = formatPattern[index % formatPattern.length];
+      const targetDifficulty = difficulty === "mixed"
+        ? difficultyPattern[index % difficultyPattern.length]
+        : difficulty;
+      const recentQuestions = selected.slice(-5);
+      const recentClueQuestions = selected.slice(-3);
+
+      const candidates = available.filter(
+        (question) => !selected.some((picked) => picked.id === question.id)
+      );
+      if (candidates.length === 0) break;
+
+      const score = (question: FootballConnectionQuestion): number => {
+        let value = Math.random() * 10;
+        if (question.format === targetFormat) value += 30;
+        if (question.difficulty === targetDifficulty) value += 45;
+
+        const clueIds = [question.left.id, question.right.id].filter(
+          (id): id is number => id !== null
+        );
+        for (const previous of recentClueQuestions) {
+          const previousIds = [previous.left.id, previous.right.id];
+          if (clueIds.some((id) => previousIds.includes(id))) value -= 45;
+        }
+
+        const answerIds = new Set(question.answers.map((answer) => answer.playerId));
+        for (const previous of recentQuestions) {
+          if (previous.answers.some((answer) => answerIds.has(answer.playerId))) value -= 55;
+        }
+        return value;
+      };
+
+      const best = candidates
+        .map((question) => ({ question, value: score(question) }))
+        .sort((a, b) => b.value - a.value)[0];
+      selected.push(best.question);
+    }
+
+    const history = [
+      ...(this.room.recentFootballConnectionIds ?? []),
+      ...selected.map((question) => question.id),
+    ];
+    this.room.recentFootballConnectionIds = Array.from(new Set(history)).slice(-200);
+    return selected;
+  }
+
+  private selectMysteryCareerQuestions(
+    count: number,
+    config?: GameModeConfig
+  ): MysteryCareerQuestion[] {
+    const difficulty = config?.mysteryCareerDifficulty ?? "mixed";
+    const candidates = getMysteryCareerCandidates({
+      preferredDifficulty: difficulty,
+      limit: Math.max(300, count * 80),
+    });
+    const source = candidates.length > 0 ? candidates : MYSTERY_CAREER_FALLBACK;
+    const exact = source.filter(
+      (question) => difficulty === "mixed" || question.difficulty === difficulty
+    );
+    const pool = exact.length >= count
+      ? exact
+      : [...exact, ...source.filter((question) => !exact.includes(question))];
+    const recent = new Set(this.room.recentMysteryCareerPlayerIds ?? []);
+    let available = pool.filter((question) => !recent.has(question.playerId));
+    if (available.length < count) available = [...pool];
+
+    const selected = [...available].sort(() => Math.random() - 0.5).slice(0, count);
+    this.room.recentMysteryCareerPlayerIds = Array.from(new Set([
+      ...(this.room.recentMysteryCareerPlayerIds ?? []),
+      ...selected.map((question) => question.playerId),
+    ])).slice(-200);
+    return selected;
+  }
+
+  private selectMissingClubQuestions(
+    count: number,
+    config?: GameModeConfig
+  ): MissingClubQuestion[] {
+    const difficulty = config?.missingClubDifficulty ?? "mixed";
+    const candidates = getMissingClubCandidates({
+      preferredDifficulty: difficulty,
+      limit: Math.max(300, count * 80),
+    });
+    const source = candidates.length > 0 ? candidates : MISSING_CLUB_FALLBACK;
+    const exact = source.filter(
+      (question) => difficulty === "mixed" || question.difficulty === difficulty
+    );
+    const pool = exact.length >= count
+      ? exact
+      : [...exact, ...source.filter((question) => !exact.includes(question))];
+    const recent = new Set(this.room.recentMissingClubQuestionIds ?? []);
+    const recentPlayers = new Set(this.room.recentMissingClubPlayerIds ?? []);
+    let available = pool.filter(
+      (question) => !recent.has(question.id) && !recentPlayers.has(question.playerId)
+    );
+    if (available.length < count) available = [...pool];
+    const selected: MissingClubQuestion[] = [];
+    for (const question of [...available].sort(() => Math.random() - 0.5)) {
+      if (selected.some((picked) => picked.playerId === question.playerId)) continue;
+      selected.push(question);
+      if (selected.length >= count) break;
+    }
+    this.room.recentMissingClubQuestionIds = Array.from(new Set([
+      ...(this.room.recentMissingClubQuestionIds ?? []),
+      ...selected.map((question) => question.id),
+    ])).slice(-200);
+    this.room.recentMissingClubPlayerIds = Array.from(new Set([
+      ...(this.room.recentMissingClubPlayerIds ?? []),
+      ...selected.map((question) => question.playerId),
+    ])).slice(-200);
+    return selected;
+  }
+
   /**
    * Load questions for a specific mode and return N shuffled questions
    */
@@ -625,6 +900,12 @@ export class GameEngine {
         pool = GameEngine.loadParcoursQuestions();
         if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
         break;
+      case "footballconnection":
+        return this.selectFootballConnectionQuestions(count, config);
+      case "mysterycareer":
+        return this.selectMysteryCareerQuestions(count, config);
+      case "missingclub":
+        return this.selectMissingClubQuestions(count, config);
       case "geoquiz":
         pool = GameEngine.loadGeoQuizQuestions();
         if (pool.length === 0) pool = [...SAMPLE_QUESTIONS];
@@ -1069,6 +1350,21 @@ export class GameEngine {
     this.roundEnding = false; // Reset guard for the new round
     this.currentRound++;
     this.answers.clear();
+    this.footballConnectionAttempts.clear();
+    this.footballConnectionLastAttemptAt.clear();
+    this.footballConnectionFirstFinder = null;
+    if (this.footballConnectionGraceTimer) {
+      clearTimeout(this.footballConnectionGraceTimer);
+      this.footballConnectionGraceTimer = null;
+    }
+    if (this.mysteryCareerGraceTimer) {
+      clearTimeout(this.mysteryCareerGraceTimer);
+      this.mysteryCareerGraceTimer = null;
+    }
+    this.mysteryCareerAttempts.clear();
+    this.mysteryCareerLastAttemptAt.clear();
+    this.mysteryCareerFirstFinder = null;
+    this.mysteryCareerRevealedClues = 1;
     this.roomManager.resetRoundScores(this.room.code);
 
     if (this.currentRound > this.questions.length) {
@@ -1176,6 +1472,7 @@ export class GameEngine {
 
     this.currentQuestion = nextQuestion;
     this.timeRemaining = this.currentQuestion.timeLimit;
+    this.roundStartedAtMs = Date.now();
 
     // Send question to all players (sanitized to hide answers)
     const questionForClient = this.sanitizeQuestionForClient(this.currentQuestion);
@@ -1206,6 +1503,40 @@ export class GameEngine {
         ...question,
         playerName: "", // Hide the player name
         acceptedAnswers: [], // Hide accepted answers
+      };
+    }
+    if (question.type === "footballconnection") {
+      return {
+        ...question,
+        answers: [],
+      };
+    }
+    if (question.type === "mysterycareer") {
+      return {
+        ...question,
+        playerId: 0,
+        playerName: "",
+        aliases: [],
+        sportingCountry: null,
+        clubs: question.clubs.slice(0, 1),
+      };
+    }
+    if (question.type === "missingclub") {
+      return {
+        ...question,
+        clubs: question.clubs.map((club, index) =>
+          index === question.missingIndex
+            ? {
+                ...club,
+                teamId: 0,
+                name: "",
+                appearances: null,
+                goals: null,
+              }
+            : club
+        ),
+        missingClubName: "",
+        acceptedAnswers: [],
       };
     }
     if (question.type === "geoquiz") {
@@ -1370,6 +1701,10 @@ export class GameEngine {
   private startTimer(): void {
     // Safety: stop any existing timer to prevent leaked intervals
     this.stopTimer();
+    if (this.footballConnectionGraceTimer) {
+      clearTimeout(this.footballConnectionGraceTimer);
+      this.footballConnectionGraceTimer = null;
+    }
     this.timerPaused = false;
     // Nobody is around to play this round — don't burn it down on an empty
     // room (see pauseTimerIfRoomEmpty).
@@ -1380,6 +1715,21 @@ export class GameEngine {
     this.timerInterval = setInterval(() => {
       this.timeRemaining--;
       this.io.to(this.room.code).emit("game:time_update", this.timeRemaining);
+
+      if (this.currentQuestion?.type === "mysterycareer") {
+        const elapsed = this.currentQuestion.timeLimit - this.timeRemaining;
+        const targetCount = Math.min(
+          this.currentQuestion.clubs.length,
+          1 + Math.floor(elapsed / this.currentQuestion.revealInterval)
+        );
+        while (this.mysteryCareerRevealedClues < targetCount) {
+          const clue = this.currentQuestion.clubs[this.mysteryCareerRevealedClues];
+          this.mysteryCareerRevealedClues++;
+          if (clue) {
+            this.io.to(this.room.code).emit("mysterycareer:clue_revealed", clue);
+          }
+        }
+      }
 
       if (this.timeRemaining <= 0) {
         if (this.currentQuestion?.type === "drawing") {
@@ -1462,6 +1812,16 @@ export class GameEngine {
   submitAnswer(playerId: string, answerText: string): void {
     if (!this.currentQuestion) return;
 
+    if (this.currentQuestion.type === "footballconnection") {
+      this.submitFootballConnectionGuess(playerId, answerText);
+      return;
+    }
+
+    if (this.currentQuestion.type === "mysterycareer") {
+      this.submitMysteryCareerGuess(playerId, answerText);
+      return;
+    }
+
     // Lineup mode: continuous multi-answer per round
     if (this.currentQuestion.type === "lineup") {
       this.handleLineupGuess(playerId, answerText);
@@ -1534,6 +1894,247 @@ export class GameEngine {
     }
   }
 
+  submitFootballConnectionGuess(playerId: string, rawGuess: string): void {
+    if (
+      !this.currentQuestion
+      || this.currentQuestion.type !== "footballconnection"
+      || this.roundEnding
+      || this.timeRemaining <= 0
+    ) return;
+
+    const socketId = this.roomManager.getSocketIdFromPlayerId(playerId);
+    if (!socketId) return;
+    const question = this.currentQuestion;
+
+    if (this.answers.has(playerId)) {
+      const answer = this.answers.get(playerId)!;
+      this.io.to(socketId).emit("footballconnection:guess_result", {
+        correct: true,
+        attemptsRemaining: Math.max(0, 3 - (this.footballConnectionAttempts.get(playerId)?.length ?? 0)),
+        cooldownMs: 0,
+        normalizedPlayerName: answer.answer,
+        points: answer.points,
+      });
+      return;
+    }
+
+    const guess = rawGuess.trim().slice(0, 80);
+    if (!guess) return;
+    const attempts = this.footballConnectionAttempts.get(playerId) ?? [];
+    if (attempts.length >= 3) {
+      this.io.to(socketId).emit("footballconnection:guess_result", {
+        correct: false,
+        attemptsRemaining: 0,
+        cooldownMs: 0,
+      });
+      return;
+    }
+
+    const now = Date.now();
+    const previousAttemptAt = this.footballConnectionLastAttemptAt.get(playerId) ?? 0;
+    const cooldownRemaining = Math.max(0, 1000 - (now - previousAttemptAt));
+    if (cooldownRemaining > 0) {
+      this.io.to(socketId).emit("footballconnection:guess_result", {
+        correct: false,
+        attemptsRemaining: 3 - attempts.length,
+        cooldownMs: cooldownRemaining,
+      });
+      return;
+    }
+
+    attempts.push(guess);
+    this.footballConnectionAttempts.set(playerId, attempts);
+    this.footballConnectionLastAttemptAt.set(playerId, now);
+
+    const matched = question.answers.find((candidate) =>
+      GameEngine.fuzzyMatchAnswer(guess, candidate.aliases)
+    );
+    if (!matched) {
+      const result: FootballConnectionGuessResult = {
+        correct: false,
+        attemptsRemaining: 3 - attempts.length,
+        cooldownMs: attempts.length < 3 ? 1000 : 0,
+      };
+      this.io.to(socketId).emit("footballconnection:guess_result", result);
+      if (this.everyActiveFootballConnectionPlayerFinished()) this.endRound();
+      return;
+    }
+
+    const responseTime = Math.max(0, (now - this.roundStartedAtMs) / 1000);
+    const points = this.getFootballConnectionPoints(question, responseTime);
+    const isFirst = this.footballConnectionFirstFinder === null;
+    if (isFirst) this.footballConnectionFirstFinder = playerId;
+
+    this.answers.set(playerId, {
+      playerId,
+      questionId: question.id,
+      answer: matched.playerName,
+      timestamp: now,
+      responseTime,
+      isCorrect: true,
+      points,
+    });
+
+    this.io.to(socketId).emit("footballconnection:guess_result", {
+      correct: true,
+      attemptsRemaining: 3 - attempts.length,
+      cooldownMs: 0,
+      normalizedPlayerName: matched.playerName,
+      points,
+    });
+    const player = this.room.players.find((candidate) => candidate.id === playerId);
+    this.io.to(this.room.code).emit("footballconnection:player_found", {
+      playerId,
+      playerName: player?.name ?? "?",
+      points,
+      isFirst,
+    });
+    this.io.to(this.room.code).emit("game:player_answered", playerId);
+
+    if (this.everyActiveFootballConnectionPlayerFinished()) {
+      this.endRound();
+      return;
+    }
+
+    if (isFirst && !this.footballConnectionGraceTimer) {
+      this.footballConnectionGraceTimer = setTimeout(() => {
+        this.footballConnectionGraceTimer = null;
+        this.endRound();
+      }, 3000);
+    }
+  }
+
+  private everyActiveFootballConnectionPlayerFinished(): boolean {
+    const activePlayers = this.getActivePlayers();
+    return activePlayers.length > 0 && activePlayers.every((active) =>
+      this.answers.has(active.id)
+      || (this.footballConnectionAttempts.get(active.id)?.length ?? 0) >= 3
+    );
+  }
+
+  submitMysteryCareerGuess(playerId: string, rawGuess: string): void {
+    if (
+      !this.currentQuestion
+      || this.currentQuestion.type !== "mysterycareer"
+      || this.roundEnding
+      || this.timeRemaining <= 0
+    ) return;
+
+    const socketId = this.roomManager.getSocketIdFromPlayerId(playerId);
+    if (!socketId) return;
+    const question = this.currentQuestion;
+    const attempts = this.mysteryCareerAttempts.get(playerId) ?? [];
+
+    if (this.answers.has(playerId)) {
+      const answer = this.answers.get(playerId)!;
+      this.io.to(socketId).emit("mysterycareer:guess_result", {
+        correct: true,
+        attemptsRemaining: Math.max(0, 3 - attempts.length),
+        cooldownMs: 0,
+        normalizedPlayerName: answer.answer,
+        points: answer.points,
+      });
+      return;
+    }
+    if (attempts.length >= 3 || !rawGuess.trim()) return;
+
+    const now = Date.now();
+    const previousAttemptAt = this.mysteryCareerLastAttemptAt.get(playerId) ?? 0;
+    const cooldownMs = Math.max(0, 900 - (now - previousAttemptAt));
+    if (cooldownMs > 0) {
+      this.io.to(socketId).emit("mysterycareer:guess_result", {
+        correct: false,
+        attemptsRemaining: 3 - attempts.length,
+        cooldownMs,
+      });
+      return;
+    }
+
+    const guess = rawGuess.trim().slice(0, 80);
+    attempts.push(guess);
+    this.mysteryCareerAttempts.set(playerId, attempts);
+    this.mysteryCareerLastAttemptAt.set(playerId, now);
+    const correct = GameEngine.fuzzyMatchAnswer(guess, question.aliases, 0.82);
+
+    if (!correct) {
+      this.io.to(socketId).emit("mysterycareer:guess_result", {
+        correct: false,
+        attemptsRemaining: 3 - attempts.length,
+        cooldownMs: attempts.length < 3 ? 900 : 0,
+      });
+      if (this.everyActiveMysteryCareerPlayerFinished()) this.endRound();
+      return;
+    }
+
+    const responseTime = question.timeLimit - this.timeRemaining;
+    const points = this.getMysteryCareerPoints(question, responseTime);
+    const isFirst = this.mysteryCareerFirstFinder === null;
+    if (isFirst) this.mysteryCareerFirstFinder = playerId;
+    this.answers.set(playerId, {
+      playerId,
+      questionId: question.id,
+      answer: question.playerName,
+      timestamp: now,
+      responseTime,
+      isCorrect: true,
+      points,
+    });
+    this.io.to(socketId).emit("mysterycareer:guess_result", {
+      correct: true,
+      attemptsRemaining: 3 - attempts.length,
+      cooldownMs: 0,
+      normalizedPlayerName: question.playerName,
+      points,
+    });
+    const player = this.room.players.find((candidate) => candidate.id === playerId);
+    this.io.to(this.room.code).emit("mysterycareer:player_found", {
+      playerId,
+      playerName: player?.name ?? "?",
+      points,
+      isFirst,
+    });
+    this.io.to(this.room.code).emit("game:player_answered", playerId);
+
+    if (this.everyActiveMysteryCareerPlayerFinished()) {
+      this.endRound();
+      return;
+    }
+    if (isFirst && !this.mysteryCareerGraceTimer) {
+      this.mysteryCareerGraceTimer = setTimeout(() => {
+        this.mysteryCareerGraceTimer = null;
+        this.endRound();
+      }, 4000);
+    }
+  }
+
+  private everyActiveMysteryCareerPlayerFinished(): boolean {
+    const activePlayers = this.getActivePlayers();
+    return activePlayers.length > 0 && activePlayers.every((active) =>
+      this.answers.has(active.id)
+      || (this.mysteryCareerAttempts.get(active.id)?.length ?? 0) >= 3
+    );
+  }
+
+  private getMysteryCareerPoints(
+    question: MysteryCareerQuestion,
+    responseTime: number
+  ): number {
+    const revealed = Math.min(
+      question.clubs.length,
+      1 + Math.floor(Math.max(0, responseTime) / question.revealInterval)
+    );
+    const unrevealed = Math.max(0, question.clubs.length - revealed);
+    return question.points + Math.min(150, unrevealed * 20);
+  }
+
+  private getFootballConnectionPoints(
+    question: FootballConnectionQuestion,
+    responseTime: number
+  ): number {
+    const remainingRatio = Math.max(0, Math.min(1, 1 - responseTime / question.timeLimit));
+    return question.points + Math.round(question.points * 0.5 * remainingRatio);
+  }
+
   /**
    * True when no connected player is still owed a chance to answer.
    */
@@ -1555,6 +2156,14 @@ export class GameEngine {
     this.roundStarting = false; // Allow next round to start
 
     this.stopTimer();
+    if (this.footballConnectionGraceTimer) {
+      clearTimeout(this.footballConnectionGraceTimer);
+      this.footballConnectionGraceTimer = null;
+    }
+    if (this.mysteryCareerGraceTimer) {
+      clearTimeout(this.mysteryCareerGraceTimer);
+      this.mysteryCareerGraceTimer = null;
+    }
 
     // Clear petit bac stop timer if active
     if (this.petitBacStopTimer) {
@@ -1734,6 +2343,18 @@ export class GameEngine {
     const scores: { playerId: string; points: number; total: number }[] = [];
     let winner: Player | undefined;
 
+    if (this.currentQuestion.type === "footballconnection") {
+      return this.calculateFootballConnectionScores(this.currentQuestion);
+    }
+
+    if (this.currentQuestion.type === "mysterycareer") {
+      return this.calculateMysteryCareerScores(this.currentQuestion);
+    }
+
+    if (this.currentQuestion.type === "missingclub") {
+      return this.calculateMissingClubScores(this.currentQuestion);
+    }
+
     if (this.currentQuestion.type === "estimation") {
       return this.calculateEstimationScores(correctAnswer, scores);
     }
@@ -1808,6 +2429,167 @@ export class GameEngine {
       question: this.currentQuestion,
       answers: Array.from(this.answers.values()),
       correctAnswer,
+      winner,
+      scores,
+    };
+  }
+
+  private calculateFootballConnectionScores(
+    question: FootballConnectionQuestion
+  ): RoundResult {
+    const scores: { playerId: string; points: number; total: number }[] = [];
+    const resultAnswers: Answer[] = [];
+    let winner: Player | undefined;
+    let fastestTime = Infinity;
+
+    for (const player of this.room.players) {
+      const correct = this.answers.get(player.id);
+      let points = 0;
+      if (correct?.isCorrect) {
+        points = correct.points ?? this.getFootballConnectionPoints(
+          question,
+          correct.responseTime ?? question.timeLimit
+        );
+        correct.points = points;
+        resultAnswers.push(correct);
+        if ((correct.responseTime ?? Infinity) < fastestTime) {
+          fastestTime = correct.responseTime ?? Infinity;
+          winner = player;
+        }
+      } else {
+        const attempts = this.footballConnectionAttempts.get(player.id) ?? [];
+        if (attempts.length > 0) {
+          resultAnswers.push({
+            playerId: player.id,
+            questionId: question.id,
+            answer: attempts[attempts.length - 1],
+            timestamp: this.footballConnectionLastAttemptAt.get(player.id) ?? Date.now(),
+            isCorrect: false,
+            points: 0,
+          });
+        }
+      }
+
+      const updated = this.roomManager.updatePlayerScore(player.id, points);
+      scores.push({
+        playerId: player.id,
+        points,
+        total: updated?.score ?? player.score,
+      });
+    }
+
+    const displayedAnswers = question.answers.map((answer) => answer.playerName);
+    const correctAnswer = displayedAnswers.length <= 5
+      ? displayedAnswers.join(" · ")
+      : `${displayedAnswers.slice(0, 5).join(" · ")} · +${displayedAnswers.length - 5}`;
+
+    return {
+      roundNumber: this.currentRound,
+      question,
+      answers: resultAnswers,
+      correctAnswer,
+      winner,
+      scores,
+    };
+  }
+
+  private calculateMysteryCareerScores(
+    question: MysteryCareerQuestion
+  ): RoundResult {
+    const scores: { playerId: string; points: number; total: number }[] = [];
+    const resultAnswers: Answer[] = [];
+    let winner: Player | undefined;
+    let fastestTime = Infinity;
+
+    for (const player of this.room.players) {
+      const correct = this.answers.get(player.id);
+      let points = 0;
+      if (correct?.isCorrect) {
+        points = correct.points ?? this.getMysteryCareerPoints(
+          question,
+          correct.responseTime ?? question.timeLimit
+        );
+        correct.points = points;
+        resultAnswers.push(correct);
+        if ((correct.responseTime ?? Infinity) < fastestTime) {
+          fastestTime = correct.responseTime ?? Infinity;
+          winner = player;
+        }
+      } else {
+        const attempts = this.mysteryCareerAttempts.get(player.id) ?? [];
+        if (attempts.length > 0) {
+          resultAnswers.push({
+            playerId: player.id,
+            questionId: question.id,
+            answer: attempts[attempts.length - 1],
+            timestamp: this.mysteryCareerLastAttemptAt.get(player.id) ?? Date.now(),
+            isCorrect: false,
+            points: 0,
+          });
+        }
+      }
+
+      const updated = this.roomManager.updatePlayerScore(player.id, points);
+      scores.push({
+        playerId: player.id,
+        points,
+        total: updated?.score ?? player.score,
+      });
+    }
+
+    return {
+      roundNumber: this.currentRound,
+      question,
+      answers: resultAnswers,
+      correctAnswer: question.playerName,
+      winner,
+      scores,
+    };
+  }
+
+  private calculateMissingClubScores(
+    question: MissingClubQuestion
+  ): RoundResult {
+    const scores: { playerId: string; points: number; total: number }[] = [];
+    let winner: Player | undefined;
+    let fastestTime = Infinity;
+
+    for (const player of this.room.players) {
+      const answer = this.answers.get(player.id);
+      let points = 0;
+      if (answer) {
+        answer.isCorrect = GameEngine.fuzzyMatchAnswer(
+          answer.answer,
+          question.acceptedAnswers,
+          0.78
+        );
+        if (answer.isCorrect) {
+          const responseTime = answer.responseTime ?? question.timeLimit;
+          const remainingRatio = Math.max(
+            0,
+            Math.min(1, 1 - responseTime / question.timeLimit)
+          );
+          points = question.points + Math.round(question.points * 0.5 * remainingRatio);
+          answer.points = points;
+          if (responseTime < fastestTime) {
+            fastestTime = responseTime;
+            winner = player;
+          }
+        }
+      }
+      const updated = this.roomManager.updatePlayerScore(player.id, points);
+      scores.push({
+        playerId: player.id,
+        points,
+        total: updated?.score ?? player.score,
+      });
+    }
+
+    return {
+      roundNumber: this.currentRound,
+      question,
+      answers: Array.from(this.answers.values()),
+      correctAnswer: question.missingClubName,
       winner,
       scores,
     };
@@ -2410,6 +3192,14 @@ export class GameEngine {
       }
       case "parcours":
         return (this.currentQuestion as ParcoursQuestion).playerName;
+      case "footballconnection":
+        return (this.currentQuestion as FootballConnectionQuestion).answers
+          .map((answer) => answer.playerName)
+          .join(" · ");
+      case "mysterycareer":
+        return (this.currentQuestion as MysteryCareerQuestion).playerName;
+      case "missingclub":
+        return (this.currentQuestion as MissingClubQuestion).missingClubName;
       case "petitbac":
         return (this.currentQuestion as PetitBacQuestion).letter;
       case "geoquiz":
@@ -2518,6 +3308,16 @@ export class GameEngine {
       case "parcours":
         // Parcours scoring is handled manually by host validation
         return false;
+      case "footballconnection":
+        // Continuous guesses are handled in submitFootballConnectionGuess.
+        return false;
+      case "mysterycareer":
+        // Continuous guesses are handled in submitMysteryCareerGuess.
+        return false;
+      case "missingclub": {
+        const q = this.currentQuestion as MissingClubQuestion;
+        return GameEngine.fuzzyMatchAnswer(answer, q.acceptedAnswers, 0.78);
+      }
       case "maths": {
         const q = this.currentQuestion as MathsQuestion;
         const correctOption = q.options[q.correctIndex].toLowerCase();
@@ -6143,6 +6943,12 @@ export class GameEngine {
       if (activeUnresolved.length === 0) {
         this.endRound();
       }
+    } else if (
+      !this.roundEnding
+      && this.currentQuestion?.type === "mysterycareer"
+      && this.everyActiveMysteryCareerPlayerFinished()
+    ) {
+      this.endRound();
     } else if (!this.roundEnding && this.everyActivePlayerAnswered()) {
       this.endRound();
     }
@@ -6183,14 +6989,55 @@ export class GameEngine {
     if (this.currentQuestion.type === "drawing" || this.currentQuestion.type === "splitsteal") return;
 
     const myAnswer = this.answers.get(playerId);
+    let publicQuestion = this.sanitizeQuestionForClient(this.currentQuestion);
+    if (
+      this.currentQuestion.type === "mysterycareer"
+      && publicQuestion.type === "mysterycareer"
+    ) {
+      publicQuestion = {
+        ...publicQuestion,
+        clubs: this.currentQuestion.clubs.slice(0, this.mysteryCareerRevealedClues),
+      };
+    }
     this.io.to(socketId).emit("game:resync", {
       round: this.currentRound,
       totalRounds: this.questions.length,
-      question: this.sanitizeQuestionForClient(this.currentQuestion),
+      question: publicQuestion,
       timeRemaining: this.timeRemaining,
       answeredPlayerIds: Array.from(this.answers.keys()),
       myAnswer: myAnswer ? myAnswer.answer : null,
     });
+
+    if (this.currentQuestion.type === "footballconnection") {
+      const attempts = this.footballConnectionAttempts.get(playerId) ?? [];
+      this.io.to(socketId).emit("footballconnection:guess_result", {
+        correct: Boolean(myAnswer?.isCorrect),
+        attemptsRemaining: Math.max(0, 3 - attempts.length),
+        cooldownMs: 0,
+        normalizedPlayerName: myAnswer?.isCorrect ? myAnswer.answer : undefined,
+        points: myAnswer?.isCorrect ? myAnswer.points : undefined,
+      });
+    }
+    if (this.currentQuestion.type === "mysterycareer") {
+      const attempts = this.mysteryCareerAttempts.get(playerId) ?? [];
+      this.io.to(socketId).emit("mysterycareer:guess_result", {
+        correct: Boolean(myAnswer?.isCorrect),
+        attemptsRemaining: Math.max(0, 3 - attempts.length),
+        cooldownMs: 0,
+        normalizedPlayerName: myAnswer?.isCorrect ? myAnswer.answer : undefined,
+        points: myAnswer?.isCorrect ? myAnswer.points : undefined,
+      });
+      for (const [foundPlayerId, answer] of this.answers) {
+        if (!answer.isCorrect) continue;
+        const player = this.room.players.find((candidate) => candidate.id === foundPlayerId);
+        this.io.to(socketId).emit("mysterycareer:player_found", {
+          playerId: foundPlayerId,
+          playerName: player?.name ?? "?",
+          points: answer.points ?? 0,
+          isFirst: foundPlayerId === this.mysteryCareerFirstFinder,
+        });
+      }
+    }
   }
 
   /**
@@ -6198,6 +7045,14 @@ export class GameEngine {
    */
   destroy(): void {
     this.stopTimer();
+    if (this.footballConnectionGraceTimer) {
+      clearTimeout(this.footballConnectionGraceTimer);
+      this.footballConnectionGraceTimer = null;
+    }
+    if (this.mysteryCareerGraceTimer) {
+      clearTimeout(this.mysteryCareerGraceTimer);
+      this.mysteryCareerGraceTimer = null;
+    }
     this.timerPaused = false;
     this.cancelAutoAdvance();
     if (this.countdownInterval) {

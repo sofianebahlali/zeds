@@ -4,7 +4,7 @@ import { Server } from "socket.io";
 import { io as ioClient, type Socket as ClientSocket } from "socket.io-client";
 import { RoomManager } from "../../server/room-manager";
 import { setupSocketHandlers } from "../../server/socket-handlers";
-import type { ClientToServerEvents, ServerToClientEvents } from "../../src/types";
+import type { ClientToServerEvents, ServerToClientEvents, GameModeConfig } from "../../src/types";
 
 /**
  * A real Socket.IO server wired to the real handlers, on an ephemeral port.
@@ -130,7 +130,7 @@ export async function createRoom(
   opts: {
     playerId?: string;
     name?: string;
-    playlist?: { mode: string; rounds: number }[];
+    playlist?: GameModeConfig[];
     settings?: Record<string, unknown>;
   } = {}
 ): Promise<{ host: TestClient; code: string }> {

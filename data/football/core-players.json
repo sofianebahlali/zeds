@@ -1,0 +1,53 @@
+[
+  {
+    "externalIds": { "wikidata": "Q11571" },
+    "displayName": "Cristiano Ronaldo",
+    "givenName": "Cristiano",
+    "familyName": "Ronaldo",
+    "birthDate": "1985-02-05",
+    "country": { "code": "PRT", "name": "Portugal", "flag": "🇵🇹" },
+    "aliases": ["Cristiano", "Ronaldo", "CR7", "Cristiano Ronaldo dos Santos Aveiro"],
+    "fameScore": 100,
+    "clubs": [
+      { "name": "Sporting CP", "countryCode": "PRT", "from": "2002", "to": "2003", "appearances": 25, "goals": 3 },
+      { "name": "Manchester United", "countryCode": "ENG", "from": "2003", "to": "2009" },
+      { "name": "Real Madrid", "countryCode": "ESP", "from": "2009", "to": "2018", "appearances": 292, "goals": 311 },
+      { "name": "Juventus", "countryCode": "ITA", "from": "2018", "to": "2021", "appearances": 98, "goals": 81 },
+      { "name": "Manchester United", "countryCode": "ENG", "from": "2021", "to": "2022" },
+      { "name": "Al-Nassr", "countryCode": "SAU", "from": "2023", "to": null }
+    ],
+    "clubTotals": [
+      { "name": "Manchester United", "appearances": 236, "goals": 103, "scope": "domestic_league" }
+    ]
+  },
+  {
+    "externalIds": { "wikidata": "Q615" },
+    "displayName": "Lionel Messi",
+    "givenName": "Lionel",
+    "familyName": "Messi",
+    "birthDate": "1987-06-24",
+    "country": { "code": "ARG", "name": "Argentine", "flag": "🇦🇷" },
+    "aliases": ["Messi", "Leo Messi", "Leo", "La Pulga", "Lionel Andrés Messi"],
+    "fameScore": 100,
+    "clubs": [
+      { "name": "FC Barcelone", "countryCode": "ESP", "from": "2004", "to": "2021", "appearances": 520, "goals": 474 },
+      { "name": "Paris Saint-Germain", "countryCode": "FRA", "from": "2021", "to": "2023", "appearances": 58, "goals": 22 },
+      { "name": "Inter Miami", "countryCode": "USA", "from": "2023", "to": null }
+    ]
+  },
+  {
+    "externalIds": { "wikidata": "Q44298" },
+    "displayName": "Bastian Schweinsteiger",
+    "givenName": "Bastian",
+    "familyName": "Schweinsteiger",
+    "birthDate": "1984-08-01",
+    "country": { "code": "DEU", "name": "Allemagne", "flag": "🇩🇪" },
+    "aliases": ["Schweinsteiger", "Basti", "Schweini"],
+    "fameScore": 94,
+    "clubs": [
+      { "name": "Bayern Munich", "countryCode": "DEU", "from": "2002", "to": "2015", "appearances": 342, "goals": 45 },
+      { "name": "Manchester United", "countryCode": "ENG", "from": "2015", "to": "2017", "appearances": 18, "goals": 1 },
+      { "name": "Chicago Fire", "countryCode": "USA", "from": "2017", "to": "2019", "appearances": 85, "goals": 8 }
+    ]
+  }
+]

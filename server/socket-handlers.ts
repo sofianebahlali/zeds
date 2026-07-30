@@ -301,6 +301,22 @@ export function setupSocketHandlers(io: TypedIO, roomManager: RoomManager) {
       gameEngine.submitAnswer(playerId, answer);
     });
 
+    socket.on("footballconnection:submit_guess", (guess: string) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+      gameEngines.get(room.code)?.submitFootballConnectionGuess(playerId, guess);
+    });
+
+    socket.on("mysterycareer:submit_guess", (guess: string) => {
+      const playerId = roomManager.getPlayerIdFromSocket(socket.id);
+      if (!playerId) return;
+      const room = roomManager.getRoomByPlayerId(playerId);
+      if (!room) return;
+      gameEngines.get(room.code)?.submitMysteryCareerGuess(playerId, guess);
+    });
+
     socket.on("game:request_next_round", () => {
       const playerId = roomManager.getPlayerIdFromSocket(socket.id);
       if (!playerId) return;
