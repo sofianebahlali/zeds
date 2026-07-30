@@ -7,6 +7,7 @@ import {
   DEFAULT_GAME_SETTINGS,
   type GameMode,
   type GameModeConfig,
+  type FootballConnectionQuestion,
   type MysteryCareerQuestion,
   type MissingClubQuestion,
   type RoundResult,
