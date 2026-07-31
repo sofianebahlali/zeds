@@ -37,6 +37,7 @@ export function GameScreen() {
   const teamData = useGameStore((s) => s.teamData);
   const modeTransition = useGameStore((s) => s.modeTransition);
   const room = useRoomStore((s) => s.room);
+  const fastMode = room?.settings.fastMode ?? true;
   const myPlayerId = usePlayerStore((s) => s.playerId);
   const currentGameMode = room?.gameMode;
   const isDrawingMode = currentGameMode === "drawing";
@@ -140,7 +141,7 @@ export function GameScreen() {
 
       {/* Mode transition overlay */}
       <AnimatePresence>
-        {transitionModeInfo && (
+        {!fastMode && transitionModeInfo && (
           <motion.div
             key={transitionModeInfo.id}
             initial={{ opacity: 0 }}
@@ -190,7 +191,7 @@ export function GameScreen() {
 
       {/* Main content */}
       <div className={`w-full h-screen-safe ${teamData ? "pt-24" : "pt-16"} overflow-y-auto`} style={{ paddingBottom: "calc(5rem + env(safe-area-inset-bottom, 0px))" }}>
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode={fastMode ? "sync" : "wait"}>
           {status === "countdown" && <CountdownOverlay key="countdown" />}
           {(status === "question" || status === "answering") && (
             isPokemon ? <PokemonGameScreen key={`pokemon-${currentRound}`} /> :

@@ -305,6 +305,15 @@ const FOOTBALL_GUESS_LIMIT = 5;
 const MYSTERY_CAREER_GUESS_LIMIT = 5;
 const MYSTERY_CAREER_STARTING_CLUES = 3;
 
+// The classic preset preserves the original pacing; fast mode opts into much
+// shorter pauses without changing the experience of existing classic games.
+const ROUND_RESULT_DISPLAY_MS = 6000;
+const SHORT_TRANSITION_MS = 2000;
+const LINEUP_REVEAL_DISPLAY_MS = 30000;
+const FAST_ROUND_RESULT_DISPLAY_MS = 2000;
+const FAST_TRANSITION_MS = 250;
+const FAST_LINEUP_REVEAL_DISPLAY_MS = 5000;
+
 const PETITBAC_LETTERS = "ABCDEFGHJKLMNOPRSTV".split("");
 
 export class GameEngine {
@@ -705,6 +714,43 @@ export class GameEngine {
       if (normalizedInput === normalizedAccepted) return true;
       if (GameEngine.levenshteinSimilarity(normalizedInput, normalizedAccepted) >= threshold) return true;
     }
+    return false;
+  }
+
+  /**
+   * Match a person's name while also accepting a family-name-only guess.
+   *
+   * Football aliases usually include the conventional surname ("De Bruyne"),
+   * but not always its final word ("Bruyne"). Accepting any trailing part at a
+   * word boundary makes both forms work without treating a given name as a
+   * surname. A small typo in a one-word surname remains acceptable too.
+   */
+  private static fuzzyMatchPersonName(
+    input: string,
+    acceptedNames: string[],
+    threshold = 0.75
+  ): boolean {
+    if (GameEngine.fuzzyMatchAnswer(input, acceptedNames, threshold)) return true;
+
+    const normalizedInput = GameEngine.normalizeForComparison(input);
+    if (normalizedInput.length < 3) return false;
+    const inputIsSingleWord = !normalizedInput.includes(" ");
+
+    for (const accepted of acceptedNames) {
+      const normalizedName = GameEngine.normalizeForComparison(accepted);
+      if (!normalizedName.includes(" ")) continue;
+
+      if (normalizedName.endsWith(` ${normalizedInput}`)) return true;
+
+      if (inputIsSingleWord) {
+        const lastWord = normalizedName.slice(normalizedName.lastIndexOf(" ") + 1);
+        if (
+          lastWord.length >= 3
+          && GameEngine.levenshteinSimilarity(normalizedInput, lastWord) >= 0.8
+        ) return true;
+      }
+    }
+
     return false;
   }
 
@@ -1345,6 +1391,16 @@ export class GameEngine {
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval);
     }
+
+    if (this.room.settings.fastMode ?? true) {
+      // Keep the event so clients still enter/reset the game screen, but start
+      // the first question immediately instead of rendering the countdown.
+      this.io.to(this.room.code).emit("game:starting", 0);
+      this.roomManager.updateRoomStatus(this.room.code, "playing");
+      this.startRound();
+      return;
+    }
+
     let countdown = 3;
     this.io.to(this.room.code).emit("game:starting", countdown);
 
@@ -1841,6 +1897,24 @@ export class GameEngine {
     }
   }
 
+  private getRoundResultDisplayMs(): number {
+    return (this.room.settings.fastMode ?? true)
+      ? FAST_ROUND_RESULT_DISPLAY_MS
+      : ROUND_RESULT_DISPLAY_MS;
+  }
+
+  private getShortTransitionMs(): number {
+    return (this.room.settings.fastMode ?? true)
+      ? FAST_TRANSITION_MS
+      : SHORT_TRANSITION_MS;
+  }
+
+  private getLineupRevealDisplayMs(): number {
+    return (this.room.settings.fastMode ?? true)
+      ? FAST_LINEUP_REVEAL_DISPLAY_MS
+      : LINEUP_REVEAL_DISPLAY_MS;
+  }
+
   /**
    * Submit an answer
    */
@@ -1982,7 +2056,10 @@ export class GameEngine {
     this.footballConnectionLastAttemptAt.set(playerId, now);
 
     const matched = question.answers.find((candidate) =>
-      GameEngine.fuzzyMatchAnswer(guess, candidate.aliases)
+      GameEngine.fuzzyMatchPersonName(
+        guess,
+        [candidate.playerName, ...candidate.aliases]
+      )
     );
     if (!matched) {
       const result: FootballConnectionGuessResult = {
@@ -2089,7 +2166,11 @@ export class GameEngine {
     attempts.push(guess);
     this.mysteryCareerAttempts.set(playerId, attempts);
     this.mysteryCareerLastAttemptAt.set(playerId, now);
-    const correct = GameEngine.fuzzyMatchAnswer(guess, question.aliases, 0.82);
+    const correct = GameEngine.fuzzyMatchPersonName(
+      guess,
+      [question.playerName, ...question.aliases],
+      0.8
+    );
 
     if (!correct) {
       this.io.to(socketId).emit("mysterycareer:guess_result", {
@@ -2301,10 +2382,10 @@ export class GameEngine {
       // Emit reveal with full match data
       this.io.to(this.room.code).emit("lineup:reveal", q.match, revealScores);
 
-      // Auto-advance after 30 seconds
+      // Leave enough time to scan the full lineup without stalling the game.
       this.lineupRevealTimer = setTimeout(() => {
         this.finalizeLineupRound();
-      }, 30000);
+      }, this.getLineupRevealDisplayMs());
       return;
     }
 
@@ -2334,8 +2415,8 @@ export class GameEngine {
       this.autoAdvanceInnerTimer = setTimeout(() => {
         this.autoAdvanceInnerTimer = null;
         this.nextRound();
-      }, 2000);
-    }, 6000);
+      }, this.getShortTransitionMs());
+    }, this.getRoundResultDisplayMs());
   }
 
   /**
@@ -3608,8 +3689,8 @@ export class GameEngine {
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
       setTimeout(() => {
         this.nextRound();
-      }, 2000);
-    }, 6000);
+      }, this.getShortTransitionMs());
+    }, this.getRoundResultDisplayMs());
   }
 
   /**
@@ -3834,8 +3915,8 @@ export class GameEngine {
       this.autoAdvanceInnerTimer = setTimeout(() => {
         this.autoAdvanceInnerTimer = null;
         this.nextRound();
-      }, 2000);
-    }, 6000);
+      }, this.getShortTransitionMs());
+    }, this.getRoundResultDisplayMs());
   }
 
   // ==========================================
@@ -4054,8 +4135,8 @@ export class GameEngine {
       this.autoAdvanceInnerTimer = setTimeout(() => {
         this.autoAdvanceInnerTimer = null;
         this.nextRound();
-      }, 2000);
-    }, 6000);
+      }, this.getShortTransitionMs());
+    }, this.getRoundResultDisplayMs());
   }
 
   // ==========================================
@@ -4259,8 +4340,8 @@ export class GameEngine {
       this.autoAdvanceInnerTimer = setTimeout(() => {
         this.autoAdvanceInnerTimer = null;
         this.nextRound();
-      }, 2000);
-    }, 6000);
+      }, this.getShortTransitionMs());
+    }, this.getRoundResultDisplayMs());
   }
 
   // ==========================================
@@ -4346,8 +4427,8 @@ export class GameEngine {
 
       setTimeout(() => {
         this.nextRound();
-      }, 2000);
-    }, 6000);
+      }, this.getShortTransitionMs());
+    }, this.getRoundResultDisplayMs());
   }
 
   /**
@@ -4560,7 +4641,7 @@ export class GameEngine {
       // Finalize after brief delay for last animation
       setTimeout(() => {
         this.finalizeGeoQuizFromDecisions();
-      }, 2000);
+      }, this.getShortTransitionMs());
     }
   }
 
@@ -4620,8 +4701,8 @@ export class GameEngine {
 
       setTimeout(() => {
         this.nextRound();
-      }, 2000);
-    }, 6000);
+      }, this.getShortTransitionMs());
+    }, this.getRoundResultDisplayMs());
   }
 
   /**
@@ -4721,8 +4802,8 @@ export class GameEngine {
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
       setTimeout(() => {
         this.nextRound();
-      }, 2000);
-    }, 6000);
+      }, this.getShortTransitionMs());
+    }, this.getRoundResultDisplayMs());
   }
 
   private startPokeGeoValidation(): void {
@@ -4834,7 +4915,7 @@ export class GameEngine {
       }
       setTimeout(() => {
         this.finalizePokeGeoFromDecisions();
-      }, 2000);
+      }, this.getShortTransitionMs());
     }
   }
 
@@ -4878,8 +4959,8 @@ export class GameEngine {
 
       setTimeout(() => {
         this.nextRound();
-      }, 2000);
-    }, 6000);
+      }, this.getShortTransitionMs());
+    }, this.getRoundResultDisplayMs());
   }
 
   private calculatePokeGeoScores(
@@ -5071,7 +5152,7 @@ export class GameEngine {
       }
       setTimeout(() => {
         this.finalizeLangueFromDecisions();
-      }, 2000);
+      }, this.getShortTransitionMs());
     }
   }
 
@@ -5120,8 +5201,8 @@ export class GameEngine {
 
       setTimeout(() => {
         this.nextRound();
-      }, 2000);
-    }, 6000);
+      }, this.getShortTransitionMs());
+    }, this.getRoundResultDisplayMs());
   }
 
   private calculateLangueScores(
@@ -5289,7 +5370,7 @@ export class GameEngine {
       }
       setTimeout(() => {
         this.finalizeParcoursFromDecisions();
-      }, 2000);
+      }, this.getShortTransitionMs());
     }
   }
 
@@ -5374,8 +5455,8 @@ export class GameEngine {
 
       setTimeout(() => {
         this.nextRound();
-      }, 2000);
-    }, 6000);
+      }, this.getShortTransitionMs());
+    }, this.getRoundResultDisplayMs());
   }
 
   // ==========================================
@@ -5492,7 +5573,7 @@ export class GameEngine {
       }
       setTimeout(() => {
         this.finalizeGuessGameFromDecisions();
-      }, 2000);
+      }, this.getShortTransitionMs());
     }
   }
 
@@ -5577,8 +5658,8 @@ export class GameEngine {
 
       setTimeout(() => {
         this.nextRound();
-      }, 2000);
-    }, 6000);
+      }, this.getShortTransitionMs());
+    }, this.getRoundResultDisplayMs());
   }
 
   // ==========================================
@@ -5676,7 +5757,7 @@ export class GameEngine {
       }
       setTimeout(() => {
         this.finalizeConsensusFromDecisions();
-      }, 2000);
+      }, this.getShortTransitionMs());
     }
   }
 
@@ -5783,8 +5864,8 @@ export class GameEngine {
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
       setTimeout(() => {
         this.nextRound();
-      }, 2000);
-    }, 6000);
+      }, this.getShortTransitionMs());
+    }, this.getRoundResultDisplayMs());
   }
 
   // ==========================================
@@ -6017,7 +6098,7 @@ export class GameEngine {
       }
       setTimeout(() => {
         this.finalizePokemonFromDecisions();
-      }, 2000);
+      }, this.getShortTransitionMs());
     }
   }
 
@@ -6132,8 +6213,8 @@ export class GameEngine {
       this.autoAdvanceInnerTimer = setTimeout(() => {
         this.autoAdvanceInnerTimer = null;
         this.nextRound();
-      }, 2000);
-    }, 6000);
+      }, this.getShortTransitionMs());
+    }, this.getRoundResultDisplayMs());
   }
 
   // ==========================================
@@ -6532,7 +6613,7 @@ export class GameEngine {
 
       setTimeout(() => {
         this.nextRound();
-      }, 2000);
+      }, this.getShortTransitionMs());
       return;
     }
 
@@ -6845,8 +6926,8 @@ export class GameEngine {
       this.io.to(this.room.code).emit("game:leaderboard", leaderboard);
       setTimeout(() => {
         this.nextRound();
-      }, 2000);
-    }, 6000);
+      }, this.getShortTransitionMs());
+    }, this.getRoundResultDisplayMs());
   }
 
   /**

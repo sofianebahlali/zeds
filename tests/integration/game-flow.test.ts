@@ -14,7 +14,7 @@ import type { FootballConnectionQuestion, MissingClubQuestion, MysteryCareerQues
 
 /**
  * These drive the real GameEngine end to end. Rounds are advanced with
- * `game:request_next_round` rather than waiting out the 8s auto-advance.
+ * `game:request_next_round` rather than waiting for the auto-advance.
  */
 describe("game flow", () => {
   let server: TestServer;
@@ -34,7 +34,7 @@ describe("game flow", () => {
     await server.close();
   });
 
-  /** Start a game and return the first question, skipping the 3s countdown. */
+  /** Start a game and return the first question. */
   async function startGame(host: TestClient, watchers: TestClient[] = []) {
     const countdowns = collect<[number]>(host, "game:starting");
     host.emit("game:start");
@@ -43,7 +43,7 @@ describe("game flow", () => {
     return { round, question, countdowns };
   }
 
-  it("counts down before the first round and reaches every player", async () => {
+  it("starts immediately in the default fast mode and reaches every player", async () => {
     const { host, code } = await createRoom(server, { playlist: [{ mode: "open", rounds: 2 }] });
     track(host);
     const guest = track(await joinRoom(server, code, "p2"));
@@ -51,12 +51,23 @@ describe("game flow", () => {
     const guestRound = waitFor<[number, Question]>(guest, "game:round_start", 12_000);
     const { countdowns, round, question } = await startGame(host);
 
-    expect(countdowns.map(([n]) => n)).toEqual([3, 2, 1]);
+    expect(countdowns.map(([n]) => n)).toEqual([0]);
     expect(round).toBe(1);
     expect(question.type).toBe("open");
 
     const [guestRoundNumber] = await guestRound;
     expect(guestRoundNumber).toBe(1);
+  });
+
+  it("keeps the countdown available when fast mode is disabled", async () => {
+    const { host } = await createRoom(server, {
+      playlist: [{ mode: "open", rounds: 1 }],
+      settings: { fastMode: false },
+    });
+    track(host);
+
+    const { countdowns } = await startGame(host);
+    expect(countdowns.map(([n]) => n)).toEqual([3, 2, 1]);
   });
 
   it("never ships the answer to the client", async () => {

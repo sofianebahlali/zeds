@@ -67,6 +67,7 @@ describe("playlists and presets", () => {
     expect(DEFAULT_GAME_SETTINGS.playlist).toBe(DEFAULT_PLAYLIST);
     expect(DEFAULT_GAME_SETTINGS.maxPlayers).toBeGreaterThan(1);
     expect(DEFAULT_GAME_SETTINGS.roundDuration).toBeGreaterThan(0);
+    expect(DEFAULT_GAME_SETTINGS.fastMode).toBe(true);
   });
 
   it("builds every preset out of real modes", () => {
@@ -296,7 +297,8 @@ describe("Carrière mystère engine", () => {
       .toMatchObject({ correct: false, attemptsRemaining: 4 });
 
     internals.mysteryCareerLastAttemptAt.set("p1", 0);
-    engine.submitMysteryCareerGuess("p1", truth.aliases[0]);
+    const surname = truth.playerName.trim().split(/\s+/).at(-1)!;
+    engine.submitMysteryCareerGuess("p1", surname);
     const correct = emitted
       .filter((entry) => entry.event === "mysterycareer:guess_result")
       .at(-1)?.args[0];
@@ -311,6 +313,17 @@ describe("Carrière mystère engine", () => {
     expect(result.scores[0].points).toBeGreaterThan(truth.points);
 
     engine.destroy();
+  });
+
+  it("accepts simple and compound family names even when only the full name is stored", () => {
+    const matchPersonName = (GameEngine as unknown as {
+      fuzzyMatchPersonName: (input: string, names: string[], threshold?: number) => boolean;
+    }).fuzzyMatchPersonName;
+
+    expect(matchPersonName("Bruyne", ["Kevin De Bruyne"], 0.8)).toBe(true);
+    expect(matchPersonName("De Bruyne", ["Kevin De Bruyne"], 0.8)).toBe(true);
+    expect(matchPersonName("Schweinsteigr", ["Bastian Schweinsteiger"], 0.8)).toBe(true);
+    expect(matchPersonName("Kevin", ["Kevin De Bruyne"], 0.8)).toBe(false);
   });
 });
 

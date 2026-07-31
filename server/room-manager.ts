@@ -15,6 +15,7 @@ const DEFAULT_SETTINGS: GameSettings = {
   teamRoundsEnabled: false,
   hideScoresBetweenRounds: false,
   shufflePlaylist: false,
+  fastMode: true,
 };
 
 /**

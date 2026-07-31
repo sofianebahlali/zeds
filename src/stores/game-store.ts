@@ -160,7 +160,7 @@ interface GameStoreState {
   setRoundResult: (result: RoundResult) => void;
   nextRound: () => void;
   resetGame: () => void;
-  startGame: (totalRounds: number) => void;
+  startGame: (totalRounds: number, initialCountdown?: number) => void;
   finishGame: () => void;
   setFootballConnectionGuessResult: (result: FootballConnectionGuessResult) => void;
   addFootballConnectionFoundPlayer: (data: {
@@ -487,14 +487,14 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       status: "idle",
     })),
 
-  startGame: (totalRounds) =>
+  startGame: (totalRounds, initialCountdown = 3) =>
     set({
-      status: "countdown",
+      status: initialCountdown > 0 ? "countdown" : "idle",
       currentRound: 1,
       totalRounds,
       currentQuestion: null,
       timeRemaining: 0,
-      countdown: 3,
+      countdown: initialCountdown,
       myAnswer: null,
       hasAnswered: false,
       answeredPlayers: [],

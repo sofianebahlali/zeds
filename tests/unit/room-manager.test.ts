@@ -44,6 +44,7 @@ describe("RoomManager", () => {
       expect(room.hostId).toBe("p1");
       expect(room.players[0].isHost).toBe(true);
       expect(room.status).toBe("waiting");
+      expect(room.settings.fastMode).toBe(true);
     });
 
     it("is case-insensitive about codes", () => {

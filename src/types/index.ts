@@ -76,6 +76,8 @@ export interface GameSettings {
   difficulty: "easy" | "medium" | "hard";
   playlist: GameModeConfig[];
   teamRoundsEnabled: boolean;
+  /** Skip presentation screens and use shorter post-round pauses. Defaults to true. */
+  fastMode?: boolean;
 }
 
 // ==========================================
@@ -195,6 +197,7 @@ export const DEFAULT_GAME_SETTINGS: GameSettings = {
   difficulty: "medium",
   playlist: DEFAULT_PLAYLIST,
   teamRoundsEnabled: false,
+  fastMode: true,
 };
 
 // ==========================================

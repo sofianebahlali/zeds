@@ -194,6 +194,12 @@ describe("gameStore", () => {
     expect(useGameStore.getState().status).toBe("finished");
   });
 
+  it("does not enter the countdown screen for an immediate start", () => {
+    useGameStore.getState().startGame(5, 0);
+    expect(useGameStore.getState().status).toBe("idle");
+    expect(useGameStore.getState().countdown).toBe(0);
+  });
+
   it("returns to a blank slate on reset", () => {
     useGameStore.getState().startGame(5);
     useGameStore.getState().setCurrentQuestion(question(), 2);

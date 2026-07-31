@@ -338,6 +338,10 @@ function setupSocketListeners() {
   // Game events
   socket.on("game:mode_changed", (mode: GameMode) => {
     useRoomStore.getState().setGameMode(mode);
+    if (useRoomStore.getState().room?.settings.fastMode ?? true) {
+      useGameStore.getState().setModeTransition(null);
+      return;
+    }
     useGameStore.getState().setModeTransition(mode);
     // Auto-clear after animation
     setTimeout(() => {
@@ -350,10 +354,12 @@ function setupSocketListeners() {
       useUIStore.getState().setScreen("game");
       const room = useRoomStore.getState().room;
       if (room) {
-        useGameStore.getState().startGame(room.settings.totalRounds);
+        useGameStore.getState().startGame(room.settings.totalRounds, countdown);
       }
     }
-    useGameStore.getState().setCountdown(countdown);
+    if (countdown > 0) {
+      useGameStore.getState().setCountdown(countdown);
+    }
   });
 
   socket.on("game:round_start", (round: number, question: Question) => {

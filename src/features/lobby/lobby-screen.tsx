@@ -191,6 +191,30 @@ export function LobbyScreen() {
               <Card>
                 <label className="flex items-center justify-between cursor-pointer">
                   <div>
+                    <p className="text-sm font-medium text-surface-100">Mode rapide</p>
+                    <p className="text-xs text-surface-500">Enchaîne les manches sans écrans de présentation</p>
+                  </div>
+                  <button
+                    role="switch"
+                    aria-checked={room.settings.fastMode ?? true}
+                    onClick={() => updateRoomSettings({ fastMode: !(room.settings.fastMode ?? true) })}
+                    className={cn(
+                      "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
+                      (room.settings.fastMode ?? true) ? "bg-brand-500" : "bg-surface-700"
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "inline-block h-4 w-4 rounded-full bg-white transition-transform",
+                        (room.settings.fastMode ?? true) ? "translate-x-6" : "translate-x-1"
+                      )}
+                    />
+                  </button>
+                </label>
+              </Card>
+              <Card>
+                <label className="flex items-center justify-between cursor-pointer">
+                  <div>
                     <p className="text-sm font-medium text-surface-100">Manches en équipe</p>
                     <p className="text-xs text-surface-500">Active des manches aléatoires en équipe</p>
                   </div>
