@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import next from "next";
 import { RoomManager } from "./room-manager";
 import { setupSocketHandlers, startRoomCleanup } from "./socket-handlers";
+import { warmFootballDb } from "./football-db";
 import type { ClientToServerEvents, ServerToClientEvents } from "../src/types";
 
 const PORT = parseInt(process.env.PORT || "3000", 10);
@@ -73,6 +74,11 @@ async function main() {
   httpServer.listen(PORT, () => {
     console.log(`Production server running on port ${PORT}`);
     console.log(`Next.js + Express + Socket.IO on single port`);
+
+    const warmStart = Date.now();
+    warmFootballDb()
+      .then(() => console.log(`Football DB warmed in ${Date.now() - warmStart}ms`))
+      .catch((error) => console.warn("Football DB warmup failed:", error));
   });
 
   process.on("SIGTERM", () => {

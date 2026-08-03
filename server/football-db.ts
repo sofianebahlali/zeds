@@ -16,6 +16,11 @@ const DB_PATH = path.resolve(__dirname, "../data/football.db");
 let db: Database.Database | null = null;
 let mysteryCareerCache: MysteryCareerQuestion[] | null = null;
 let missingClubCache: MissingClubQuestion[] | null = null;
+// Hydrated connection pools keyed by accessibility threshold + formats. Every
+// query here is synchronous (better-sqlite3) and therefore blocks the
+// Socket.IO event loop, so each pool is built once and re-sampled per game.
+const connectionPoolCache = new Map<string, FootballConnectionQuestion[]>();
+const CONNECTION_POOL_SIZE = 6_000;
 
 interface ConnectionRow {
   id: string;
@@ -133,42 +138,61 @@ export function getFootballConnectionCandidates(options: {
   const formats = options.formats.length
     ? options.formats
     : ["club_club", "club_country", "initials"] as const;
-  const placeholders = formats.map(() => "?").join(", ");
-  const difficultyOrder = options.preferredDifficulty === "mixed"
-    ? ""
-    : "CASE WHEN difficulty = ? THEN 0 ELSE 1 END,";
   const accessibilityThreshold =
     options.preferredDifficulty === "easy"
       ? 98
       : options.preferredDifficulty === "medium" || options.preferredDifficulty === "mixed"
       ? 94
       : null;
-  const accessibilityFilter = accessibilityThreshold === null
-    ? ""
-    : `AND EXISTS (
-        SELECT 1
-        FROM football_connection_answers accessible_answer
-        JOIN players accessible_player ON accessible_player.id = accessible_answer.player_id
-        WHERE accessible_answer.question_id = football_connection_questions.id
-          AND accessible_player.fame_score >= ?
-      )`;
-  const parameters: (string | number)[] = [...formats];
-  if (accessibilityThreshold !== null) parameters.push(accessibilityThreshold);
-  if (options.preferredDifficulty !== "mixed") {
-    parameters.push(options.preferredDifficulty);
-  }
-  parameters.push(Math.max(100, Math.min(options.limit ?? 6_000, 10_000)));
+  const limit = Math.max(100, Math.min(options.limit ?? CONNECTION_POOL_SIZE, CONNECTION_POOL_SIZE));
 
-  const rows = database.prepare(`
-    SELECT id, format, left_team_id, right_team_id, left_label, right_label,
-           left_kind, right_kind, difficulty, time_limit, points, answer_count
-    FROM football_connection_questions
-    WHERE format IN (${placeholders})
-      ${accessibilityFilter}
-    ORDER BY ${difficultyOrder} RANDOM()
-    LIMIT ?
-  `).all(...parameters) as ConnectionRow[];
-  return hydrateConnectionRows(database, rows);
+  const cacheKey = `${accessibilityThreshold ?? "all"}|${[...formats].sort().join(",")}`;
+  let pool = connectionPoolCache.get(cacheKey);
+  if (!pool) {
+    const placeholders = formats.map(() => "?").join(", ");
+    const accessibilityFilter = accessibilityThreshold === null
+      ? ""
+      : "AND accessible_player.fame_score >= ?";
+    const parameters: (string | number)[] = [...formats];
+    if (accessibilityThreshold !== null) parameters.push(accessibilityThreshold);
+    parameters.push(CONNECTION_POOL_SIZE);
+
+    // For accessible difficulties, start from the answer/player graph instead
+    // of running a correlated EXISTS for every one of the 150k+ questions. The
+    // old shape re-scanned the answer index once per question and made the very
+    // first football game block the Socket.IO event loop for several seconds.
+    const accessibleJoin = accessibilityThreshold === null
+      ? ""
+      : `JOIN football_connection_answers accessible_answer
+           ON accessible_answer.question_id = football_connection_questions.id
+         JOIN players accessible_player
+           ON accessible_player.id = accessible_answer.player_id`;
+    const distinct = accessibilityThreshold === null ? "" : "DISTINCT";
+    const rows = database.prepare(`
+      SELECT ${distinct} football_connection_questions.id, format,
+             left_team_id, right_team_id, left_label, right_label,
+             left_kind, right_kind, difficulty, time_limit, points, answer_count
+      FROM football_connection_questions
+      ${accessibleJoin}
+      WHERE format IN (${placeholders})
+        ${accessibilityFilter}
+      ORDER BY RANDOM()
+      LIMIT ?
+    `).all(...parameters) as ConnectionRow[];
+    pool = hydrateConnectionRows(database, rows);
+    connectionPoolCache.set(cacheKey, pool);
+  }
+
+  // Per-game sampling over the cached pool, preserving the old SQL semantics:
+  // random order, preferred difficulty first when one is requested.
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  if (options.preferredDifficulty !== "mixed") {
+    shuffled.sort((left, right) =>
+      Number(left.difficulty !== options.preferredDifficulty)
+      - Number(right.difficulty !== options.preferredDifficulty)
+    );
+  }
+  return shuffled.slice(0, limit);
 }
 
 export function findFootballConnections(
@@ -206,60 +230,31 @@ export function getMysteryCareerCandidates(options: {
     return sampleMysteryCareers(mysteryCareerCache, preferred, safeLimit);
   }
 
-  const players = database.prepare(`
-    WITH career_clubs AS (
-      SELECT
-        ps.player_id,
-        ps.team_id,
-        MAX(t.fame_score) AS club_fame,
-        SUM(COALESCE(ps.appearances, 0)) AS appearances
-      FROM player_season_stats ps
-      JOIN teams t ON t.id = ps.team_id AND t.team_type = 'club'
-        AND LOWER(t.canonical_name) NOT LIKE '% primavera%'
-        AND LOWER(t.canonical_name) NOT LIKE '% academy%'
-        AND LOWER(t.canonical_name) NOT LIKE '% youth%'
-        AND LOWER(t.canonical_name) NOT LIKE '% reserves%'
-        AND LOWER(t.canonical_name) NOT LIKE '% u19%'
-        AND LOWER(t.canonical_name) NOT LIKE '% u21%'
-        AND LOWER(t.canonical_name) NOT LIKE '% u23%'
-        AND LOWER(t.canonical_name) NOT LIKE '% ii'
-        AND LOWER(t.canonical_name) NOT LIKE '% b'
-      GROUP BY ps.player_id, ps.team_id
-      HAVING SUM(COALESCE(ps.appearances, 0)) > 0
-    ),
-    candidates AS (
-      SELECT
-        p.id AS player_id,
-        p.display_name,
-        country.name AS sporting_country,
-        p.fame_score,
-        COUNT(*) AS club_count,
-        SUM(CASE WHEN career_clubs.club_fame >= 65 THEN 1 ELSE 0 END) AS notable_clubs,
-        CASE
-          WHEN p.fame_score >= 98 THEN 'easy'
-          WHEN p.fame_score >= 94 THEN 'medium'
-          ELSE 'hard'
-        END AS difficulty
-      FROM players p
-      JOIN career_clubs ON career_clubs.player_id = p.id
-      LEFT JOIN countries country ON country.id = p.sporting_country_id
-      WHERE p.game_eligible = 1
-        AND p.fame_score >= 82
-        AND TRIM(p.display_name) <> ''
-      GROUP BY p.id
-      HAVING COUNT(*) BETWEEN 3 AND 12
-         AND MAX(career_clubs.appearances) >= 10
-         AND SUM(CASE WHEN career_clubs.club_fame >= 60 THEN 1 ELSE 0 END) >= 2
-    )
-    SELECT player_id, display_name, sporting_country, fame_score, difficulty
-    FROM candidates
-    WHERE difficulty IN ('easy', 'medium', 'hard')
+  // Restrict the expensive stats aggregation to eligible players first. The
+  // previous CTE grouped the complete 500k-row stats table before applying the
+  // indexed player eligibility filter, which accounted for roughly ten
+  // seconds before the start countdown could even be emitted.
+  const candidatePlayers = database.prepare(`
+    SELECT
+      p.id AS player_id,
+      p.display_name,
+      country.name AS sporting_country,
+      p.fame_score,
+      CASE
+        WHEN p.fame_score >= 98 THEN 'easy'
+        WHEN p.fame_score >= 94 THEN 'medium'
+        ELSE 'hard'
+      END AS difficulty
+    FROM players p
+    LEFT JOIN countries country ON country.id = p.sporting_country_id
+    WHERE p.game_eligible = 1
+      AND p.fame_score >= 82
+      AND TRIM(p.display_name) <> ''
     ORDER BY RANDOM()
-    LIMIT ?
-  `).all(2_000) as MysteryCareerPlayerRow[];
-  if (players.length === 0) return [];
+  `).all() as MysteryCareerPlayerRow[];
+  if (candidatePlayers.length === 0) return [];
 
-  const ids = players.map((player) => player.player_id);
+  const ids = candidatePlayers.map((player) => player.player_id);
   const placeholders = ids.map(() => "?").join(", ");
   const clubRows = database.prepare(`
     SELECT
@@ -289,12 +284,41 @@ export function getMysteryCareerCandidates(options: {
     HAVING SUM(COALESCE(ps.appearances, 0)) > 0
     ORDER BY ps.player_id, MIN(se.start_date), t.canonical_name
   `).all(...ids) as MysteryCareerClubRow[];
+  const eligibilityByPlayer = new Map<number, {
+    clubCount: number;
+    maxAppearances: number;
+    notableClubCount: number;
+  }>();
+  for (const row of clubRows) {
+    const eligibility = eligibilityByPlayer.get(row.player_id) ?? {
+      clubCount: 0,
+      maxAppearances: 0,
+      notableClubCount: 0,
+    };
+    eligibility.clubCount++;
+    eligibility.maxAppearances = Math.max(eligibility.maxAppearances, row.appearances ?? 0);
+    if (row.fame_score >= 60) eligibility.notableClubCount++;
+    eligibilityByPlayer.set(row.player_id, eligibility);
+  }
+  const players = candidatePlayers.filter((player) => {
+    const eligibility = eligibilityByPlayer.get(player.player_id);
+    return eligibility
+      && eligibility.clubCount >= 3
+      && eligibility.clubCount <= 12
+      && eligibility.maxAppearances >= 10
+      && eligibility.notableClubCount >= 2;
+  }).slice(0, 2_000);
+  if (players.length === 0) return [];
+
+  const selectedPlayerIds = new Set(players.map((player) => player.player_id));
+  const selectedIds = [...selectedPlayerIds];
+  const selectedPlaceholders = selectedIds.map(() => "?").join(", ");
   const aliasRows = database.prepare(`
     SELECT player_id, alias
     FROM player_aliases
-    WHERE player_id IN (${placeholders})
+    WHERE player_id IN (${selectedPlaceholders})
     ORDER BY player_id, alias
-  `).all(...ids) as { player_id: number; alias: string }[];
+  `).all(...selectedIds) as { player_id: number; alias: string }[];
 
   const aliasesByPlayer = new Map<number, string[]>();
   for (const row of aliasRows) {
@@ -305,6 +329,7 @@ export function getMysteryCareerCandidates(options: {
 
   const clubsByPlayer = new Map<number, MysteryCareerClub[]>();
   for (const row of clubRows) {
+    if (!selectedPlayerIds.has(row.player_id)) continue;
     const clubs = clubsByPlayer.get(row.player_id) ?? [];
     const key = normalizeClubIdentity(row.canonical_name);
     const existing = clubs.find((club) => normalizeClubIdentity(club.name) === key);
@@ -752,4 +777,37 @@ export function closeFootballDb(): void {
   }
   mysteryCareerCache = null;
   missingClubCache = null;
+  connectionPoolCache.clear();
+}
+
+/**
+ * Pre-pay every cost the first football game would otherwise pay while a host
+ * is staring at "Lancer la partie": pull the database file into the OS page
+ * cache with non-blocking reads (cold I/O on the ~200 MB file is what froze
+ * the event loop for seconds), then build the in-memory question pools one
+ * synchronous query at a time, yielding between each so connected sockets
+ * keep their heartbeats.
+ */
+export async function warmFootballDb(): Promise<void> {
+  if (!fs.existsSync(DB_PATH)) return;
+
+  await new Promise<void>((resolve) => {
+    const stream = fs.createReadStream(DB_PATH);
+    stream.on("data", () => {});
+    stream.on("end", resolve);
+    stream.on("error", () => resolve());
+  });
+
+  const yieldToEventLoop = () => new Promise<void>((resolve) => setImmediate(resolve));
+  const allFormats = ["club_club", "club_country", "initials"] as const;
+
+  getFootballConnectionCandidates({ formats: allFormats, preferredDifficulty: "easy", limit: 100 });
+  await yieldToEventLoop();
+  // "medium" and "mixed" share the same pool.
+  getFootballConnectionCandidates({ formats: allFormats, preferredDifficulty: "mixed", limit: 100 });
+  await yieldToEventLoop();
+  getMysteryCareerCandidates({ preferredDifficulty: "mixed", limit: 100 });
+  await yieldToEventLoop();
+  // Also derives from the mystery-career cache, so this one is cheap.
+  getMissingClubCandidates({ preferredDifficulty: "mixed", limit: 100 });
 }

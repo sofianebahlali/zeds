@@ -10,6 +10,8 @@ import {
   type TestClient,
 } from "../helpers/test-server";
 import { getGameEngine } from "../../server/socket-handlers";
+import { closeFootballDb } from "../../server/football-db";
+import { GAME_PRESETS } from "../../src/types";
 import type { FootballConnectionQuestion, MissingClubQuestion, MysteryCareerQuestion, OpenQuestion, Player, Question, RoundResult } from "../../src/types";
 
 /**
@@ -78,6 +80,21 @@ describe("game flow", () => {
     expect((question as OpenQuestion).answers).toEqual([]);
   });
 
+  it("starts the full football preset promptly with a cold database", async () => {
+    closeFootballDb();
+    const footballPreset = GAME_PRESETS.find((preset) => preset.id === "football");
+    expect(footballPreset).toBeDefined();
+    const { host } = await createRoom(server, { playlist: footballPreset!.playlist });
+    track(host);
+
+    const startedAt = performance.now();
+    const starting = waitFor<[number]>(host, "game:starting", 10_000);
+    host.emit("game:start");
+
+    expect((await starting)[0]).toBe(0);
+    expect(performance.now() - startedAt).toBeLessThan(3_000);
+  });
+
   it("plays Connexion Foot with retries, speed points and a full reveal", async () => {
     const { host, code } = await createRoom(server, {
       playlist: [{
@@ -140,13 +157,17 @@ describe("game flow", () => {
     const truth = loadedQuestion(server, code, question.id) as MysteryCareerQuestion;
     expect(publicQuestion.sportingCountry).toBe(truth.sportingCountry);
     const initiallyVisibleOrders = publicQuestion.clubs.map((club) => club.order);
-    const nextClue = waitFor<[MysteryCareerQuestion["clubs"][number]]>(
-      host,
-      "mysterycareer:clue_revealed",
-      3000
-    );
-    setRemainingTime(code, truth.timeLimit - truth.revealInterval);
-    expect(initiallyVisibleOrders).not.toContain((await nextClue)[0].order);
+    if (publicQuestion.totalClubs > publicQuestion.clubs.length) {
+      const nextClue = waitFor<[MysteryCareerQuestion["clubs"][number]]>(
+        host,
+        "mysterycareer:clue_revealed",
+        3000
+      );
+      setRemainingTime(code, truth.timeLimit - truth.revealInterval);
+      expect(initiallyVisibleOrders).not.toContain((await nextClue)[0].order);
+    } else {
+      expect(publicQuestion.clubs).toHaveLength(publicQuestion.totalClubs);
+    }
 
     const wrongResult = waitFor<[{ correct: boolean; attemptsRemaining: number }]>(
       host,

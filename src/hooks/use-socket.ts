@@ -850,6 +850,18 @@ export function useSocket() {
   }, [socket]);
 
   const startGameAction = useCallback(() => {
+    // On a dead socket, Socket.IO would buffer this emit and flush it on
+    // reconnect — the game then "starts on its own" seconds or minutes after
+    // the tap. Surface the problem and reconnect instead.
+    if (!socket.connected) {
+      useUIStore.getState().addNotification({
+        type: "error",
+        message: "Connexion perdue — reconnexion en cours, réessaie dans un instant.",
+        duration: 4000,
+      });
+      resumeConnection("start-game");
+      return;
+    }
     socket.emit("game:start");
   }, [socket]);
 
